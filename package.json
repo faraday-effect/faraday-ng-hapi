@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/faraday-effect/faraday#readme",
   "dependencies": {
-    "hapi": "^13.4.1"
+    "bookshelf": "^0.9.5",
+    "hapi": "^13.4.1",
+    "knex": "^0.11.4",
+    "pg": "^4.5.5"
   }
 }
