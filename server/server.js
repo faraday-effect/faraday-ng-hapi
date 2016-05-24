@@ -1,6 +1,7 @@
 'use strict';
 
 const Hapi = require('hapi');
+const Good = require('good');
 
 const server = new Hapi.Server();
 server.connection({ port: 3000 });
@@ -30,12 +31,35 @@ server.register(require('inert'), (err) => {
 });
 });
 
-server.start((err) => {
+//Server logging and starting functionality
+server.register({
+    register: Good,
+    options: {
+        reporters: {
+            console: [{
+                module: 'good-squeeze',
+                name: 'Squeeze',
+                args: [{
+                    response: '*',
+                    log: '*'
+                }]
+            }, {
+                module: 'good-console'
+            }, 'stdout']
+        }
+    }
+}, (err) => {
 
+    //Checks to see if an error occured while loading the plugin
     if (err) {
         throw err;
     }
 
-    console.log('Faraday');
-    console.log('Server running at:', server.info.uri);
+    server.start((err) => {
+
+        if (err) {
+            throw err;
+        }
+        server.log('info', 'Server running at: ' + server.info.uri);
+    });
 });
