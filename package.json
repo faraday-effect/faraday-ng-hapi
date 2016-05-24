@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/faraday-effect/faraday/issues"
   },
-  "homepage": "https://github.com/faraday-effect/faraday#readme"
+  "homepage": "https://github.com/faraday-effect/faraday#readme",
+  "dependencies": {
+    "hapi": "^13.4.1"
+  }
 }
