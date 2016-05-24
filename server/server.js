@@ -133,7 +133,7 @@ server.register({
     }
 }, (err) => {
 
-    //Checks to see if an error occured while loading the plugin
+    //Checks to see if an error occurred while loading the plugin
     if (err) {
         throw err;
     }
