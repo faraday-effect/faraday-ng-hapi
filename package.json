@@ -1,0 +1,19 @@
+{
+  "name": "faraday",
+  "version": "1.0.0",
+  "description": "LMS 2.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/faraday-effect/faraday.git"
+  },
+  "author": "Taylor University",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/faraday-effect/faraday/issues"
+  },
+  "homepage": "https://github.com/faraday-effect/faraday#readme"
+}
