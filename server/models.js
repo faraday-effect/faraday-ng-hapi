@@ -37,9 +37,6 @@ var knex = require('knex')({
 });
 var Bookshelf = require('bookshelf')(knex);
 
-export class Models{
-//Models
-
 //Department
 var Department = Bookshelf.Model.extend({
     tableName: 'department',
@@ -83,9 +80,11 @@ var Departments = Bookshelf.Collection.extend({
     model: Department
 });
 
-var Courses = Bookshelf.Collection.extend({
-    model: Course
-});
+module.exports = {
+    Courses: Bookshelf.Collection.extend({
+        model: Course
+    })
+};
 
 var Sections = Bookshelf.Collection.extend({
     model: Section
@@ -94,4 +93,3 @@ var Sections = Bookshelf.Collection.extend({
 var Terms = Bookshelf.Collection.extend({
     model: Term
 });
-}
