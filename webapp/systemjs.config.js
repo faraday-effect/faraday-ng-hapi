@@ -21,6 +21,7 @@
     'platform-browser',
     'platform-browser-dynamic',
     'router',
+    'router-deprecated',
   ];
 
   // Add package entries for angular packages
