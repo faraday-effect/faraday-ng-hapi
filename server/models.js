@@ -1,30 +1,3 @@
-"use strict";
-/*
-"use strict";
-
-var knex = require('knex')({
-    client: 'pg',
-    connection: "postgres://faraday:password@localhost/faraday",
-    debug: true
-});
-
-// Department
-console.log("Creating 'department' table");
-
-knex.schema.dropTableIfExists('department').then(function(foo) {
-    console.log(`Foo is ${foo}`)
-});
-
-knex.schema.withSchema('public').createTable('department', function(table) {
-    table.increments();
-    table.string('name');
-    table.timestamps();
-}).then(function(foo) {
-    console.log(`Foo is ${foo}`);
-});
-
-process.exit(0);
- */
 var knex = require('knex')({
     client: 'pg',
     connection: {
@@ -75,21 +48,23 @@ var Term = Bookshelf.Model.extend({
     }
 });
 
-//Collections
-var Departments = Bookshelf.Collection.extend({
+module.exports['Course'] = Course;
+module.exports['Department'] = Department;
+module.exports['Section'] = Section;
+module.exports['Term'] = Term;
+
+module.exports['Departments'] = Bookshelf.Collection.extend({
     model: Department
 });
 
-module.exports = {
-    Courses: Bookshelf.Collection.extend({
+module.exports['Courses'] = Bookshelf.Collection.extend({
         model: Course
-    })
-};
+});
 
-var Sections = Bookshelf.Collection.extend({
+module.exports['Sections'] = Bookshelf.Collection.extend({
     model: Section
 });
 
-var Terms = Bookshelf.Collection.extend({
+module.exports['Terms'] = Bookshelf.Collection.extend({
     model: Term
 });

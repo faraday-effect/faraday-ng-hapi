@@ -8,20 +8,6 @@ var Models = require('./models.js');
 const server = new Hapi.Server();
 server.connection({ port: 3000});
 
-var knex = require('knex')({
-    client: 'pg',
-    connection: {
-        host: '127.0.0.1',
-        user: 'faraday',
-        password: 'pass',
-        database: 'faraday',
-        charset: 'utf8'
-    }
-});
-var Bookshelf = require('bookshelf')(knex);
-
-
-
 //Serving dynamic content
 server.route({
     method: 'GET',
@@ -36,10 +22,9 @@ server.route({
     method: 'GET',
     path: '/course',
     handler: function (request, reply) {
-        console.log(Models);
-        let course = Models.Courses.forge().fetch();
+        let response = Models.Courses.forge().fetch();
 
-        reply(course);
+        reply(response);
     }
 });
 
@@ -55,7 +40,7 @@ server.route({
     method: 'GET',
     path: '/course/{course_id}',
     handler: function (request, reply) {
-        let course = Course.forge({id: request.params.id}).fetch();
+        let course = Models.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch();
         reply(course);
     }
 });
@@ -65,6 +50,17 @@ server.route({
     path: '/course/{course_id}/edit',
     handler: function (request, reply) {
         reply("course_id: " + encodeURIComponent(request.params.course_id) + " Edit");
+    }
+});
+
+//Department Routes
+server.route({
+    method: 'GET',
+    path: '/department',
+    handler: function (request, reply) {
+        let response = Models.Departments.forge().fetch();
+
+        reply(response);
     }
 });
 
