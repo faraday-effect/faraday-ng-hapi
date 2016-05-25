@@ -14,17 +14,6 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: Faraday; Type: SCHEMA; Schema: -; Owner: abramjstamper
---
-
-CREATE DATABASE "Faraday";
-
-CREATE SCHEMA "Faraday";
-
-
-ALTER SCHEMA "Faraday" OWNER TO abramjstamper;
-
---
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
 --
 
@@ -38,45 +27,33 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
-SET search_path = "Faraday", pg_catalog;
+SET search_path = public, pg_catalog;
 
 SET default_tablespace = '';
 
 SET default_with_oids = false;
 
 --
--- Name: Course; Type: TABLE; Schema: Faraday; Owner: abramjstamper
+-- Name: course; Type: TABLE; Schema: public; Owner: faraday
 --
 
-CREATE TABLE "Course" (
+CREATE TABLE course (
     id integer NOT NULL,
-    prefix text,
-    number text,
-    title text,
-    active boolean DEFAULT false,
-    department integer
+    prefix character varying(255) NOT NULL,
+    number character varying(255) NOT NULL,
+    title character varying(255) NOT NULL,
+    active boolean NOT NULL,
+    department_id integer NOT NULL
 );
 
 
-ALTER TABLE "Course" OWNER TO abramjstamper;
+ALTER TABLE course OWNER TO faraday;
 
 --
--- Name: Department; Type: TABLE; Schema: Faraday; Owner: abramjstamper
+-- Name: course_id_seq; Type: SEQUENCE; Schema: public; Owner: faraday
 --
 
-CREATE TABLE "Department" (
-    id integer NOT NULL,
-    name text
-);
-
-
-ALTER TABLE "Department" OWNER TO abramjstamper;
-
---
--- Name: Department_id_seq; Type: SEQUENCE; Schema: Faraday; Owner: abramjstamper
---
-
-CREATE SEQUENCE "Department_id_seq"
+CREATE SEQUENCE course_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -84,35 +61,32 @@ CREATE SEQUENCE "Department_id_seq"
     CACHE 1;
 
 
-ALTER TABLE "Department_id_seq" OWNER TO abramjstamper;
+ALTER TABLE course_id_seq OWNER TO faraday;
 
 --
--- Name: Department_id_seq; Type: SEQUENCE OWNED BY; Schema: Faraday; Owner: abramjstamper
+-- Name: course_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: faraday
 --
 
-ALTER SEQUENCE "Department_id_seq" OWNED BY "Department".id;
+ALTER SEQUENCE course_id_seq OWNED BY course.id;
 
 
 --
--- Name: Section; Type: TABLE; Schema: Faraday; Owner: abramjstamper
+-- Name: department; Type: TABLE; Schema: public; Owner: faraday
 --
 
-CREATE TABLE "Section" (
+CREATE TABLE department (
     id integer NOT NULL,
-    reg_number text,
-    title text,
-    course_id integer,
-    term_id integer
+    name character varying(255) NOT NULL
 );
 
 
-ALTER TABLE "Section" OWNER TO abramjstamper;
+ALTER TABLE department OWNER TO faraday;
 
 --
--- Name: Section_id_seq; Type: SEQUENCE; Schema: Faraday; Owner: abramjstamper
+-- Name: department_id_seq; Type: SEQUENCE; Schema: public; Owner: faraday
 --
 
-CREATE SEQUENCE "Section_id_seq"
+CREATE SEQUENCE department_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -120,34 +94,35 @@ CREATE SEQUENCE "Section_id_seq"
     CACHE 1;
 
 
-ALTER TABLE "Section_id_seq" OWNER TO abramjstamper;
+ALTER TABLE department_id_seq OWNER TO faraday;
 
 --
--- Name: Section_id_seq; Type: SEQUENCE OWNED BY; Schema: Faraday; Owner: abramjstamper
+-- Name: department_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: faraday
 --
 
-ALTER SEQUENCE "Section_id_seq" OWNED BY "Section".id;
+ALTER SEQUENCE department_id_seq OWNED BY department.id;
 
 
 --
--- Name: Term; Type: TABLE; Schema: Faraday; Owner: abramjstamper
+-- Name: section; Type: TABLE; Schema: public; Owner: faraday
 --
 
-CREATE TABLE "Term" (
+CREATE TABLE section (
     id integer NOT NULL,
-    name text,
-    start_date date,
-    end_date date
+    course_id integer NOT NULL,
+    term_id integer NOT NULL,
+    reg_number character varying(255) NOT NULL,
+    title character varying(255) NOT NULL
 );
 
 
-ALTER TABLE "Term" OWNER TO abramjstamper;
+ALTER TABLE section OWNER TO faraday;
 
 --
--- Name: Term_id_seq; Type: SEQUENCE; Schema: Faraday; Owner: abramjstamper
+-- Name: section_id_seq; Type: SEQUENCE; Schema: public; Owner: faraday
 --
 
-CREATE SEQUENCE "Term_id_seq"
+CREATE SEQUENCE section_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -155,20 +130,34 @@ CREATE SEQUENCE "Term_id_seq"
     CACHE 1;
 
 
-ALTER TABLE "Term_id_seq" OWNER TO abramjstamper;
+ALTER TABLE section_id_seq OWNER TO faraday;
 
 --
--- Name: Term_id_seq; Type: SEQUENCE OWNED BY; Schema: Faraday; Owner: abramjstamper
+-- Name: section_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: faraday
 --
 
-ALTER SEQUENCE "Term_id_seq" OWNED BY "Term".id;
+ALTER SEQUENCE section_id_seq OWNED BY section.id;
 
 
 --
--- Name: untitled_table_id_seq; Type: SEQUENCE; Schema: Faraday; Owner: abramjstamper
+-- Name: term; Type: TABLE; Schema: public; Owner: faraday
 --
 
-CREATE SEQUENCE untitled_table_id_seq
+CREATE TABLE term (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    start_date date NOT NULL,
+    end_date date NOT NULL
+);
+
+
+ALTER TABLE term OWNER TO faraday;
+
+--
+-- Name: term_id_seq; Type: SEQUENCE; Schema: public; Owner: faraday
+--
+
+CREATE SEQUENCE term_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -176,157 +165,140 @@ CREATE SEQUENCE untitled_table_id_seq
     CACHE 1;
 
 
-ALTER TABLE untitled_table_id_seq OWNER TO abramjstamper;
+ALTER TABLE term_id_seq OWNER TO faraday;
 
 --
--- Name: untitled_table_id_seq; Type: SEQUENCE OWNED BY; Schema: Faraday; Owner: abramjstamper
+-- Name: term_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: faraday
 --
 
-ALTER SEQUENCE untitled_table_id_seq OWNED BY "Course".id;
-
-
---
--- Name: id; Type: DEFAULT; Schema: Faraday; Owner: abramjstamper
---
-
-ALTER TABLE ONLY "Course" ALTER COLUMN id SET DEFAULT nextval('untitled_table_id_seq'::regclass);
+ALTER SEQUENCE term_id_seq OWNED BY term.id;
 
 
 --
--- Name: id; Type: DEFAULT; Schema: Faraday; Owner: abramjstamper
+-- Name: id; Type: DEFAULT; Schema: public; Owner: faraday
 --
 
-ALTER TABLE ONLY "Department" ALTER COLUMN id SET DEFAULT nextval('"Department_id_seq"'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: Faraday; Owner: abramjstamper
---
-
-ALTER TABLE ONLY "Section" ALTER COLUMN id SET DEFAULT nextval('"Section_id_seq"'::regclass);
+ALTER TABLE ONLY course ALTER COLUMN id SET DEFAULT nextval('course_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: Faraday; Owner: abramjstamper
+-- Name: id; Type: DEFAULT; Schema: public; Owner: faraday
 --
 
-ALTER TABLE ONLY "Term" ALTER COLUMN id SET DEFAULT nextval('"Term_id_seq"'::regclass);
+ALTER TABLE ONLY department ALTER COLUMN id SET DEFAULT nextval('department_id_seq'::regclass);
 
 
 --
--- Data for Name: Course; Type: TABLE DATA; Schema: Faraday; Owner: abramjstamper
+-- Name: id; Type: DEFAULT; Schema: public; Owner: faraday
 --
 
-COPY "Course" (id, prefix, number, title, active, department) FROM stdin;
+ALTER TABLE ONLY section ALTER COLUMN id SET DEFAULT nextval('section_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: faraday
+--
+
+ALTER TABLE ONLY term ALTER COLUMN id SET DEFAULT nextval('term_id_seq'::regclass);
+
+
+--
+-- Data for Name: course; Type: TABLE DATA; Schema: public; Owner: faraday
+--
+
+COPY course (id, prefix, number, title, active, department_id) FROM stdin;
+1	COS	121	Foundations of Computer Science	t	1
+2	COS	243	Multi-Tier Web Applications	f	1
 \.
 
 
 --
--- Data for Name: Department; Type: TABLE DATA; Schema: Faraday; Owner: abramjstamper
+-- Name: course_id_seq; Type: SEQUENCE SET; Schema: public; Owner: faraday
 --
 
-COPY "Department" (id, name) FROM stdin;
+SELECT pg_catalog.setval('course_id_seq', 1, true);
+
+
+--
+-- Data for Name: department; Type: TABLE DATA; Schema: public; Owner: faraday
+--
+
+COPY department (id, name) FROM stdin;
+1	Computer Science
 \.
 
 
 --
--- Name: Department_id_seq; Type: SEQUENCE SET; Schema: Faraday; Owner: abramjstamper
+-- Name: department_id_seq; Type: SEQUENCE SET; Schema: public; Owner: faraday
 --
 
-SELECT pg_catalog.setval('"Department_id_seq"', 1, false);
+SELECT pg_catalog.setval('department_id_seq', 1, false);
 
 
 --
--- Data for Name: Section; Type: TABLE DATA; Schema: Faraday; Owner: abramjstamper
+-- Data for Name: section; Type: TABLE DATA; Schema: public; Owner: faraday
 --
 
-COPY "Section" (id, reg_number, title, course_id, term_id) FROM stdin;
+COPY section (id, course_id, term_id, reg_number, title) FROM stdin;
+1	1	1	343734	Class 1
+2	2	1	540723	Class 1
+3	1	1	354161	Class 2
 \.
 
 
 --
--- Name: Section_id_seq; Type: SEQUENCE SET; Schema: Faraday; Owner: abramjstamper
+-- Name: section_id_seq; Type: SEQUENCE SET; Schema: public; Owner: faraday
 --
 
-SELECT pg_catalog.setval('"Section_id_seq"', 1, false);
+SELECT pg_catalog.setval('section_id_seq', 1, false);
 
 
 --
--- Data for Name: Term; Type: TABLE DATA; Schema: Faraday; Owner: abramjstamper
+-- Data for Name: term; Type: TABLE DATA; Schema: public; Owner: faraday
 --
 
-COPY "Term" (id, name, start_date, end_date) FROM stdin;
+COPY term (id, name, start_date, end_date) FROM stdin;
+1	Spring 2016	2016-01-01	2016-05-01
 \.
 
 
 --
--- Name: Term_id_seq; Type: SEQUENCE SET; Schema: Faraday; Owner: abramjstamper
+-- Name: term_id_seq; Type: SEQUENCE SET; Schema: public; Owner: faraday
 --
 
-SELECT pg_catalog.setval('"Term_id_seq"', 1, false);
-
-
---
--- Name: untitled_table_id_seq; Type: SEQUENCE SET; Schema: Faraday; Owner: abramjstamper
---
-
-SELECT pg_catalog.setval('untitled_table_id_seq', 1, false);
+SELECT pg_catalog.setval('term_id_seq', 1, false);
 
 
 --
--- Name: Course_pkey; Type: CONSTRAINT; Schema: Faraday; Owner: abramjstamper
+-- Name: course_pkey; Type: CONSTRAINT; Schema: public; Owner: faraday
 --
 
-ALTER TABLE ONLY "Course"
-    ADD CONSTRAINT "Course_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Department_pkey; Type: CONSTRAINT; Schema: Faraday; Owner: abramjstamper
---
-
-ALTER TABLE ONLY "Department"
-    ADD CONSTRAINT "Department_pkey" PRIMARY KEY (id);
+ALTER TABLE ONLY course
+    ADD CONSTRAINT course_pkey PRIMARY KEY (id);
 
 
 --
--- Name: Section_pkey; Type: CONSTRAINT; Schema: Faraday; Owner: abramjstamper
+-- Name: department_pkey; Type: CONSTRAINT; Schema: public; Owner: faraday
 --
 
-ALTER TABLE ONLY "Section"
-    ADD CONSTRAINT "Section_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Term_pkey; Type: CONSTRAINT; Schema: Faraday; Owner: abramjstamper
---
-
-ALTER TABLE ONLY "Term"
-    ADD CONSTRAINT "Term_pkey" PRIMARY KEY (id);
+ALTER TABLE ONLY department
+    ADD CONSTRAINT department_pkey PRIMARY KEY (id);
 
 
 --
--- Name: Course_department_fkey; Type: FK CONSTRAINT; Schema: Faraday; Owner: abramjstamper
+-- Name: section_pkey; Type: CONSTRAINT; Schema: public; Owner: faraday
 --
 
-ALTER TABLE ONLY "Course"
-    ADD CONSTRAINT "Course_department_fkey" FOREIGN KEY (department) REFERENCES "Department"(id);
-
-
---
--- Name: Section_course_id_fkey; Type: FK CONSTRAINT; Schema: Faraday; Owner: abramjstamper
---
-
-ALTER TABLE ONLY "Section"
-    ADD CONSTRAINT "Section_course_id_fkey" FOREIGN KEY (course_id) REFERENCES "Course"(id);
+ALTER TABLE ONLY section
+    ADD CONSTRAINT section_pkey PRIMARY KEY (id);
 
 
 --
--- Name: Section_term_id_fkey; Type: FK CONSTRAINT; Schema: Faraday; Owner: abramjstamper
+-- Name: term_pkey; Type: CONSTRAINT; Schema: public; Owner: faraday
 --
 
-ALTER TABLE ONLY "Section"
-    ADD CONSTRAINT "Section_term_id_fkey" FOREIGN KEY (term_id) REFERENCES "Term"(id);
+ALTER TABLE ONLY term
+    ADD CONSTRAINT term_pkey PRIMARY KEY (id);
 
 
 --
