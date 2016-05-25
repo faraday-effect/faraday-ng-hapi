@@ -1,3 +1,4 @@
+"use strict";
 /*
 "use strict";
 
@@ -36,7 +37,7 @@ var knex = require('knex')({
 });
 var Bookshelf = require('bookshelf')(knex);
 
-
+export class Models{
 //Models
 
 //Department
@@ -93,3 +94,4 @@ var Sections = Bookshelf.Collection.extend({
 var Terms = Bookshelf.Collection.extend({
     model: Term
 });
+}
