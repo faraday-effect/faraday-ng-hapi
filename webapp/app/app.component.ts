@@ -28,7 +28,7 @@ import { CourseDetailComponent } from './course-detail.component';
     useAsDefault: true,
   },
   {
-    path: '/courses/:id',
+    path: '/course/:id',
     name: 'CourseDetail',
     component: CourseDetailComponent,
   },
