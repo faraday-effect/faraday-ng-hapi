@@ -2,9 +2,25 @@
 
 const Hapi = require('hapi');
 const Good = require('good');
+var Models = require('./models.js');
+
 
 const server = new Hapi.Server();
 server.connection({ port: 3000});
+
+var knex = require('knex')({
+    client: 'pg',
+    connection: {
+        host: '127.0.0.1',
+        user: 'faraday',
+        password: 'pass',
+        database: 'faraday',
+        charset: 'utf8'
+    }
+});
+var Bookshelf = require('bookshelf')(knex);
+
+
 
 //Serving dynamic content
 server.route({
@@ -20,7 +36,10 @@ server.route({
     method: 'GET',
     path: '/course',
     handler: function (request, reply) {
-        reply('list of courses');
+        console.log(Models);
+        let course = Models.Courses.forge().fetch();
+
+        reply(course);
     }
 });
 
@@ -28,7 +47,7 @@ server.route({
     method: ['POST', 'GET'],
     path: '/course/new',
     handler: function (request, reply) {
-        reply('New Course');
+        reply("new course");
     }
 });
 
@@ -36,7 +55,8 @@ server.route({
     method: 'GET',
     path: '/course/{course_id}',
     handler: function (request, reply) {
-        reply("course_id: " + encodeURIComponent(request.params.course_id) + " Show");
+        let course = Course.forge({id: request.params.id}).fetch();
+        reply(course);
     }
 });
 
