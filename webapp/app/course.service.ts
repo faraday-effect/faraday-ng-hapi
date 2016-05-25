@@ -38,10 +38,14 @@ export class CourseService {
   }
 
   getCourse(id: number) {
-    return this.getCourses()
-               .then(courses => courses.filter(course => course.id === id)[0]);
+    return this.http.get(this.coursesUrl+'/'+id)
+               .toPromise()
+               .then(response => response.json())
+               .catch(this.handleError);
   }
 
-  handleError(){}
+  handleError(err: any) {
+    console.error("CourseService", err);
+  }
 
 }

@@ -22,7 +22,7 @@ import { CourseDetailComponent } from './course-detail.component';
 })
 @RouteConfig([
   {
-    path: '/courses',
+    path: '/course',
     name: 'Courses',
     component: CoursesComponent,
     useAsDefault: true,
