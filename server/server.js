@@ -31,7 +31,6 @@ server.route({
     path: '/course',
     handler: function (request, reply) {
         let response = Models.Courses.forge().fetch();
-
         reply(response);
     }
 });
@@ -40,7 +39,12 @@ server.route({
     method: ['POST', 'GET'],
     path: '/course/new',
     handler: function (request, reply) {
-        reply("new course");
+        if(request.method == 'get') {
+            reply({course: "new course"});
+        }
+        if(request.method == 'post') {
+            reply({statusCode: 200, method: "post", course: "new course"})
+        }
     }
 });
 
@@ -48,16 +52,24 @@ server.route({
     method: 'GET',
     path: '/course/{course_id}',
     handler: function (request, reply) {
-        let course = Models.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch();
-        reply(course);
+        let response = Models.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch();
+        reply(response);
     }
 });
 
 server.route({
-    method: ['POST', 'GET'],
+    method: ['PUT', 'GET'],
     path: '/course/{course_id}/edit',
     handler: function (request, reply) {
-        reply("course_id: " + encodeURIComponent(request.params.course_id) + " Edit");
+        let response = Models.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch();
+        if(request.method == 'get'){
+            reply(response);
+        }
+        if(request.method == 'put'){
+            //do database transaction
+            response = Models.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch();
+            reply(response);
+        }
     }
 });
 
@@ -67,8 +79,46 @@ server.route({
     path: '/department',
     handler: function (request, reply) {
         let response = Models.Departments.forge().fetch();
-
         reply(response);
+    }
+});
+
+server.route({
+    method: 'GET',
+    path: '/department/{department_id}',
+    handler: function (request, reply) {
+        let response = Models.Department.forge({'id': encodeURIComponent(request.params.department_id)}).fetch();
+        reply(response);
+    }
+});
+
+
+server.route({
+    method: ['POST', 'GET'],
+    path: '/department/new',
+    handler: function (request, reply) {
+        if(request.method == 'get') {
+            reply({course: "new department"});
+        }
+        if(request.method == 'post') {
+            reply({statusCode: 200, method: "post", department: "new department"})
+        }
+    }
+});
+
+server.route({
+    method: ['PUT', 'GET'],
+    path: '/department/{department_id}/edit',
+    handler: function (request, reply) {
+        let response = Models.Department.forge({'id': encodeURIComponent(request.params.department_id)}).fetch();
+        if(request.method == 'get'){
+            reply(response);
+        }
+        if(request.method == 'put'){
+            //do database transaction
+            response = Models.Department.forge({'id': encodeURIComponent(request.params.department_id)}).fetch();
+            reply(response);
+        }
     }
 });
 
@@ -77,15 +127,21 @@ server.route({
     method: 'GET',
     path: '/section',
     handler: function (request, reply) {
-        reply("View alls sections");
+        let response = Models.Sections.forge().fetch();
+        reply(response);
     }
 });
 
 server.route({
-    method: 'GET',
+    method: ['GET', 'POST'],
     path: '/course/{course_id}/section/new',
     handler: function (request, reply) {
-        reply("New Section of " + encodeURIComponent(request.params.course_id));
+        if(request.method == 'get') {
+            reply({section: "new section"});
+        }
+        if(request.method == 'post') {
+            reply({statusCode: 200, method: "post", section: "new section"})
+        }
     }
 });
 
@@ -93,50 +149,115 @@ server.route({
     method: 'GET',
     path: '/course/{course_id}/section/{section_id}',
     handler: function (request, reply) {
-        reply("course_id: " + encodeURIComponent(request.params.course_id) + "section_id: " + encodeURIComponent(request.params.section_id)+ " View Section");
+        let response = Models.Section.forge({'id': encodeURIComponent(request.params.section_id)}).fetch();
+        reply(response);
     }
 });
 
 server.route({
-    method: ['POST', 'GET'],
+    method: 'GET',
+    path: '/course/{course_id}/section',
+    handler: function (request, reply) {
+        let response = Models.Sections.forge({'course_id': encodeURIComponent(request.params.course_id)}).fetch();
+        reply(response);
+    }
+});
+
+server.route({
+    method: ['PUT', 'GET'],
     path: '/course/{course_id}/section/{section_id}/edit',
     handler: function (request, reply) {
-        reply("course_id: " + encodeURIComponent(request.params.course_id) + "section_id: " + encodeURIComponent(request.params.section_id)+ " Edit Section");
+        let response = Models.Section.forge({'id': encodeURIComponent(request.params.section_id)}).fetch();
+        if(request.method == 'get'){
+            reply(response);
+        }
+        if(request.method == 'post'){
+            //do database transaction
+            response = Models.Section.forge({'id': encodeURIComponent(request.params.section_id)}).fetch();
+            reply(response);
+        }
+    }
+});
+
+// server.route({
+//     method: ['POST', 'GET'],
+//     path: '/course/{course_id}/section/{section_id}/enroll',
+//     handler: function (request, reply) {
+//         reply("course_id: " + encodeURIComponent(request.params.course_id) + "section_id: " + encodeURIComponent(request.params.section_id)+ " Enroll");
+//     }
+// });
+//
+// server.route({
+//     method: ['POST', 'GET'],
+//     path: '/course/{course_id}/section/{section_id}/unenroll',
+//     handler: function (request, reply) {
+//         reply("course_id: " + encodeURIComponent(request.params.course_id) + "section_id: " + encodeURIComponent(request.params.section_id)+ " Unenroll");
+//     }
+// });
+
+//Term
+server.route({
+    method: 'GET',
+    path: '/term',
+    handler: function (request, reply) {
+        let response = Models.Terms.forge().fetch();
+        reply(response);
     }
 });
 
 server.route({
-    method: ['POST', 'GET'],
-    path: '/course/{course_id}/section/{section_id}/enroll',
+    method: ['GET', 'POST'],
+    path: '/term/new',
     handler: function (request, reply) {
-        reply("course_id: " + encodeURIComponent(request.params.course_id) + "section_id: " + encodeURIComponent(request.params.section_id)+ " Enroll");
+        if(request.method == 'get') {
+            reply({term: "new term"});
+        }
+        if(request.method == 'post') {
+            reply({statusCode: 200, method: "post", course: "new term"})
+        }
     }
 });
 
 server.route({
-    method: ['POST', 'GET'],
-    path: '/course/{course_id}/section/{section_id}/unenroll',
+    method: 'GET',
+    path: '/term/{term_id}',
     handler: function (request, reply) {
-        reply("course_id: " + encodeURIComponent(request.params.course_id) + "section_id: " + encodeURIComponent(request.params.section_id)+ " Unenroll");
+        let response = Models.Term.forge({'id': encodeURIComponent(request.params.term_id)}).fetch();
+        reply(response);
     }
 });
 
+server.route({
+    method: ['PUT', 'GET'],
+    path: '/term/{term_id}/edit',
+    handler: function (request, reply) {
+        let response = Models.Term.forge({'id': encodeURIComponent(request.params.term_id)}).fetch();
+        if(request.method == 'get'){
+            reply(response);
+        }
+        if(request.method == 'post'){
+            //do database transaction
+            response = Models.Term.forge({'id': encodeURIComponent(request.params.term_id)}).fetch();
+            reply(response);
+        }
+    }
+});
 
 //Serving static content
-server.register(require('inert'), (err) => {
-
-    if (err) {
-        throw err;
-    }
-
-    server.route({
-    method: 'GET',
-    path: '/my_css',
-    handler: function (request, reply) {
-        reply.file('./server/static/special_style.css');
-    }
-});
-});
+// server.register(require('inert'), (err) => {
+//
+//     if (err) {
+//         throw err;
+//     }
+//
+//     server.route({
+//         method: 'GET',
+//         path: '/my_css',
+//         handler: function (request, reply) {
+//             reply.file('./server/static/special_style.css');
+//         }
+//     });
+// });
 
 //Server logging and starting functionality
 server.register({
