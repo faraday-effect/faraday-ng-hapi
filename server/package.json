@@ -18,12 +18,14 @@
   "homepage": "https://github.com/faraday-effect/faraday#readme",
   "dependencies": {
     "bookshelf": "^0.9.5",
-    "hapi": "^13.4.1",
-    "knex": "^0.11.4",
-    "pg": "^4.5.5",
     "good": "^7.0.1",
     "good-console": "^6.1.1",
     "good-squeeze": "^3.0.1",
-    "inert": "^4.0.0"
+    "hapi": "^13.4.1",
+    "inert": "^4.0.0",
+    "knex": "^0.11.4",
+    "lodash": "^4.13.1",
+    "pg": "^4.5.5",
+    "when": "^3.7.7"
   }
 }
