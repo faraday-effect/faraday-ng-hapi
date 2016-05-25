@@ -8,6 +8,9 @@ var Models = require('./models.js');
 const server = new Hapi.Server();
 server.connection({ port: 3000});
 
+server.register([require('vision'), require('inert'), { register: require('lout') }], function(err) {
+});
+
 //Serving dynamic content
 server.route({
     method: 'GET',
