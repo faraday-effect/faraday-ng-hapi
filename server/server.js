@@ -2,6 +2,8 @@
 
 const Hapi = require('hapi');
 const Good = require('good');
+var Models = require('./models.js');
+
 
 const server = new Hapi.Server();
 server.connection({ port: 3000});
@@ -20,7 +22,9 @@ server.route({
     method: 'GET',
     path: '/course',
     handler: function (request, reply) {
-        reply('list of courses');
+        let response = Models.Courses.forge().fetch();
+
+        reply(response);
     }
 });
 
@@ -28,7 +32,7 @@ server.route({
     method: ['POST', 'GET'],
     path: '/course/new',
     handler: function (request, reply) {
-        reply('New Course');
+        reply("new course");
     }
 });
 
@@ -36,7 +40,8 @@ server.route({
     method: 'GET',
     path: '/course/{course_id}',
     handler: function (request, reply) {
-        reply("course_id: " + encodeURIComponent(request.params.course_id) + " Show");
+        let course = Models.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch();
+        reply(course);
     }
 });
 
@@ -45,6 +50,17 @@ server.route({
     path: '/course/{course_id}/edit',
     handler: function (request, reply) {
         reply("course_id: " + encodeURIComponent(request.params.course_id) + " Edit");
+    }
+});
+
+//Department Routes
+server.route({
+    method: 'GET',
+    path: '/department',
+    handler: function (request, reply) {
+        let response = Models.Departments.forge().fetch();
+
+        reply(response);
     }
 });
 
