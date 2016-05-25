@@ -6,7 +6,11 @@ var Models = require('./models.js');
 
 
 const server = new Hapi.Server();
-server.connection({ port: 3000});
+server.connection({ port: 3000,
+		    routes: {
+			cors: true
+		      }
+		    });
 
 server.register([require('vision'), require('inert'), { register: require('lout') }], function(err) {
 });
