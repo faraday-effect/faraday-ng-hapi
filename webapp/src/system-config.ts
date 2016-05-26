@@ -3,12 +3,24 @@
  **********************************************************************************************/
 /** Map relative paths to URLs. */
 const map: any = {
-  'shared': 'app/shared'
+  '@angular2-material': 'vendor/@angular2-material'
 };
 
 /** User packages configuration. */
 const packages: any = {
 };
+
+const materialPkgs: string[] = [
+  'core',
+  'button',
+  'card',
+  'list',
+  'toolbar',
+];
+
+materialPkgs.forEach((pkg) => {
+  packages[`@angular2-material/${pkg}`] = {main: `${pkg}.js`};
+});
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /***********************************************************************************************

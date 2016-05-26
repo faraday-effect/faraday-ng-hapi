@@ -1,6 +1,7 @@
-<ul>
-  <li *ngFor="let course of courses"
-      (click)="gotoCourse(course.id)">
-    <span>{{course.title}}</span>
-  </li>
-</ul>
+<div class="courses">
+
+  <md-card *ngFor="let course of courses">
+    <button md-button (click)="gotoCourse(course.id)">{{course.title}}</button>
+  </md-card>
+
+</div>
