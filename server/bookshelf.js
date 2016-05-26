@@ -49,7 +49,7 @@ var Course = Bookshelf.Model.extend({
     department: function () {
         return this.belongsTo(Department);
     },
-    section: function () {
+    sections: function () {
         return this.hasMany(Section);
     },
     prefix: function () {
