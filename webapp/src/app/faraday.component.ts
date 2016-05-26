@@ -3,7 +3,10 @@ import { Router, Routes, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from '@angular/rou
 
 import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
 import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
+import { MD_SIDENAV_DIRECTIVES } from '@angular2-material/sidenav';
 import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
+
+import { BreadcrumbComponent } from 'ng2-breadcrumb/ng2-breadcrumb';
 
 import {
   CourseService,
@@ -23,7 +26,9 @@ import {
     ROUTER_DIRECTIVES,
     MD_BUTTON_DIRECTIVES,
     MD_CARD_DIRECTIVES,
+    MD_SIDENAV_DIRECTIVES,
     MD_TOOLBAR_DIRECTIVES,
+    BreadcrumbComponent,
   ],
   providers: [ROUTER_PROVIDERS, CourseService, SectionService]
 })

@@ -3,11 +3,13 @@
  **********************************************************************************************/
 /** Map relative paths to URLs. */
 const map: any = {
-  '@angular2-material': 'vendor/@angular2-material'
+  '@angular2-material': 'vendor/@angular2-material',
+  'ng2-breadcrumb': 'vendor/ng2-breadcrumb',
 };
 
 /** User packages configuration. */
 const packages: any = {
+  'ng2-breadcrumb': { main: 'ng2-breadcrumb' },
 };
 
 const materialPkgs: string[] = [
@@ -15,6 +17,7 @@ const materialPkgs: string[] = [
   'card',
   'core',
   'list',
+  'sidenav',
   'toolbar',
 ];
 
