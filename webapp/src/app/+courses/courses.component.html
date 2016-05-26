@@ -1,0 +1,6 @@
+<ul>
+  <li *ngFor="let course of courses"
+      (click)="gotoCourse(course.id)">
+    <span>{{course.title}}</span>
+  </li>
+</ul>
