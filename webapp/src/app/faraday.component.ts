@@ -11,6 +11,7 @@ import {
   CoursesComponent,
   SectionService,
   SectionComponent,
+  SectionsComponent,
 } from './shared';
 
 @Component({
@@ -31,6 +32,7 @@ import {
   {path: '/course', component: CoursesComponent},
   {path: '/', component: CoursesComponent},
   {path: '/section/:id', component: SectionComponent},
+  {path: '/section', component: SectionsComponent}
 ])
 export class FaradayAppComponent {
 
@@ -40,6 +42,10 @@ export class FaradayAppComponent {
 
   gotoCourses() {
     this.router.navigate(['/course']);
+  }
+
+  gotoSections() {
+    this.router.navigate(['/section']);
   }
 
   title = 'faraday works!';

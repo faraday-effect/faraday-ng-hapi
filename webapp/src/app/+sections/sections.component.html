@@ -1,0 +1,7 @@
+<div class="sections">
+
+  <md-card *ngFor="let section of sections">
+    <button md-button (click)="gotoSection(section.id)">{{section.title}}</button>
+  </md-card>
+
+</div>
