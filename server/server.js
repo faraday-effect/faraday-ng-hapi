@@ -2,7 +2,7 @@
 
 const Hapi = require('hapi');
 const Good = require('good');
-var Models = require('./models.js');
+var bookshelf = require('./bookshelf');
 
 
 const server = new Hapi.Server();
@@ -25,7 +25,7 @@ server.route({
     method: 'GET',
     path: '/course',
     handler: function (request, reply) {
-        let response = Models.Courses.forge().fetch();
+        let response = bookshelf.Courses.forge().fetch();
         reply(response);
     }
 });
@@ -47,7 +47,7 @@ server.route({
     method: 'GET',
     path: '/course/{course_id}',
     handler: function (request, reply) {
-        let response = Models.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch();
+        let response = bookshelf.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch();
         reply(response);
     }
 });
@@ -56,13 +56,13 @@ server.route({
     method: ['PUT', 'GET'],
     path: '/course/{course_id}/edit',
     handler: function (request, reply) {
-        let response = Models.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch();
+        let response = bookshelf.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch();
         if(request.method == 'get'){
             reply(response);
         }
         if(request.method == 'put'){
             //do database transaction
-            response = Models.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch();
+            response = bookshelf.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch();
             reply(response);
         }
     }
@@ -73,7 +73,7 @@ server.route({
     method: 'GET',
     path: '/department',
     handler: function (request, reply) {
-        let response = Models.Departments.forge().fetch();
+        let response = bookshelf.Departments.forge().fetch();
         reply(response);
     }
 });
@@ -82,7 +82,7 @@ server.route({
     method: 'GET',
     path: '/department/{department_id}',
     handler: function (request, reply) {
-        let response = Models.Department.forge({'id': encodeURIComponent(request.params.department_id)}).fetch();
+        let response = bookshelf.Department.forge({'id': encodeURIComponent(request.params.department_id)}).fetch();
         reply(response);
     }
 });
@@ -105,13 +105,13 @@ server.route({
     method: ['PUT', 'GET'],
     path: '/department/{department_id}/edit',
     handler: function (request, reply) {
-        let response = Models.Department.forge({'id': encodeURIComponent(request.params.department_id)}).fetch();
+        let response = bookshelf.Department.forge({'id': encodeURIComponent(request.params.department_id)}).fetch();
         if(request.method == 'get'){
             reply(response);
         }
         if(request.method == 'put'){
             //do database transaction
-            response = Models.Department.forge({'id': encodeURIComponent(request.params.department_id)}).fetch();
+            response = bookshelf.Department.forge({'id': encodeURIComponent(request.params.department_id)}).fetch();
             reply(response);
         }
     }
@@ -122,7 +122,7 @@ server.route({
     method: 'GET',
     path: '/section',
     handler: function (request, reply) {
-        let response = Models.Sections.forge().fetch();
+        let response = bookshelf.Sections.forge().fetch();
         reply(response);
     }
 });
@@ -144,7 +144,7 @@ server.route({
     method: 'GET',
     path: '/course/{course_id}/section/{section_id}',
     handler: function (request, reply) {
-        let response = Models.Section.forge({'id': encodeURIComponent(request.params.section_id)}).fetch();
+        let response = bookshelf.Section.forge({'id': encodeURIComponent(request.params.section_id)}).fetch();
         reply(response);
     }
 });
@@ -153,7 +153,7 @@ server.route({
     method: 'GET',
     path: '/course/{course_id}/section',
     handler: function (request, reply) {
-        let response = Models.Sections.forge({'course_id': encodeURIComponent(request.params.course_id)}).fetch();
+        let response = bookshelf.Sections.forge({'course_id': encodeURIComponent(request.params.course_id)}).fetch();
         reply(response);
     }
 });
@@ -162,13 +162,13 @@ server.route({
     method: ['PUT', 'GET'],
     path: '/course/{course_id}/section/{section_id}/edit',
     handler: function (request, reply) {
-        let response = Models.Section.forge({'id': encodeURIComponent(request.params.section_id)}).fetch();
+        let response = bookshelf.Section.forge({'id': encodeURIComponent(request.params.section_id)}).fetch();
         if(request.method == 'get'){
             reply(response);
         }
         if(request.method == 'post'){
             //do database transaction
-            response = Models.Section.forge({'id': encodeURIComponent(request.params.section_id)}).fetch();
+            response = bookshelf.Section.forge({'id': encodeURIComponent(request.params.section_id)}).fetch();
             reply(response);
         }
     }
@@ -195,7 +195,7 @@ server.route({
     method: 'GET',
     path: '/term',
     handler: function (request, reply) {
-        let response = Models.Terms.forge().fetch();
+        let response = bookshelf.Terms.forge().fetch();
         reply(response);
     }
 });
@@ -217,7 +217,7 @@ server.route({
     method: 'GET',
     path: '/term/{term_id}',
     handler: function (request, reply) {
-        let response = Models.Term.forge({'id': encodeURIComponent(request.params.term_id)}).fetch();
+        let response = bookshelf.Term.forge({'id': encodeURIComponent(request.params.term_id)}).fetch();
         reply(response);
     }
 });
@@ -226,13 +226,13 @@ server.route({
     method: ['PUT', 'GET'],
     path: '/term/{term_id}/edit',
     handler: function (request, reply) {
-        let response = Models.Term.forge({'id': encodeURIComponent(request.params.term_id)}).fetch();
+        let response = bookshelf.Term.forge({'id': encodeURIComponent(request.params.term_id)}).fetch();
         if(request.method == 'get'){
             reply(response);
         }
         if(request.method == 'post'){
             //do database transaction
-            response = Models.Term.forge({'id': encodeURIComponent(request.params.term_id)}).fetch();
+            response = bookshelf.Term.forge({'id': encodeURIComponent(request.params.term_id)}).fetch();
             reply(response);
         }
     }
