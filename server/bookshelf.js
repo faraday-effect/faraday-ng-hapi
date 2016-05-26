@@ -35,10 +35,10 @@ var Prefix = Bookshelf.Model.extend({
 //Department_prefix
 var Department_Prefix = Bookshelf.Model.extend({
     tableName: 'department_prefix',
-    department_id: function () {
+    department: function () {
         return this.belongsTo(Department);
     },
-    prefix_id: function () {
+    prefix: function () {
         return this.belongsTo(Prefix)
     }
 });
@@ -46,13 +46,13 @@ var Department_Prefix = Bookshelf.Model.extend({
 //Course
 var Course = Bookshelf.Model.extend({
     tableName: 'course',
-    department_id: function () {
+    department: function () {
         return this.belongsTo(Department);
     },
-    section_id: function () {
+    section: function () {
         return this.hasMany(Section);
     },
-    prefix_id: function () {
+    prefix: function () {
         return this.belongsTo(Prefix);
     }
 });
