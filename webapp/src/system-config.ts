@@ -11,9 +11,9 @@ const packages: any = {
 };
 
 const materialPkgs: string[] = [
-  'core',
   'button',
   'card',
+  'core',
   'list',
   'toolbar',
 ];
