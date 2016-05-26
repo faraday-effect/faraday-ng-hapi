@@ -68,15 +68,21 @@ server.route({
     method: 'PUT',
     path: '/course/{course_id}/edit',
     handler: function (request, reply) {
-        let response = bookshelf.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch();
-        if (request.method == 'get'){
-            reply(response);
-        }
-        if (request.method == 'put') {
-            //do database transaction
-            response = bookshelf.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch();
-            reply(response);
-        }
+        bookshelf.Course.forge({'id': request.params.course_id})
+            .save(
+                {
+                    title: request.payload.title,
+                    prefix_id: request.payload.prefix_id,
+                    number: request.payload.prefix_id,
+                    active: request.payload.active,
+                    department_id: request.payload.department_id
+                }
+            ).then(function (model) {
+            //get database
+            reply({statusCode: 200, method: "put", response: model})
+        }).catch(function (error) {
+            reply({statusCode: 500, err: error});
+        });
     }
 });
 
@@ -129,15 +135,70 @@ server.route({
     method: 'PUT',
     path: '/department/{department_id}/edit',
     handler: function (request, reply) {
-        let response = bookshelf.Department.forge({'id': encodeURIComponent(request.params.department_id)}).fetch();
-        if (request.method == 'get'){
-            reply(response);
-        }
-        if (request.method == 'put') {
-            //do database transaction
-            response = bookshelf.Department.forge({'id': encodeURIComponent(request.params.department_id)}).fetch();
-            reply(response);
-        }
+        bookshelf.Department.forge({'id': request.params.department_id})
+            .save(
+                {
+                    name: request.payload.name
+                }
+            ).then(function (model) {
+            //get database
+            reply({statusCode: 200, method: "put", response: model})
+        }).catch(function (error) {
+            reply({statusCode: 500, err: error});
+        });
+    }
+});
+
+//Prefix
+server.route({
+    method: 'GET',
+    path: '/prefix',
+    handler: function (request, reply) {
+        let response = bookshelf.Prefixs.forge().fetch();
+        reply(response);
+    }
+});
+
+server.route({
+    method: 'POST',
+    path: '/prefix/new',
+    handler: function (request, reply) {
+        new bookshelf.Prefix({
+            name: request.payload.name
+        })
+            .save().then(function (model) {
+            //get database
+            reply({statusCode: 200, method: "post", response: model})
+        }).catch(function (error) {
+            reply({statusCode: 500, err: error});
+        });
+    }
+});
+
+server.route({
+    method: 'PUT',
+    path: '/prefix/{prefix_id}/edit',
+    handler: function (request, reply) {
+        bookshelf.Prefix.forge({'id': request.params.prefix_id})
+            .save(
+                {
+                    name: request.payload.name
+                }
+            ).then(function (model) {
+            //get database
+            reply({statusCode: 200, method: "put", response: model})
+        }).catch(function (error) {
+            reply({statusCode: 500, err: error});
+        });
+    }
+});
+
+server.route({
+    method: 'GET',
+    path: '/prefix/{prefix_id}',
+    handler: function (request, reply) {
+        let response = bookshelf.Prefix.forge({'id': encodeURIComponent(request.params.prefix_id)}).fetch();
+        reply(response);
     }
 });
 
@@ -183,50 +244,20 @@ server.route({
     method: 'PUT',
     path: '/section/{section_id}/edit',
     handler: function (request, reply) {
-        let response = bookshelf.Section.forge({'id': encodeURIComponent(request.params.section_id)}).fetch();
-        if (request.method == 'get'){
-            reply(response);
-        }
-        if (request.method == 'post') {
-            //do database transaction
-            response = bookshelf.Section.forge({'id': encodeURIComponent(request.params.section_id)}).fetch();
-            reply(response);
-        }
-    }
-});
-
-//Prefix
-server.route({
-    method: 'GET',
-    path: '/prefix',
-    handler: function (request, reply) {
-        let response = bookshelf.Prefixs.forge().fetch();
-        reply(response);
-    }
-});
-
-server.route({
-    method: 'POST',
-    path: '/prefix/new',
-    handler: function (request, reply) {
-        new bookshelf.Prefix({
-            name: request.payload.name
-        })
-            .save().then(function (model) {
+        bookshelf.Section.forge({'id': request.params.section_id})
+            .save(
+                {
+                    course_id: request.payload.course_id,
+                    term_id: request.payload.term_id,
+                    reg_number: request.payload.reg_number,
+                    title: request.payload.title
+                }
+            ).then(function (model) {
             //get database
-            reply({statusCode: 200, method: "post", response: model})
+            reply({statusCode: 200, method: "put", response: model})
         }).catch(function (error) {
             reply({statusCode: 500, err: error});
         });
-    }
-});
-
-server.route({
-    method: 'GET',
-    path: '/prefix/{prefix_id}',
-    handler: function (request, reply) {
-        let response = bookshelf.Prefix.forge({'id': encodeURIComponent(request.params.prefix_id)}).fetch();
-        reply(response);
     }
 });
 
@@ -271,15 +302,19 @@ server.route({
     method: 'PUT',
     path: '/term/{term_id}/edit',
     handler: function (request, reply) {
-        let response = bookshelf.Term.forge({'id': encodeURIComponent(request.params.term_id)}).fetch();
-        if (request.method == 'get'){
-            reply(response);
-        }
-        if (request.method == 'post') {
-            //do database transaction
-            response = bookshelf.Term.forge({'id': encodeURIComponent(request.params.term_id)}).fetch();
-            reply(response);
-        }
+        bookshelf.Term.forge({'id': request.params.term_id})
+            .save(
+                {
+                    name: request.payload.name,
+                    start_date: request.payload.start_date,
+                    end_date: request.payload.end_date
+                }
+            ).then(function (model) {
+            //get database
+            reply({statusCode: 200, method: "put", response: model})
+        }).catch(function (error) {
+            reply({statusCode: 500, err: error});
+        });
     }
 });
 
