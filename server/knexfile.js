@@ -2,10 +2,17 @@
 
 module.exports = {
 
-  development: {
-    client: 'pg',
-    connection: "postgres://faraday:password@localhost/faraday"
-  },
+    development: {
+        client: 'pg',
+        connection: {
+            database: 'faraday',
+            user: 'faraday',
+            password: 'pass'
+        },
+        seeds: {
+            directory: './seeds/'
+        }
+    },
 
   staging: {
     client: 'postgresql',

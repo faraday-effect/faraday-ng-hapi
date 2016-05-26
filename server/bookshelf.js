@@ -15,6 +15,31 @@ var Department = Bookshelf.Model.extend({
     tableName: 'department',
     course: function () {
         return this.hasMany(Course);
+    },
+    department_prefix: function () {
+        return this.hasMany(department_prefix);
+    }
+});
+
+//Prefix
+var Prefix = Bookshelf.Model.extend({
+    tableName: 'prefix',
+    department_prefix: function () {
+        return this.hasMany(department_prefix);
+    },
+    course: function () {
+        return this.hasMany(Course);
+    }
+});
+
+//Department_prefix
+var Department_Prefix = Bookshelf.Model.extend({
+    tableName: 'department_prefix',
+    department: function () {
+        return this.belongsTo(Department);
+    },
+    prefix: function () {
+        return this.belongsTo(Prefix)
     }
 });
 
@@ -24,8 +49,11 @@ var Course = Bookshelf.Model.extend({
     department: function () {
         return this.belongsTo(Department);
     },
-    section: function () {
+    sections: function () {
         return this.hasMany(Section);
+    },
+    prefix: function () {
+        return this.belongsTo(Prefix);
     }
 });
 
@@ -48,10 +76,12 @@ var Term = Bookshelf.Model.extend({
     }
 });
 
+module.exports['Prefix'] = Prefix;
+module.exports['Term'] = Term;
 module.exports['Course'] = Course;
 module.exports['Department'] = Department;
+module.exports['Department_Prefix'] = Department_Prefix;
 module.exports['Section'] = Section;
-module.exports['Term'] = Term;
 
 module.exports['Departments'] = Bookshelf.Collection.extend({
     model: Department
