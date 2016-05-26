@@ -2,26 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
-import { Course } from './course';
-
-var COURSES = [
-  {
-    id: 1,
-    prefix: "COS",
-    number: 120,
-    title: "Introduction to Computational Problem Solving",
-    active: false,
-    department_id: 2,
-  },
-  {
-    id: 2,
-    prefix: "COS",
-    number: 121,
-    title: "C++ and Linux",
-    active: false,
-    department_id: 2,
-  },
-];
+import { Course } from './shared';
 
 @Injectable()
 export class CourseService {
