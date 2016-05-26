@@ -7,13 +7,13 @@ var bookshelf = require('./bookshelf');
 
 const server = new Hapi.Server();
 server.connection({
-  port: 3000,
-  routes: {
-    cors: true,
-  },
+    port: 3000,
+    routes: {
+        cors: true
+    }
 });
 
-server.register([require('vision'), require('inert'), { register: require('lout') }], function(err) {
+server.register([require('vision'), require('inert'), {register: require('lout')}], function (err) {
 });
 
 //Serving dynamic content
@@ -36,13 +36,13 @@ server.route({
 });
 
 server.route({
-    method: ['POST', 'GET'],
+    method: 'POST',
     path: '/course/new',
     handler: function (request, reply) {
-        if(request.method == 'get') {
+        if (request.method == 'get') {
             reply({course: "new course"});
         }
-        if(request.method == 'post') {
+        if (request.method == 'post') {
             reply({statusCode: 200, method: "post", course: "new course"})
         }
     }
@@ -58,14 +58,14 @@ server.route({
 });
 
 server.route({
-    method: ['PUT', 'GET'],
+    method: 'PUT',
     path: '/course/{course_id}/edit',
     handler: function (request, reply) {
         let response = bookshelf.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch();
-        if(request.method == 'get'){
+        if (request.method == 'get'){
             reply(response);
         }
-        if(request.method == 'put'){
+        if (request.method == 'put') {
             //do database transaction
             response = bookshelf.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch();
             reply(response);
@@ -94,27 +94,36 @@ server.route({
 
 
 server.route({
-    method: ['POST', 'GET'],
+    method: 'POST',
     path: '/department/new',
     handler: function (request, reply) {
-        if(request.method == 'get') {
+        if (request.method == 'get') {
             reply({course: "new department"});
         }
-        if(request.method == 'post') {
-            reply({statusCode: 200, method: "post", department: "new department"})
+        if (request.method == 'post') {
+            new Models.Department({
+                id: parseInt(encodeURIComponent(request.payload.department_id)),
+                name: encodeURIComponent(request.payload.name)
+            })
+                .save().then(function (model) {
+                //something here
+                reply({statusCode: 200, method: "post", department: "new department"})
+            }).catch(function (error) {
+                reply({statusCode: 500, err: error});
+            });
         }
     }
 });
 
 server.route({
-    method: ['PUT', 'GET'],
+    method: 'PUT',
     path: '/department/{department_id}/edit',
     handler: function (request, reply) {
         let response = bookshelf.Department.forge({'id': encodeURIComponent(request.params.department_id)}).fetch();
-        if(request.method == 'get'){
+        if (request.method == 'get'){
             reply(response);
         }
-        if(request.method == 'put'){
+        if (request.method == 'put') {
             //do database transaction
             response = bookshelf.Department.forge({'id': encodeURIComponent(request.params.department_id)}).fetch();
             reply(response);
@@ -133,13 +142,13 @@ server.route({
 });
 
 server.route({
-    method: ['GET', 'POST'],
+    method: 'POST',
     path: '/course/{course_id}/section/new',
     handler: function (request, reply) {
-        if(request.method == 'get') {
+        if (request.method == 'get') {
             reply({section: "new section"});
         }
-        if(request.method == 'post') {
+        if (request.method == 'post') {
             reply({statusCode: 200, method: "post", section: "new section"})
         }
     }
@@ -164,14 +173,14 @@ server.route({
 });
 
 server.route({
-    method: ['PUT', 'GET'],
+    method: 'PUT',
     path: '/course/{course_id}/section/{section_id}/edit',
     handler: function (request, reply) {
         let response = bookshelf.Section.forge({'id': encodeURIComponent(request.params.section_id)}).fetch();
-        if(request.method == 'get'){
+        if (request.method == 'get'){
             reply(response);
         }
-        if(request.method == 'post'){
+        if (request.method == 'post') {
             //do database transaction
             response = bookshelf.Section.forge({'id': encodeURIComponent(request.params.section_id)}).fetch();
             reply(response);
@@ -195,6 +204,25 @@ server.route({
 //     }
 // });
 
+//Prefix
+server.route({
+    method: 'GET',
+    path: '/prefix',
+    handler: function (request, reply) {
+        let response = Models.Prefixs.forge().fetch();
+        reply(response);
+    }
+});
+
+server.route({
+    method: 'GET',
+    path: '/prefix/{prefix_id}',
+    handler: function (request, reply) {
+        let response = Models.Prefix.forge({'id': encodeURIComponent(request.params.prefix_id)}).fetch();
+        reply(response);
+    }
+});
+
 //Term
 server.route({
     method: 'GET',
@@ -206,13 +234,13 @@ server.route({
 });
 
 server.route({
-    method: ['GET', 'POST'],
+    method: 'POST',
     path: '/term/new',
     handler: function (request, reply) {
-        if(request.method == 'get') {
+        if (request.method == 'get') {
             reply({term: "new term"});
         }
-        if(request.method == 'post') {
+        if (request.method == 'post') {
             reply({statusCode: 200, method: "post", course: "new term"})
         }
     }
@@ -228,14 +256,14 @@ server.route({
 });
 
 server.route({
-    method: ['PUT', 'GET'],
+    method: 'PUT',
     path: '/term/{term_id}/edit',
     handler: function (request, reply) {
         let response = bookshelf.Term.forge({'id': encodeURIComponent(request.params.term_id)}).fetch();
-        if(request.method == 'get'){
+        if (request.method == 'get'){
             reply(response);
         }
-        if(request.method == 'post'){
+        if (request.method == 'post') {
             //do database transaction
             response = bookshelf.Term.forge({'id': encodeURIComponent(request.params.term_id)}).fetch();
             reply(response);
