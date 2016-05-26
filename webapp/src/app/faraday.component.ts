@@ -13,12 +13,12 @@ import { SectionService } from './shared';
   templateUrl: 'faraday.component.html',
   styleUrls: ['faraday.component.css'],
   directives: [ROUTER_DIRECTIVES],
-  providers: [ROUTER_PROVIDERS, CourseService]
+  providers: [ROUTER_PROVIDERS, CourseService, SectionService]
 })
 @Routes([
   {path: '/course/:id', component: CourseComponent},
-  {path: '/courses', component: CoursesComponent},
-  {path: '/', component: CoursesComponent},
+  // {path: '/courses', component: CoursesComponent},
+  // {path: '/', component: CoursesComponent},
   {path: '/section/:id', component: SectionComponent}
 ])
 export class FaradayAppComponent {

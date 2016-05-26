@@ -8,7 +8,6 @@ import { Section, SectionService } from '../shared';
   selector: 'app-section',
   templateUrl: 'section.component.html',
   styleUrls: ['section.component.css'],
-  providers: [SectionService]
 })
 export class SectionComponent implements OnActivate {
 
