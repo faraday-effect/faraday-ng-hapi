@@ -96,7 +96,16 @@ server.route({
             reply({course: "new department"});
         }
         if(request.method == 'post') {
-            reply({statusCode: 200, method: "post", department: "new department"})
+            new Models.Department({
+                id: parseInt(encodeURIComponent(request.payload.department_id)),
+                name: encodeURIComponent(request.payload.name)
+            })
+                .save().then(function (model) {
+                //something here
+                reply({statusCode: 200, method: "post", department: "new department"})
+            }).catch(function (error) {
+                reply({statusCode: 500, err: error});
+            });
         }
     }
 });
