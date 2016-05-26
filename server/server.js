@@ -204,6 +204,25 @@ server.route({
 //     }
 // });
 
+//Prefix
+server.route({
+    method: 'GET',
+    path: '/prefix',
+    handler: function (request, reply) {
+        let response = Models.Prefixs.forge().fetch();
+        reply(response);
+    }
+});
+
+server.route({
+    method: 'GET',
+    path: '/prefix/{prefix_id}',
+    handler: function (request, reply) {
+        let response = Models.Prefix.forge({'id': encodeURIComponent(request.params.prefix_id)}).fetch();
+        reply(response);
+    }
+});
+
 //Term
 server.route({
     method: 'GET',
