@@ -1,8 +1,11 @@
-//temp key
-
+"use strict";
 
 exports.seed = function (knex, Promise) {
-    var key = {};
+    var key_by_id = {};
+
+    function insert_and_grab_id(table, properties, key) {
+        return knex(table).returning('id').insert(properties).then((ids) => key_by_id[key] = ids[0]);
+    }
 
     return Promise.join(
         // Deletes ALL existing entries
@@ -13,153 +16,181 @@ exports.seed = function (knex, Promise) {
         knex('prefix').del(),
         knex('term').del(),
         () => console.log("delete_promise complete")
+
     ).then(() => Promise.join(
         //Inserts seed entries
-        knex('department').returning('id').insert({name: 'Computer Science'}).then((ids) => {
-            key['d1'] = ids[0];
-        }),
-        knex('department').returning('id').insert({name: 'Mathematics'}).then((ids) => {
-            key['d2'] = ids[0];
-        }),
-        knex('department').returning('id').insert({name: 'Biblical Studies, Christian Education, & Philosophy'}).then((ids) => {
-            key['d3'] = ids[0];
-        }),
+        insert_and_grab_id('department', {name: 'Computer Science'}, 'd1'),
+        insert_and_grab_id('department', {name: 'Mathematics'}, 'd2'),
+        insert_and_grab_id('department', {name: 'Biblical Studies, Christian Education, & Philosophy'}, 'd3'),
 
-        knex('prefix').returning('id').insert({name: 'COS'}).then((ids) => {
-            key['p1'] = ids[0];
-        }),
-        knex('prefix').returning('id').insert({name: 'MAT'}).then((ids) => {
-            key['p2'] = ids[0];
-        }),
-        knex('prefix').returning('id').insert({name: 'BIB'}).then((ids) => {
-            key['p3'] = ids[0];
-        }),
-        knex('prefix').returning('id').insert({name: 'REL'}).then((ids) => {
-            key['p4'] = ids[0];
-        }),
-        knex('prefix').returning('id').insert({name: 'PHI'}).then((ids) => {
-            key['p5'] = ids[0];
-        }),
+        insert_and_grab_id('prefix', {name: 'COS'}, 'p1'),
+        insert_and_grab_id('prefix', {name: 'MAT'}, 'p2'),
+        insert_and_grab_id('prefix', {name: 'BIB'}, 'p3'),
+        insert_and_grab_id('prefix', {name: 'REL'}, 'p4'),
+        insert_and_grab_id('prefix', {name: 'PHI'}, 'p5'),
 
-        knex('term').returning('id').insert({
+        insert_and_grab_id('term', {
             name: 'Fall 2016',
             start_date: "2016-09-01",
             end_date: "2016-12-01"
-        }).then((ids) => {
-            key['t1'] = ids[0];
-        }),
-        knex('term').returning('id').insert({
+        }, 't1'),
+
+        insert_and_grab_id('term', {
             name: 'Fall 2017',
             start_date: "2017-09-01",
             end_date: "2017-12-01"
-        }).then((ids) => {
-            key['t2'] = ids[0];
-        }),
-        knex('term').returning('id').insert({
+        }, 't2'),
+
+        insert_and_grab_id('term', {
             name: 'Spring 2016',
             start_date: "2016-01-01",
             end_date: "2016-05-01"
-        }).then((ids) => {
-            key['t3'] = ids[0];
-        }),
-        knex('term').returning('id').insert({
+        }, 't3'),
+
+        insert_and_grab_id('term', {
             name: 'Spring 2017',
             start_date: "2016-01-01",
             end_date: "2016-05-01"
-        }).then((ids) => {
-            key['t4'] = ids[0];
-        }),
+        }, 't4'),
         () => console.log("department_promise complete")
-    )).then(() => Promise.join(
-        knex('department_prefix').insert({prefix_id: key['p1'], department_id: key['d1']}),
-        knex('department_prefix').insert({prefix_id: key['p2'], department_id: key['d1']}),
-        knex('department_prefix').insert({prefix_id: key['p3'], department_id: key['d3']}),
-        knex('department_prefix').insert({prefix_id: key['p4'], department_id: key['d3']}),
-        knex('department_prefix').insert({prefix_id: key['p5'], department_id: key['d3']}),
 
-        knex('course').returning('id').insert({
-            prefix_id: key['p1'],
-            department_id: key['d1'],
+    )).then(() => Promise.join(
+        knex('department_prefix').insert({prefix_id: key_by_id['p1'], department_id: key_by_id['d1']}),
+        knex('department_prefix').insert({prefix_id: key_by_id['p2'], department_id: key_by_id['d1']}),
+        knex('department_prefix').insert({prefix_id: key_by_id['p3'], department_id: key_by_id['d3']}),
+        knex('department_prefix').insert({prefix_id: key_by_id['p4'], department_id: key_by_id['d3']}),
+        knex('department_prefix').insert({prefix_id: key_by_id['p5'], department_id: key_by_id['d3']}),
+
+        insert_and_grab_id('course', {
+            prefix_id: key_by_id['p1'],
+            department_id: key_by_id['d1'],
             number: "121",
             title: "Foundations of Computer Science",
             "active": false
-        }).then((ids) => {
-            key['c1'] = ids[0];
-        }),
+        }, 'c1'),
 
-        knex('course').returning('id').insert({
-            prefix_id: key['p1'],
-            department_id: key['d1'],
+        insert_and_grab_id('course', {
+            prefix_id: key_by_id['p1'],
+            department_id: key_by_id['d1'],
             number: "243",
             title: "Multi-Tier Web Applications",
             "active": false
-        }).then((ids) => {
-            key['c2'] = ids[0];
-        }),
+        }, 'c2'),
 
-        knex('course').returning('id').insert({
-            prefix_id: key['p2'],
-            department_id: key['d2'],
+        insert_and_grab_id('course', {
+            prefix_id: key_by_id['p2'],
+            department_id: key_by_id['d2'],
             number: "210",
             title: "Statistics",
             "active": true
-        }).then((ids) => {
-            key['c3'] = ids[0];
-        }),
+        }, 'c3'),
 
-        knex('course').returning('id').insert({
-            prefix_id: key['p3'],
-            department_id: key['d3'],
+        insert_and_grab_id('course', {
+            prefix_id: key_by_id['p3'],
+            department_id: key_by_id['d3'],
             number: "110",
             title: "Biblical Literature I",
             "active": true
-        }).then((ids) => {
-            key['c4'] = ids[0];
-        }),
+        }, 'c4'),
 
-        knex('course').returning('id').insert({
-            prefix_id: key['p3'],
-            department_id: key['d3'],
+        insert_and_grab_id('course', {
+            prefix_id: key_by_id['p3'],
+            department_id: key_by_id['d3'],
             number: "210",
             title: "Biblical Literature II",
             "active": true
-        }).then((ids) => {
-            key['c5'] = ids[0];
-        }),
+        }, 'c5'),
 
-        knex('course').returning('id').insert({
-            prefix_id: key['p4'],
-            department_id: key['d3'],
+        insert_and_grab_id('course', {
+            prefix_id: key_by_id['p4'],
+            department_id: key_by_id['d3'],
             number: "313",
             title: "Historic Christian Belief",
             "active": false
-        }).then((ids) => {
-            key['c6'] = ids[0];
-        }),
+        }, 'c6'),
 
-        knex('course').returning('id').insert({
-            prefix_id: key['p5'],
-            department_id: key['d3'],
+        insert_and_grab_id('course', {
+            prefix_id: key_by_id['p5'],
+            department_id: key_by_id['d3'],
             number: "413",
             title: "Contemporary Christian Belief",
             "active": false
-        }).then((ids) => {
-            key['c7'] = ids[0];
-        }),
+        }, 'c7'),
         () => console.log("course_promise complete")
+
     )).then(() => Promise.join(
-        knex('section').insert({course_id: key['c1'], term_id: key['t1'], reg_number: "123456", title: "Class 1"}),
-        knex('section').insert({course_id: key['c2'], term_id: key['t1'], reg_number: "234567", title: "Class 1"}),
-        knex('section').insert({course_id: key['c3'], term_id: key['t1'], reg_number: "345678", title: "Class 1"}),
-        knex('section').insert({course_id: key['c4'], term_id: key['t1'], reg_number: "456789", title: "Class 1"}),
-        knex('section').insert({course_id: key['c5'], term_id: key['t1'], reg_number: "987654", title: "Class 1"}),
-        knex('section').insert({course_id: key['c6'], term_id: key['t1'], reg_number: "876543", title: "Class 1"}),
-        knex('section').insert({course_id: key['c7'], term_id: key['t1'], reg_number: "765432", title: "Class 1"}),
-        knex('section').insert({course_id: key['c4'], term_id: key['t1'], reg_number: "654321", title: "Class 2"}),
-        knex('section').insert({course_id: key['c5'], term_id: key['t1'], reg_number: "098765", title: "Class 2"}),
-        knex('section').insert({course_id: key['c2'], term_id: key['t1'], reg_number: "012345", title: "Class 2"}),
-        knex('section').insert({course_id: key['c6'], term_id: key['t2'], reg_number: "123987", title: "Class 1"}),
-        knex('section').insert({course_id: key['c6'], term_id: key['t2'], reg_number: "987123", title: "Class 2"}),
+        knex('section').insert({
+            course_id: key_by_id['c1'],
+            term_id: key_by_id['t1'],
+            reg_number: "123456",
+            title: "Class 1"
+        }),
+        knex('section').insert({
+            course_id: key_by_id['c2'],
+            term_id: key_by_id['t1'],
+            reg_number: "234567",
+            title: "Class 1"
+        }),
+        knex('section').insert({
+            course_id: key_by_id['c3'],
+            term_id: key_by_id['t1'],
+            reg_number: "345678",
+            title: "Class 1"
+        }),
+        knex('section').insert({
+            course_id: key_by_id['c4'],
+            term_id: key_by_id['t1'],
+            reg_number: "456789",
+            title: "Class 1"
+        }),
+        knex('section').insert({
+            course_id: key_by_id['c5'],
+            term_id: key_by_id['t1'],
+            reg_number: "987654",
+            title: "Class 1"
+        }),
+        knex('section').insert({
+            course_id: key_by_id['c6'],
+            term_id: key_by_id['t1'],
+            reg_number: "876543",
+            title: "Class 1"
+        }),
+        knex('section').insert({
+            course_id: key_by_id['c7'],
+            term_id: key_by_id['t1'],
+            reg_number: "765432",
+            title: "Class 1"
+        }),
+        knex('section').insert({
+            course_id: key_by_id['c4'],
+            term_id: key_by_id['t1'],
+            reg_number: "654321",
+            title: "Class 2"
+        }),
+        knex('section').insert({
+            course_id: key_by_id['c5'],
+            term_id: key_by_id['t1'],
+            reg_number: "098765",
+            title: "Class 2"
+        }),
+        knex('section').insert({
+            course_id: key_by_id['c2'],
+            term_id: key_by_id['t1'],
+            reg_number: "012345",
+            title: "Class 2"
+        }),
+        knex('section').insert({
+            course_id: key_by_id['c6'],
+            term_id: key_by_id['t2'],
+            reg_number: "123987",
+            title: "Class 1"
+        }),
+        knex('section').insert({
+            course_id: key_by_id['c6'],
+            term_id: key_by_id['t2'],
+            reg_number: "987123",
+            title: "Class 2"
+        }),
         () => console.log("section_promise complete")
     ));
 };
