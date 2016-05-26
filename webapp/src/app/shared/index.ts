@@ -6,4 +6,8 @@ export * from '../course';
 export * from '../course.service';
 export * from '../+course';
 export * from '../+courses';
+export * from '../department';
+export * from '../department.service';
+export * from '../+department';
+export * from '../+departments';
 

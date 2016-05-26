@@ -6,8 +6,6 @@ import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 import { MD_SIDENAV_DIRECTIVES } from '@angular2-material/sidenav';
 import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
 
-import { BreadcrumbComponent } from 'ng2-breadcrumb/ng2-breadcrumb';
-
 import {
   CourseService,
   CourseComponent,
@@ -15,6 +13,9 @@ import {
   SectionService,
   SectionComponent,
   SectionsComponent,
+  DepartmentService,
+  DepartmentComponent,
+  DepartmentsComponent,
 } from './shared';
 
 @Component({
@@ -28,16 +29,17 @@ import {
     MD_CARD_DIRECTIVES,
     MD_SIDENAV_DIRECTIVES,
     MD_TOOLBAR_DIRECTIVES,
-    BreadcrumbComponent,
   ],
-  providers: [ROUTER_PROVIDERS, CourseService, SectionService]
+  providers: [ROUTER_PROVIDERS, CourseService, SectionService, DepartmentService]
 })
 @Routes([
   {path: '/course/:id', component: CourseComponent},
   {path: '/course', component: CoursesComponent},
   {path: '/', component: CoursesComponent},
   {path: '/section/:id', component: SectionComponent},
-  {path: '/section', component: SectionsComponent}
+  {path: '/section', component: SectionsComponent},
+  {path: '/department/:id', component: DepartmentComponent},
+  {path: '/department', component: DepartmentsComponent}
 ])
 export class FaradayAppComponent {
 
@@ -51,6 +53,10 @@ export class FaradayAppComponent {
 
   gotoSections() {
     this.router.navigate(['/section']);
+  }
+
+  gotoDepartments() {
+    this.router.navigate(['/department']);
   }
 
   title = 'faraday works!';
