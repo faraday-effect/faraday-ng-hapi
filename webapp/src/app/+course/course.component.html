@@ -1,5 +1,16 @@
-<div *ngIf="course">
-  <h2>{{course.title}}</h2>
-  <h3>{{course.prefix}} {{course.number}}</h3>
-  Active: {{course.active}}
+<div class="course">
+
+  <md-card *ngIf="course">
+    <md-card-title>{{course.title}}</md-card-title>
+    <md-card-subtitle>{{course.prefix}} {{course.number}}</md-card-subtitle>
+    <md-card-content>
+      <p *ngIf="course.active">
+        This course is active!
+      </p>
+      <p *ngIf="! course.active">
+        This course is not active...
+      </p>
+    </md-card-content>
+  </md-card>
+
 </div>
