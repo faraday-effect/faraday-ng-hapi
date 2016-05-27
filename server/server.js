@@ -81,6 +81,7 @@ server.route({
             reply(response);
         }
         if (request.method == 'delete') {
+            console.log('I deleted');
             reply(response);
         }
         reply({statusCode: 500, error: 'no action performed'})
