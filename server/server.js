@@ -62,10 +62,10 @@ server.route({
         validate: {
             payload: {
                 title: Joi.string(),
-                prefix_id: Joi.number().positive().integer(),
-                number: Joi.string().length(3),
+                prefix_id: Joi.number().positive().integer().required(),
+                number: Joi.string().length(3).required(),
                 active: Joi.boolean().default(false),
-                department_id: Joi.number().positive().integer()
+                department_id: Joi.number().positive().integer().required()
             }
         }
     }
@@ -114,10 +114,10 @@ server.route({
             },
             payload: {
                 title: Joi.string(),
-                prefix_id: Joi.number().positive().integer(),
-                number: Joi.string().length(3),
+                prefix_id: Joi.number().positive().integer().required(),
+                number: Joi.string().length(3).required(),
                 active: Joi.boolean().default(false),
-                department_id: Joi.number().positive().integer()
+                department_id: Joi.number().positive().integer().required()
             }
         }
     }
@@ -183,7 +183,7 @@ server.route({
     config: {
         validate: {
             payload: {
-                name: Joi.string()
+                name: Joi.string().required()
             }
         }
     }
@@ -211,7 +211,7 @@ server.route({
                 course_id: Joi.number().positive().integer()
             },
             payload: {
-                name: Joi.string()
+                name: Joi.string().required()
             }
         }
     }
@@ -244,7 +244,7 @@ server.route({
     config: {
         validate: {
             payload: {
-                name: Joi.string().length(3)
+                name: Joi.string().length(3).required()
             }
         }
     }
@@ -272,7 +272,7 @@ server.route({
                 prefix_id: Joi.number().positive().integer()
             },
             payload: {
-                name: Joi.string().length(3)
+                name: Joi.string().length(3).required()
             }
         }
     }
@@ -324,9 +324,9 @@ server.route({
     config: {
         validate: {
             payload: {
-                course_id: Joi.number().positive().integer(),
-                term_id: Joi.number().positive().integer(),
-                reg_number: Joi.string(),
+                course_id: Joi.number().positive().integer().required(),
+                term_id: Joi.number().positive().integer().required(),
+                reg_number: Joi.string().required(),
                 title: Joi.string()
             }
         }
@@ -374,9 +374,9 @@ server.route({
                 section_id: Joi.number().integer()
             },
             payload: {
-                course_id: Joi.number().positive().integer(),
-                term_id: Joi.number().positive().integer(),
-                reg_number: Joi.string(),
+                course_id: Joi.number().positive().integer().required(),
+                term_id: Joi.number().positive().integer().required(),
+                reg_number: Joi.string().required(),
                 title: Joi.string()
             }
         }
@@ -412,9 +412,9 @@ server.route({
     config: {
         validate: {
             payload: {
-                name: Joi.string(),
-                start_date: Joi.date().format('YYYY/MM/DD'),
-                end_date: Joi.date().format('YYYY/MM/DD')
+                name: Joi.string().required(),
+                start_date: Joi.date().format('YYYY/MM/DD').required(),
+                end_date: Joi.date().format('YYYY/MM/DD').required()
             }
         }
     }
@@ -460,9 +460,9 @@ server.route({
                 term_id: Joi.number().positive().integer()
             },
             payload: {
-                name: Joi.string(),
-                start_date: Joi.date().format('YYYY/MM/DD'),
-                end_date: Joi.date().format('YYYY/MM/DD')
+                name: Joi.string().required(),
+                start_date: Joi.date().format('YYYY/MM/DD').required(),
+                end_date: Joi.date().format('YYYY/MM/DD').required()
             }
         }
     }
