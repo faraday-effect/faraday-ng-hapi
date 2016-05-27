@@ -1,0 +1,7 @@
+<div class="termss">
+
+  <md-card *ngFor="let term of terms">
+    <button md-button (click)="gotoTerm(term.id)">{{term.name}}</button>
+  </md-card>
+
+</div>
