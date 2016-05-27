@@ -39,12 +39,19 @@ server.route({
     method: 'POST',
     path: '/course/new',
     handler: function (request, reply) {
-        if (request.method == 'get') {
-            reply({course: "new course"});
-        }
-        if (request.method == 'post') {
-            reply({statusCode: 200, method: "post", course: "new course"})
-        }
+        new bookshelf.Course({
+            title: request.payload.title,
+            prefix_id: request.payload.prefix_id,
+            number: request.payload.number,
+            active: request.payload.active,
+            department_id: request.payload.department_id
+        })
+            .save().then(function (model) {
+            //get database
+            reply({statusCode: 200, method: "post", response: model})
+        }).catch(function (error) {
+            reply({statusCode: 500, err: error});
+        });
     }
 });
 
@@ -61,15 +68,30 @@ server.route({
     method: 'PUT',
     path: '/course/{course_id}/edit',
     handler: function (request, reply) {
-        let response = bookshelf.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch();
-        if (request.method == 'get'){
-            reply(response);
-        }
-        if (request.method == 'put') {
-            //do database transaction
-            response = bookshelf.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch();
-            reply(response);
-        }
+        bookshelf.Course.forge({'id': request.params.course_id})
+            .save(
+                {
+                    title: request.payload.title,
+                    prefix_id: request.payload.prefix_id,
+                    number: request.payload.number,
+                    active: request.payload.active,
+                    department_id: request.payload.department_id
+                }
+            ).then(function (model) {
+            //get database
+            reply({statusCode: 200, method: "put", response: model})
+        }).catch(function (error) {
+            reply({statusCode: 500, err: error});
+        });
+    }
+});
+
+server.route({
+    method: 'GET',
+    path: '/course/{course_id}/section',
+    handler: function (request, reply) {
+        let response = bookshelf.Section.where('course_id', request.params.course_id).fetch();
+        reply(response);
     }
 });
 
@@ -97,21 +119,15 @@ server.route({
     method: 'POST',
     path: '/department/new',
     handler: function (request, reply) {
-        if (request.method == 'get') {
-            reply({course: "new department"});
-        }
-        if (request.method == 'post') {
-            new Models.Department({
-                id: parseInt(encodeURIComponent(request.payload.department_id)),
-                name: encodeURIComponent(request.payload.name)
-            })
-                .save().then(function (model) {
-                //something here
-                reply({statusCode: 200, method: "post", department: "new department"})
-            }).catch(function (error) {
-                reply({statusCode: 500, err: error});
-            });
-        }
+        new bookshelf.Department({
+            name: request.payload.name
+        })
+            .save().then(function (model) {
+            //get database
+            reply({statusCode: 200, method: "post", response: model})
+        }).catch(function (error) {
+            reply({statusCode: 500, err: error});
+        });
     }
 });
 
@@ -119,15 +135,70 @@ server.route({
     method: 'PUT',
     path: '/department/{department_id}/edit',
     handler: function (request, reply) {
-        let response = bookshelf.Department.forge({'id': encodeURIComponent(request.params.department_id)}).fetch();
-        if (request.method == 'get'){
-            reply(response);
-        }
-        if (request.method == 'put') {
-            //do database transaction
-            response = bookshelf.Department.forge({'id': encodeURIComponent(request.params.department_id)}).fetch();
-            reply(response);
-        }
+        bookshelf.Department.forge({'id': request.params.department_id})
+            .save(
+                {
+                    name: request.payload.name
+                }
+            ).then(function (model) {
+            //get database
+            reply({statusCode: 200, method: "put", response: model})
+        }).catch(function (error) {
+            reply({statusCode: 500, err: error});
+        });
+    }
+});
+
+//Prefix
+server.route({
+    method: 'GET',
+    path: '/prefix',
+    handler: function (request, reply) {
+        let response = bookshelf.Prefixs.forge().fetch();
+        reply(response);
+    }
+});
+
+server.route({
+    method: 'POST',
+    path: '/prefix/new',
+    handler: function (request, reply) {
+        new bookshelf.Prefix({
+            name: request.payload.name
+        })
+            .save().then(function (model) {
+            //get database
+            reply({statusCode: 200, method: "post", response: model})
+        }).catch(function (error) {
+            reply({statusCode: 500, err: error});
+        });
+    }
+});
+
+server.route({
+    method: 'PUT',
+    path: '/prefix/{prefix_id}/edit',
+    handler: function (request, reply) {
+        bookshelf.Prefix.forge({'id': request.params.prefix_id})
+            .save(
+                {
+                    name: request.payload.name
+                }
+            ).then(function (model) {
+            //get database
+            reply({statusCode: 200, method: "put", response: model})
+        }).catch(function (error) {
+            reply({statusCode: 500, err: error});
+        });
+    }
+});
+
+server.route({
+    method: 'GET',
+    path: '/prefix/{prefix_id}',
+    handler: function (request, reply) {
+        let response = bookshelf.Prefix.forge({'id': encodeURIComponent(request.params.prefix_id)}).fetch();
+        reply(response);
     }
 });
 
@@ -143,83 +214,50 @@ server.route({
 
 server.route({
     method: 'POST',
-    path: '/course/{course_id}/section/new',
+    path: '/section/new',
     handler: function (request, reply) {
-        if (request.method == 'get') {
-            reply({section: "new section"});
-        }
-        if (request.method == 'post') {
-            reply({statusCode: 200, method: "post", section: "new section"})
-        }
+        new bookshelf.Section({
+            title: request.payload.title,
+            reg_number: request.payload.reg_number,
+            course_id: request.payload.course_id,
+            term_id: request.payload.term_id
+        })
+            .save().then(function (model) {
+            //get database
+            reply({statusCode: 200, method: "post", response: model})
+        }).catch(function (error) {
+            reply({statusCode: 500, err: error});
+        });
     }
 });
 
 server.route({
     method: 'GET',
-    path: '/course/{course_id}/section/{section_id}',
+    path: '/section/{section_id}',
     handler: function (request, reply) {
         let response = bookshelf.Section.forge({'id': encodeURIComponent(request.params.section_id)}).fetch();
-        reply(response);
-    }
-});
-
-server.route({
-    method: 'GET',
-    path: '/course/{course_id}/section',
-    handler: function (request, reply) {
-        let response = bookshelf.Sections.forge({'course_id': encodeURIComponent(request.params.course_id)}).fetch();
         reply(response);
     }
 });
 
 server.route({
     method: 'PUT',
-    path: '/course/{course_id}/section/{section_id}/edit',
+    path: '/section/{section_id}/edit',
     handler: function (request, reply) {
-        let response = bookshelf.Section.forge({'id': encodeURIComponent(request.params.section_id)}).fetch();
-        if (request.method == 'get'){
-            reply(response);
-        }
-        if (request.method == 'post') {
-            //do database transaction
-            response = bookshelf.Section.forge({'id': encodeURIComponent(request.params.section_id)}).fetch();
-            reply(response);
-        }
-    }
-});
-
-// server.route({
-//     method: ['POST', 'GET'],
-//     path: '/course/{course_id}/section/{section_id}/enroll',
-//     handler: function (request, reply) {
-//         reply("course_id: " + encodeURIComponent(request.params.course_id) + "section_id: " + encodeURIComponent(request.params.section_id)+ " Enroll");
-//     }
-// });
-//
-// server.route({
-//     method: ['POST', 'GET'],
-//     path: '/course/{course_id}/section/{section_id}/unenroll',
-//     handler: function (request, reply) {
-//         reply("course_id: " + encodeURIComponent(request.params.course_id) + "section_id: " + encodeURIComponent(request.params.section_id)+ " Unenroll");
-//     }
-// });
-
-//Prefix
-server.route({
-    method: 'GET',
-    path: '/prefix',
-    handler: function (request, reply) {
-        let response = Models.Prefixs.forge().fetch();
-        reply(response);
-    }
-});
-
-server.route({
-    method: 'GET',
-    path: '/prefix/{prefix_id}',
-    handler: function (request, reply) {
-        let response = Models.Prefix.forge({'id': encodeURIComponent(request.params.prefix_id)}).fetch();
-        reply(response);
+        bookshelf.Section.forge({'id': request.params.section_id})
+            .save(
+                {
+                    course_id: request.payload.course_id,
+                    term_id: request.payload.term_id,
+                    reg_number: request.payload.reg_number,
+                    title: request.payload.title
+                }
+            ).then(function (model) {
+            //get database
+            reply({statusCode: 200, method: "put", response: model})
+        }).catch(function (error) {
+            reply({statusCode: 500, err: error});
+        });
     }
 });
 
@@ -237,12 +275,17 @@ server.route({
     method: 'POST',
     path: '/term/new',
     handler: function (request, reply) {
-        if (request.method == 'get') {
-            reply({term: "new term"});
-        }
-        if (request.method == 'post') {
-            reply({statusCode: 200, method: "post", course: "new term"})
-        }
+        new bookshelf.Term({
+            name: request.payload.name,
+            start_date: request.payload.start_date,
+            end_date: request.payload.end_date
+        })
+            .save().then(function (model) {
+            //get database
+            reply({statusCode: 200, method: "post", response: model})
+        }).catch(function (error) {
+            reply({statusCode: 500, err: error});
+        });
     }
 });
 
@@ -259,15 +302,19 @@ server.route({
     method: 'PUT',
     path: '/term/{term_id}/edit',
     handler: function (request, reply) {
-        let response = bookshelf.Term.forge({'id': encodeURIComponent(request.params.term_id)}).fetch();
-        if (request.method == 'get'){
-            reply(response);
-        }
-        if (request.method == 'post') {
-            //do database transaction
-            response = bookshelf.Term.forge({'id': encodeURIComponent(request.params.term_id)}).fetch();
-            reply(response);
-        }
+        bookshelf.Term.forge({'id': request.params.term_id})
+            .save(
+                {
+                    name: request.payload.name,
+                    start_date: request.payload.start_date,
+                    end_date: request.payload.end_date
+                }
+            ).then(function (model) {
+            //get database
+            reply({statusCode: 200, method: "put", response: model})
+        }).catch(function (error) {
+            reply({statusCode: 500, err: error});
+        });
     }
 });
 

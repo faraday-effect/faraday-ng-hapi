@@ -57,5 +57,10 @@ exports.up = function (knex, Promise) {
 };
 
 exports.down = function (knex, Promise) {
-
+    return knex.schema.dropTable('department_prefix');
+    return knex.schema.dropTable('section');
+    return knex.schema.dropTable('course');
+    return knex.schema.dropTable('department');
+    return knex.schema.dropTable('prefix');
+    return knex.schema.dropTable('term');
 };
