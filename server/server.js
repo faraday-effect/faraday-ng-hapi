@@ -43,7 +43,7 @@ server.route({
 
 server.route({
     method: 'POST',
-    path: '/course/new',
+    path: '/course',
     handler: function (request, reply) {
         new bookshelf.Course({
             title: request.payload.title,
@@ -73,19 +73,28 @@ server.route({
 });
 
 server.route({
-    method: ['GET', 'DELETE'],
+    method: 'DELETE',
     path: '/course/{course_id}',
     handler: function (request, reply) {
         let response = bookshelf.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch();
-        if (request.method == 'get') {
-            reply(response);
+        console.log('I deleted');
+        reply(response);
+    },
+    config: {
+        validate: {
+            params: {
+                course_id: Joi.number().positive().integer()
+            }
         }
-        else if (request.method == 'delete') {
-            console.log('I deleted');
-            reply(response);
-        } else {
-            reply({statusCode: 500, error: 'no action performed'})
-        }
+    }
+});
+
+server.route({
+    method: 'GET',
+    path: '/course/{course_id}',
+    handler: function (request, reply) {
+        let response = bookshelf.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch();
+        reply(response);
     },
     config: {
         validate: {
@@ -98,7 +107,7 @@ server.route({
 
 server.route({
     method: 'PUT',
-    path: '/course/{course_id}/edit',
+    path: '/course/{course_id}',
     handler: function (request, reply) {
         bookshelf.Course.forge({'id': request.params.course_id})
             .save(
@@ -177,7 +186,7 @@ server.route({
 
 server.route({
     method: 'POST',
-    path: '/department/new',
+    path: '/department',
     handler: function (request, reply) {
         new bookshelf.Department({
             name: request.payload.name
@@ -200,7 +209,7 @@ server.route({
 
 server.route({
     method: 'PUT',
-    path: '/department/{department_id}/edit',
+    path: '/department/{department_id}',
     handler: function (request, reply) {
         bookshelf.Department.forge({'id': request.params.department_id})
             .save(
@@ -226,6 +235,23 @@ server.route({
     }
 });
 
+server.route({
+    method: 'DELETE',
+    path: '/department/{department_id}',
+    handler: function (request, reply) {
+        let response = bookshelf.Department.forge({'id': encodeURIComponent(request.params.department_id)}).fetch();
+        console.log('I deleted');
+        reply(response);
+    },
+    config: {
+        validate: {
+            params: {
+                department_id: Joi.number().positive().integer()
+            }
+        }
+    }
+});
+
 //Prefix
 server.route({
     method: 'GET',
@@ -238,7 +264,7 @@ server.route({
 
 server.route({
     method: 'POST',
-    path: '/prefix/new',
+    path: '/prefix',
     handler: function (request, reply) {
         new bookshelf.Prefix({
             name: request.payload.name
@@ -261,7 +287,7 @@ server.route({
 
 server.route({
     method: 'PUT',
-    path: '/prefix/{prefix_id}/edit',
+    path: '/prefix/{prefix_id}',
     handler: function (request, reply) {
         bookshelf.Prefix.forge({'id': request.params.prefix_id})
             .save(
@@ -303,6 +329,23 @@ server.route({
     }
 });
 
+server.route({
+    method: 'DELETE',
+    path: '/prefix/{prefix_id}',
+    handler: function (request, reply) {
+        let response = bookshelf.Prefix.forge({'id': encodeURIComponent(request.params.prefix_id)}).fetch();
+        console.log('I deleted');
+        reply(response);
+    },
+    config: {
+        validate: {
+            params: {
+                prefix_id: Joi.number().positive().integer()
+            }
+        }
+    }
+});
+
 //Section Routes
 server.route({
     method: 'GET',
@@ -315,7 +358,7 @@ server.route({
 
 server.route({
     method: 'POST',
-    path: '/section/new',
+    path: '/section',
     handler: function (request, reply) {
         new bookshelf.Section({
             title: request.payload.title,
@@ -360,7 +403,7 @@ server.route({
 
 server.route({
     method: 'PUT',
-    path: '/section/{section_id}/edit',
+    path: '/section/{section_id}',
     handler: function (request, reply) {
         bookshelf.Section.forge({'id': request.params.section_id})
             .save(
@@ -392,6 +435,23 @@ server.route({
     }
 });
 
+server.route({
+    method: 'DELETE',
+    path: '/section/{section_id}',
+    handler: function (request, reply) {
+        let response = bookshelf.Section.forge({'id': encodeURIComponent(request.params.section_id)}).fetch();
+        console.log('I deleted');
+        reply(response);
+    },
+    config: {
+        validate: {
+            params: {
+                section_id: Joi.number().positive().integer()
+            }
+        }
+    }
+});
+
 //Term
 server.route({
     method: 'GET',
@@ -404,7 +464,7 @@ server.route({
 
 server.route({
     method: 'POST',
-    path: '/term/new',
+    path: '/term',
     handler: function (request, reply) {
         new bookshelf.Term({
             name: request.payload.name,
@@ -447,7 +507,7 @@ server.route({
 
 server.route({
     method: 'PUT',
-    path: '/term/{term_id}/edit',
+    path: '/term/{term_id}',
     handler: function (request, reply) {
         bookshelf.Term.forge({'id': request.params.term_id})
             .save(
@@ -472,6 +532,23 @@ server.route({
                 name: Joi.string().required(),
                 start_date: Joi.date().format('YYYY/MM/DD').required(),
                 end_date: Joi.date().format('YYYY/MM/DD').required()
+            }
+        }
+    }
+});
+
+server.route({
+    method: 'DELETE',
+    path: '/term/{term_id}',
+    handler: function (request, reply) {
+        let response = bookshelf.Term.forge({'id': encodeURIComponent(request.params.term_id)}).fetch();
+        console.log('I deleted');
+        reply(response);
+    },
+    config: {
+        validate: {
+            params: {
+                term_id: Joi.number().positive().integer()
             }
         }
     }
