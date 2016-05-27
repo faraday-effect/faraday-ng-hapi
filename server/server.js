@@ -80,11 +80,12 @@ server.route({
         if (request.method == 'get') {
             reply(response);
         }
-        if (request.method == 'delete') {
+        else if (request.method == 'delete') {
             console.log('I deleted');
             reply(response);
+        } else {
+            reply({statusCode: 500, error: 'no action performed'})
         }
-        reply({statusCode: 500, error: 'no action performed'})
     },
     config: {
         validate: {
