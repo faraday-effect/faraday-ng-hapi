@@ -25,6 +25,7 @@ import {
 export class CoursesComponent implements OnInit {
 
   courses: Course[] = [];
+  showInactive = false;
 
   constructor(
     private router: Router,

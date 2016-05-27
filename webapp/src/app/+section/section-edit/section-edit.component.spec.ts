@@ -9,25 +9,25 @@ import {
 import { ComponentFixture, TestComponentBuilder } from '@angular/compiler/testing';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { CourseEditComponent } from './course-edit.component';
+import { SectionEditComponent } from './section-edit.component';
 
-describe('Component: CourseEdit', () => {
+describe('Component: SectionEdit', () => {
   let builder: TestComponentBuilder;
 
-  beforeEachProviders(() => [CourseEditComponent]);
+  beforeEachProviders(() => [SectionEditComponent]);
   beforeEach(inject([TestComponentBuilder], function (tcb: TestComponentBuilder) {
     builder = tcb;
   }));
 
-  it('should inject the component', inject([CourseEditComponent],
-      (component: CourseEditComponent) => {
+  it('should inject the component', inject([SectionEditComponent],
+      (component: SectionEditComponent) => {
     expect(component).toBeTruthy();
   }));
 
   it('should create the component', inject([], () => {
-    return builder.createAsync(CourseEditComponentTestController)
+    return builder.createAsync(SectionEditComponentTestController)
       .then((fixture: ComponentFixture<any>) => {
-        let query = fixture.debugElement.query(By.directive(CourseEditComponent));
+        let query = fixture.debugElement.query(By.directive(SectionEditComponent));
         expect(query).toBeTruthy();
         expect(query.componentInstance).toBeTruthy();
       });
@@ -37,10 +37,10 @@ describe('Component: CourseEdit', () => {
 @Component({
   selector: 'test',
   template: `
-    <app-course-edit></app-course-edit>
+    <app-section-edit></app-section-edit>
   `,
-  directives: [CourseEditComponent]
+  directives: [SectionEditComponent]
 })
-class CourseEditComponentTestController {
+class SectionEditComponentTestController {
 }
 

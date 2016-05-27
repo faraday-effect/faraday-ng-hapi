@@ -40,4 +40,7 @@ export class SectionsComponent implements OnInit {
     this.router.navigate(['/section', id ]);
   }
 
+  createSection() {
+  }
+
 }

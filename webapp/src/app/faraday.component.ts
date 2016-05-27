@@ -12,6 +12,7 @@ import {
   SectionService,
   SectionComponent,
   SectionsComponent,
+  SectionEditComponent,
   DepartmentService,
   DepartmentComponent,
   DepartmentsComponent,
@@ -22,7 +23,6 @@ import {
   TermComponent,
   TermsComponent,
 } from './shared';
-import { CourseEditComponent } from './+course-edit';
 
 @Component({
   moduleId: module.id,
@@ -49,6 +49,7 @@ import { CourseEditComponent } from './+course-edit';
   // {path: '/course/:id/edit', component: CourseEditComponent},
   {path: '/course/:id', component: CourseComponent},
   {path: '/course', component: CoursesComponent},
+  {path: '/section/create', component: SectionEditComponent},
   {path: '/section/:id', component: SectionComponent},
   {path: '/section', component: SectionsComponent},
   {path: '/department/:id', component: DepartmentComponent},

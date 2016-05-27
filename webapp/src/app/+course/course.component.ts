@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { OnActivate, Router, RouteSegment , Routes, ROUTER_DIRECTIVES} from '@angular/router';
-import { EditComponent } from './+edit';
+import { OnActivate, RouteSegment, Router } from '@angular/router';
 
 import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 
@@ -13,9 +12,6 @@ import { Course, CourseService } from '../shared';
   styleUrls: ['course.component.css'],
   directives: [MD_CARD_DIRECTIVES]
 })
-@Routes([
-  {path: '/:id/edit', component: EditComponent}
-])
 export class CourseComponent implements OnActivate {
 
   course: Course;
@@ -33,15 +29,10 @@ export class CourseComponent implements OnActivate {
         .then(course => this.course = course);
   }
 
-  deleteCourse() {
+  deactivateCourse() {
     let id = +this.routeSegment.getParam('id');
     this.courseService.deleteCourse(id)
         .then(() => this.router.navigate(['/course']));
-  }
-
-  editCourse() {
-    let id = +this.routeSegment.getParam('id');
-    this.router.navigate(['/course/'+id+'/edit']);
   }
 
 }
