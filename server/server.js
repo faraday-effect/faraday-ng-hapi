@@ -73,11 +73,17 @@ server.route({
 });
 
 server.route({
-    method: 'GET',
+    method: ['GET', 'DELETE'],
     path: '/course/{course_id}',
     handler: function (request, reply) {
         let response = bookshelf.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch();
-        reply(response);
+        if (request.method == 'get') {
+            reply(response);
+        }
+        if (request.method == 'delete') {
+            reply(response);
+        }
+        reply({statusCode: 500, error: 'no action performed'})
     },
     config: {
         validate: {
