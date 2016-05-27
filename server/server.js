@@ -42,7 +42,7 @@ server.route({
         new bookshelf.Course({
             title: request.payload.title,
             prefix_id: request.payload.prefix_id,
-            number: request.payload.prefix_id,
+            number: request.payload.number,
             active: request.payload.active,
             department_id: request.payload.department_id
         })
@@ -73,7 +73,7 @@ server.route({
                 {
                     title: request.payload.title,
                     prefix_id: request.payload.prefix_id,
-                    number: request.payload.prefix_id,
+                    number: request.payload.number,
                     active: request.payload.active,
                     department_id: request.payload.department_id
                 }
