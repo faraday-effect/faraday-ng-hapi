@@ -62,10 +62,10 @@ server.route({
         validate: {
             payload: {
                 title: Joi.string(),
-                prefix_id: Joi.number().integer(),
+                prefix_id: Joi.number().positive().integer(),
                 number: Joi.string().length(3),
                 active: Joi.boolean(),
-                department_id: Joi.number().integer()
+                department_id: Joi.number().positive().integer()
             }
         }
     }
@@ -81,7 +81,7 @@ server.route({
     config: {
         validate: {
             params: {
-                course_id: Joi.number().integer()
+                course_id: Joi.number().positive().integer()
             }
         }
     }
@@ -96,7 +96,7 @@ server.route({
                 {
                     title: request.payload.title,
                     prefix_id: request.payload.prefix_id,
-                    number: Joi.string().length(3),
+                    number: request.payload.number,
                     active: request.payload.active,
                     department_id: request.payload.department_id
                 }
@@ -110,14 +110,14 @@ server.route({
     config: {
         validate: {
             params: {
-                course_id: Joi.number().integer()
+                course_id: Joi.number().positive().integer()
             },
             payload: {
                 title: Joi.string(),
-                prefix_id: Joi.number().integer(),
-                number: Joi.number().integer(),
+                prefix_id: Joi.number().positive().integer(),
+                number: Joi.string().length(3),
                 active: Joi.boolean(),
-                department_id: Joi.number().integer()
+                department_id: Joi.number().positive().integer()
             }
         }
     }
@@ -133,7 +133,7 @@ server.route({
     config: {
         validate: {
             params: {
-                course_id: Joi.number().integer()
+                course_id: Joi.number().positive().integer()
             }
         }
     }
@@ -159,7 +159,7 @@ server.route({
     config: {
         validate: {
             params: {
-                department_id: Joi.number().integer()
+                department_id: Joi.number().positive().integer()
             }
         }
     }
@@ -179,6 +179,13 @@ server.route({
         }).catch(function (error) {
             reply({statusCode: 500, err: error});
         });
+    },
+    config: {
+        validate: {
+            payload: {
+                name: Joi.string()
+            }
+        }
     }
 });
 
@@ -201,7 +208,10 @@ server.route({
     config: {
         validate: {
             params: {
-                course_id: Joi.number().integer()
+                course_id: Joi.number().positive().integer()
+            },
+            payload: {
+                name: Joi.string()
             }
         }
     }
@@ -230,6 +240,13 @@ server.route({
         }).catch(function (error) {
             reply({statusCode: 500, err: error});
         });
+    },
+    config: {
+        validate: {
+            payload: {
+                name: Joi.string().length(3)
+            }
+        }
     }
 });
 
@@ -252,7 +269,10 @@ server.route({
     config: {
         validate: {
             params: {
-                prefix_id: Joi.number().integer()
+                prefix_id: Joi.number().positive().integer()
+            },
+            payload: {
+                name: Joi.string().length(3)
             }
         }
     }
@@ -268,7 +288,7 @@ server.route({
     config: {
         validate: {
             params: {
-                prefix_id: Joi.number().integer()
+                prefix_id: Joi.number().positive().integer()
             }
         }
     }
@@ -300,6 +320,16 @@ server.route({
         }).catch(function (error) {
             reply({statusCode: 500, err: error});
         });
+    },
+    config: {
+        validate: {
+            payload: {
+                course_id: Joi.number().positive().integer(),
+                term_id: Joi.number().positive().integer(),
+                reg_number: Joi.string(),
+                title: Joi.string()
+            }
+        }
     }
 });
 
@@ -313,7 +343,7 @@ server.route({
     config: {
         validate: {
             params: {
-                section_id: Joi.number().integer()
+                section_id: Joi.number().positive().integer()
             }
         }
     }
@@ -342,6 +372,12 @@ server.route({
         validate: {
             params: {
                 section_id: Joi.number().integer()
+            },
+            payload: {
+                course_id: Joi.number().positive().integer(),
+                term_id: Joi.number().positive().integer(),
+                reg_number: Joi.string(),
+                title: Joi.string()
             }
         }
     }
@@ -372,6 +408,15 @@ server.route({
         }).catch(function (error) {
             reply({statusCode: 500, err: error});
         });
+    },
+    config: {
+        validate: {
+            payload: {
+                name: Joi.string(),
+                start_date: Joi.date().format('YYYY/MM/DD'),
+                end_date: Joi.date().format('YYYY/MM/DD')
+            }
+        }
     }
 });
 
@@ -385,7 +430,7 @@ server.route({
     config: {
         validate: {
             params: {
-                term_id: Joi.number().integer()
+                term_id: Joi.number().positive().integer()
             }
         }
     }
@@ -412,7 +457,12 @@ server.route({
     config: {
         validate: {
             params: {
-                term_id: Joi.number().integer()
+                term_id: Joi.number().positive().integer()
+            },
+            payload: {
+                name: Joi.string(),
+                start_date: Joi.date().format('YYYY/MM/DD'),
+                end_date: Joi.date().format('YYYY/MM/DD')
             }
         }
     }
