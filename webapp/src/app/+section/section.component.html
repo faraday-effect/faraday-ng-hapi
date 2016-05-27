@@ -1,6 +1,12 @@
-<div *ngIf="section">
-  <h2>Section Title: {{section.title}}</h2>
-  <h3>Course ID for this Section:{{section.course_id}}</h3>
-  <h3>Term ID: {{section.term_id}} </h3>
-  <h3>Registration Number: {{section.reg_number}}</h3>
+<div class="section">
+
+  <md-card *ngIf="section">
+    <md-card-title>{{section.title}}</md-card-title>
+    <md-card-subtitle>Registration Number: {{section.reg_number}}</md-card-subtitle>
+    <md-card-content>
+      <div>Term ID: {{section.term_id}}</div>
+      <div>Course ID for this Section:{{section.course_id}}</div>
+    </md-card-content>
+  </md-card>
+
 </div>
