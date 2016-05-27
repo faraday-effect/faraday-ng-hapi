@@ -15,7 +15,6 @@ const materialPkgs: string[] = [
   'card',
   'core',
   'list',
-  'sidenav',
   'toolbar',
 ];
 
