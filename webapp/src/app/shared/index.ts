@@ -14,4 +14,8 @@ export * from '../prefix';
 export * from '../prefix.service';
 export * from '../+prefix';
 export * from '../+prefixes';
+export * from '../term';
+export * from '../term.service';
+export * from '../+term';
+export * from '../+terms';
 

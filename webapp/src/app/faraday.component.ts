@@ -18,6 +18,9 @@ import {
   PrefixService,
   PrefixComponent,
   PrefixesComponent,
+  TermService,
+  TermComponent,
+  TermsComponent
 } from './shared';
 
 @Component({
@@ -31,8 +34,14 @@ import {
     MD_CARD_DIRECTIVES,
     MD_TOOLBAR_DIRECTIVES,
   ],
-  providers: [ROUTER_PROVIDERS, CourseService, SectionService,
-    DepartmentService, PrefixService]
+  providers: [
+    ROUTER_PROVIDERS,
+    CourseService,
+    SectionService,
+    DepartmentService,
+    PrefixService,
+    TermService
+  ]
 })
 @Routes([
   {path: '/course/:id', component: CourseComponent},
@@ -43,7 +52,9 @@ import {
   {path: '/department/:id', component: DepartmentComponent},
   {path: '/department', component: DepartmentsComponent},
   {path: '/prefix/:id', component: PrefixComponent},
-  {path: '/prefix', component: PrefixesComponent}
+  {path: '/prefix', component: PrefixesComponent},
+  {path: '/term/:id', component: TermComponent},
+  {path: '/term', component: TermsComponent}
 ])
 export class FaradayAppComponent {
 
@@ -65,6 +76,10 @@ export class FaradayAppComponent {
 
   gotoPrefixes() {
     this.router.navigate(['/prefix']);
+  }
+
+  gotoTerms() {
+    this.router.navigate(['/term']);
   }
 
   title = 'faraday works!';
