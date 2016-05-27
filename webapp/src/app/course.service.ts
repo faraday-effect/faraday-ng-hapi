@@ -25,6 +25,13 @@ export class CourseService {
                .catch(this.handleError);
   }
 
+  deleteCourse(id: number) {
+    return this.http.delete(this.coursesUrl+'/'+id)
+               .toPromise()
+               .then(response => response.json())
+               .catch(this.handleError);
+  }
+
   handleError(err: any) {
     console.error("CourseService", err);
   }

@@ -31,7 +31,7 @@ import {
   providers: [ROUTER_PROVIDERS, CourseService, SectionService, DepartmentService]
 })
 @Routes([
-  {path: '/course/:id', component: CourseComponent},
+  {path: '/course/:id/...', component: CourseComponent},
   {path: '/course', component: CoursesComponent},
   {path: '/', component: CoursesComponent},
   {path: '/section/:id', component: SectionComponent},

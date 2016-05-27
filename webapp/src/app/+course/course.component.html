@@ -11,6 +11,12 @@
         This course is not active...
       </p>
     </md-card-content>
+    <md-card-actions>
+      <button md-raised-button (click)="deleteCourse()">Delete</button>
+      <button md-raised-button (click)="editCourse()">Edit</button>
+    </md-card-actions>
   </md-card>
 
 </div>
+
+<router-outlet></router-outlet>
