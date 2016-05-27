@@ -5,6 +5,7 @@ const Good = require('good');
 const Joi = require('joi');
 var bookshelf = require('./bookshelf');
 
+const course_prefix_name = 8;
 
 const server = new Hapi.Server();
 server.connection({
@@ -63,7 +64,7 @@ server.route({
             payload: {
                 title: Joi.string(),
                 prefix_id: Joi.number().positive().integer().required(),
-                number: Joi.string().length(3).required(),
+                number: Joi.string().length(course_prefix_name).required(),
                 active: Joi.boolean().default(false),
                 department_id: Joi.number().positive().integer().required()
             }
@@ -115,7 +116,7 @@ server.route({
             payload: {
                 title: Joi.string(),
                 prefix_id: Joi.number().positive().integer().required(),
-                number: Joi.string().length(3).required(),
+                number: Joi.string().length(course_prefix_name).required(),
                 active: Joi.boolean().default(false),
                 department_id: Joi.number().positive().integer().required()
             }
@@ -244,7 +245,7 @@ server.route({
     config: {
         validate: {
             payload: {
-                name: Joi.string().length(3).required()
+                name: Joi.string().length(course_prefix_name).required()
             }
         }
     }
@@ -272,7 +273,7 @@ server.route({
                 prefix_id: Joi.number().positive().integer()
             },
             payload: {
-                name: Joi.string().length(3).required()
+                name: Joi.string().length(course_prefix_name).required()
             }
         }
     }
