@@ -98,7 +98,7 @@ server.route({
         new bookshelf.Course({id: request.params.course_id}).fetch().then(function (model) {
             new bookshelf.Prefix({id: model.get('prefix_id')}).fetch().then(function (model2) {
                 name = model2.get('name');
-                model.set('prefix', name);
+                model.set('prefix_name', name);
                 reply(model);
             });
 
@@ -111,7 +111,8 @@ server.route({
             params: {
                 course_id: Joi.number().positive().integer()
             }
-        }
+        },
+        notes: 'Contains a course object appended with prefix_name: \'name\' with the prefix id\'s name'
     }
 });
 
