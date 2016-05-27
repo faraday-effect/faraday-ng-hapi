@@ -64,7 +64,7 @@ server.route({
                 title: Joi.string(),
                 prefix_id: Joi.number().positive().integer(),
                 number: Joi.string().length(3),
-                active: Joi.boolean(),
+                active: Joi.boolean().default(false),
                 department_id: Joi.number().positive().integer()
             }
         }
@@ -116,7 +116,7 @@ server.route({
                 title: Joi.string(),
                 prefix_id: Joi.number().positive().integer(),
                 number: Joi.string().length(3),
-                active: Joi.boolean(),
+                active: Joi.boolean().default(false),
                 department_id: Joi.number().positive().integer()
             }
         }
