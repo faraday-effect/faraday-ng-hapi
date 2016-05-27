@@ -3,7 +3,7 @@ Learning Management 2.0
 
 
 To Import Database Schema:
-`knex migrate:run`
+`knex migrate:latest`
 
 To Import Database Data:
 `knex seed:run`

@@ -87,8 +87,16 @@ module.exports['Departments'] = Bookshelf.Collection.extend({
     model: Department
 });
 
+module.exports['Department_Prefixes'] = Bookshelf.Collection.extend({
+    model: Department_Prefix
+});
+
 module.exports['Courses'] = Bookshelf.Collection.extend({
         model: Course
+});
+
+module.exports['Prefixes'] = Bookshelf.Collection.extend({
+    model: Prefix
 });
 
 module.exports['Sections'] = Bookshelf.Collection.extend({
