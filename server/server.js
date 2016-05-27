@@ -93,8 +93,18 @@ server.route({
     method: 'GET',
     path: '/course/{course_id}',
     handler: function (request, reply) {
-        let response = bookshelf.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch();
-        reply(response);
+        //let response = bookshelf.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch()
+        let name = "not set";
+        new bookshelf.Course({id: request.params.course_id}).fetch().then(function (model) {
+            new bookshelf.Prefix({id: model.get('prefix_id')}).fetch().then(function (model2) {
+                name = model2.get('name');
+                model.set('prefix', name);
+                reply(model);
+            });
+
+        });
+        //response.set('prefix', bookshelf.Prefix.forge().fetch(response.prefix_id));
+        //reply(response);
     },
     config: {
         validate: {
@@ -257,7 +267,7 @@ server.route({
     method: 'GET',
     path: '/prefix',
     handler: function (request, reply) {
-        let response = bookshelf.Prefixs.forge().fetch();
+        let response = bookshelf.Prefixes.forge().fetch();
         reply(response);
     }
 });
