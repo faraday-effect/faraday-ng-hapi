@@ -1,0 +1,7 @@
+<div class="prefixes">
+
+  <md-card *ngFor="let prefix of prefixes">
+    <button md-button (click)="gotoPrefix(prefix.id)">{{prefix.name}}</button>
+  </md-card>
+
+</div>

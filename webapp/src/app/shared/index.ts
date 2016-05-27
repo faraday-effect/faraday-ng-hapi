@@ -10,4 +10,8 @@ export * from '../department';
 export * from '../department.service';
 export * from '../+department';
 export * from '../+departments';
+export * from '../prefix';
+export * from '../prefix.service';
+export * from '../+prefix';
+export * from '../+prefixes';
 
