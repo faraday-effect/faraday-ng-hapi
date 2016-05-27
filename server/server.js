@@ -2,6 +2,7 @@
 
 const Hapi = require('hapi');
 const Good = require('good');
+const Joi = require('joi');
 var bookshelf = require('./bookshelf');
 
 
@@ -22,6 +23,10 @@ server.route({
     path: '/',
     handler: function (request, reply) {
         reply('It works!');
+    },
+    config: {
+        description: 'Say hello!',
+        notes: ['parameters', 'test', 'test']
     }
 });
 
@@ -52,6 +57,17 @@ server.route({
         }).catch(function (error) {
             reply({statusCode: 500, err: error});
         });
+    },
+    config: {
+        validate: {
+            payload: {
+                title: Joi.string(),
+                prefix_id: Joi.number().integer(),
+                number: Joi.string().length(3),
+                active: Joi.boolean(),
+                department_id: Joi.number().integer()
+            }
+        }
     }
 });
 
@@ -61,6 +77,13 @@ server.route({
     handler: function (request, reply) {
         let response = bookshelf.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch();
         reply(response);
+    },
+    config: {
+        validate: {
+            params: {
+                course_id: Joi.number().integer()
+            }
+        }
     }
 });
 
@@ -73,7 +96,7 @@ server.route({
                 {
                     title: request.payload.title,
                     prefix_id: request.payload.prefix_id,
-                    number: request.payload.number,
+                    number: Joi.string().length(3),
                     active: request.payload.active,
                     department_id: request.payload.department_id
                 }
@@ -83,6 +106,20 @@ server.route({
         }).catch(function (error) {
             reply({statusCode: 500, err: error});
         });
+    },
+    config: {
+        validate: {
+            params: {
+                course_id: Joi.number().integer()
+            },
+            payload: {
+                title: Joi.string(),
+                prefix_id: Joi.number().integer(),
+                number: Joi.number().integer(),
+                active: Joi.boolean(),
+                department_id: Joi.number().integer()
+            }
+        }
     }
 });
 
@@ -92,6 +129,13 @@ server.route({
     handler: function (request, reply) {
         let response = bookshelf.Section.where('course_id', request.params.course_id).fetch();
         reply(response);
+    },
+    config: {
+        validate: {
+            params: {
+                course_id: Joi.number().integer()
+            }
+        }
     }
 });
 
@@ -111,6 +155,13 @@ server.route({
     handler: function (request, reply) {
         let response = bookshelf.Department.forge({'id': encodeURIComponent(request.params.department_id)}).fetch();
         reply(response);
+    },
+    config: {
+        validate: {
+            params: {
+                department_id: Joi.number().integer()
+            }
+        }
     }
 });
 
@@ -146,6 +197,13 @@ server.route({
         }).catch(function (error) {
             reply({statusCode: 500, err: error});
         });
+    },
+    config: {
+        validate: {
+            params: {
+                course_id: Joi.number().integer()
+            }
+        }
     }
 });
 
@@ -190,6 +248,13 @@ server.route({
         }).catch(function (error) {
             reply({statusCode: 500, err: error});
         });
+    },
+    config: {
+        validate: {
+            params: {
+                prefix_id: Joi.number().integer()
+            }
+        }
     }
 });
 
@@ -199,6 +264,13 @@ server.route({
     handler: function (request, reply) {
         let response = bookshelf.Prefix.forge({'id': encodeURIComponent(request.params.prefix_id)}).fetch();
         reply(response);
+    },
+    config: {
+        validate: {
+            params: {
+                prefix_id: Joi.number().integer()
+            }
+        }
     }
 });
 
@@ -237,6 +309,13 @@ server.route({
     handler: function (request, reply) {
         let response = bookshelf.Section.forge({'id': encodeURIComponent(request.params.section_id)}).fetch();
         reply(response);
+    },
+    config: {
+        validate: {
+            params: {
+                section_id: Joi.number().integer()
+            }
+        }
     }
 });
 
@@ -258,6 +337,13 @@ server.route({
         }).catch(function (error) {
             reply({statusCode: 500, err: error});
         });
+    },
+    config: {
+        validate: {
+            params: {
+                section_id: Joi.number().integer()
+            }
+        }
     }
 });
 
@@ -295,6 +381,13 @@ server.route({
     handler: function (request, reply) {
         let response = bookshelf.Term.forge({'id': encodeURIComponent(request.params.term_id)}).fetch();
         reply(response);
+    },
+    config: {
+        validate: {
+            params: {
+                term_id: Joi.number().integer()
+            }
+        }
     }
 });
 
@@ -315,6 +408,13 @@ server.route({
         }).catch(function (error) {
             reply({statusCode: 500, err: error});
         });
+    },
+    config: {
+        validate: {
+            params: {
+                term_id: Joi.number().integer()
+            }
+        }
     }
 });
 
