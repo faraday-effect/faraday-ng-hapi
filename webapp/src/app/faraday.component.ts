@@ -19,6 +19,7 @@ import {
   PrefixComponent,
   PrefixesComponent,
 } from './shared';
+import { CourseEditComponent } from './+course-edit';
 
 @Component({
   moduleId: module.id,
@@ -31,19 +32,25 @@ import {
     MD_CARD_DIRECTIVES,
     MD_TOOLBAR_DIRECTIVES,
   ],
-  providers: [ROUTER_PROVIDERS, CourseService, SectionService,
-    DepartmentService, PrefixService]
+  providers: [
+    ROUTER_PROVIDERS,
+    CourseService,
+    SectionService,
+    DepartmentService,
+    PrefixService,
+  ]
 })
 @Routes([
-  {path: '/course/:id/...', component: CourseComponent},
-  {path: '/course', component: CoursesComponent},
   {path: '/', component: CoursesComponent},
-  {path: '/section/:id', component: SectionComponent},
+  {path: '/course', component: CoursesComponent},
+  {path: '/course/:id', component: CourseComponent},
+  // {path: '/course/:id/edit', component: CourseEditComponent},
   {path: '/section', component: SectionsComponent},
-  {path: '/department/:id', component: DepartmentComponent},
+  {path: '/section/:id', component: SectionComponent},
   {path: '/department', component: DepartmentsComponent},
+  {path: '/department/:id', component: DepartmentComponent},
+  {path: '/prefix', component: PrefixesComponent},
   {path: '/prefix/:id', component: PrefixComponent},
-  {path: '/prefix', component: PrefixesComponent}
 ])
 export class FaradayAppComponent {
 

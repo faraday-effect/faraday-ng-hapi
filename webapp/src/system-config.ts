@@ -48,9 +48,9 @@ const barrels: string[] = [
   'app/+sections',
   'app/+department',
   'app/+departments',
-  'app/+course/+edit',
   'app/+prefix',
   'app/+prefixes',
+  'app/+course-edit',
   /** @cli-barrel */
 ];
 
