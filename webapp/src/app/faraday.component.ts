@@ -20,7 +20,7 @@ import {
   PrefixesComponent,
   TermService,
   TermComponent,
-  TermsComponent
+  TermsComponent,
 } from './shared';
 import { CourseEditComponent } from './+course-edit';
 
@@ -45,18 +45,18 @@ import { CourseEditComponent } from './+course-edit';
   ]
 })
 @Routes([
-  {path: '/', component: CoursesComponent},
-  {path: '/course', component: CoursesComponent},
-  {path: '/course/:id', component: CourseComponent},
+  {path: '/...', component: CoursesComponent},
   // {path: '/course/:id/edit', component: CourseEditComponent},
-  {path: '/section', component: SectionsComponent},
+  {path: '/course/:id', component: CourseComponent},
+  {path: '/course', component: CoursesComponent},
   {path: '/section/:id', component: SectionComponent},
-  {path: '/department', component: DepartmentsComponent},
+  {path: '/section', component: SectionsComponent},
   {path: '/department/:id', component: DepartmentComponent},
-  {path: '/prefix', component: PrefixesComponent},
+  {path: '/department', component: DepartmentsComponent},
   {path: '/prefix/:id', component: PrefixComponent},
+  {path: '/prefix', component: PrefixesComponent},
+  {path: '/term', component: TermsComponent},
   {path: '/term/:id', component: TermComponent},
-  {path: '/term', component: TermsComponent}
 ])
 export class FaradayAppComponent {
 
