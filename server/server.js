@@ -194,6 +194,30 @@ server.route({
     }
 });
 
+server.route({
+    method: 'GET',
+    path: '/department/{department_id}/prefix',
+    handler: function (request, reply) {
+        new bookshelf.Department({id: request.params.department_id}).fetch().then(function (model) {
+            new bookshelf.Department_Prefix().where({department_id: request.params.department_id}).fetchAll().then(model2 => {
+                let responseJSON = {
+                    id: model.get('id'),
+                    name: model.get('name'),
+                    prefixes: model2
+                };
+                reply(responseJSON);
+            });
+        });
+    },
+    config: {
+        validate: {
+            params: {
+                department_id: Joi.number().positive().integer()
+            }
+        },
+        notes: 'returns the prefixes in an array and department name for a given department_id'
+    }
+});
 
 server.route({
     method: 'POST',
