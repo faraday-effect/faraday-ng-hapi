@@ -13,6 +13,7 @@ const packages: any = {
 const materialPkgs: string[] = [
   'button',
   'card',
+  'checkbox',
   'core',
   'list',
   'toolbar',

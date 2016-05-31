@@ -1,5 +1,9 @@
 <div class="courses">
 
+  <md-checkbox [(ngModel)]="showInactive">
+    Show Inactive
+  </md-checkbox>
+
   <div *ngFor="let course of courses">
     <md-card *ngIf="course.active || showInactive">
       <button md-button (click)="gotoCourse(course.id)">{{course.title}}</button>
