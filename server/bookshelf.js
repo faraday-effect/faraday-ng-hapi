@@ -18,6 +18,9 @@ var Department = Bookshelf.Model.extend({
     },
     department_prefix: function () {
         return this.hasMany(Department_Prefix);
+    },
+    prefix: function () {
+        return this.belongsToMany(Prefix, 'department_prefix', 'prefix_id', 'department_id');
     }
 });
 
@@ -29,6 +32,9 @@ var Prefix = Bookshelf.Model.extend({
     },
     course: function () {
         return this.hasMany(Course);
+    },
+    department: function () {
+        return this.belongsToMany(Department, 'department_prefix', 'prefix_id', 'department_id');
     }
 });
 
@@ -39,7 +45,7 @@ var Department_Prefix = Bookshelf.Model.extend({
         return this.belongsTo(Department);
     },
     prefix: function () {
-        return this.belongsTo(Prefix)
+        return this.belongsTo(Prefix);
     }
 });
 
@@ -54,6 +60,9 @@ var Course = Bookshelf.Model.extend({
     },
     prefix: function () {
         return this.belongsTo(Prefix);
+    },
+    term: function () {
+        return this.belongsToMany(Term, 'offering', 'course_id', 'term_id');
     }
 });
 
@@ -73,13 +82,13 @@ var Section = Bookshelf.Model.extend({
         return this.hasMany(Section_Weekday);
     },
     instructor: function () {
-        return this.hasMany(Instructor);
+        return this.belongsToMany(Person, 'instructor', 'person_id', 'section_id')
     },
     teaching_assistant: function () {
-        return this.hasMany(Teaching_Assistant);
+        return this.belongsToMany(Person, 'teaching_assistant', 'person_id', 'section_id')
     },
     student: function () {
-        return this.hasMany(Student);
+        return this.belongsToMany(Person, 'student', 'person_id', 'section_id')
     }
 });
 
@@ -94,6 +103,9 @@ var Offering = Bookshelf.Model.extend({
     },
     planned_class: function () {
         return this.hasMany(Planned_Class);
+    },
+    weekday: function () {
+        return this.belongsToMany(Weekday, 'offering_weekday', 'offering_id', 'weekday_id');
     }
 });
 
@@ -124,6 +136,9 @@ var Term = Bookshelf.Model.extend({
     },
     holiday: function () {
         return this.hasMany(Holiday);
+    },
+    course: function () {
+        return this.belongsToMany(Course, 'offering', 'course_id', 'term_id');
     }
 });
 
@@ -143,6 +158,12 @@ var Weekday = Bookshelf.Model.extend({
     },
     section_weekday: function () {
         return this.belongsTo(Section_Weekday);
+    },
+    offering: function () {
+        return this.belongsToMany(Offering, 'offering_weekday', 'offering_id', 'weekday_id');
+    },
+    section: function () {
+        return this.belongsToMany(Section, 'section_weekday', 'section_id', 'weekday_id');
     }
 });
 
@@ -182,6 +203,18 @@ var Person = Bookshelf.Model.extend({
     },
     student: function () {
         return this.hasMany(Student);
+    },
+    role: function () {
+        return this.belongsToMany(Role, 'person_role', 'role_id', 'person_id');
+    },
+    sections_taught: function () {
+        return this.belongsToMany(Section, 'instructor', 'section_id', 'person_id');
+    },
+    sections_enrolled: function () {
+        return this.belongsToMany(Section, 'student', 'section_id', 'person_id');
+    },
+    sections_ta: function () {
+        return this.belongsToMany(Section, 'teaching_assistant', 'section_id', 'person_id');
     }
 });
 
@@ -237,6 +270,9 @@ var Role = Bookshelf.Model.extend({
     tableName: 'role',
     person_role: function () {
         return this.hasMany(Person_Role);
+    },
+    person: function () {
+        return this.belongsToMany(Person, 'person_role', 'role_id', 'person_id');
     }
 });
 
