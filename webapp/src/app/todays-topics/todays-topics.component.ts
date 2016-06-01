@@ -16,13 +16,11 @@ import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
   ],
 })
 export class TodaysTopicsComponent implements OnInit {
-  test: any;
-  constructor() {
-    console.log("Hey!");
-  }
+
+  constructor() {}
 
   ngOnInit() {
-    console.log("?");
+    
   }
 
 }

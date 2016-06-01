@@ -21,6 +21,7 @@ export * from '../+term';
 export * from '../+terms';
 export * from '../+admin';
 export * from '../+login';
-export * from '../+welcome';
 export * from '../todays-topics';
+export * from '../important-dates';
+export * from '../+welcome';
 export * from '../+cue-sheet';
