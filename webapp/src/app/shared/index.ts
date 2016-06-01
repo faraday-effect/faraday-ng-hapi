@@ -23,3 +23,4 @@ export * from '../+admin';
 export * from '../+login';
 export * from '../+welcome';
 export * from '../+cue-sheet';
+export * from '../attendance.service';

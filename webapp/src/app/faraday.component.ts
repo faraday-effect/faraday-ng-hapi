@@ -8,6 +8,7 @@ import {
   DepartmentService,
   PrefixService,
   TermService,
+  AttendanceService,
   // Components
   LoginComponent,
   AdminComponent,
@@ -27,6 +28,7 @@ import {
     DepartmentService,
     PrefixService,
     TermService,
+    AttendanceService,
   ]
 })
 @Routes([
