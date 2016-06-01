@@ -293,6 +293,21 @@ module.exports['Course'] = Course;
 module.exports['Department'] = Department;
 module.exports['Department_Prefix'] = Department_Prefix;
 module.exports['Section'] = Section;
+module.exports['Person'] = Person;
+module.exports['Role'] = Role;
+module.exports['Person_Role'] = Person_Role;
+module.exports['Instructor'] = Instructor;
+module.exports['Teaching_Assistant'] = Teaching_Assistant;
+module.exports['Student'] = Student;
+module.exports['Attendance'] = Attendance;
+module.exports['Offering'] = Offering;
+module.exports['Planned_Class'] = Planned_Class;
+module.exports['Actual_Class'] = Actual_Class;
+module.exports['Weekday'] = Weekday;
+module.exports['Offering_Weekday'] = Offering_Weekday;
+module.exports['Holiday'] = Holiday;
+module.exports['Section_Weekday'] = Section_Weekday;
+
 
 module.exports['Departments'] = Bookshelf.Collection.extend({
     model: Department
