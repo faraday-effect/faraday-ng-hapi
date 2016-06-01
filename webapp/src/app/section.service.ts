@@ -8,7 +8,7 @@ import { Section } from './shared';
 @Injectable()
 export class SectionService {
 
-  private sectionUrl = 'http://localhost:3000/section';  // URL to web api
+  private sectionUrl = 'http://localhost:3000/sections';  // URL to web api
 
   constructor(private http: Http) { }
 

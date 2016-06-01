@@ -34,17 +34,17 @@ import {
 @Routes([
   {path: '/', component: CoursesComponent},
   // {path: '/course/:id/edit', component: CourseEditComponent},
-  {path: '/course/:id', component: CourseComponent},
-  {path: '/course', component: CoursesComponent},
-  {path: '/section/create', component: SectionEditComponent},
-  {path: '/section/:id', component: SectionComponent},
-  {path: '/section', component: SectionsComponent},
-  {path: '/department/:id', component: DepartmentComponent},
-  {path: '/department', component: DepartmentsComponent},
-  {path: '/prefix/:id', component: PrefixComponent},
-  {path: '/prefix', component: PrefixesComponent},
-  {path: '/term', component: TermsComponent},
-  {path: '/term/:id', component: TermComponent},
+  {path: '/courses/:id', component: CourseComponent},
+  {path: '/courses', component: CoursesComponent},
+  {path: '/sections/create', component: SectionEditComponent},
+  {path: '/sections/:id', component: SectionComponent},
+  {path: '/sections', component: SectionsComponent},
+  {path: '/departments/:id', component: DepartmentComponent},
+  {path: '/departments', component: DepartmentsComponent},
+  {path: '/prefixes/:id', component: PrefixComponent},
+  {path: '/prefixes', component: PrefixesComponent},
+  {path: '/terms/:id', component: TermComponent},
+  {path: '/terms', component: TermsComponent},
 ])
 export class AdminComponent {
 
@@ -53,23 +53,23 @@ export class AdminComponent {
   }
 
   gotoCourses() {
-    this.router.navigate(['/admin/course']); // FIXME ADMIN
+    this.router.navigate(['/admin/courses']); // FIXME ADMIN
   }
 
   gotoSections() {
-    this.router.navigate(['/admin/section']); // FIXME ADMIN
+    this.router.navigate(['/admin/sections']); // FIXME ADMIN
   }
 
   gotoDepartments() {
-    this.router.navigate(['/admin/department']); // FIXME ADMIN
+    this.router.navigate(['/admin/departments']); // FIXME ADMIN
   }
 
   gotoPrefixes() {
-    this.router.navigate(['/admin/prefix']); // FIXME ADMIN
+    this.router.navigate(['/admin/prefixes']); // FIXME ADMIN
   }
 
   gotoTerms() {
-    this.router.navigate(['/admin/term']); // FIXME ADMIN
+    this.router.navigate(['/admin/terms']); // FIXME ADMIN
   }
 
   title = 'Admin Console';

@@ -36,7 +36,7 @@ export class PrefixesComponent implements OnInit {
   }
 
   gotoPrefix(id: number) {
-    this.router.navigate(['/admin/prefix', id ]); // FIXME ADMIN
+    this.router.navigate(['/admin/prefixes', id ]); // FIXME ADMIN
   }
 
 }

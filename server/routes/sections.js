@@ -42,7 +42,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'GET',
-        path: '/section/{section_id}',
+        path: '/sections/{section_id}',
         handler: function (request, reply) {
             var response = bookshelf.Section.forge({'id': encodeURIComponent(request.params.section_id)}).fetch();
             reply(response);

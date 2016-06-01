@@ -7,7 +7,7 @@ import { Prefix } from './shared';
 @Injectable()
 export class PrefixService {
 
-  private prefixesUrl = 'http://localhost:3000/prefix';  // URL to web api
+  private prefixesUrl = 'http://localhost:3000/prefixes';  // URL to web api
 
   constructor(private http: Http) { }
 
