@@ -4,6 +4,9 @@ import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
 import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
 
+import {
+  TodaysTopicsComponent,
+} from '../shared';
 
 @Component({
   moduleId: module.id,
@@ -14,6 +17,7 @@ import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
     MD_CARD_DIRECTIVES,
     MD_TOOLBAR_DIRECTIVES,
     MD_LIST_DIRECTIVES,
+    //TodaysTopicsComponent
   ],
 })
 export class WelcomeComponent implements OnInit {
@@ -25,6 +29,8 @@ export class WelcomeComponent implements OnInit {
 
   ngOnInit() {
     this.date = new Date();
+    console.log(TodaysTopicsComponent);
+    console.log(this);
   }
 
 }
