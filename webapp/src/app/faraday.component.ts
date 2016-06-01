@@ -12,6 +12,7 @@ import {
   LoginComponent,
   AdminComponent,
   WelcomeComponent,
+  CueSheetComponent,
 } from './shared';
 
 @Component({
@@ -33,6 +34,7 @@ import {
   {path: '/login', component: LoginComponent},
   {path: '/admin', component: AdminComponent},
   {path: '/welcome', component: WelcomeComponent},
+  {path: '/cue-sheet', component: CueSheetComponent}
 ])
 export class FaradayAppComponent {
 
