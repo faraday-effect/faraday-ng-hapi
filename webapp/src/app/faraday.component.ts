@@ -11,6 +11,7 @@ import {
   // Components
   LoginComponent,
   AdminComponent,
+  WelcomeComponent,
 } from './shared';
 
 @Component({
