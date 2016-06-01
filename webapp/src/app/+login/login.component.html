@@ -1,3 +1,24 @@
-<p>
-  login works!
-</p>
+<md-toolbar color="primary">
+  <span>{{title}}</span>
+  <span class="fill-space"></span>
+  <span>{{date}}</span>
+</md-toolbar>
+
+<div class="container">
+  <md-list>
+    <md-list-item>
+      <h1>Please Log In</h1>
+    </md-list-item>
+    <md-list-item>
+      <md-input placeholder="User Name" [(ngModel)]="userName"></md-input>
+    </md-list-item>
+    <md-list-item>
+      <md-input placeholder="Password" [(ngModel)]="password" type="password"></md-input>
+    </md-list-item>
+    <md-list-item>
+      <span class="fill-space"></span>
+      <button (click)="login()" md-raised-button color="accent">Login</button>
+    </md-list-item>
+  </md-list>
+</div>
+
