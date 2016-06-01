@@ -6,7 +6,8 @@ var knex = require('knex')({
         password: 'pass',
         database: 'faraday',
         charset: 'utf8'
-    }
+    },
+    debug: true
 });
 var Bookshelf = require('bookshelf')(knex);
 
@@ -82,13 +83,13 @@ var Section = Bookshelf.Model.extend({
         return this.hasMany(Section_Weekday);
     },
     instructor: function () {
-        return this.belongsToMany(Person, 'instructor', 'person_id', 'section_id')
+        return this.belongsTo(Person).through(Instructor);
     },
     teaching_assistant: function () {
-        return this.belongsToMany(Person, 'teaching_assistant', 'person_id', 'section_id')
+        return this.belongsToMany(Person).through(Teaching_Assistant);
     },
     student: function () {
-        return this.belongsToMany(Person, 'student', 'person_id', 'section_id')
+        return this.belongsToMany(Person).through(Student);
     }
 });
 
@@ -208,13 +209,13 @@ var Person = Bookshelf.Model.extend({
         return this.belongsToMany(Role, 'person_role', 'role_id', 'person_id');
     },
     sections_taught: function () {
-        return this.belongsToMany(Section, 'instructor', 'section_id', 'person_id');
+        return this.belongsToMany(Section).through(Instructor);
     },
     sections_enrolled: function () {
-        return this.belongsToMany(Section, 'student', 'section_id', 'person_id');
+        return this.belongsToMany(Section).through(Student);
     },
     sections_ta: function () {
-        return this.belongsToMany(Section, 'teaching_assistant', 'section_id', 'person_id');
+        return this.belongsToMany(Section).through(Teaching_Assistant);
     }
 });
 
