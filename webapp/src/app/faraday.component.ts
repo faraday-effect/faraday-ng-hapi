@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router, Routes, ROUTER_DIRECTIVES } from '@angular/router';
+import { Router, Routes, ROUTER_DIRECTIVES , ROUTER_PROVIDERS} from '@angular/router';
 
 import {
   // Services
@@ -11,6 +11,7 @@ import {
   // Components
   LoginComponent,
   AdminComponent,
+  WelcomeComponent,
   // FIXME ADMIN: Router doesn't support nested routing yet
   CourseComponent,
   CoursesComponent,
@@ -43,6 +44,7 @@ import {
   {path: '/', component: AdminComponent},
   {path: '/login', component: LoginComponent},
   {path: '/admin', component: AdminComponent},
+  {path: '/welcome', component: WelcomeComponent},
 
   // FIXME ADMIN: Router doesn't support nested routing yet
   {path: '/admin/course/:id', component: CourseComponent},

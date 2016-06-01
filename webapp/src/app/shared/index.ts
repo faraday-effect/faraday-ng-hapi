@@ -21,3 +21,4 @@ export * from '../+term';
 export * from '../+terms';
 export * from '../+admin';
 export * from '../+login';
+export * from '../+welcome';
