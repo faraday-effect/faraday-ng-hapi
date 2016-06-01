@@ -47,6 +47,7 @@ exports.up = function (knex, Promise) {
         }),
 
         knex.schema.createTable('section_weekday', function (table) {
+            table.increments('id').primary();
             table.integer('section_id')
                 .references('id')
                 .inTable('section');
@@ -55,15 +56,15 @@ exports.up = function (knex, Promise) {
                 .inTable('weekday');
             table.time('start_time').notNullable();
             table.time('stop_time').notNullable();
-            table.primary(['section_id', 'weekday_id']);
         }),
 
         knex.schema.createTable('offering_weekday', function (table) {
             table.integer('offering_id')
-                .references('offering_pkey');
-            //.inTable('offering');
+                .references('id')
+                .inTable('offering');
             table.integer('weekday_id')
-                .references('id');
+                .references('id')
+                .inTable('weekday');
             table.primary(['offering_id', 'weekday_id']);
         }),
 
@@ -82,30 +83,30 @@ exports.up = function (knex, Promise) {
         }),
 
         knex.schema.createTable('offering', function (table) {
+            table.increments('id').primary();
             table.integer('course_id')
                 .references('id')
                 .inTable('course');
             table.integer('term_id')
                 .references('id')
                 .inTable('term');
-            table.primary(['course_id', 'term_id']);
         }),
 
         knex.schema.createTable('section', function (table) {
             table.increments('id').primary();
             table.string('reg_number').notNullable();
             table.string('title');
-            table.foreign('offering_id')
-                .references('offering_pkey');
-            //    .inTable('offering');
+            table.integer('offering_id')
+                .references('id')
+                .inTable('offering');
         }),
 
         knex.schema.createTable('planned_class', function (table) {
             table.increments('id').primary();
             table.date('date').notNullable();
             table.integer('offering_id')
-                .references('offering_pkey');
-            //    .inTable('offering');
+                .references('id')
+                .inTable('offering');
             table.text('reflection');
         }),
 
@@ -147,69 +148,71 @@ exports.up = function (knex, Promise) {
         }),
 
         knex.schema.createTable('instructor', function (table) {
+            table.increments('id').primary();
             table.integer('section_id')
                 .references('id')
                 .inTable('section');
             table.integer('person_id')
                 .references('id')
                 .inTable('person');
-            table.primary(['person_id', 'section_id']);
         }),
         knex.schema.createTable('teaching_assistant', function (table) {
+            table.increments('id').primary();
             table.integer('section_id')
                 .references('id')
                 .inTable('section');
             table.integer('person_id')
                 .references('id')
                 .inTable('person');
-            table.primary(['person_id', 'section_id']);
         }),
 
         knex.schema.createTable('student', function (table) {
+            table.increments('id').primary();
             table.integer('section_id')
                 .references('id')
                 .inTable('section');
             table.integer('person_id')
                 .references('id')
                 .inTable('person');
-            table.primary(['person_id', 'section_id']);
         }),
 
         knex.schema.createTable('attendance', function (table) {
+            table.increments('id').primary();
             table.integer('student_id')
-                .references('student_pkey');
-            //   .inTable('student');
+                .references('id')
+                .inTable('student');
             table.integer('actual_class_id')
                 .references('id')
                 .inTable('actual_class');
-            table.primary(['actual_class_id', 'student_id']);
         })
     ])
 
 };
 
 exports.down = function (knex, Promise) {
+    return Promise.all([
     //fk tables
-    knex.schema.dropTable('department_prefix');
-    knex.schema.dropTable('offering_weekday');
-    knex.schema.dropTable('section_weekday');
-    knex.schema.dropTable('attendance');
-    knex.schema.dropTable('student');
-    knex.schema.dropTable('instructor');
-    knex.schema.dropTable('teaching_assistant');
-    knex.schema.dropTable('person_role');
-    knex.schema.dropTable('offering');
-    knex.schema.dropTable('actual_class');
-    knex.schema.dropTable('planned_class');
-    knex.schema.dropTable('section');
-    knex.schema.dropTable('course');
+        knex.schema.dropTable('department_prefix'),
+        knex.schema.dropTable('offering_weekday'),
+        knex.schema.dropTable('section_weekday'),
+        knex.schema.dropTable('attendance'),
+        knex.schema.dropTable('student'),
+        knex.schema.dropTable('instructor'),
+        knex.schema.dropTable('teaching_assistant'),
+        knex.schema.dropTable('person_role'),
+        knex.schema.dropTable('offering'),
+        knex.schema.dropTable('actual_class'),
+        knex.schema.dropTable('planned_class'),
+        knex.schema.dropTable('section'),
+        knex.schema.dropTable('course'),
 
     //tables without fk
-    knex.schema.dropTable('department');
-    knex.schema.dropTable('prefix');
-    knex.schema.dropTable('term');
-    knex.schema.dropTable('role');
-    knex.schema.dropTable('weekday');
-    knex.schema.dropTable('holiday');
-    knex.schema.dropTable('person');
+        knex.schema.dropTable('department'),
+        knex.schema.dropTable('prefix'),
+        knex.schema.dropTable('term'),
+        knex.schema.dropTable('role'),
+        knex.schema.dropTable('weekday'),
+        knex.schema.dropTable('holiday'),
+        knex.schema.dropTable('person')
+    ]);
 };
