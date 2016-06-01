@@ -6,6 +6,7 @@ const Joi = require('joi');
 var bookshelf = require('./bookshelf');
 
 const course_prefix_name = 8;
+const attendence_code_length = 6;
 
 const server = new Hapi.Server();
 server.connection({
@@ -586,6 +587,102 @@ server.route({
                 term_id: Joi.number().positive().integer()
             }
         }
+    }
+});
+
+
+//new routes
+
+// attendance
+server.route({
+    method: 'POST',
+    path: '/attendance',
+    handler: function (request, reply) {
+        reply({});
+    },
+    config: {
+        validate: {
+            payload: {
+                code: Joi.string().required().length(attendence_code_length)
+            }
+        },
+        notes: "Puts the student in the class on the server, requires the 6 digit code"
+    }
+});
+
+server.route({
+    method: 'GET',
+    path: '/course/{course_id}/code',
+    handler: function (request, reply) {
+        reply({});
+    },
+    config: {
+        notes: "Returns the code for a given course_id"
+    }
+});
+
+server.route({
+    method: 'GET',
+    path: '/attendance',
+    handler: function (request, reply) {
+        reply({});
+    },
+    config: {
+        notes: "Returns a list of students and their presence"
+    }
+});
+
+//Login & Logout
+
+server.route({
+    method: 'POST',
+    path: '/login',
+    handler: function (request, reply) {
+        reply({});
+    },
+    config: {
+        validate: {
+            payload: {
+                email: Joi.string().email().required().lowercase(),
+                password: Joi.string().required()
+                //should use the .strip() for password
+            }
+        },
+        notes: "Allows the user to login"
+    }
+});
+
+server.route({
+    method: 'POST',
+    path: '/logout',
+    handler: function (request, reply) {
+        reply({});
+    },
+    config: {
+        notes: "Allows the user to logout"
+    }
+});
+
+//Section for user around current time
+server.route({
+    method: 'POST',
+    path: '/section/enrolled/active',
+    handler: function (request, reply) {
+        reply({});
+    },
+    config: {
+        notes: "returns any class for a user in the next 10 minutes +/- the class"
+    }
+});
+
+server.route({
+    method: 'POST',
+    path: '/section/enrolled',
+    handler: function (request, reply) {
+        reply({});
+    },
+    config: {
+        notes: "returns classes for a student that they are actively enrolled in"
     }
 });
 
