@@ -20,7 +20,7 @@ exports.up = function (knex, Promise) {
             table.integer('prefix_id')
                 .references('id')
                 .inTable('prefix');
-            table.primary('department_id', 'prefix_id');
+            table.primary(['department_id', 'prefix_id']);
         }),
 
         //pink
