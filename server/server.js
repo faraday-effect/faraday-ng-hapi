@@ -18,7 +18,9 @@ server.register([
     {register: require('./routes/sections')},
     {register: require('./routes/courses')},
     {register: require('./routes/terms')},
-    {register: require('./routes/departments')}
+    {register: require('./routes/departments')},
+    {register: require('./routes/authentication')},
+    {register: require('./routes/users')}
 ], (err) => {
     if (err) {
         throw err;
