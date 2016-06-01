@@ -15,6 +15,7 @@ const materialPkgs: string[] = [
   'card',
   'checkbox',
   'core',
+  'input',
   'list',
   'toolbar',
 ];
@@ -54,6 +55,9 @@ const barrels: string[] = [
   'app/+term',
   'app/+terms',
   'app/+section/section-edit',
+  'app/+login',
+  'app/+admin',
+  'app/+admin/shared',
   /** @cli-barrel */
 ];
 

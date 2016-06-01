@@ -14,9 +14,4 @@ describe('App: Faraday', () => {
       inject([FaradayAppComponent], (app: FaradayAppComponent) => {
     expect(app).toBeTruthy();
   }));
-
-  it('should have as title \'faraday works!\'',
-      inject([FaradayAppComponent], (app: FaradayAppComponent) => {
-    expect(app.title).toEqual('faraday works!');
-  }));
 });
