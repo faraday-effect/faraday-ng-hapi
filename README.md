@@ -12,3 +12,12 @@ To run server:
 run `node server/server.js` in terminal
 
 In a browser visit `localhost:3000`
+
+
+To run express-admin:
+run `node server/node_modules/express-admin server/express-admin`
+
+In a browser visit: `localhost:5000`
+
+User: admin
+Pass: AdmiN123
