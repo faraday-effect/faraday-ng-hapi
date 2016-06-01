@@ -303,7 +303,7 @@ module.exports['Department_Prefixes'] = Bookshelf.Collection.extend({
 });
 
 module.exports['Courses'] = Bookshelf.Collection.extend({
-        model: Course
+    model: Course
 });
 
 module.exports['Prefixes'] = Bookshelf.Collection.extend({
