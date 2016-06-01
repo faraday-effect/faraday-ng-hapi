@@ -40,7 +40,7 @@ export class CoursesComponent implements OnInit {
   }
 
   gotoCourse(id: number) {
-    this.router.navigate(['/admin/course', id ]); // FIXME ADMIN
+    this.router.navigate(['/admin/courses', id ]); // FIXME ADMIN
   }
 
 }

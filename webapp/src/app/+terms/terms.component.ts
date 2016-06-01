@@ -36,7 +36,7 @@ export class TermsComponent implements OnInit {
   }
 
   gotoTerm(id: number) {
-    this.router.navigate(['/admin/term', id ]); // FIXME ADMIN
+    this.router.navigate(['/admin/terms', id ]); // FIXME ADMIN
   }
 
 }

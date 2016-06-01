@@ -7,7 +7,7 @@ import { Department } from './shared';
 @Injectable()
 export class DepartmentService {
 
-  private departmentsUrl = 'http://localhost:3000/department';  // URL to web api
+  private departmentsUrl = 'http://localhost:3000/departments';  // URL to web api
 
   constructor(private http: Http) { }
 

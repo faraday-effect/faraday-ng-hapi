@@ -7,7 +7,7 @@ import { Term } from './shared';
 @Injectable()
 export class TermService {
 
-  private termsUrl = 'http://localhost:3000/term';  // URL to web api
+  private termsUrl = 'http://localhost:3000/terms';  // URL to web api
 
   constructor(private http: Http) { }
 
