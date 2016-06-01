@@ -19,4 +19,5 @@ export * from '../term';
 export * from '../term.service';
 export * from '../+term';
 export * from '../+terms';
-
+export * from '../+admin';
+export * from '../+login';

@@ -17,7 +17,7 @@ import {
   PrefixesComponent,
   TermComponent,
   TermsComponent,
-} from './shared';
+} from '../shared';
 
 @Component({
   moduleId: module.id,
@@ -53,23 +53,23 @@ export class AdminComponent {
   }
 
   gotoCourses() {
-    this.router.navigate(['/course']);
+    this.router.navigate(['/admin/course']); // FIXME ADMIN
   }
 
   gotoSections() {
-    this.router.navigate(['/section']);
+    this.router.navigate(['/admin/section']); // FIXME ADMIN
   }
 
   gotoDepartments() {
-    this.router.navigate(['/department']);
+    this.router.navigate(['/admin/department']); // FIXME ADMIN
   }
 
   gotoPrefixes() {
-    this.router.navigate(['/prefix']);
+    this.router.navigate(['/admin/prefix']); // FIXME ADMIN
   }
 
   gotoTerms() {
-    this.router.navigate(['/term']);
+    this.router.navigate(['/admin/term']); // FIXME ADMIN
   }
 
   title = 'Admin Console';

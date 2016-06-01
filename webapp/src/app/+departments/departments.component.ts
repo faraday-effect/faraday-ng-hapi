@@ -37,7 +37,7 @@ export class DepartmentsComponent implements OnInit {
   }
 
   gotoDepartment(id: number) {
-    this.router.navigate(['/department', id ]);
+    this.router.navigate(['/admin/department', id ]); // FIXME ADMIN
   }
 
 }

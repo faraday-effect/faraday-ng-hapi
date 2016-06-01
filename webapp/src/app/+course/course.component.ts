@@ -32,7 +32,7 @@ export class CourseComponent implements OnActivate {
   deactivateCourse() {
     let id = +this.routeSegment.getParam('id');
     this.courseService.deleteCourse(id)
-        .then(() => this.router.navigate(['/course']));
+        .then(() => this.router.navigate(['/admin/course'])); // FIXME ADMIN
   }
 
 }

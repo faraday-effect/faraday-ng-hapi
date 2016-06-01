@@ -37,7 +37,7 @@ export class SectionsComponent implements OnInit {
   }
 
   gotoSection(id: number) {
-    this.router.navigate(['/section', id ]);
+    this.router.navigate(['/admin/section', id ]); // FIXME admin
   }
 
   createSection() {
