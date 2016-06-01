@@ -309,6 +309,54 @@ module.exports['Holiday'] = Holiday;
 module.exports['Section_Weekday'] = Section_Weekday;
 
 
+module.exports['Weekdays'] = Bookshelf.Collection.extend({
+    model: Weekday
+});
+
+module.exports['Holidays'] = Bookshelf.Collection.extend({
+    module: Holiday
+});
+
+module.exports['Students'] = Bookshelf.Collection.extend({
+    module: Student
+});
+
+module.exports['Instructors'] = Bookshelf.Collection.extend({
+    module: Instructor
+});
+
+module.exports['Teaching_Assistants'] = Bookshelf.Collection.extend({
+    module: Teaching_Assistant
+});
+
+module.exports['All_Attendances'] = Bookshelf.Collection.extend({
+    module: Attendance
+});
+
+module.exports['People'] = Bookshelf.Collection.extend({
+    module: Person
+});
+
+module.exports['Roles'] = Bookshelf.Collection.extend({
+    module: Role
+});
+
+module.exports['Offerings_Weekdays'] = Bookshelf.Collection.extend({
+    module: Offering_Weekday
+});
+
+module.exports['Sections_Weekdays'] = Bookshelf.Collection.extend({
+    module: Section_Weekday
+});
+
+module.exports['Planned_Classes'] = Bookshelf.Collection.extend({
+    module: Planned_Class
+});
+
+module.exports['Actual_Classes'] = Bookshelf.Collection.extend({
+    module: Actual_Class
+});
+
 module.exports['Departments'] = Bookshelf.Collection.extend({
     model: Department
 });
