@@ -1,9 +1,8 @@
-<md-toolbar color="primary">
-  <span>{{title}}</span>
-</md-toolbar>
-
-<md-card>
-  <button (click)="gotoCourses()" md-raised-button>Courses</button>
-</md-card>
-
+<div *ngIf="debug">
+  <a [routerLink]="['/']">/</a>
+  <a [routerLink]="['/login']">/login</a>
+  <a [routerLink]="['/admin']">/admin</a>
+  <a [routerLink]="['/welcome']">/welcome</a>
+  <a [routerLink]="['/cue-sheet']">/cue-sheet</a>
+</div>
 <router-outlet></router-outlet>

@@ -1,0 +1,16 @@
+<div class="card-container">
+  <md-card>
+    <md-card-title>
+        <span *ngIf="course">
+          Log in to {{course.prefix}} {{ course.number }}
+        </span>
+    </md-card-title>
+    <md-card-content class="secondary">
+      <p>Class code</p>
+      <b># HERE</b>
+      <div class="footer">
+        <p>... of ... Logged In</p>
+      </div>
+    </md-card-content>
+  </md-card>
+</div>

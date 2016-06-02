@@ -1,14 +1,21 @@
 import { Component } from '@angular/core';
-import { Router, Routes, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from '@angular/router';
+import { Router, Routes, ROUTER_DIRECTIVES , ROUTER_PROVIDERS} from '@angular/router';
 
-import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
-import { MdButton } from '@angular2-material/button';
-import { MdToolbar } from '@angular2-material/toolbar';
+import { MdIconRegistry } from '@angular2-material/icon';
 
 import {
+  // Services
   CourseService,
-  CourseComponent,
-  CoursesComponent,
+  SectionService,
+  DepartmentService,
+  PrefixService,
+  TermService,
+  AttendanceService,
+  // Components
+  LoginComponent,
+  AdminComponent,
+  WelcomeComponent,
+  CueSheetComponent,
 } from './shared';
 
 @Component({
@@ -16,28 +23,30 @@ import {
   selector: 'faraday-app',
   templateUrl: 'faraday.component.html',
   styleUrls: ['faraday.component.css'],
-  directives: [
-    ROUTER_DIRECTIVES,
-    MD_CARD_DIRECTIVES,
-    MdButton,
-    MdToolbar,
-  ],
-  providers: [ROUTER_PROVIDERS, CourseService]
+  directives: [ROUTER_DIRECTIVES],
+  providers: [
+    MdIconRegistry,
+    CourseService,
+    SectionService,
+    DepartmentService,
+    PrefixService,
+    TermService,
+    AttendanceService,
+  ]
 })
 @Routes([
-  {path: '/course/:id', component: CourseComponent},
-  {path: '/course', component: CoursesComponent},
-  {path: '/', component: CoursesComponent}
+  {path: '/', component: LoginComponent},
+  {path: '/login', component: LoginComponent},
+  {path: '/admin', component: AdminComponent},
+  {path: '/welcome', component: WelcomeComponent},
+  {path: '/cue-sheet', component: CueSheetComponent},
 ])
 export class FaradayAppComponent {
+
+  debug = true;
 
   constructor(
     private router: Router) {
   }
 
-  gotoCourses() {
-    this.router.navigate(['/course']);
-  }
-
-  title = 'faraday works!';
 }

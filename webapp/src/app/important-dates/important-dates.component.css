@@ -1,0 +1,10 @@
+.secondary {
+  color: rgba(0,0,0,0.54);
+}
+
+md-card {
+  width: 400px;
+  box-sizing: border-box;
+  margin: 16px;
+}
+

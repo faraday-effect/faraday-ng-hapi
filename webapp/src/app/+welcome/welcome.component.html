@@ -1,0 +1,16 @@
+<md-toolbar color="primary">
+  <span *ngIf="course">
+    <b> Welcome to {{course.prefix}} {{ course.number }}</b>
+    <span> {{ course.title }}</span>
+  </span>
+  <span class="fill-space"></span>
+  <span>{{date}}</span>
+</md-toolbar>
+
+<div class="card-container">
+  <app-todays-topics></app-todays-topics>
+  <app-important-dates></app-important-dates>
+  <app-class-code></app-class-code>
+</div>
+
+

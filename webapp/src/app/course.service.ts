@@ -7,7 +7,7 @@ import { Course } from './shared';
 @Injectable()
 export class CourseService {
 
-  private coursesUrl = 'http://localhost:3000/course';  // URL to web api
+  private coursesUrl = 'http://localhost:3000/courses';  // URL to web api
 
   constructor(private http: Http) { }
   
@@ -20,6 +20,13 @@ export class CourseService {
 
   getCourse(id: number) {
     return this.http.get(this.coursesUrl+'/'+id)
+               .toPromise()
+               .then(response => response.json())
+               .catch(this.handleError);
+  }
+
+  deleteCourse(id: number) {
+    return this.http.delete(this.coursesUrl+'/'+id)
                .toPromise()
                .then(response => response.json())
                .catch(this.handleError);

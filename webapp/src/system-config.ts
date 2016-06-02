@@ -3,7 +3,7 @@
  **********************************************************************************************/
 /** Map relative paths to URLs. */
 const map: any = {
-  '@angular2-material': 'vendor/@angular2-material'
+  '@angular2-material': 'vendor/@angular2-material',
 };
 
 /** User packages configuration. */
@@ -11,9 +11,12 @@ const packages: any = {
 };
 
 const materialPkgs: string[] = [
-  'core',
   'button',
   'card',
+  'checkbox',
+  'core',
+  'icon',
+  'input',
   'list',
   'toolbar',
 ];
@@ -44,6 +47,24 @@ const barrels: string[] = [
   'app/shared',
   'app/+course',
   'app/+courses',
+  'app/+section',
+  'app/+sections',
+  'app/+department',
+  'app/+departments',
+  'app/+prefix',
+  'app/+prefixes',
+  'app/+term',
+  'app/+terms',
+  'app/+section/section-edit',
+  'app/+login',
+  'app/+admin',
+  'app/+admin/shared',
+  'app/+welcome',
+  'app/todays-topics',
+  'app/important-dates',
+  'app/+cue-sheet',
+  'app/+cue-sheet/attendance',
+  'app/+welcome/class-code',
   /** @cli-barrel */
 ];
 

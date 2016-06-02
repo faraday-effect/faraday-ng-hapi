@@ -1,0 +1,18 @@
+<md-card>
+  <md-card-title>Attendance</md-card-title>
+
+  <md-list>
+
+    <md-list-item *ngFor="let pair of getPresent()" class="attendee-container">
+      <img md-list-avatar src="http://efdreams.com/data_images/dreams/face/face-10.jpg">
+      <md-line class="student-present">{{pair[0].first_name}} {{pair[0].last_name}}</md-line>
+    </md-list-item>
+
+    <md-list-item *ngFor="let pair of getAbsent()" class="attendee-container">
+      <img md-list-avatar src="http://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/durchschnittsgesichter/m(01-32)_gr.jpg">
+      <md-line class="student-absent">{{pair[0].first_name}} {{pair[0].last_name}}</md-line>
+    </md-list-item>
+
+  </md-list>
+
+</md-card>
