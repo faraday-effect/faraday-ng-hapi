@@ -25,3 +25,4 @@ export * from '../todays-topics';
 export * from '../important-dates';
 export * from '../+welcome';
 export * from '../+cue-sheet';
+export * from '../attendance.service';
