@@ -25,7 +25,7 @@ export class CourseService {
                .catch(this.handleError);
   }
 
-  deleteCourse(id: number) {
+  hideCourse(id: number) {
     return this.http.delete(this.coursesUrl+'/'+id)
                .toPromise()
                .then(response => response.json())
