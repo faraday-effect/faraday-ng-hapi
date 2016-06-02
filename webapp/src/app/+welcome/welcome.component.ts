@@ -3,6 +3,7 @@ import { Component, OnInit} from '@angular/core';
 import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
 import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
+import { ClassCodeComponent } from './class-code';
 
 //import { TodaysTopicsComponent } from '../todays-topics';
 import {
@@ -23,6 +24,7 @@ import {
     MD_LIST_DIRECTIVES,
     TodaysTopicsComponent,
     ImportantDatesComponent,
+    ClassCodeComponent,
   ],
 })
 export class WelcomeComponent implements OnInit {
