@@ -10,15 +10,21 @@ server.connection({
     }
 });
 
-server.register([require('vision'), require('inert'), {register: require('lout')}], function (err) {
-});
 
 server.register([
+    //lout requirements
+    {register: require('vision')},
+    {register: require('inert')},
+    {register: require('lout')},
+    //route plugins
+    {register: require('./routes/attendance')},
+    {register: require('./routes/authentication')},
+    {register: require('./routes/courses')},
+    {register: require('./routes/departments')},
     {register: require('./routes/prefixes')},
     {register: require('./routes/sections')},
-    {register: require('./routes/courses')},
     {register: require('./routes/terms')},
-    {register: require('./routes/departments')}
+    {register: require('./routes/users')}
 ], (err) => {
     if (err) {
         throw err;
@@ -43,12 +49,10 @@ server.register({
         }
     }
 }, (err) => {
-
-    //Checks to see if an error occurred while loading the plugin
+    //Checks to see if an error occurred while loading the plugins
     if (err) {
         throw err;
     }
-
     server.start((err) => {
 
         if (err) {
