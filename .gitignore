@@ -4,3 +4,4 @@ typings/
 npm-debug.log
 build/
 /etc/unwedge/test-db.sqlite
+/server/express-admin/settings.json
