@@ -20,7 +20,7 @@ export class TodaysTopicsComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    
+
   }
 
 }

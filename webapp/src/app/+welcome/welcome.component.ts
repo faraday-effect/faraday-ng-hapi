@@ -8,6 +8,8 @@ import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
 import {
   TodaysTopicsComponent,
   ImportantDatesComponent,
+  Course,
+  CourseService,
 } from '../shared';
 
 @Component({
@@ -25,15 +27,25 @@ import {
 })
 export class WelcomeComponent implements OnInit {
 
-  title = 'Welcome to <<section.course.title>>';
+  title = 'Welcome to ';
   date: Date;
+  course: Course;
 
-  constructor() {}
+  constructor(
+    private courseService: CourseService) {
+
+  }
 
   ngOnInit() {
     this.date = new Date();
-    console.log(TodaysTopicsComponent);
-    console.log(this);
+    // FIXME hardcoded course
+    this.courseService.getCourses().then(
+      (courses) => {
+        this.course = courses[0];
+        console.log(this.course);
+      }
+    );
+
   }
 
 }
