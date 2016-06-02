@@ -1,0 +1,17 @@
+md-card {
+  margin: 20px;
+}
+
+.student-present {
+  color: green;
+}
+
+.student-absent {
+  color: red;
+}
+
+.attendee-container {
+  display: flex;
+  flex-flow: row wrap;
+  width: 200px;
+}
