@@ -34,15 +34,30 @@ export class AttendanceComponent implements OnInit {
         for (let i in students) {
           this.attending[i] = [students[i], false];
         }
-        this.attendanceService.handle(
+        this.attendanceService.handleArrive(
           is => {
             for (let i of is) {
               this.attending[i][1] = true;
             }
           }
         );
+        this.attendanceService.handleDepart(
+          is => {
+            for (let i of is) {
+              this.attending[i][1] = false;
+            }
+          }
+        );
       }
     );
+  }
+
+  getPresent() {
+    return this.attending.filter(at => at[1]);
+  }
+
+  getAbsent() {
+    return this.attending.filter(at => ! at[1]);
   }
 
 }

@@ -3,7 +3,7 @@ md-card {
 }
 
 .student-present {
-  color: green;
+  color: darkgreen;
 }
 
 .student-absent {
@@ -11,7 +11,10 @@ md-card {
 }
 
 .attendee-container {
+  width: 200px;
+}
+
+md-list {
   display: flex;
   flex-flow: row wrap;
-  width: 200px;
 }
