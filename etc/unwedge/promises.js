@@ -1,6 +1,6 @@
 "use strict";
 
-const Promise = require('../../server/node_modules/bluebird');
+const Promise = require('bluebird');
 
 // From the Bluebird anti-patterns documentation
 function delay(ms, value) {
