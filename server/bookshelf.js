@@ -294,96 +294,96 @@ var Person_Role = Bookshelf.Model.extend({
     }
 });
 
-module.exports['Prefix'] = Prefix;
-module.exports['Term'] = Term;
-module.exports['Course'] = Course;
-module.exports['Department'] = Department;
-module.exports['Department_Prefix'] = Department_Prefix;
-module.exports['Section'] = Section;
-module.exports['Person'] = Person;
-module.exports['Role'] = Role;
-module.exports['Person_Role'] = Person_Role;
-module.exports['Instructor'] = Instructor;
-module.exports['Teaching_Assistant'] = Teaching_Assistant;
-module.exports['Student'] = Student;
-module.exports['Attendance'] = Attendance;
-module.exports['Offering'] = Offering;
-module.exports['Planned_Class'] = Planned_Class;
-module.exports['Actual_Class'] = Actual_Class;
-module.exports['Weekday'] = Weekday;
-module.exports['Offering_Weekday'] = Offering_Weekday;
-module.exports['Holiday'] = Holiday;
-module.exports['Section_Weekday'] = Section_Weekday;
+exports.Prefix = Prefix;
+exports.Term = Term;
+exports.Course = Course;
+exports.Department = Department;
+exports.Department_Prefix = Department_Prefix;
+exports.Section = Section;
+exports.Person = Person;
+exports.Role = Role;
+exports.Person_Role = Person_Role;
+exports.Instructor = Instructor;
+exports.Teaching_Assistant = Teaching_Assistant;
+exports.Student = Student;
+exports.Attendance = Attendance;
+exports.Offering = Offering;
+exports.Planned_Class = Planned_Class;
+exports.Actual_Class = Actual_Class;
+exports.Weekday = Weekday;
+exports.Offering_Weekday = Offering_Weekday;
+exports.Holiday = Holiday;
+exports.Section_Weekday = Section_Weekday;
 
 
-module.exports['Weekdays'] = Bookshelf.Collection.extend({
+exports.Weekdays = Bookshelf.Collection.extend({
     model: Weekday
 });
 
-module.exports['Holidays'] = Bookshelf.Collection.extend({
+exports.Holidays = Bookshelf.Collection.extend({
     module: Holiday
 });
 
-module.exports['Students'] = Bookshelf.Collection.extend({
+exports.Students = Bookshelf.Collection.extend({
     module: Student
 });
 
-module.exports['Instructors'] = Bookshelf.Collection.extend({
+exports.Instructors = Bookshelf.Collection.extend({
     module: Instructor
 });
 
-module.exports['Teaching_Assistants'] = Bookshelf.Collection.extend({
+exports.Teaching_Assistants = Bookshelf.Collection.extend({
     module: Teaching_Assistant
 });
 
-module.exports['All_Attendances'] = Bookshelf.Collection.extend({
+exports.All_Attendances = Bookshelf.Collection.extend({
     module: Attendance
 });
 
-module.exports['People'] = Bookshelf.Collection.extend({
+exports.People = Bookshelf.Collection.extend({
     module: Person
 });
 
-module.exports['Roles'] = Bookshelf.Collection.extend({
+exports.Roles = Bookshelf.Collection.extend({
     module: Role
 });
 
-module.exports['Offerings_Weekdays'] = Bookshelf.Collection.extend({
+exports.Offerings_Weekdays = Bookshelf.Collection.extend({
     module: Offering_Weekday
 });
 
-module.exports['Sections_Weekdays'] = Bookshelf.Collection.extend({
+exports.Sections_Weekdays = Bookshelf.Collection.extend({
     module: Section_Weekday
 });
 
-module.exports['Planned_Classes'] = Bookshelf.Collection.extend({
+exports.Planned_Classes = Bookshelf.Collection.extend({
     module: Planned_Class
 });
 
-module.exports['Actual_Classes'] = Bookshelf.Collection.extend({
+exports.Actual_Classes = Bookshelf.Collection.extend({
     module: Actual_Class
 });
 
-module.exports['Departments'] = Bookshelf.Collection.extend({
+exports.Departments = Bookshelf.Collection.extend({
     model: Department
 });
 
-module.exports['Department_Prefixes'] = Bookshelf.Collection.extend({
+exports.Department_Prefixes = Bookshelf.Collection.extend({
     model: Department_Prefix
 });
 
-module.exports['Courses'] = Bookshelf.Collection.extend({
+exports.Courses = Bookshelf.Collection.extend({
     model: Course
 });
 
-module.exports['Prefixes'] = Bookshelf.Collection.extend({
+exports.Prefixes = Bookshelf.Collection.extend({
     model: Prefix
 });
 
-module.exports['Sections'] = Bookshelf.Collection.extend({
+exports.Sections = Bookshelf.Collection.extend({
     model: Section
 });
 
-module.exports['Terms'] = Bookshelf.Collection.extend({
+exports.Terms = Bookshelf.Collection.extend({
     model: Term
 });
