@@ -27,3 +27,5 @@ export * from '../+welcome';
 export * from '../attendance.service';
 export * from '../+cue-sheet';
 export * from '../person';
+export * from '../register.service';
+export * from '../+register';
