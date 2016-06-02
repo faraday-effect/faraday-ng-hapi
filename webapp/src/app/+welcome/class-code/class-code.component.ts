@@ -6,21 +6,20 @@ import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
 
 @Component({
   moduleId: module.id,
-  selector: 'app-todays-topics',
-  templateUrl: 'todays-topics.component.html',
-  styleUrls: ['todays-topics.component.css'],
+  selector: 'app-class-code',
+  templateUrl: 'class-code.component.html',
+  styleUrls: ['class-code.component.css'],
   directives: [
     MD_CARD_DIRECTIVES,
     MD_TOOLBAR_DIRECTIVES,
     MD_LIST_DIRECTIVES,
   ],
 })
-export class TodaysTopicsComponent implements OnInit {
+export class ClassCodeComponent implements OnInit {
 
   constructor() {}
 
   ngOnInit() {
-
   }
 
 }

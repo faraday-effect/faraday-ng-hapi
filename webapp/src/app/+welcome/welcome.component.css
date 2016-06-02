@@ -1,10 +1,13 @@
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 .fill-space {
   flex: 1 1 auto;
 }
 
-.welcome-container {
-  width: 300px;
-  margin: auto;
-  margin-top: 20%;
-  height: 300px;
+.card-container {
+  display: flex;
+  flex-flow: row wrap;
 }
