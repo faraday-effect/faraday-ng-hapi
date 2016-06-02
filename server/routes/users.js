@@ -98,7 +98,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'POST',
-        path: '/user',
+        path: '/users',
         handler: function (request, reply) {
             var hash = bcrypt.hashSync(request.payload.password, saltRounds);
             var responseJSON = {};
