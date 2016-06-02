@@ -64,7 +64,6 @@ const barrels: string[] = [
   'app/important-dates',
   'app/+cue-sheet',
   'app/+cue-sheet/attendance',
-  'app/class-code',
   'app/+welcome/class-code',
   /** @cli-barrel */
 ];
