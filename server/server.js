@@ -20,7 +20,8 @@ server.register([
     {register: require('./routes/terms')},
     {register: require('./routes/departments')},
     {register: require('./routes/authentication')},
-    {register: require('./routes/users')}
+    {register: require('./routes/users')},
+    {register: require('./routes/attendance')},
 ], (err) => {
     if (err) {
         throw err;
