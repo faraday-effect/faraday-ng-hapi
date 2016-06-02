@@ -7,7 +7,7 @@ exports.register = function (server, options, next) {
         path: '/students/{user_id}/sections',
         handler: function (request, reply) {
             //check session token with {user_id} return error if dif
-            bookshelf.Person.forge({id: request.params.user_id}).fetch({withRelated: ['sections_enrolled']}).then((model) => {
+            bookshelf.Person.where({id: request.params.user_id}).fetch({withRelated: ['sections_enrolled']}).then((model) => {
                 reply(model);
             }).catch(function (error) {
                 reply({err: error});
@@ -27,7 +27,7 @@ exports.register = function (server, options, next) {
         path: '/instructors/{user_id}/sections',
         handler: function (request, reply) {
             //check session token with {user_id} return error if dif
-            bookshelf.Person.forge({id: request.params.user_id}).fetch({withRelated: ['sections_taught']}).then((model) => {
+            bookshelf.Person.where({id: request.params.user_id}).fetch({withRelated: ['sections_taught']}).then((model) => {
                 reply(model);
             }).catch(function (error) {
                 reply({err: error});
@@ -47,7 +47,7 @@ exports.register = function (server, options, next) {
         path: '/ta/{user_id}/sections',
         handler: function (request, reply) {
             //check session token with {user_id} return error if dif
-            bookshelf.Person.forge({id: request.params.user_id}).fetch({withRelated: ['sections_ta']}).then((model) => {
+            bookshelf.Person.where({id: request.params.user_id}).fetch({withRelated: ['sections_ta']}).then((model) => {
                 reply(model);
             }).catch(function (error) {
                 reply({err: error});
@@ -66,7 +66,7 @@ exports.register = function (server, options, next) {
         method: 'GET',
         path: '/users/{user_id}',
         handler: function (request, reply) {
-            bookshelf.Person.forge('id', request.params.user_id).fetch().then((model) => {
+            bookshelf.Person.where({id: request.params.user_id}).fetch().then((model) => {
                 reply(model)
             }).catch(function (error) {
                 reply({err: error});
