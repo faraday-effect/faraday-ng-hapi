@@ -44,5 +44,5 @@ function test_all() {
 
 console.log("START");
 test_all();
-test_join()
+test_join();
 console.log("FINISH");
