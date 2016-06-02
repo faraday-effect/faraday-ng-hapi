@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router, Routes, ROUTER_DIRECTIVES , ROUTER_PROVIDERS} from '@angular/router';
 
+import { MdIconRegistry } from '@angular2-material/icon';
+
 import {
   // Services
   CourseService,
@@ -23,6 +25,7 @@ import {
   styleUrls: ['faraday.component.css'],
   directives: [ROUTER_DIRECTIVES],
   providers: [
+    MdIconRegistry,
     CourseService,
     SectionService,
     DepartmentService,
@@ -32,13 +35,15 @@ import {
   ]
 })
 @Routes([
-  {path: '/', component: AdminComponent},
+  {path: '/', component: LoginComponent},
   {path: '/login', component: LoginComponent},
   {path: '/admin', component: AdminComponent},
   {path: '/welcome', component: WelcomeComponent},
-  {path: '/cue-sheet', component: CueSheetComponent}
+  {path: '/cue-sheet', component: CueSheetComponent},
 ])
 export class FaradayAppComponent {
+
+  debug = true;
 
   constructor(
     private router: Router) {

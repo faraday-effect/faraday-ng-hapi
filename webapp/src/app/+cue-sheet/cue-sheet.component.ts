@@ -5,6 +5,8 @@ import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
 import {
   Course,
   CourseService,
+  TodaysTopicsComponent,
+  ImportantDatesComponent,
 } from '../shared';
 
 import { AttendanceComponent } from './attendance';
@@ -17,6 +19,8 @@ import { AttendanceComponent } from './attendance';
   directives: [
     MD_TOOLBAR_DIRECTIVES,
     AttendanceComponent,
+    TodaysTopicsComponent,
+    ImportantDatesComponent,
   ],
 })
 export class CueSheetComponent implements OnInit {

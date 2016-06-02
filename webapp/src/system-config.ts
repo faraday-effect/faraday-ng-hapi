@@ -15,6 +15,7 @@ const materialPkgs: string[] = [
   'card',
   'checkbox',
   'core',
+  'icon',
   'input',
   'list',
   'toolbar',

@@ -1,3 +1,14 @@
-<p>
-  attendance works!
-</p>
+<md-card>
+  <md-card-title>Attendance</md-card-title>
+
+  <md-list>
+    <md-list-item *ngFor="let pair of attending" class="attendee-container">
+      <img md-list-avatar src="http://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/durchschnittsgesichter/m(01-32)_gr.jpg">
+      <div [ngSwitch]="pair[1]">
+        <md-line *ngSwitchWhen="true"  class="student-present">{{pair[0].first_name}} {{pair[0].last_name}}</md-line>
+        <md-line *ngSwitchWhen="false" class="student-absent" >{{pair[0].first_name}} {{pair[0].last_name}}</md-line>
+      </div>
+    </md-list-item>
+  </md-list>
+
+</md-card>

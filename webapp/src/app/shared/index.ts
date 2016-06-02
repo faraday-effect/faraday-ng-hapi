@@ -24,5 +24,6 @@ export * from '../+login';
 export * from '../todays-topics';
 export * from '../important-dates';
 export * from '../+welcome';
-export * from '../+cue-sheet';
 export * from '../attendance.service';
+export * from '../+cue-sheet';
+export * from '../person';
