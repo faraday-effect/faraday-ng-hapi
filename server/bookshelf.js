@@ -56,7 +56,7 @@ var Course = Bookshelf.Model.extend({
     department: function () {
         return this.belongsTo(Department);
     },
-    sections: function () {
+    offering: function () {
         return this.hasMany(Offering);
     },
     prefix: function () {
@@ -64,14 +64,20 @@ var Course = Bookshelf.Model.extend({
     },
     term: function () {
         return this.belongsToMany(Term, 'offering', 'course_id', 'term_id');
+    },
+    section: function () {
+        return this.hasMany(Section).through(Offering);
     }
 });
 
 //Section
 var Section = Bookshelf.Model.extend({
     tableName: 'section',
-    course: function () {
+    offering: function () {
         return this.belongsTo(Offering);
+    },
+    course: function () {
+        return this.belongsToMany(Course).through(Offering);
     },
     term: function () {
         return this.belongsTo(Term);

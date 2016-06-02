@@ -42,10 +42,17 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'GET',
-        path: '/section/{section_id}',
+        path: '/sections/{section_id}',
         handler: function (request, reply) {
-            var response = bookshelf.Section.forge({'id': encodeURIComponent(request.params.section_id)}).fetch();
-            reply(response);
+            bookshelf.Section.where({'id': request.params.section_id}).fetch().then(function (model) {
+                bookshelf.Offering.where({'id': model.get('offering_id')}).fetch().then(function (model2) {
+                    bookshelf.Course.where({'id': model2.get('course_id')}).fetch().then(model3 => {
+                        var responseJSON = model.toJSON();
+                        responseJSON['course'] = model3.toJSON();
+                        reply(responseJSON);
+                    });
+                });
+            });
         },
         config: {
             validate: {
