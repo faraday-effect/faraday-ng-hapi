@@ -65,6 +65,7 @@ const barrels: string[] = [
   'app/+cue-sheet',
   'app/+cue-sheet/attendance',
   'app/+welcome/class-code',
+  'app/+register',
   /** @cli-barrel */
 ];
 

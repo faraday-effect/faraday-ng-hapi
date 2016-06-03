@@ -1,1554 +1,1666 @@
 {
-  "knex_migrations": {
-    "slug": "knex_migrations",
-    "table": {
-      "name": "knex_migrations",
-      "pk": "id",
-      "verbose": "knex_migrations"
+    "knex_migrations": {
+        "slug": "knex_migrations",
+        "table": {
+            "name": "knex_migrations",
+            "pk": "id",
+            "verbose": "knex_migrations"
+        },
+        "columns": [
+            {
+                "name": "id",
+                "verbose": "id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "name",
+                "verbose": "name",
+                "control": {
+                    "text": true
+                },
+                "type": "varchar(255)",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "batch",
+                "verbose": "batch",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "migration_time",
+                "verbose": "migration_time",
+                "control": {
+                    "text": true
+                },
+                "type": "timestamp",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
     },
-    "columns": [
-      {
-        "name": "id",
-        "verbose": "id",
-        "control": {
-          "text": true
+    "knex_migrations_lock": {
+        "slug": "knex_migrations_lock",
+        "table": {
+            "name": "knex_migrations_lock",
+            "pk": "",
+            "verbose": "knex_migrations_lock"
         },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
+        "columns": [
+            {
+                "name": "is_locked",
+                "verbose": "is_locked",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
         "listview": {
-          "show": true
+            "order": {},
+            "page": 25
         },
         "editview": {
-          "show": true
+            "readonly": false
         }
-      },
-      {
-        "name": "name",
-        "verbose": "name",
-        "control": {
-          "text": true
-        },
-        "type": "varchar(255)",
-        "allowNull": true,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "batch",
-        "verbose": "batch",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": true,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "migration_time",
-        "verbose": "migration_time",
-        "control": {
-          "text": true
-        },
-        "type": "timestamp",
-        "allowNull": true,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      }
-    ],
-    "mainview": {
-      "show": true
     },
-    "listview": {
-      "order": {},
-      "page": 25
+    "planned_class": {
+        "slug": "planned_class",
+        "table": {
+            "name": "planned_class",
+            "pk": "id",
+            "verbose": "planned_class"
+        },
+        "columns": [
+            {
+                "name": "id",
+                "verbose": "id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "date",
+                "verbose": "date",
+                "control": {
+                    "text": true
+                },
+                "type": "date",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "offering_id",
+                "verbose": "offering_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "reflection",
+                "verbose": "reflection",
+                "control": {
+                    "text": true
+                },
+                "type": "text",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
     },
-    "editview": {
-      "readonly": false
+    "offering_weekday": {
+        "slug": "offering_weekday",
+        "table": {
+            "name": "offering_weekday",
+            "pk": [
+                "offering_id",
+                "weekday_id"
+            ],
+            "verbose": "offering_weekday"
+        },
+        "columns": [
+            {
+                "name": "offering_id",
+                "verbose": "offering_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "weekday_id",
+                "verbose": "weekday_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
+    },
+    "holiday": {
+        "slug": "holiday",
+        "table": {
+            "name": "holiday",
+            "pk": "id",
+            "verbose": "holiday"
+        },
+        "columns": [
+            {
+                "name": "id",
+                "verbose": "id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "term_id",
+                "verbose": "term_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "title",
+                "verbose": "title",
+                "control": {
+                    "text": true
+                },
+                "type": "varchar(255)",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "start_date",
+                "verbose": "start_date",
+                "control": {
+                    "text": true
+                },
+                "type": "date",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "stop_date",
+                "verbose": "stop_date",
+                "control": {
+                    "text": true
+                },
+                "type": "date",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
+    },
+    "section": {
+        "slug": "section",
+        "table": {
+            "name": "section",
+            "pk": "id",
+            "verbose": "section"
+        },
+        "columns": [
+            {
+                "name": "id",
+                "verbose": "id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "reg_number",
+                "verbose": "reg_number",
+                "control": {
+                    "text": true
+                },
+                "type": "varchar(255)",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "title",
+                "verbose": "title",
+                "control": {
+                    "text": true
+                },
+                "type": "varchar(255)",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "offering_id",
+                "verbose": "offering_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
+    },
+    "actual_class": {
+        "slug": "actual_class",
+        "table": {
+            "name": "actual_class",
+            "pk": "id",
+            "verbose": "actual_class"
+        },
+        "columns": [
+            {
+                "name": "id",
+                "verbose": "id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "sequence",
+                "verbose": "sequence",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "date",
+                "verbose": "date",
+                "control": {
+                    "text": true
+                },
+                "type": "date",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "section_id",
+                "verbose": "section_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "reflection",
+                "verbose": "reflection",
+                "control": {
+                    "text": true
+                },
+                "type": "text",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
+    },
+    "attendance": {
+        "slug": "attendance",
+        "table": {
+            "name": "attendance",
+            "pk": [
+                "student_id",
+                "actual_class_id"
+            ],
+            "verbose": "attendance"
+        },
+        "columns": [
+            {
+                "name": "student_id",
+                "verbose": "student_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "actual_class_id",
+                "verbose": "actual_class_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "id",
+                "verbose": "id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
+    },
+    "prefix": {
+        "slug": "prefix",
+        "table": {
+            "name": "prefix",
+            "pk": "id",
+            "verbose": "prefix"
+        },
+        "columns": [
+            {
+                "name": "id",
+                "verbose": "id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "name",
+                "verbose": "name",
+                "control": {
+                    "text": true
+                },
+                "type": "varchar(255)",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
+    },
+    "department_prefix": {
+        "slug": "department_prefix",
+        "table": {
+            "name": "department_prefix",
+            "pk": "department_id",
+            "verbose": "department_prefix"
+        },
+        "columns": [
+            {
+                "name": "department_id",
+                "verbose": "department_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "prefix_id",
+                "verbose": "prefix_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
+    },
+    "weekday": {
+        "slug": "weekday",
+        "table": {
+            "name": "weekday",
+            "pk": "id",
+            "verbose": "weekday"
+        },
+        "columns": [
+            {
+                "name": "id",
+                "verbose": "id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "name",
+                "verbose": "name",
+                "control": {
+                    "text": true
+                },
+                "type": "varchar(255)",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
+    },
+    "section_weekday": {
+        "slug": "section_weekday",
+        "table": {
+            "name": "section_weekday",
+            "pk": [
+                "section_id",
+                "weekday_id"
+            ],
+            "verbose": "section_weekday"
+        },
+        "columns": [
+            {
+                "name": "section_id",
+                "verbose": "section_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "weekday_id",
+                "verbose": "weekday_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "start_time",
+                "verbose": "start_time",
+                "control": {
+                    "text": true
+                },
+                "type": "time",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "stop_time",
+                "verbose": "stop_time",
+                "control": {
+                    "text": true
+                },
+                "type": "time",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "id",
+                "verbose": "id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
+    },
+    "department": {
+        "slug": "department",
+        "table": {
+            "name": "department",
+            "pk": "id",
+            "verbose": "department"
+        },
+        "columns": [
+            {
+                "name": "id",
+                "verbose": "id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "name",
+                "verbose": "name",
+                "control": {
+                    "text": true
+                },
+                "type": "varchar(255)",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
+    },
+    "course": {
+        "slug": "course",
+        "table": {
+            "name": "course",
+            "pk": "id",
+            "verbose": "course"
+        },
+        "columns": [
+            {
+                "name": "id",
+                "verbose": "id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "number",
+                "verbose": "number",
+                "control": {
+                    "text": true
+                },
+                "type": "varchar(255)",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "title",
+                "verbose": "title",
+                "control": {
+                    "text": true
+                },
+                "type": "varchar(255)",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "hidden",
+                "verbose": "hidden",
+                "control": {
+                    "text": true
+                },
+                "type": "char",
+                "allowNull": false,
+                "defaultValue": "false",
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "prefix_id",
+                "verbose": "prefix_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "department_id",
+                "verbose": "department_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
+    },
+    "term": {
+        "slug": "term",
+        "table": {
+            "name": "term",
+            "pk": "id",
+            "verbose": "term"
+        },
+        "columns": [
+            {
+                "name": "id",
+                "verbose": "id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "name",
+                "verbose": "name",
+                "control": {
+                    "text": true
+                },
+                "type": "varchar(255)",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "start_date",
+                "verbose": "start_date",
+                "control": {
+                    "text": true
+                },
+                "type": "date",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "end_date",
+                "verbose": "end_date",
+                "control": {
+                    "text": true
+                },
+                "type": "date",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
+    },
+    "offering": {
+        "slug": "offering",
+        "table": {
+            "name": "offering",
+            "pk": [
+                "course_id",
+                "term_id"
+            ],
+            "verbose": "offering"
+        },
+        "columns": [
+            {
+                "name": "course_id",
+                "verbose": "course_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "term_id",
+                "verbose": "term_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "id",
+                "verbose": "id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
+    },
+    "role": {
+        "slug": "role",
+        "table": {
+            "name": "role",
+            "pk": "id",
+            "verbose": "role"
+        },
+        "columns": [
+            {
+                "name": "id",
+                "verbose": "id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "title",
+                "verbose": "title",
+                "control": {
+                    "text": true
+                },
+                "type": "varchar(255)",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "description",
+                "verbose": "description",
+                "control": {
+                    "text": true
+                },
+                "type": "varchar(255)",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
+    },
+    "person_role": {
+        "slug": "person_role",
+        "table": {
+            "name": "person_role",
+            "pk": [
+                "person_id",
+                "role_id"
+            ],
+            "verbose": "person_role"
+        },
+        "columns": [
+            {
+                "name": "person_id",
+                "verbose": "person_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "role_id",
+                "verbose": "role_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
+    },
+    "instructor": {
+        "slug": "instructor",
+        "table": {
+            "name": "instructor",
+            "pk": [
+                "section_id",
+                "person_id"
+            ],
+            "verbose": "instructor"
+        },
+        "columns": [
+            {
+                "name": "section_id",
+                "verbose": "section_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "person_id",
+                "verbose": "person_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "id",
+                "verbose": "id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
+    },
+    "teaching_assistant": {
+        "slug": "teaching_assistant",
+        "table": {
+            "name": "teaching_assistant",
+            "pk": [
+                "section_id",
+                "person_id"
+            ],
+            "verbose": "teaching_assistant"
+        },
+        "columns": [
+            {
+                "name": "section_id",
+                "verbose": "section_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "person_id",
+                "verbose": "person_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "id",
+                "verbose": "id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
+    },
+    "person": {
+        "slug": "person",
+        "table": {
+            "name": "person",
+            "pk": "id",
+            "verbose": "person"
+        },
+        "columns": [
+            {
+                "name": "id",
+                "verbose": "id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "first_name",
+                "verbose": "first_name",
+                "control": {
+                    "text": true
+                },
+                "type": "varchar(255)",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "last_name",
+                "verbose": "last_name",
+                "control": {
+                    "text": true
+                },
+                "type": "varchar(255)",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "email",
+                "verbose": "email",
+                "control": {
+                    "text": true
+                },
+                "type": "varchar(255)",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "password",
+                "verbose": "password",
+                "control": {
+                    "text": true
+                },
+                "type": "varchar(255)",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "office_phone",
+                "verbose": "office_phone",
+                "control": {
+                    "text": true
+                },
+                "type": "varchar(255)",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "mobile_phone",
+                "verbose": "mobile_phone",
+                "control": {
+                    "text": true
+                },
+                "type": "varchar(255)",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
+    },
+    "student": {
+        "slug": "student",
+        "table": {
+            "name": "student",
+            "pk": [
+                "section_id",
+                "person_id"
+            ],
+            "verbose": "student"
+        },
+        "columns": [
+            {
+                "name": "section_id",
+                "verbose": "section_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "person_id",
+                "verbose": "person_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "id",
+                "verbose": "id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
     }
-  },
-  "knex_migrations_lock": {
-    "slug": "knex_migrations_lock",
-    "table": {
-      "name": "knex_migrations_lock",
-      "pk": "",
-      "verbose": "knex_migrations_lock"
-    },
-    "columns": [
-      {
-        "name": "is_locked",
-        "verbose": "is_locked",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": true,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      }
-    ],
-    "mainview": {
-      "show": true
-    },
-    "listview": {
-      "order": {},
-      "page": 25
-    },
-    "editview": {
-      "readonly": false
-    }
-  },
-  "planned_class": {
-    "slug": "planned_class",
-    "table": {
-      "name": "planned_class",
-      "pk": "id",
-      "verbose": "planned_class"
-    },
-    "columns": [
-      {
-        "name": "id",
-        "verbose": "id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "date",
-        "verbose": "date",
-        "control": {
-          "text": true
-        },
-        "type": "date",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "offering_id",
-        "verbose": "offering_id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": true,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "reflection",
-        "verbose": "reflection",
-        "control": {
-          "text": true
-        },
-        "type": "text",
-        "allowNull": true,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      }
-    ],
-    "mainview": {
-      "show": true
-    },
-    "listview": {
-      "order": {},
-      "page": 25
-    },
-    "editview": {
-      "readonly": false
-    }
-  },
-  "offering_weekday": {
-    "slug": "offering_weekday",
-    "table": {
-      "name": "offering_weekday",
-      "pk": [
-        "offering_id",
-        "weekday_id"
-      ],
-      "verbose": "offering_weekday"
-    },
-    "columns": [
-      {
-        "name": "offering_id",
-        "verbose": "offering_id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "weekday_id",
-        "verbose": "weekday_id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      }
-    ],
-    "mainview": {
-      "show": true
-    },
-    "listview": {
-      "order": {},
-      "page": 25
-    },
-    "editview": {
-      "readonly": false
-    }
-  },
-  "holiday": {
-    "slug": "holiday",
-    "table": {
-      "name": "holiday",
-      "pk": "id",
-      "verbose": "holiday"
-    },
-    "columns": [
-      {
-        "name": "id",
-        "verbose": "id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "term_id",
-        "verbose": "term_id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": true,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "title",
-        "verbose": "title",
-        "control": {
-          "text": true
-        },
-        "type": "varchar(255)",
-        "allowNull": true,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "start_date",
-        "verbose": "start_date",
-        "control": {
-          "text": true
-        },
-        "type": "date",
-        "allowNull": true,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "stop_date",
-        "verbose": "stop_date",
-        "control": {
-          "text": true
-        },
-        "type": "date",
-        "allowNull": true,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      }
-    ],
-    "mainview": {
-      "show": true
-    },
-    "listview": {
-      "order": {},
-      "page": 25
-    },
-    "editview": {
-      "readonly": false
-    }
-  },
-  "section": {
-    "slug": "section",
-    "table": {
-      "name": "section",
-      "pk": "id",
-      "verbose": "section"
-    },
-    "columns": [
-      {
-        "name": "id",
-        "verbose": "id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "reg_number",
-        "verbose": "reg_number",
-        "control": {
-          "text": true
-        },
-        "type": "varchar(255)",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "title",
-        "verbose": "title",
-        "control": {
-          "text": true
-        },
-        "type": "varchar(255)",
-        "allowNull": true,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      }
-    ],
-    "mainview": {
-      "show": true
-    },
-    "listview": {
-      "order": {},
-      "page": 25
-    },
-    "editview": {
-      "readonly": false
-    }
-  },
-  "actual_class": {
-    "slug": "actual_class",
-    "table": {
-      "name": "actual_class",
-      "pk": "id",
-      "verbose": "actual_class"
-    },
-    "columns": [
-      {
-        "name": "id",
-        "verbose": "id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "sequence",
-        "verbose": "sequence",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": true,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "date",
-        "verbose": "date",
-        "control": {
-          "text": true
-        },
-        "type": "date",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "section_id",
-        "verbose": "section_id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": true,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "reflection",
-        "verbose": "reflection",
-        "control": {
-          "text": true
-        },
-        "type": "text",
-        "allowNull": true,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      }
-    ],
-    "mainview": {
-      "show": true
-    },
-    "listview": {
-      "order": {},
-      "page": 25
-    },
-    "editview": {
-      "readonly": false
-    }
-  },
-  "attendance": {
-    "slug": "attendance",
-    "table": {
-      "name": "attendance",
-      "pk": [
-        "student_id",
-        "actual_class_id"
-      ],
-      "verbose": "attendance"
-    },
-    "columns": [
-      {
-        "name": "student_id",
-        "verbose": "student_id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "actual_class_id",
-        "verbose": "actual_class_id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      }
-    ],
-    "mainview": {
-      "show": true
-    },
-    "listview": {
-      "order": {},
-      "page": 25
-    },
-    "editview": {
-      "readonly": false
-    }
-  },
-  "prefix": {
-    "slug": "prefix",
-    "table": {
-      "name": "prefix",
-      "pk": "id",
-      "verbose": "prefix"
-    },
-    "columns": [
-      {
-        "name": "id",
-        "verbose": "id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "name",
-        "verbose": "name",
-        "control": {
-          "text": true
-        },
-        "type": "varchar(255)",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      }
-    ],
-    "mainview": {
-      "show": true
-    },
-    "listview": {
-      "order": {},
-      "page": 25
-    },
-    "editview": {
-      "readonly": false
-    }
-  },
-  "department_prefix": {
-    "slug": "department_prefix",
-    "table": {
-      "name": "department_prefix",
-      "pk": "department_id",
-      "verbose": "department_prefix"
-    },
-    "columns": [
-      {
-        "name": "department_id",
-        "verbose": "department_id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "prefix_id",
-        "verbose": "prefix_id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": true,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      }
-    ],
-    "mainview": {
-      "show": true
-    },
-    "listview": {
-      "order": {},
-      "page": 25
-    },
-    "editview": {
-      "readonly": false
-    }
-  },
-  "weekday": {
-    "slug": "weekday",
-    "table": {
-      "name": "weekday",
-      "pk": "id",
-      "verbose": "weekday"
-    },
-    "columns": [
-      {
-        "name": "id",
-        "verbose": "id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "name",
-        "verbose": "name",
-        "control": {
-          "text": true
-        },
-        "type": "varchar(255)",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      }
-    ],
-    "mainview": {
-      "show": true
-    },
-    "listview": {
-      "order": {},
-      "page": 25
-    },
-    "editview": {
-      "readonly": false
-    }
-  },
-  "section_weekday": {
-    "slug": "section_weekday",
-    "table": {
-      "name": "section_weekday",
-      "pk": [
-        "section_id",
-        "weekday_id"
-      ],
-      "verbose": "section_weekday"
-    },
-    "columns": [
-      {
-        "name": "section_id",
-        "verbose": "section_id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "weekday_id",
-        "verbose": "weekday_id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "start_time",
-        "verbose": "start_time",
-        "control": {
-          "text": true
-        },
-        "type": "time",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "stop_time",
-        "verbose": "stop_time",
-        "control": {
-          "text": true
-        },
-        "type": "time",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      }
-    ],
-    "mainview": {
-      "show": true
-    },
-    "listview": {
-      "order": {},
-      "page": 25
-    },
-    "editview": {
-      "readonly": false
-    }
-  },
-  "department": {
-    "slug": "department",
-    "table": {
-      "name": "department",
-      "pk": "id",
-      "verbose": "department"
-    },
-    "columns": [
-      {
-        "name": "id",
-        "verbose": "id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "name",
-        "verbose": "name",
-        "control": {
-          "text": true
-        },
-        "type": "varchar(255)",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      }
-    ],
-    "mainview": {
-      "show": true
-    },
-    "listview": {
-      "order": {},
-      "page": 25
-    },
-    "editview": {
-      "readonly": false
-    }
-  },
-  "course": {
-    "slug": "course",
-    "table": {
-      "name": "course",
-      "pk": "id",
-      "verbose": "course"
-    },
-    "columns": [
-      {
-        "name": "id",
-        "verbose": "id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "number",
-        "verbose": "number",
-        "control": {
-          "text": true
-        },
-        "type": "varchar(255)",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "title",
-        "verbose": "title",
-        "control": {
-          "text": true
-        },
-        "type": "varchar(255)",
-        "allowNull": true,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "hidden",
-        "verbose": "hidden",
-        "control": {
-          "text": true
-        },
-        "type": "char",
-        "allowNull": false,
-        "defaultValue": "false",
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "prefix_id",
-        "verbose": "prefix_id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": true,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "department_id",
-        "verbose": "department_id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": true,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      }
-    ],
-    "mainview": {
-      "show": true
-    },
-    "listview": {
-      "order": {},
-      "page": 25
-    },
-    "editview": {
-      "readonly": false
-    }
-  },
-  "term": {
-    "slug": "term",
-    "table": {
-      "name": "term",
-      "pk": "id",
-      "verbose": "term"
-    },
-    "columns": [
-      {
-        "name": "id",
-        "verbose": "id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "name",
-        "verbose": "name",
-        "control": {
-          "text": true
-        },
-        "type": "varchar(255)",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "start_date",
-        "verbose": "start_date",
-        "control": {
-          "text": true
-        },
-        "type": "date",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "end_date",
-        "verbose": "end_date",
-        "control": {
-          "text": true
-        },
-        "type": "date",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      }
-    ],
-    "mainview": {
-      "show": true
-    },
-    "listview": {
-      "order": {},
-      "page": 25
-    },
-    "editview": {
-      "readonly": false
-    }
-  },
-  "offering": {
-    "slug": "offering",
-    "table": {
-      "name": "offering",
-      "pk": [
-        "course_id",
-        "term_id"
-      ],
-      "verbose": "offering"
-    },
-    "columns": [
-      {
-        "name": "course_id",
-        "verbose": "course_id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "term_id",
-        "verbose": "term_id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      }
-    ],
-    "mainview": {
-      "show": true
-    },
-    "listview": {
-      "order": {},
-      "page": 25
-    },
-    "editview": {
-      "readonly": false
-    }
-  },
-  "role": {
-    "slug": "role",
-    "table": {
-      "name": "role",
-      "pk": "id",
-      "verbose": "role"
-    },
-    "columns": [
-      {
-        "name": "id",
-        "verbose": "id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "title",
-        "verbose": "title",
-        "control": {
-          "text": true
-        },
-        "type": "varchar(255)",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "description",
-        "verbose": "description",
-        "control": {
-          "text": true
-        },
-        "type": "varchar(255)",
-        "allowNull": true,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      }
-    ],
-    "mainview": {
-      "show": true
-    },
-    "listview": {
-      "order": {},
-      "page": 25
-    },
-    "editview": {
-      "readonly": false
-    }
-  },
-  "person_role": {
-    "slug": "person_role",
-    "table": {
-      "name": "person_role",
-      "pk": [
-        "person_id",
-        "role_id"
-      ],
-      "verbose": "person_role"
-    },
-    "columns": [
-      {
-        "name": "person_id",
-        "verbose": "person_id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "role_id",
-        "verbose": "role_id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      }
-    ],
-    "mainview": {
-      "show": true
-    },
-    "listview": {
-      "order": {},
-      "page": 25
-    },
-    "editview": {
-      "readonly": false
-    }
-  },
-  "instructor": {
-    "slug": "instructor",
-    "table": {
-      "name": "instructor",
-      "pk": [
-        "section_id",
-        "person_id"
-      ],
-      "verbose": "instructor"
-    },
-    "columns": [
-      {
-        "name": "section_id",
-        "verbose": "section_id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "person_id",
-        "verbose": "person_id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      }
-    ],
-    "mainview": {
-      "show": true
-    },
-    "listview": {
-      "order": {},
-      "page": 25
-    },
-    "editview": {
-      "readonly": false
-    }
-  },
-  "teaching_assistant": {
-    "slug": "teaching_assistant",
-    "table": {
-      "name": "teaching_assistant",
-      "pk": [
-        "section_id",
-        "person_id"
-      ],
-      "verbose": "teaching_assistant"
-    },
-    "columns": [
-      {
-        "name": "section_id",
-        "verbose": "section_id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "person_id",
-        "verbose": "person_id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      }
-    ],
-    "mainview": {
-      "show": true
-    },
-    "listview": {
-      "order": {},
-      "page": 25
-    },
-    "editview": {
-      "readonly": false
-    }
-  },
-  "person": {
-    "slug": "person",
-    "table": {
-      "name": "person",
-      "pk": "id",
-      "verbose": "person"
-    },
-    "columns": [
-      {
-        "name": "id",
-        "verbose": "id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "first_name",
-        "verbose": "first_name",
-        "control": {
-          "text": true
-        },
-        "type": "varchar(255)",
-        "allowNull": true,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "last_name",
-        "verbose": "last_name",
-        "control": {
-          "text": true
-        },
-        "type": "varchar(255)",
-        "allowNull": true,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "email",
-        "verbose": "email",
-        "control": {
-          "text": true
-        },
-        "type": "varchar(255)",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "password",
-        "verbose": "password",
-        "control": {
-          "text": true
-        },
-        "type": "varchar(255)",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "office_phone",
-        "verbose": "office_phone",
-        "control": {
-          "text": true
-        },
-        "type": "varchar(255)",
-        "allowNull": true,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "mobile_phone",
-        "verbose": "mobile_phone",
-        "control": {
-          "text": true
-        },
-        "type": "varchar(255)",
-        "allowNull": true,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      }
-    ],
-    "mainview": {
-      "show": true
-    },
-    "listview": {
-      "order": {},
-      "page": 25
-    },
-    "editview": {
-      "readonly": false
-    }
-  },
-  "student": {
-    "slug": "student",
-    "table": {
-      "name": "student",
-      "pk": [
-        "section_id",
-        "person_id"
-      ],
-      "verbose": "student"
-    },
-    "columns": [
-      {
-        "name": "section_id",
-        "verbose": "section_id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      },
-      {
-        "name": "person_id",
-        "verbose": "person_id",
-        "control": {
-          "text": true
-        },
-        "type": "integer",
-        "allowNull": false,
-        "defaultValue": null,
-        "listview": {
-          "show": true
-        },
-        "editview": {
-          "show": true
-        }
-      }
-    ],
-    "mainview": {
-      "show": true
-    },
-    "listview": {
-      "order": {},
-      "page": 25
-    },
-    "editview": {
-      "readonly": false
-    }
-  }
 }
