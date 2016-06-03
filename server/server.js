@@ -2,6 +2,7 @@
 
 const Hapi = require('hapi');
 const Good = require('good');
+
 const server = new Hapi.Server();
 server.connection({
     port: 3000,
@@ -13,6 +14,8 @@ server.connection({
 server.register([
     //authentication
     {register: require('hapi-auth-cookie')},
+    //Sockets
+    {register: require('nes')},
     //lout requirements
     {register: require('vision')},
     {register: require('inert')},
