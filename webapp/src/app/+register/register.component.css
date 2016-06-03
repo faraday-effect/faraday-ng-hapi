@@ -1,0 +1,12 @@
+.fill-space {
+  flex: 1 1 auto;
+}
+
+.container {
+  width: 300px;
+  margin: auto;
+}
+
+.container md-input {
+  width: 300px;
+}

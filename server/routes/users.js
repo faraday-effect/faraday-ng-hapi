@@ -1,7 +1,22 @@
 const Joi = require('joi');
+const bcrypt = require('bcrypt');
 const bookshelf = require('./../bookshelf');
+const saltRounds = 10;
 
 exports.register = function (server, options, next) {
+    server.route({
+        method: 'GET',
+        path: '/users',
+        handler: function (request, reply) {
+            bookshelf.Person.fetchAll().then((Collection) => {
+                reply(Collection);
+            });
+        },
+        config: {
+            notes: 'returns all the Person objects'
+        }
+    });
+
     server.route({
         method: 'GET',
         path: '/students/{user_id}/sections',
@@ -76,6 +91,38 @@ exports.register = function (server, options, next) {
             validate: {
                 params: {
                     user_id: Joi.number().positive().integer()
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'POST',
+        path: '/users',
+        handler: function (request, reply) {
+            var hash = bcrypt.hashSync(request.payload.password, saltRounds);
+            var responseJSON = {};
+            new bookshelf.Person({
+                first_name: request.payload.first_name,
+                last_name: request.payload.last_name,
+                email: request.payload.email,
+                password: hash
+            }).save().then((model) => {
+                responseJSON = model.toJSON();
+                delete responseJSON['password'];
+                reply(responseJSON);
+            }).catch((err) => {
+                reply(err)
+            });
+
+        },
+        config: {
+            validate: {
+                payload: {
+                    first_name: Joi.string().required(),
+                    last_name: Joi.string().required(),
+                    email: Joi.string().email().lowercase().required(),
+                    password: Joi.string().required()
                 }
             }
         }

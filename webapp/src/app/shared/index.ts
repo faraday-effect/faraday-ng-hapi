@@ -31,5 +31,5 @@ export * from '../+cue-sheet';
 export * from '../person';
 export * from '../activity';
 export * from '../important-date';//how does it know the difference between a file and the folder?!?
-
-
+export * from '../register.service';
+export * from '../+register';
