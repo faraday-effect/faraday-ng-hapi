@@ -20,6 +20,7 @@ export * from '../term.service';
 export * from '../+term';
 export * from '../+terms';
 export * from '../+admin';
+export * from '../login.service';
 export * from '../+login';
 export * from '../todays-topics';
 export * from '../important-dates';

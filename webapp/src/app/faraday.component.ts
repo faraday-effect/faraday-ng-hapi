@@ -17,6 +17,7 @@ import {
   AdminComponent,
   WelcomeComponent,
   CueSheetComponent,
+  LoginService,
   RegisterComponent,
 } from './shared';
 
@@ -34,6 +35,7 @@ import {
     PrefixService,
     TermService,
     AttendanceService,
+    LoginService,
     RegisterService,
   ]
 })
