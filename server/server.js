@@ -10,8 +10,9 @@ server.connection({
     }
 });
 
-
 server.register([
+    //authentication
+    {register: require('hapi-auth-cookie')},
     //lout requirements
     {register: require('vision')},
     {register: require('inert')},
