@@ -24,7 +24,6 @@
     "good-console": "^6.1.1",
     "good-squeeze": "^3.0.1",
     "hapi": "^13.4.1",
-    "hapi-auth-basic": "^4.2.0",
     "hapi-auth-cookie": "^6.1.1",
     "inert": "^4.0.0",
     "joi": "^8.1.1",

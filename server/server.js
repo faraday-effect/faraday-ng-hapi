@@ -12,7 +12,7 @@ server.connection({
 
 server.register([
     //authentication
-    {register: require('hapi-auth-basic')},
+    {register: require('hapi-auth-cookie')},
     //lout requirements
     {register: require('vision')},
     {register: require('inert')},
@@ -31,12 +31,6 @@ server.register([
         throw err;
     }
 });
-
-//defaults to set authentication on all routes
-//server.auth.default({
-//strategy: ‘base’
-//});
-
 
 //Server logging and starting functionality
 server.register({

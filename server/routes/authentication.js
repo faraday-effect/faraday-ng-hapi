@@ -1,45 +1,76 @@
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
 const bookshelf = require('./../bookshelf');
+var uuid = 1;
 
 exports.register = function (server, options, next) {
 
-    const validateUser = function (request, email, password, callback) {
-        var user = {};
+    const cache = server.cache({segment: 'sessions', expiresIn: 24 * 60 * 60 * 1000});
+    server.app.cache = cache;
 
-        console.log(email, password);
-        new bookshelf.Person({email: email}).fetch().then((model) => {
-            user = model.toJSON();
-            console.log(user);
+    const validate = function (request, session, callback) {
+        cache.get(session.sid, (err, cached) => {
+            if (err) {
+                return callback(err, false);
+            }
 
-            bcrypt.compare(password, user.password, (err, isValid) => {
-                callback(err, isValid, {
-                    id: user.id,
-                    email: user.email,
-                    first_name: user.first_name,
-                    last_name: user.last_name
-                });
-            });
-        }).catch(() => {
-            return callback(null, false);
+            if (!cached) {
+                return callback(null, false);
+            }
+
+            return callback(null, true, cached.user);
         });
     };
 
-    server.auth.strategy('login', 'basic', {validateFunc: validateUser});
+    //defaults to set authentication on all routes
+    server.auth.strategy('session', 'cookie', {
+        cookie: 'faraday-cookie',                           //cookie name
+        isSecure: false,                                    //set to true for production apps
+        password: '01234567890123456789012345678912',       //cookie secret
+        redirectTo: false,                                  //client is handling
+        ttl: 24 * 60 * 60 * 1000,                           //expires in 1 day
+        validateFunc: validate
+    });
+
+    //secures all routes
+    server.auth.default({strategy: 'session'});
 
     server.route({
         method: 'POST',
         path: '/login',
         handler: function (request, reply) {
-            
-            if (request.auth.isAuthenticated) {
-                reply(request.auth);
-            }
+            var user = {};
 
-            //reply({success: false})
+            new bookshelf.Person({email: request.payload.email}).fetch().then((model) => {
+                user = model.toJSON();
+                console.log(user);
+
+                bcrypt.compare(request.payload.password, user.password, (err, isValid) => {
+                    if (!isValid) {
+                        if (err) {
+                            return reply({err: err, isValid: isValid});
+                        }
+                        return reply({isValid: isValid, err: 'Incorrect password'})
+                    }
+                    const sid = String(++uuid);
+                    request.server.app.cache.set(sid, {user: user}, 0, (err) => {
+                        if (err) {
+                            reply(err);
+                        }
+                        request.cookieAuth.set({sid: sid});
+                        delete user['password'];
+                        delete user['office_phone'];
+                        delete user['mobile_phone'];
+                        reply(user);
+                    });
+                });
+
+            }).catch(() => {
+                return reply({isValid: false, err: 'Invalid email or password'});
+            });
         },
         config: {
-
+            auth: false,
             validate: {
                 payload: {
                     email: Joi.string().email().lowercase().required(),
@@ -53,7 +84,7 @@ exports.register = function (server, options, next) {
         method: 'POST',
         path: '/logout',
         handler: function (request, reply) {
-            //request.auth.session.clear();
+            request.cookieAuth.clear();
             reply({success: true})
         },
         config: {
