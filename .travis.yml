@@ -5,7 +5,7 @@ node_js:
 
 env:
   - TEST_DIR=server
-  - TEST_DIR=webapp
+# - TEST_DIR=webapp
 
 script: cd $TEST_DIR && npm install && npm test
 
