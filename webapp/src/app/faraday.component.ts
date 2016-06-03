@@ -11,6 +11,8 @@ import {
   PrefixService,
   TermService,
   AttendanceService,
+  ActivityService,
+  ImportantDateService,
   // Components
   LoginComponent,
   AdminComponent,
@@ -32,6 +34,8 @@ import {
     PrefixService,
     TermService,
     AttendanceService,
+    ActivityService,
+    ImportantDateService,
   ]
 })
 @Routes([
