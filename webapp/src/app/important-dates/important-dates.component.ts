@@ -4,6 +4,11 @@ import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
 import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
 
+import {
+  ImportantDate,
+  ImportantDateService,
+} from '../shared';
+
 @Component({
   moduleId: module.id,
   selector: 'app-important-dates',
@@ -17,9 +22,24 @@ import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
 })
 export class ImportantDatesComponent implements OnInit {
 
-  constructor() {}
+  importantDates: ImportantDate[] = [];
+
+  constructor(
+    private importantDateService: ImportantDateService){
+  }
 
   ngOnInit() {
+    // FIXME hardcoded activities
+    console.log("got here");
+    console.log(this.importantDateService);
+    this.importantDateService.getImportantDates().then(
+      (importantDates) => {
+        this.importantDates = importantDates;
+        console.log(this);
+      }
+    );
+
   }
+
 
 }
