@@ -1,0 +1,21 @@
+<md-toolbar color="primary">
+  <span *ngIf="section">
+    <b>{{ section.course.prefix }} {{ section.course.number }}</b>
+  </span>
+  <span class="fill-space"></span>
+  <span>Story Board</span>
+</md-toolbar>
+<div class="card-container">
+  <div *ngFor="let activity of activities">
+    <md-card>
+      <md-card-title>{{ activity.title }}</md-card-title>
+      <md-card-content class="secondary">
+        <p>{{ activity.description }}</p>
+        <p><b>{{ activity.details}}</b></p>
+      </md-card-content>
+      <md-card-actions align="end">
+        <button md-raised-button color="accent">START</button>
+      </md-card-actions>
+    </md-card>
+  </div>
+</div>
