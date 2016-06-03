@@ -1,6 +1,13 @@
 language: node_js
+
 node_js:
-  - "node 5.11"
-  
+  - "5"
+
+env:
+  - TEST_DIR=server
+# - TEST_DIR=webapp
+
+script: cd $TEST_DIR && npm install && npm test
+
 notifications:
   slack: quantum-bits:qYEIHmdw3vBD1Q3XRxh2neXY

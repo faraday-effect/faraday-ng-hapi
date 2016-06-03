@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/faraday-effect/faraday.svg?branch=develop)](https://travis-ci.org/faraday-effect/faraday)
+
 # faraday
 Learning Management 2.0
 

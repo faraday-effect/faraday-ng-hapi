@@ -1,7 +1,7 @@
 <md-toolbar color="primary">
-  <span *ngIf="course">
-    <b> Welcome to {{course.prefix}} {{ course.number }}</b>
-    <span> {{ course.title }}</span>
+  <span *ngIf="section">
+    <b> Welcome to {{ section.course.prefix }} {{ section.course.number }}</b>
+    <span> {{ section.course.title }}</span>
   </span>
   <span class="fill-space"></span>
   <span>{{date}}</span>

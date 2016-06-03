@@ -4,8 +4,8 @@ import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
 import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
 import {
-  Course,
-  CourseService,
+  Section,
+  SectionService,
 } from '../../shared';
 
 
@@ -22,22 +22,20 @@ import {
 })
 export class ClassCodeComponent implements OnInit {
 
-  title = 'Welcome to ';
   date: Date;
-  course: Course;
+  section: Section;
 
   constructor(
-    private courseService: CourseService) {
-
+    private sectionService: SectionService) {
   }
 
   ngOnInit() {
     this.date = new Date();
-    // FIXME hardcoded course
-    this.courseService.getCourses().then(
-      (courses) => {
-        this.course = courses[0];
-        console.log(this.course);
+    // FIXME hardcoded section
+    this.sectionService.getMockSections().then(
+      (sections) => {
+        this.section = sections[0];
+        console.log(this.section);
       }
     );
 
