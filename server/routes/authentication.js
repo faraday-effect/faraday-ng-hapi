@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const Bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 const bookshelf = require('./../bookshelf');
 
 exports.register = function (server, options, next) {
@@ -7,19 +7,21 @@ exports.register = function (server, options, next) {
     const validateUser = function (request, email, password, callback) {
         var user = {};
 
-        bookshelf.Person.where({email: email}).fetch().then((model) => {
-            user = model.toJSON;
+        console.log(email, password);
+        new bookshelf.Person({email: email}).fetch().then((model) => {
+            user = model.toJSON();
+            console.log(user);
+
+            bcrypt.compare(password, user.password, (err, isValid) => {
+                callback(err, isValid, {
+                    id: user.id,
+                    email: user.email,
+                    first_name: user.first_name,
+                    last_name: user.last_name
+                });
+            });
         }).catch(() => {
             return callback(null, false);
-        });
-
-        Bcrypt.compare(password, user.password, (err, isValid) => {
-            callback(err, isValid, {
-                id: user.id,
-                email: user.email,
-                first_name: user.first_name,
-                last_name: user.last_name
-            });
         });
     };
 
@@ -34,10 +36,10 @@ exports.register = function (server, options, next) {
                 reply(request.auth);
             }
 
-            reply({success: false})
+            //reply({success: false})
         },
         config: {
-            //auth: 'login',
+
             validate: {
                 payload: {
                     email: Joi.string().email().lowercase().required(),
@@ -51,7 +53,7 @@ exports.register = function (server, options, next) {
         method: 'POST',
         path: '/logout',
         handler: function (request, reply) {
-            request.auth.session.clear();
+            //request.auth.session.clear();
             reply({success: true})
         },
         config: {
