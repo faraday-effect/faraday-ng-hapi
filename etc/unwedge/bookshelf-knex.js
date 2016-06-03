@@ -2,12 +2,14 @@
 
 const Promise = require('bluebird');
 
+const DEBUG = true;
+
 var knex = require('knex')({
     client: 'sqlite3',
     connection: {
         filename: "./test-db.sqlite"
     },
-    debug: true,
+    debug: DEBUG,
     useNullAsDefault: true        // Quiet the sqlite3 driver
 });
 
@@ -25,18 +27,18 @@ function reset_schema() {
 }
 
 function create_schema() {
-    console.log("Create schema")
+    console.log("Create schema");
 
     return Promise.join(
         knex.schema.createTableIfNotExists('users', (table) => {
-            table.increments();
+            table.increments('id').primary();
             table.string('first_name');
             table.string('last_name');
             table.string('email');
         }),
 
         knex.schema.createTableIfNotExists('roles', (table) => {
-            table.increments();
+            table.increments('id').primary();
             table.string('name');
         }),
 
@@ -69,23 +71,61 @@ function insert_data() {
     );
 }
 
-function build_orm() {
-    console.log("Building ORM");
+function check_data() {
+    console.log("Check data");
 
-    var User = bookshelf.Model.extend({
-        tableName: 'users'
+    return knex('users')
+        .select()
+        .then(function (rows) {
+            for (let row of rows) {
+                console.log(`ID ${row.id} is ${row.first_name} ${row.last_name}`);
+            }
+        })
+        .catch(function (err) {
+            console.error("ERROR", err)
+        });
+}
+
+function unwedge_orm() {
+    console.log("Configure ORM");
+
+    let User = bookshelf.Model.extend({
+        tableName: 'users',
+        roles: function () {
+            return this.belongsToMany(Role);
+        }
     });
 
-    var Role = bookshelf.Model.extend({
-        tableName: 'roles'
+    let Role = bookshelf.Model.extend({
+        tableName: 'roles',
+        users: function () {
+            return this.belongsToMany(User);
+        }
     });
-    console.log("ORM built");
+
+    console.log("ORM configured");
+
+    return User.roles()
+        .fetchAll()
+        .then(function (collection) {
+            console.log("ROLES", collection);
+        })
+        .catch((err) => console.error("ERROR", err));
+
+    return User.forge()
+        .fetchAll()
+        .then(function (collection) {
+            collection.each(function(user) {
+                console.log("USER", user.get('first_name'), user.get('last_name'));
+            });
+        })
+        .finally(() => console.log("Users tested"))
+        .catch((err) => console.error("ERROR", err));
 }
 
 reset_schema()
     .then(create_schema)
     .then(insert_data)
-    .then(() => {
-        build_orm();
-        process.exit(1);
-    });
+    .then(check_data)
+    .then(unwedge_orm)
+    .then(() => process.exit(1));
