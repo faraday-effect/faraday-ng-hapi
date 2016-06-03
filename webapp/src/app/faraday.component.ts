@@ -11,11 +11,13 @@ import {
   PrefixService,
   TermService,
   AttendanceService,
+  RegisterService,
   // Components
   LoginComponent,
   AdminComponent,
   WelcomeComponent,
   CueSheetComponent,
+  RegisterComponent,
 } from './shared';
 
 @Component({
@@ -32,6 +34,7 @@ import {
     PrefixService,
     TermService,
     AttendanceService,
+    RegisterService,
   ]
 })
 @Routes([
@@ -40,6 +43,7 @@ import {
   {path: '/admin', component: AdminComponent},
   {path: '/welcome', component: WelcomeComponent},
   {path: '/cue-sheet', component: CueSheetComponent},
+  {path: '/register', component: RegisterComponent},
 ])
 export class FaradayAppComponent {
 

@@ -3,6 +3,6 @@ export class Course {
   prefix: string;
   number: string;
   title: string;
-  active: boolean;
+  hidden: boolean;
   department_id: number;
 }

@@ -1,0 +1,43 @@
+<md-toolbar color="primary">
+  <span>{{title}}</span>
+  <span class="fill-space"></span>
+  <span>{{date}}</span>
+</md-toolbar>
+
+<div class="container">
+  <md-list>
+    <md-list-item>
+      <h1>Please Register</h1>
+    </md-list-item>
+    <md-list-item>
+      <md-input placeholder="First Name" [(ngModel)]="first_name"></md-input>
+    </md-list-item>
+    <md-list-item>
+      <md-input placeholder="Last Name" [(ngModel)]="last_name"></md-input>
+    </md-list-item>
+    <md-list-item>
+      <md-input placeholder="Email" [(ngModel)]="email"></md-input>
+    </md-list-item>
+    <md-list-item>
+      <md-input placeholder="Password" [(ngModel)]="password" type="password"></md-input>
+    </md-list-item>
+    <md-list-item>
+      <span class="fill-space"></span>
+      <button (click)="register()" md-raised-button color="accent">Register</button>
+    </md-list-item>
+  </md-list>
+</div>
+
+<div *ngIf="debug" style="margin: 20px;">
+  <md-list>
+    <h3 md-subheader>Users</h3>
+    <div *ngFor="let user of users">
+      <md-divider></md-divider>
+      <md-list-item>
+        <p md-line>Email: {{user.email}}</p>
+        <p md-line>Password hash: {{user.password}}</p>
+      </md-list-item>
+    </div>
+  </md-list>
+  <button (click)="getUsers()" md-raised-button>Refresh users</button>
+</div>

@@ -27,7 +27,7 @@ import {
 export class CoursesComponent implements OnInit {
 
   courses: Course[] = [];
-  @Input() showInactive = false;
+  @Input() showHidden = false;
 
   constructor(
     private router: Router,
@@ -35,6 +35,7 @@ export class CoursesComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this);
     this.courseService.getCourses()
         .then(courses => this.courses = courses);
   }

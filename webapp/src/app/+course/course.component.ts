@@ -29,9 +29,9 @@ export class CourseComponent implements OnActivate {
         .then(course => this.course = course);
   }
 
-  deactivateCourse() {
+  hideCourse() {
     let id = +this.routeSegment.getParam('id');
-    this.courseService.deleteCourse(id)
+    this.courseService.hideCourse(id)
         .then(() => this.router.navigate(['/admin/courses'])); // FIXME ADMIN
   }
 
