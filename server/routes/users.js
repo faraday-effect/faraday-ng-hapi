@@ -13,6 +13,7 @@ exports.register = function (server, options, next) {
             });
         },
         config: {
+            auth: false,
             notes: 'returns all the Person objects'
         }
     });
@@ -117,6 +118,7 @@ exports.register = function (server, options, next) {
 
         },
         config: {
+            auth: false,
             validate: {
                 payload: {
                     first_name: Joi.string().required(),
