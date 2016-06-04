@@ -2,7 +2,11 @@
   <md-card>
     <md-card-title>Important Dates</md-card-title>
     <md-card-content class="secondary">
-      Some text.
+      <div *ngFor="let importantDate of importantDates">
+        <b>{{ importantDate.title }}</b>
+        <p>{{ importantDate.date }}</p>
+        <p>{{ importantDate.description }}</p>
+      </div>
     </md-card-content>
   </md-card>
 </div>

@@ -5,12 +5,11 @@ import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
 import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
 import { ClassCodeComponent } from './class-code';
 
-//import { TodaysTopicsComponent } from '../todays-topics';
 import {
   TodaysTopicsComponent,
   ImportantDatesComponent,
-  Course,
-  CourseService,
+  Section,
+  SectionService,
 } from '../shared';
 
 @Component({
@@ -28,23 +27,22 @@ import {
   ],
 })
 export class WelcomeComponent implements OnInit {
-
-  title = 'Welcome to ';
+  
   date: Date;
-  course: Course;
+  section: Section;
 
   constructor(
-    private courseService: CourseService) {
+    private sectionService: SectionService) {
 
   }
 
   ngOnInit() {
     this.date = new Date();
     // FIXME hardcoded course
-    this.courseService.getCourses().then(
-      (courses) => {
-        this.course = courses[0];
-        console.log(this.course);
+    this.sectionService.getMockSections().then(
+      (sections) => {
+        this.section = sections[0];
+        console.log(this);
       }
     );
 

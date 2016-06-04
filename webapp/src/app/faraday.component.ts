@@ -11,6 +11,8 @@ import {
   PrefixService,
   TermService,
   AttendanceService,
+  ActivityService,
+  ImportantDateService,
   RegisterService,
   // Components
   LoginComponent,
@@ -34,6 +36,8 @@ import {
     PrefixService,
     TermService,
     AttendanceService,
+    ActivityService,
+    ImportantDateService,
     RegisterService,
   ]
 })

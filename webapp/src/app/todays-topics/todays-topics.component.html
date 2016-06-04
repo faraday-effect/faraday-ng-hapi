@@ -1,8 +1,11 @@
 <div class="card-container">
   <md-card>
-    <md-card-title>Today's Topic</md-card-title>
+    <md-card-title>Today's Topics</md-card-title>
     <md-card-content class="secondary">
-      Some text.
+      <div *ngFor="let activity of activities">
+        <b>{{ activity.title }}</b>
+        <p>{{ activity.description }}</p>
+      </div>
     </md-card-content>
   </md-card>
 </div>
