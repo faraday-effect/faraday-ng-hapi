@@ -7,7 +7,28 @@ env:
   - TEST_DIR=server
 # - TEST_DIR=webapp
 
-script: cd $TEST_DIR && npm install && npm test
-
 notifications:
   slack: quantum-bits:qYEIHmdw3vBD1Q3XRxh2neXY
+
+before_install:
+  - sudo apt-get install python-software-properties
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+  - sudo apt-get update
+  - sudo apt-get install gcc-5 g++-5
+  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 80 --slave /usr/bin/g++ g++ /usr/bin/g++-5
+  - sudo update-alternatives --set gcc /usr/bin/gcc-5
+
+#install:
+
+#before_script:
+
+script: cd $TEST_DIR && npm install && npm test
+
+#after_success:
+#after_failure:
+
+#before_deploy:
+#deploy:
+#after_deploy:
+
+#after_script:
