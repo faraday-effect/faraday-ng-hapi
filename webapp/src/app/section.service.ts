@@ -5,7 +5,7 @@ import 'rxjs/add/operator/toPromise';
 import { Section } from './shared';
 
 // MOCK
-const SECTIONS: Section[] = [
+const SECTIONS: any[] = [
   {
     id: 1,
     course: {

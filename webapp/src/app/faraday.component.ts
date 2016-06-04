@@ -19,7 +19,10 @@ import {
   AdminComponent,
   WelcomeComponent,
   CueSheetComponent,
+  LoginService,
   RegisterComponent,
+  StoryBoardComponent,
+  ActivityDetailComponent,
 } from './shared';
 
 @Component({
@@ -36,6 +39,7 @@ import {
     PrefixService,
     TermService,
     AttendanceService,
+    LoginService,
     ActivityService,
     ImportantDateService,
     RegisterService,
@@ -48,6 +52,8 @@ import {
   {path: '/welcome', component: WelcomeComponent},
   {path: '/cue-sheet', component: CueSheetComponent},
   {path: '/register', component: RegisterComponent},
+  {path: '/story-board', component: StoryBoardComponent},
+  {path: '/activity-detail', component: ActivityDetailComponent}
 ])
 export class FaradayAppComponent {
 
