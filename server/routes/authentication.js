@@ -84,6 +84,9 @@ exports.register = function (server, options, next) {
         method: 'POST',
         path: '/logout',
         handler: function (request, reply) {
+            request.server.app.cache.get(sid, () => {
+                console.log("not found in cache");
+            });
             request.cookieAuth.clear();
             reply({success: true})
         },
