@@ -8,28 +8,26 @@ exports.register = function (server, options, next) {
     const cache = server.cache({segment: 'sessions', expiresIn: 24 * 60 * 60 * 1000});
     server.app.cache = cache;
 
-    const validate = function (request, session, callback) {
-        cache.get(session.sid, (err, cached) => {
-            if (err) {
-                return callback(err, false);
-            }
-
-            if (!cached) {
-                return callback(null, false);
-            }
-
-            return callback(null, true, cached.user);
-        });
-    };
-
     //defaults to set authentication on all routes
     server.auth.strategy('session', 'cookie', {
         cookie: 'faraday-cookie',                           //cookie name
         isSecure: false,                                    //set to true for production apps
         password: '01234567890123456789012345678912',       //cookie secret
         redirectTo: false,                                  //client is handling
-        ttl: 24 * 60 * 60 * 1000,                           //expires in 1 day
-        validateFunc: validate
+        ttl: 24 * 60 * 60 * 1000,                            //expires in 1 day
+        validateFunc: function (request, session, callback) {
+            cache.get(session.sid, (err, value, cached, report) => {
+                if (err) {
+                    return callback(err, false);
+                }
+
+                if (!cached) {
+                    return callback(null, false);
+                }
+
+                return callback(null, true, cached.item);
+            });
+        }
     });
 
     //secures all routes
@@ -43,7 +41,6 @@ exports.register = function (server, options, next) {
 
             new bookshelf.Person({email: request.payload.email}).fetch().then((model) => {
                 user = model.toJSON();
-                console.log(user);
 
                 bcrypt.compare(request.payload.password, user.password, (err, isValid) => {
                     if (!isValid) {
@@ -53,14 +50,17 @@ exports.register = function (server, options, next) {
                         return reply({isValid: isValid, err: 'Incorrect password'})
                     }
                     const sid = String(++uuid);
-                    request.server.app.cache.set(sid, {user: user}, 0, (err) => {
+
+                    //Removes information from user object passed to browser and stored in the cache
+                    delete user['password'];
+                    delete user['office_phone'];
+                    delete user['mobile_phone'];
+
+                    server.app.cache.set(sid, user, 0, (err) => {
                         if (err) {
-                            reply(err);
+                            return reply(err);
                         }
                         request.cookieAuth.set({sid: sid});
-                        delete user['password'];
-                        delete user['office_phone'];
-                        delete user['mobile_phone'];
                         reply(user);
                     });
                 });
@@ -84,6 +84,9 @@ exports.register = function (server, options, next) {
         method: 'POST',
         path: '/logout',
         handler: function (request, reply) {
+            server.app.cache.drop(request.auth.artifacts.sid), (err) => {
+                return reply({err: err});
+            };
             request.cookieAuth.clear();
             reply({success: true})
         },
@@ -91,7 +94,6 @@ exports.register = function (server, options, next) {
             notes: 'Removes session token from the browser'
         }
     });
-
 
     next();
 };
