@@ -18,7 +18,8 @@ server.register([
     //authentication
     {register: require('hapi-auth-cookie')},
     //Sockets
-    {register: require('nes')},
+    //{register: require('nes')},
+    {register: require('./routes/nes')},
     //lout requirements
     {register: require('vision')},
     {register: require('inert')},
@@ -61,6 +62,7 @@ server.register({
         throw err;
     }
     server.start((err) => {
+        //server.broadcast('Welcome!');
 
         if (err) {
             throw err;
