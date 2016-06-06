@@ -4,10 +4,12 @@
 /** Map relative paths to URLs. */
 const map: any = {
   '@angular2-material': 'vendor/@angular2-material',
+  'nes': 'vendor/nes',
 };
 
 /** User packages configuration. */
 const packages: any = {
+  'nes': {main: 'client.js'},
 };
 
 const materialPkgs: string[] = [

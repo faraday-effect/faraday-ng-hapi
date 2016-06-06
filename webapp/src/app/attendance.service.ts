@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 
+declare var require: any;
+var Nes = require('nes/client');
+
 import {
   Person,
 } from './shared';
@@ -27,7 +30,9 @@ const PERSONS: Person[] = [
 @Injectable()
 export class AttendanceService {
 
-  constructor() {}
+  constructor() {
+    console.log(Nes);
+  }
 
   getStudents() {
     return Promise.resolve(PERSONS);
