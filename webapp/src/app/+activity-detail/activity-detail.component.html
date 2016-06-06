@@ -1,0 +1,23 @@
+<!-- css for the title toolbar is messed up -->
+<md-toolbar color="primary">
+  <span *ngIf="activity">
+      <div class="left"> < Story Board</div>
+      <span class="fill-space"></span>
+      <b>{{ activity.title }}</b>
+      <span class="fill-space"></span>
+      <div class="right">(Next Topic) > </div>
+  </span>
+</md-toolbar>
+<span *ngIf="activity">
+  <div class="card-container">
+    <div *ngFor="let slide of activity.slides">
+      <md-card>
+        <md-card-title>{{ slide.title }}</md-card-title>
+        <md-card-content class="secondary">
+          <p>{{ slide.slideDetail }}</p>
+        </md-card-content>
+      </md-card>
+    </div>
+  </div>
+</span>
+

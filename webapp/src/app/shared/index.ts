@@ -20,12 +20,20 @@ export * from '../term.service';
 export * from '../+term';
 export * from '../+terms';
 export * from '../+admin';
+export * from '../login.service';
 export * from '../+login';
+export * from '../activity.service';
 export * from '../todays-topics';
+export * from '../important-date.service';
 export * from '../important-dates';
 export * from '../+welcome';
 export * from '../attendance.service';
 export * from '../+cue-sheet';
 export * from '../person';
+export * from '../activity';
+export * from '../important-date';//how does it know the difference between a file and the folder?!?
 export * from '../register.service';
 export * from '../+register';
+export * from '../+story-board';
+export * from '../+activity-detail';
+
