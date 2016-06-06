@@ -34,3 +34,8 @@ To start webapp server (in `webapp` directory):
 run `ng serve`
 
 In a browser visit: `localhost:4200`
+
+To login:
+
+User: test@example.com
+Pass: pass

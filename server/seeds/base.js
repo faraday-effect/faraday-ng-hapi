@@ -57,7 +57,7 @@ exports.seed = function (knex, Promise) {
             first_name: 'Abram',
             last_name: 'Stamper',
             email: 'abram_stamper@taylor.edu',
-            password: 'pass',
+            password: '$2a$10$LZcZ8PDh1ow7bcXBkRqIf.i9uWlpBAXyO.wZOr.fKczvxL624TzXe',
             office_phone: null,
             mobile_phone: '765-480-4409'
         }, 'person1'),
@@ -65,7 +65,7 @@ exports.seed = function (knex, Promise) {
             first_name: 'Tom',
             last_name: 'Nurkkala',
             email: 'tom_nurkkala@taylor.edu',
-            password: 'pass',
+            password: '$2a$10$LZcZ8PDh1ow7bcXBkRqIf.i9uWlpBAXyO.wZOr.fKczvxL624TzXe',
             office_phone: null,
             mobile_phone: '765-998-4131'
         }, 'person2'),
@@ -73,7 +73,7 @@ exports.seed = function (knex, Promise) {
             first_name: 'Keith',
             last_name: 'Bauson',
             email: 'keith_bauson@taylor.edu',
-            password: 'pass',
+            password: '$2a$10$LZcZ8PDh1ow7bcXBkRqIf.i9uWlpBAXyO.wZOr.fKczvxL624TzXe',
             office_phone: null,
             mobile_phone: '765-457-4371'
         }, 'person3'),
@@ -81,9 +81,25 @@ exports.seed = function (knex, Promise) {
             first_name: 'Ken',
             last_name: 'Kiers',
             email: 'ken_kiers@taylor.edu',
-            password: 'pass',
+            password: '$2a$10$LZcZ8PDh1ow7bcXBkRqIf.i9uWlpBAXyO.wZOr.fKczvxL624TzXe',
             office_phone: null,
             mobile_phone: '765-251-4154'
+        }, 'person4'),
+        insert_and_grab_id('person', {
+            first_name: 'test',
+            last_name: 'test',
+            email: 'test@test.com',
+            password: '$2a$10$LZcZ8PDh1ow7bcXBkRqIf.i9uWlpBAXyO.wZOr.fKczvxL624TzXe',
+            office_phone: null,
+            mobile_phone: null
+        }, 'person4'),
+        insert_and_grab_id('person', {
+            first_name: 'test',
+            last_name: 'test',
+            email: 'test@example.com',
+            password: '$2a$10$LZcZ8PDh1ow7bcXBkRqIf.i9uWlpBAXyO.wZOr.fKczvxL624TzXe',
+            office_phone: null,
+            mobile_phone: null
         }, 'person4'),
 
         insert_and_grab_id('role', {
