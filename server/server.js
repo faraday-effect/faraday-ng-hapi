@@ -41,7 +41,8 @@ server.register([
 server.register({
     register: Poop,
     options: {
-        logPath: Path.join(__dirname, 'logs', 'poop.log')
+        logPath: Path.join(__dirname, 'logs', 'poop.log'),
+        heapdumpFolder: Path.join(__dirname, 'logs')
     }
 });
 
