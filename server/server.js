@@ -2,6 +2,7 @@
 
 const Hapi = require('hapi');
 const Good = require('good');
+const Nes = require('nes');
 
 const server = new Hapi.Server();
 server.connection({
@@ -18,7 +19,6 @@ server.register([
     //authentication
     {register: require('hapi-auth-cookie')},
     //Sockets
-    //{register: require('nes')},
     {register: require('./routes/nes')},
     //lout requirements
     {register: require('vision')},

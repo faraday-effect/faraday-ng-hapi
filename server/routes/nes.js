@@ -11,8 +11,7 @@ exports.register = function (server, options, next) {
             },
             config: {
                 auth: false,
-                id: 'hello',
-                notes: 'returns all the Person objects'
+                id: 'hello'
             }
         });
 
