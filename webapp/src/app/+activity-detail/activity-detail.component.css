@@ -1,0 +1,37 @@
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.fill-space {
+  flex: 1 1 auto;
+}
+
+.title-container {
+  width: 100%;
+}
+
+.card-container {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+md-card {
+  width: 400px;
+  box-sizing: border-box;
+  margin: 16px;
+}
+
+
+.left {
+  float:left;
+  width:200px;
+}
+
+
+
+.right {
+  float:right;
+  width:200px;
+  text-align: right;
+}

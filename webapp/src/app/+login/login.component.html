@@ -2,6 +2,7 @@
   <span>{{title}}</span>
   <span class="fill-space"></span>
   <span>{{date}}</span>
+  <button (click)="logout()" md-button>Logout</button>
 </md-toolbar>
 
 <div class="container">
@@ -10,7 +11,7 @@
       <h1>Please Log In</h1>
     </md-list-item>
     <md-list-item>
-      <md-input placeholder="User Name" [(ngModel)]="userName"></md-input>
+      <md-input placeholder="Email" [(ngModel)]="email"></md-input>
     </md-list-item>
     <md-list-item>
       <md-input placeholder="Password" [(ngModel)]="password" type="password"></md-input>
