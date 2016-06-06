@@ -22,7 +22,10 @@ export class LoginService {
   }
 
   logout() {
-    this.http.post(this.logoutUrl, "");
+    return this.http.post(this.logoutUrl, "")
+               .toPromise()
+               .then(response => response.json())
+               .catch(this.handleError);
   }
 
   private handleError(err) {
