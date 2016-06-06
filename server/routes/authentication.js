@@ -53,7 +53,7 @@ exports.register = function (server, options, next) {
                         return reply({isValid: isValid, err: 'Incorrect password'})
                     }
                     const sid = String(++uuid);
-                    request.server.app.cache.set(sid, {user: user}, 0, (err) => {
+                    cache.set(sid, {user: user}, 0, (err) => {
                         if (err) {
                             reply(err);
                         }
@@ -84,9 +84,6 @@ exports.register = function (server, options, next) {
         method: 'POST',
         path: '/logout',
         handler: function (request, reply) {
-            request.server.app.cache.get(sid, () => {
-                console.log("not found in cache");
-            });
             request.cookieAuth.clear();
             reply({success: true})
         },
@@ -94,7 +91,6 @@ exports.register = function (server, options, next) {
             notes: 'Removes session token from the browser'
         }
     });
-
 
     next();
 };
