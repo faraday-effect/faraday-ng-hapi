@@ -21,13 +21,13 @@ exports.register = function (server, options, next) {
                 end_date: request.payload.end_date
             })
                 .save().then(function (model) {
-                //get database
-                reply({statusCode: 200, method: "post", response: model})
-            }).catch(function (error) {
-                reply({statusCode: 500, err: error});
+                reply(model)
+            }).catch(function (err) {
+                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
             });
         },
         config: {
+            notes: 'creates a new term',
             validate: {
                 payload: {
                     name: Joi.string().required(),
@@ -46,6 +46,7 @@ exports.register = function (server, options, next) {
             reply(response);
         },
         config: {
+            notes: 'returns the term information for a given term_id',
             validate: {
                 params: {
                     term_id: Joi.number().positive().integer()
@@ -66,13 +67,13 @@ exports.register = function (server, options, next) {
                         end_date: request.payload.end_date
                     }
                 ).then(function (model) {
-                //get database
-                reply({statusCode: 200, method: "put", response: model})
-            }).catch(function (error) {
-                reply({statusCode: 500, err: error});
+                reply(model)
+            }).catch(function (err) {
+                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
             });
         },
         config: {
+            notes: 'Updates the term information for a given term_id',
             validate: {
                 params: {
                     term_id: Joi.number().positive().integer()
@@ -95,6 +96,7 @@ exports.register = function (server, options, next) {
             reply(response);
         },
         config: {
+            notes: 'to be implemented',
             validate: {
                 params: {
                     term_id: Joi.number().positive().integer()

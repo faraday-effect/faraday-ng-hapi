@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const Boom = require('boom');
 const bookshelf = require('./../bookshelf');
 const attendance_code_length = 6;
 
@@ -11,14 +12,17 @@ exports.register = function (server, options, next) {
             console.log();
             if (request.payload.code === code) {
                 new bookshelf.Attendance({actual_class_id: 0, student_id: 0}).save().then((model) => {
-                    reply({success: true, model: model});
+                    reply({model: model});
                     //send to socket to instructor projector view 'student id'
+                }).catch((err) => {
+                    return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
                 });
             }
             else
-                reply({success: false});
+                reply(Boom.badData(['the code you entered was incorrect']));
         },
         config: {
+            notes: 'Puts a student inside the class when the course code is correct',
             validate: {
                 payload: {
                     actual_class_id: Joi.number().integer().required(),
@@ -37,20 +41,20 @@ exports.register = function (server, options, next) {
         handler: function (request, reply) {
             bookshelf.Attendance.where('actual_class_id', request.params.actual_class_id).fetchAll().then((Collection) => {
                 reply(Collection);
-            }).catch(function (error) {
-                reply({err: error});
+            }).catch(function (err) {
+                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
             });
         },
         config: {
+            notes: 'returns the attendence for a class',
             validate: {
                 params: {
                     actual_class_id: Joi.number().integer().required()
                 }
-            },
-            notes: 'to be implemented later - unknown'
+            }
         }
     });
     next();
 };
 
-exports.register.attributes = {name: 'attendance', version: '0.0.1'};
+exports.register.attributes = {name: 'attendance', version: '0.0.2'};

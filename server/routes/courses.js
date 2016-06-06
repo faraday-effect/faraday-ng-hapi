@@ -20,23 +20,23 @@ exports.register = function (server, options, next) {
                 title: request.payload.title,
                 prefix_id: request.payload.prefix_id,
                 number: request.payload.number,
-                active: request.payload.active,
+                hidden: request.payload.hidden,
                 department_id: request.payload.department_id
             })
                 .save().then(function (model) {
-                //get database
-                reply({statusCode: 200, method: "post", response: model})
-            }).catch(function (error) {
-                reply({statusCode: 500, err: error});
+                reply(model)
+            }).catch(function (err) {
+                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
             });
         },
         config: {
+            notes: 'creates a new course with the given information',
             validate: {
                 payload: {
                     title: Joi.string(),
                     prefix_id: Joi.number().positive().integer().required(),
                     number: Joi.string().length(course_prefix_name).required(),
-                    active: Joi.boolean().default(false),
+                    hidden: Joi.boolean().default(false),
                     department_id: Joi.number().positive().integer().required()
                 }
             }
@@ -52,6 +52,7 @@ exports.register = function (server, options, next) {
             reply(response);
         },
         config: {
+            notes: 'to be implemented',
             validate: {
                 params: {
                     course_id: Joi.number().positive().integer()
@@ -64,7 +65,6 @@ exports.register = function (server, options, next) {
         method: 'GET',
         path: '/courses/{course_id}',
         handler: function (request, reply) {
-            //let response = bookshelf.Course.forge({'id': encodeURIComponent(request.params.course_id)}).fetch()
             var name = "not set";
             new bookshelf.Course({id: request.params.course_id}).fetch().then(function (model) {
                 new bookshelf.Prefix({id: model.get('prefix_id')}).fetch().then(function (model2) {
@@ -74,16 +74,14 @@ exports.register = function (server, options, next) {
                 });
 
             });
-            //response.set('prefix', bookshelf.Prefix.forge().fetch(response.prefix_id));
-            //reply(response);
         },
         config: {
+            notes: 'Contains a course object appended with prefix_name: \'name\' with the prefix id\'s name',
             validate: {
                 params: {
                     course_id: Joi.number().positive().integer()
                 }
-            },
-            notes: 'Contains a course object appended with prefix_name: \'name\' with the prefix id\'s name'
+            }
         }
     });
 
@@ -97,17 +95,17 @@ exports.register = function (server, options, next) {
                         title: request.payload.title,
                         prefix_id: request.payload.prefix_id,
                         number: request.payload.number,
-                        active: request.payload.active,
+                        hidden: request.payload.hidden,
                         department_id: request.payload.department_id
                     }
                 ).then(function (model) {
-                //get database
-                reply({statusCode: 200, method: "put", response: model})
-            }).catch(function (error) {
-                reply({statusCode: 500, err: error});
+                reply(model)
+            }).catch(function (err) {
+                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
             });
         },
         config: {
+            notes: 'Updates a course with the given information provided by the course_id',
             validate: {
                 params: {
                     course_id: Joi.number().positive().integer()
@@ -116,7 +114,7 @@ exports.register = function (server, options, next) {
                     title: Joi.string(),
                     prefix_id: Joi.number().positive().integer().required(),
                     number: Joi.string().length(course_prefix_name).required(),
-                    active: Joi.boolean().default(false),
+                    hidden: Joi.boolean().default(false),
                     department_id: Joi.number().positive().integer().required()
                 }
             }
@@ -131,6 +129,7 @@ exports.register = function (server, options, next) {
             reply(response);
         },
         config: {
+            notes: 'broken - to be re-implemented',
             validate: {
                 params: {
                     course_id: Joi.number().positive().integer()

@@ -20,10 +20,9 @@ exports.register = function (server, options, next) {
                 name: request.payload.name
             })
                 .save().then(function (model) {
-                //get database
-                reply({statusCode: 200, method: "post", response: model})
-            }).catch(function (error) {
-                reply({statusCode: 500, err: error});
+                reply(model)
+            }).catch(function (err) {
+                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
             });
         },
         config: {
@@ -45,13 +44,13 @@ exports.register = function (server, options, next) {
                         name: request.payload.name
                     }
                 ).then(function (model) {
-                //get database
-                reply({statusCode: 200, method: "put", response: model})
-            }).catch(function (error) {
-                reply({statusCode: 500, err: error});
+                reply(model)
+            }).catch(function (err) {
+                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
             });
         },
         config: {
+            notes: 'Updates a prefix given a prefix_id',
             validate: {
                 params: {
                     prefix_id: Joi.number().positive().integer()
@@ -71,6 +70,7 @@ exports.register = function (server, options, next) {
             reply(response);
         },
         config: {
+            notes: 'Returns a prefix name given a prefix_id',
             validate: {
                 params: {
                     prefix_id: Joi.number().positive().integer()
@@ -88,6 +88,7 @@ exports.register = function (server, options, next) {
             reply(response);
         },
         config: {
+            notes: 'to be implemented',
             validate: {
                 params: {
                     prefix_id: Joi.number().positive().integer()

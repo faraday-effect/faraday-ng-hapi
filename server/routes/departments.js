@@ -19,6 +19,7 @@ exports.register = function (server, options, next) {
             reply(response);
         },
         config: {
+            notes: 'returns a department name given a department_id',
             validate: {
                 params: {
                     department_id: Joi.number().positive().integer()
@@ -39,16 +40,20 @@ exports.register = function (server, options, next) {
                         prefixes: model2
                     };
                     reply(responseJSON);
+                }).catch((err) => {
+                    return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
                 });
+            }).catch((err) => {
+                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
             });
         },
         config: {
+            notes: 'returns the prefixes in an array and department name for a given department_id',
             validate: {
                 params: {
                     department_id: Joi.number().positive().integer()
                 }
-            },
-            notes: 'returns the prefixes in an array and department name for a given department_id'
+            }
         }
     });
 
@@ -60,13 +65,13 @@ exports.register = function (server, options, next) {
                 name: request.payload.name
             })
                 .save().then(function (model) {
-                //get database
-                reply({statusCode: 200, method: "post", response: model})
-            }).catch(function (error) {
-                reply({statusCode: 500, err: error});
+                reply(model)
+            }).catch(function (err) {
+                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
             });
         },
         config: {
+            notes: 'creates a new department',
             validate: {
                 payload: {
                     name: Joi.string().required()
@@ -85,13 +90,13 @@ exports.register = function (server, options, next) {
                         name: request.payload.name
                     }
                 ).then(function (model) {
-                //get database
-                reply({statusCode: 200, method: "put", response: model})
-            }).catch(function (error) {
-                reply({statusCode: 500, err: error});
+                reply(model)
+            }).catch(function (err) {
+                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
             });
         },
         config: {
+            notes: 'updates a department given a department_id',
             validate: {
                 params: {
                     course_id: Joi.number().positive().integer()
@@ -112,6 +117,7 @@ exports.register = function (server, options, next) {
             reply(response);
         },
         config: {
+            notes: 'to be implemented',
             validate: {
                 params: {
                     department_id: Joi.number().positive().integer()
