@@ -28,8 +28,8 @@ exports.register = function (server, options, next) {
         isSecure: false,                                    //set to true for production apps
         password: '01234567890123456789012345678912',       //cookie secret
         redirectTo: false,                                  //client is handling
-        ttl: 24 * 60 * 60 * 1000,                           //expires in 1 day
-        validateFunc: validate
+        ttl: 24 * 60 * 60 * 1000                            //expires in 1 day
+        
     });
 
     //secures all routes
