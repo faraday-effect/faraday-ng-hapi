@@ -1,10 +1,12 @@
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
+const Boom = require('boom');
 const bookshelf = require('./../bookshelf');
 var uuid = 1;
 
 exports.register = function (server, options, next) {
 
+    //creates the cache segment 'sessions' in the server to store cookie info
     const cache = server.cache({segment: 'sessions', expiresIn: 24 * 60 * 60 * 1000});
     server.app.cache = cache;
 
@@ -38,16 +40,16 @@ exports.register = function (server, options, next) {
         path: '/login',
         handler: function (request, reply) {
             var user = {};
-
             new bookshelf.Person({email: request.payload.email}).fetch().then((model) => {
                 user = model.toJSON();
 
+                //checks that the user password was matched with the DB password
                 bcrypt.compare(request.payload.password, user.password, (err, isValid) => {
                     if (!isValid) {
                         if (err) {
-                            return reply({err: err, isValid: isValid});
+                            return reply(Boom.badRequest(err));
                         }
-                        return reply({isValid: isValid, err: 'Incorrect password'})
+                        return reply(Boom.unauthorized('invalid password'));
                     }
                     const sid = String(++uuid);
 
@@ -56,21 +58,25 @@ exports.register = function (server, options, next) {
                     delete user['office_phone'];
                     delete user['mobile_phone'];
 
+                    //Sets the user object in the cache
                     server.app.cache.set(sid, user, 0, (err) => {
                         if (err) {
-                            return reply(err);
+                            return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
                         }
+                        //Sets the cookie up and gives it back to the browser
                         request.cookieAuth.set({sid: sid});
                         reply(user);
                     });
                 });
 
             }).catch(() => {
-                return reply({isValid: false, err: 'Invalid email or password'});
+                return reply(Boom.badRequest('invalid username or password'));
             });
         },
         config: {
             auth: false,
+            notes: 'Compares the password give by the payload with the password in the server and checks to make' +
+            ' sure the user exists. If auth, gives the browser back a cookie and stores the cookie in the cache',
             validate: {
                 payload: {
                     email: Joi.string().email().lowercase().required(),
@@ -84,18 +90,18 @@ exports.register = function (server, options, next) {
         method: 'POST',
         path: '/logout',
         handler: function (request, reply) {
-            server.app.cache.drop(request.auth.artifacts.sid), (err) => {
-                return reply({err: err});
-            };
+            server.app.cache.drop(request.auth.artifacts.sid, (err) => {
+                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
+            });
             request.cookieAuth.clear();
             reply({success: true})
         },
         config: {
-            notes: 'Removes session token from the browser'
+            notes: 'Removes session token from the browser & server\'s cache'
         }
     });
 
     next();
 };
 
-exports.register.attributes = {name: 'authentication', version: '0.0.1'};
+exports.register.attributes = {name: 'authentication', version: '0.0.2'};
