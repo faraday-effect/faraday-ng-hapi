@@ -4,7 +4,7 @@
   "description": "LMS 2.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Test all the things!\" && exit 0"
+    "test": "lab"
   },
   "repository": {
     "type": "git",
@@ -36,5 +36,9 @@
     "poop": "^2.0.0",
     "vision": "^4.1.0",
     "when": "^3.7.7"
+  },
+  "devDependencies": {
+    "code": "^3.0.1",
+    "lab": "^10.7.1"
   }
 }
