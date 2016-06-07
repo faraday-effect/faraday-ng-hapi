@@ -1,4 +1,5 @@
 const Nes = require('nes');
+const Boom = require('boom');
 
 exports.register = function (server, options, next) {
 
