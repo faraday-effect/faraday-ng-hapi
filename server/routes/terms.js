@@ -23,7 +23,7 @@ exports.register = function (server, options, next) {
                 .save().then(function (model) {
                 reply(model)
             }).catch(function (err) {
-                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
+                return reply(Boom.badImplementation('Failed to create a new term', err));
             });
         },
         config: {

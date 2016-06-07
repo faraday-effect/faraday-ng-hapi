@@ -122,7 +122,7 @@ exports.register = function (server, options, next) {
                 delete responseJSON['password'];
                 reply(responseJSON);
             }).catch((err) => {
-                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
+                return reply(Boom.badImplementation('Failed to create a new user', err));
             });
 
         },

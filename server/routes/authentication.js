@@ -61,7 +61,7 @@ exports.register = function (server, options, next) {
                     //Sets the user object in the cache
                     server.app.cache.set(sid, user, 0, (err) => {
                         if (err) {
-                            return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
+                            return reply(Boom.badImplementation('Failed to set session ID ' + sid + 'for user ' + user.first_name + ' ' + user.last_name, err));
                         }
                         //Sets the cookie up and gives it back to the browser
                         request.cookieAuth.set({sid: sid});
@@ -91,7 +91,7 @@ exports.register = function (server, options, next) {
         path: '/logout',
         handler: function (request, reply) {
             server.app.cache.drop(request.auth.artifacts.sid, (err) => {
-                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
+                return reply(Boom.badImplementation('Couldn\'t drop cache entry for SID ' + request.auth.artifacts.sid, err));
             });
             request.cookieAuth.clear();
             reply({success: true})

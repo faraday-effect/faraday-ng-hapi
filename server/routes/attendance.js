@@ -15,7 +15,7 @@ exports.register = function (server, options, next) {
                     reply({model: model});
                     //send to socket to instructor projector view 'student id'
                 }).catch((err) => {
-                    return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
+                    return reply(Boom.badImplementation('Failed to create attendance instance', err));
                 });
             }
             else
@@ -42,7 +42,7 @@ exports.register = function (server, options, next) {
             bookshelf.Attendance.where('actual_class_id', request.params.actual_class_id).fetchAll().then((Collection) => {
                 reply(Collection);
             }).catch(function (err) {
-                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
+                return reply(Boom.badImplementation('Couldn\'t find attendance records for class ID ' + request.params.actual_class_id, err));
             });
         },
         config: {
