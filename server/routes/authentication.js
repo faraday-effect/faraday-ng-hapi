@@ -33,7 +33,7 @@ exports.register = function (server, options, next) {
     });
 
     //secures all routes
-    server.auth.default({strategy: 'session'});
+    //server.auth.default({strategy: 'session'});
 
     server.route({
         method: 'POST',
