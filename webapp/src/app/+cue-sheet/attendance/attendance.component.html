@@ -3,15 +3,19 @@
 
   <md-list>
 
-    <md-list-item *ngFor="let pair of getPresent()" class="attendee-container">
-      <img md-list-avatar src="http://efdreams.com/data_images/dreams/face/face-10.jpg">
-      <md-line class="student-present">{{pair[0].first_name}} {{pair[0].last_name}}</md-line>
-    </md-list-item>
+    <button *ngFor="let student of getPresent()" (click)="depart(student.id)" class="student-container" md-button>
+      <md-list-item>
+        <img md-list-avatar src="http://efdreams.com/data_images/dreams/face/face-10.jpg">
+        <md-line class="student-present">{{student.first_name}} {{student.last_name}} ({{student.id}})</md-line>
+      </md-list-item>
+    </button>
 
-    <md-list-item *ngFor="let pair of getAbsent()" class="attendee-container">
-      <img md-list-avatar src="http://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/durchschnittsgesichter/m(01-32)_gr.jpg">
-      <md-line class="student-absent">{{pair[0].first_name}} {{pair[0].last_name}}</md-line>
-    </md-list-item>
+    <button  *ngFor="let student of getAbsent()" (click)="attend(student.id)" class="student-container" md-button>
+      <md-list-item>
+        <img md-list-avatar src="http://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/durchschnittsgesichter/m(01-32)_gr.jpg">
+        <md-line class="student-absent">{{student.first_name}} {{student.last_name}} ({{student.id}})</md-line>
+      </md-list-item>
+    </button>
 
   </md-list>
 

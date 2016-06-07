@@ -7,6 +7,9 @@ var Nes = require('nes/client');
 export class NesService {
   wsUrl = 'ws://localhost:3000';
   client: any;
+  connected = false;
+  toSubscribe = [];
+  toRequest = [];
 
   constructor() {
     this.startNes();
@@ -14,28 +17,38 @@ export class NesService {
 
   startNes() {
     this.client = new Nes.Client(this.wsUrl);
-    this.client.connect(err => {
-
-      let handleError = err => {
-        if (err) {
-          console.error("Nes", err);
-        }
-      };
-
-      this.client.subscribe('/attendence', (update, flags) => {
-        console.log("update: ", update);
-        console.log("flags: ", flags);
-      }, handleError);
-
-      this.client.request('/hello', (err, payload) => {
-        handleError(err);
-        console.log("payload: ", payload);
-      });
-
-      if (err) {
-        console.error(err);
+    this.client.connect(this.handleError);
+    this.client.onConnect = () => {
+      this.connected = true;
+      for (let sub of this.toSubscribe) {
+        this.subscribe(sub[0], sub[1]);
       }
-    });
+      for (let req of this.toRequest) {
+        this.request(req[0], req[1]);
+      }
+    };
+  }
+
+  subscribe(path, callback) {
+    if (this.connected) {
+      this.client.subscribe(path, callback, this.handleError);
+    } else {
+      this.toSubscribe.push([path, callback]);
+    }
+  }
+
+  request(path, callback) {
+    if (this.connected) {
+      this.client.request(path, callback);
+    } else {
+      this.toRequest.push([path, callback]);
+    }
+  }
+
+  handleError(err) {
+    if (err) {
+      console.error('Nes', err);
+    }
   }
 
 }

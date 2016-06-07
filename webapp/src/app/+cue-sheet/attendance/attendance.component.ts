@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
 import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 import { MD_ICON_DIRECTIVES } from '@angular2-material/icon';
 import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
@@ -15,6 +16,7 @@ import {
   templateUrl: 'attendance.component.html',
   styleUrls: ['attendance.component.css'],
   directives: [
+    MD_BUTTON_DIRECTIVES,
     MD_CARD_DIRECTIVES,
     MD_ICON_DIRECTIVES,
     MD_LIST_DIRECTIVES,
@@ -22,42 +24,55 @@ import {
 })
 export class AttendanceComponent implements OnInit {
 
-  attending: [Person, boolean][] = [];
+  students: Person[] = [];
+  attending = {};
 
   constructor(
     private attendanceService: AttendanceService) {
   }
 
   ngOnInit() {
-    this.attendanceService.getStudents().then(
+    let sectionId = 41;
+    this.attendanceService.getStudents(sectionId).then(
       students => {
-        for (let i in students) {
-          this.attending[i] = [students[i], false];
+        this.students = students
+        this.students.sort(
+          (a, b) => a.first_name.localeCompare(b.first_name)
+        );
+      }
+    );
+
+    this.attendanceService.handleArrive(
+      ids => {
+        for (let id of ids) {
+          this.attending[id] = true;
         }
-        this.attendanceService.handleArrive(
-          is => {
-            for (let i of is) {
-              this.attending[i][1] = true;
-            }
-          }
-        );
-        this.attendanceService.handleDepart(
-          is => {
-            for (let i of is) {
-              this.attending[i][1] = false;
-            }
-          }
-        );
+      }
+    );
+
+    this.attendanceService.handleDepart(
+      ids => {
+        for (let id of ids) {
+          this.attending[id] = false;
+        }
       }
     );
   }
 
   getPresent() {
-    return this.attending.filter(at => at[1]);
+    return this.students.filter(s => this.attending[s.id]);
   }
 
   getAbsent() {
-    return this.attending.filter(at => ! at[1]);
+    return this.students.filter(s => ! this.attending[s.id]);
+  }
+
+  attend(id: number) {
+    this.attendanceService.attend(id);
+  }
+
+  depart(id: number) {
+    this.attendanceService.depart(id);
   }
 
 }
