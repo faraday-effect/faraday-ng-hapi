@@ -69,6 +69,33 @@ exports.register = function (server, options, next) {
     });
 
     server.route({
+        method: 'GET',
+        path: '/sections/{section_id}/students',
+        handler: function (request, reply) {
+            var response = [];
+            bookshelf.Section.where({ id: request.params.section_id }).fetch().then(function (model) {
+                bookshelf.Student.where({ section_id: model.get('id') }).fetchAll().then(function (Collection) {
+                    Collection.forEach((student) => {
+                        bookshelf.Person.where({ id: student.get('person_id') }).fetch().then((person) => {
+                            console.log(person.attributes);
+                            response.push(person.attributes);
+                        });
+                    }).then(() => {
+                  reply(response);
+            });
+                });
+            });
+        },
+        config: {
+            validate: {
+                params: {
+                    section_id: Joi.number().positive().integer()
+                }
+            }
+        }
+    });
+
+    server.route({
         method: 'PUT',
         path: '/sections/{section_id}',
         handler: function (request, reply) {
