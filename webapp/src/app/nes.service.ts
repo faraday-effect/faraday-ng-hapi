@@ -15,7 +15,7 @@ export class NesService {
   startNes() {
     this.client = new Nes.Client(this.wsUrl);
     this.client.connect(err => {
-      this.client.subscribe('/courses', (update, flags) => {
+      this.client.subscribe('/hello', (update, flags) => {
         console.log("update: ", update);
         console.log("flags: ", flags);
       }, (err) => console.error("Nes", err));

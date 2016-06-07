@@ -4,6 +4,8 @@ const Hapi = require('hapi');
 const Good = require('good');
 const Poop = require('poop');
 const Path = require('path');
+const Nes = require('nes');
+
 const server = new Hapi.Server();
 server.connection({
     port: 3000,
@@ -18,6 +20,8 @@ server.connection({
 server.register([
     //authentication
     {register: require('hapi-auth-cookie')},
+    //Sockets
+    {register: require('./routes/nes')},
     //lout requirements
     {register: require('vision')},
     {register: require('inert')},
@@ -69,6 +73,7 @@ server.register({
         throw err;
     }
     server.start((err) => {
+        //server.broadcast('Welcome!');
 
         if (err) {
             throw err;
