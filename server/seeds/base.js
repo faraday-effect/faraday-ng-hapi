@@ -398,19 +398,17 @@ exports.seed = function (knex, Promise) {
     )).then(() => Promise.join(
         insert_and_grab_id('planned_class', {
             date: "2016-09-01",
-            offering_id: key_by_id['offering1'],
-            reflection: 'I am reflecting on this wonderful day.'
+            offering_id: key_by_id['offering1']
         }, 'planned_class1'),
 
         insert_and_grab_id('planned_class', {
             date: "2016-09-03",
-            offering_id: key_by_id['offering1'],
-            reflection: 'I am reflecting on this wonderful day.'
+            offering_id: key_by_id['offering1']
         }, 'planned_class1'),
 
         insert_and_grab_id('actual_class', {
-            date: "2016-09-01",
-            sequence: 1,
+            start_time: "2016-09-01 15:00:00",
+            stop_time: "2016-09-01 16:00:00",
             section_id: key_by_id['section1'],
             reflection: 'I am reflecting on this wonderful day.'
         }, 'planned_class1'),
@@ -495,10 +493,7 @@ exports.seed = function (knex, Promise) {
             start_date: '2016-03-01',
             stop_date: '2016-03-07'
         }),
-        knex('attendance').insert({
-            student_id: key_by_id['student1'],
-            actual_class_id: key_by_id['actual_class1']
-        }),
-        () => console.log("Holidays, attendance complete")
+        () => console.log("Holidays complete"),
+        () => console.log("attendance was has no entries by design and null current class in Section")
     ));
 };
