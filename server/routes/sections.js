@@ -1,3 +1,5 @@
+"use strict";
+
 const Joi = require('joi');
 const bookshelf = require('./../bookshelf');
 const Boom = require('boom');
@@ -71,10 +73,26 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'GET',
+        path: '/test/{section_id}/students',
+        handler: function (request, reply) {
+            bookshelf.Section({id: request.params.section_id})
+                .students()
+                .fetch()
+                .then(function(collection) {
+                    return reply(collection.toJSON());
+                })
+                .catch(function(err) {
+                    reply(Boom.badImplementation('Failed to fetch students', err));
+                });
+        }
+    });
+
+    server.route({
+        method: 'GET',
         path: '/sections/{section_id}/students',
         handler: function (request, reply) {
             var response = [];
-            itemsProcessed = 0;
+            var itemsProcessed = 0;
             bookshelf.Section.where({ id: request.params.section_id }).fetch().then(function (model) {
                 bookshelf.Student.where({ section_id: model.get('id') }).fetchAll().then(function (Collection) {
                     Collection.forEach((student) => {

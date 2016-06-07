@@ -1,3 +1,5 @@
+"use strict";
+
 var knex = require('knex')({
     client: 'pg',
     connection: {
@@ -96,6 +98,9 @@ var Section = Bookshelf.Model.extend({
     },
     student: function () {
         return this.belongsToMany(Person).through(Student);
+    },
+    students: function() {
+        return this.belongsToMany(Person);
     }
 });
 
