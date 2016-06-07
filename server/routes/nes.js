@@ -16,6 +16,10 @@ exports.register = function (server, options, next) {
         });
 
         server.subscription('/attendence');
+
+        setTimeout(() => {
+            server.publish('/attendence', '1')
+        }, 5000);
     });
     next();
 };
