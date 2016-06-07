@@ -17,9 +17,6 @@ exports.register = function (server, options, next) {
 
         server.subscription('/attendence');
 
-        setTimeout(() => {
-            server.publish('/attendence', {id: 5, status: 'complete'})
-        }, 10000);
     });
     next();
 };

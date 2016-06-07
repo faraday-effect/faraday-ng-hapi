@@ -14,6 +14,7 @@ exports.register = function (server, options, next) {
                 new bookshelf.Attendance({actual_class_id: 0, student_id: 0}).save().then((model) => {
                     reply({model: model});
                     //send to socket to instructor projector view 'student id'
+                    server.publish('/attendence', {id: student_id, actual_class_id: actual_class_id})
                 }).catch((err) => {
                     return reply(Boom.badImplementation('Failed to create attendance instance', err));
                 });
