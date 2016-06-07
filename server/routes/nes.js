@@ -15,7 +15,7 @@ exports.register = function (server, options, next) {
             }
         });
 
-        server.subscription('/courses');
+        server.subscription('/attendence');
     });
     next();
 };
