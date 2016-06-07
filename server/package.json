@@ -19,6 +19,7 @@
   "dependencies": {
     "bcrypt": "^0.8.6",
     "bookshelf": "^0.9.5",
+    "boom": "^3.2.1",
     "express-admin": "^1.2.8",
     "good": "^7.0.1",
     "good-console": "^6.1.1",
@@ -32,6 +33,7 @@
     "lout": "^9.0.0",
     "nes": "^6.1.2",
     "pg": "^4.5.5",
+    "poop": "^2.0.0",
     "vision": "^4.1.0",
     "when": "^3.7.7"
   }

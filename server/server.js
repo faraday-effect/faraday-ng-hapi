@@ -3,7 +3,8 @@
 const Hapi = require('hapi');
 const Good = require('good');
 const Nes = require('nes');
-
+const Poop = require('poop');
+const Path = require('path');
 const server = new Hapi.Server();
 server.connection({
     port: 3000,
@@ -39,7 +40,16 @@ server.register([
     }
 });
 
-//Server logging and starting functionality
+//Registers and sets up Poop (dump logging to a file)
+server.register({
+    register: Poop,
+    options: {
+        logPath: Path.join(__dirname, 'logs', 'poop.log'),
+        heapdumpFolder: Path.join(__dirname, 'logs')
+    }
+});
+
+//Registers and sets up logging in the console
 server.register({
     register: Good,
     options: {
