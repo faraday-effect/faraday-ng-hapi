@@ -17,6 +17,10 @@ exports.up = function (knex, Promise) {
             table.integer('current_class')
                 .references('id')
                 .inTable('actual_class')
+        }),
+
+        knex.schema.table('planned_class', function (table) {
+            table.dropColumn('reflection')
         })
     ])
 };
