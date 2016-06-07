@@ -1,6 +1,7 @@
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
 const bookshelf = require('./../bookshelf');
+const Boom = require('boom');
 const saltRounds = 10;
 
 exports.register = function (server, options, next) {
@@ -10,6 +11,8 @@ exports.register = function (server, options, next) {
         handler: function (request, reply) {
             bookshelf.Person.fetchAll().then((Collection) => {
                 reply(Collection);
+            }).catch((err) => {
+                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
             });
         },
         config: {
@@ -25,11 +28,12 @@ exports.register = function (server, options, next) {
             //check session token with {user_id} return error if dif
             bookshelf.Person.where({id: request.params.user_id}).fetch({withRelated: ['sections_enrolled']}).then((model) => {
                 reply(model);
-            }).catch(function (error) {
-                reply({err: error});
+            }).catch(function (err) {
+                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
             });
         },
         config: {
+            notes: 'returns user objects who are students and with what sections they are students of',
             validate: {
                 params: {
                     user_id: Joi.number().positive().integer()
@@ -45,11 +49,12 @@ exports.register = function (server, options, next) {
             //check session token with {user_id} return error if dif
             bookshelf.Person.where({id: request.params.user_id}).fetch({withRelated: ['sections_taught']}).then((model) => {
                 reply(model);
-            }).catch(function (error) {
-                reply({err: error});
+            }).catch(function (err) {
+                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
             });
         },
         config: {
+            notes: 'returns users objects who are instructors and with what sections they are instructors of',
             validate: {
                 params: {
                     user_id: Joi.number().positive().integer()
@@ -65,11 +70,12 @@ exports.register = function (server, options, next) {
             //check session token with {user_id} return error if dif
             bookshelf.Person.where({id: request.params.user_id}).fetch({withRelated: ['sections_ta']}).then((model) => {
                 reply(model);
-            }).catch(function (error) {
-                reply({err: error});
+            }).catch(function (err) {
+                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
             });
         },
         config: {
+            notes: 'returns users objects who are TAs and with what sections they TA',
             validate: {
                 params: {
                     user_id: Joi.number().positive().integer()
@@ -84,11 +90,12 @@ exports.register = function (server, options, next) {
         handler: function (request, reply) {
             bookshelf.Person.where({id: request.params.user_id}).fetch().then((model) => {
                 reply(model)
-            }).catch(function (error) {
-                reply({err: error});
+            }).catch(function (err) {
+                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
             });
         },
         config: {
+            notes: 'returns a user given a valid user_id',
             validate: {
                 params: {
                     user_id: Joi.number().positive().integer()
@@ -107,24 +114,29 @@ exports.register = function (server, options, next) {
                 first_name: request.payload.first_name,
                 last_name: request.payload.last_name,
                 email: request.payload.email,
-                password: hash
+                password: hash,
+                mobile_phone: request.payload.mobile_phone,
+                office_phone: request.payload.office_phone
             }).save().then((model) => {
                 responseJSON = model.toJSON();
                 delete responseJSON['password'];
                 reply(responseJSON);
             }).catch((err) => {
-                reply(err)
+                return reply(Boom.badImplementation('Failed to create a new user', err));
             });
 
         },
         config: {
             auth: false,
+            notes: 'Creates a standard user',
             validate: {
                 payload: {
                     first_name: Joi.string().required(),
                     last_name: Joi.string().required(),
                     email: Joi.string().email().lowercase().required(),
-                    password: Joi.string().required()
+                    password: Joi.string().required(),
+                    mobile_phone: Joi.string().length(10),
+                    office_phone: Joi.string().length(10)
                 }
             }
         }

@@ -22,10 +22,9 @@ exports.register = function (server, options, next) {
                 term_id: request.payload.term_id
             })
                 .save().then(function (model) {
-                //get database
-                reply({statusCode: 200, method: "post", response: model})
-            }).catch(function (error) {
-                reply({statusCode: 500, err: error});
+                reply(model)
+            }).catch(function (err) {
+                return reply(Boom.badImplementation('Failed to create a new section', err));
             });
         },
         config: {
@@ -82,10 +81,9 @@ exports.register = function (server, options, next) {
                         title: request.payload.title
                     }
                 ).then(function (model) {
-                //get database
-                reply({statusCode: 200, method: "put", response: model})
-            }).catch(function (error) {
-                reply({statusCode: 500, err: error});
+                reply(model)
+            }).catch(function (err) {
+                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
             });
         },
         config: {
