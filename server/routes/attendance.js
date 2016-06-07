@@ -11,7 +11,7 @@ exports.register = function (server, options, next) {
             var code = '000000';
             console.log();
             if (request.payload.code === code) {
-                new bookshelf.Attendance({actual_class_id: 0, student_id: 0}).save().then((model) => {
+                new bookshelf.Attendance({actual_class_id: request.payload.actual_class_id, student_id: request.payload.student_id}).save().then((model) => {
                     reply({model: model});
                     //send to socket to instructor projector view 'student id'
                     server.publish('/attendence', {id: student_id, actual_class_id: actual_class_id})
