@@ -14,6 +14,7 @@ import {
   ActivityService,
   ImportantDateService,
   RegisterService,
+  NesService,
   // Components
   LoginComponent,
   AdminComponent,
@@ -43,6 +44,7 @@ import {
     ActivityService,
     ImportantDateService,
     RegisterService,
+    NesService,
   ]
 })
 @Routes([

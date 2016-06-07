@@ -1,3 +1,4 @@
+export * from '../nes.service';
 export * from '../section';
 export * from '../section.service';
 export * from '../+section';
@@ -36,4 +37,3 @@ export * from '../register.service';
 export * from '../+register';
 export * from '../+story-board';
 export * from '../+activity-detail';
-

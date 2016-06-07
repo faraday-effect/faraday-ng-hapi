@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 
-declare var require: any;
-var Nes = require('nes/client');
-
 import {
   Person,
+  NesService,
 } from './shared';
 
 // MOCK
@@ -30,8 +28,8 @@ const PERSONS: Person[] = [
 @Injectable()
 export class AttendanceService {
 
-  constructor() {
-    console.log(Nes);
+  constructor(
+    private nesService: NesService) {
   }
 
   getStudents() {
