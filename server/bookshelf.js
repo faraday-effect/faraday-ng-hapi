@@ -1,3 +1,5 @@
+"use strict";
+
 var knex = require('knex')({
     client: 'pg',
     connection: {
@@ -66,7 +68,7 @@ var Course = Bookshelf.Model.extend({
         return this.belongsToMany(Term, 'offering', 'course_id', 'term_id');
     },
     section: function () {
-        return this.hasMany(Section).through(Offering);
+        return this.hasMany(Section, 'offering');
     }
 });
 
@@ -77,25 +79,28 @@ var Section = Bookshelf.Model.extend({
         return this.belongsTo(Offering);
     },
     course: function () {
-        return this.belongsToMany(Course).through(Offering);
+        return this.belongsTo(Course, 'offering');
     },
     term: function () {
         return this.belongsTo(Term);
-    },
-    actual_class: function () {
-        return this.hasMany(Actual_Class);
     },
     section_weekday: function () {
         return this.hasMany(Section_Weekday);
     },
     instructor: function () {
-        return this.belongsTo(Person).through(Instructor);
+        return this.belongsTo(Person, 'Instructor');
     },
     teaching_assistant: function () {
-        return this.belongsToMany(Person).through(Teaching_Assistant);
+        return this.belongsToMany(Person, 'Teaching_Assistant');
     },
-    student: function () {
-        return this.belongsToMany(Person).through(Student);
+    students: function() {
+        return this.belongsToMany(Person, 'student');
+    },
+    current_class: function() {
+        return this.hasOne(Actual_Class);
+    },
+    section: function() {
+        return this.hasMany(Actual_Class, 'section_id')
     }
 });
 
@@ -127,11 +132,14 @@ var Planned_Class = Bookshelf.Model.extend({
 //Actual Class
 var Actual_Class = Bookshelf.Model.extend({
     tableName: 'actual_class',
-    section_id: function () {
-        return this.belongsTo(Section);
-    },
     attendance: function () {
         return this.hasMany(Attendance);
+    },
+    current_class: function() {
+        return this.belongsTo(Section, 'current_class')
+    },
+    section: function() {
+        return this.belongsTo(Section)
     }
 });
 
@@ -257,14 +265,14 @@ var Student = Bookshelf.Model.extend({
         return this.belongsTo(Person);
     },
     attendance: function () {
-        return this.hasMany(Attendance);
+        return this.hasMany(Attendance, 'student_id');
     }
 });
 
 //Attendance
 var Attendance = Bookshelf.Model.extend({
     tableName: 'attendance',
-    student: function () {
+    students: function () {
         return this.belongsTo(Student);
     },
     actual_class: function () {
