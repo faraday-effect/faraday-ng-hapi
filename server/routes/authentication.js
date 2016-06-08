@@ -89,12 +89,14 @@ exports.register = function (server, options, next) {
     server.route({
         method: 'POST',
         path: '/logout',
-        handler: function (request, reply) {
-            request.cookieAuth.clear();
+        handler: function (request, reply) {          
             server.app.cache.drop(request.auth.artifacts.sid, (err) => {
-                return reply(Boom.badImplementation('Couldn\'t drop cache entry for SID ' + request.auth.artifacts.sid, err));
+                if(err){
+                    return reply(Boom.badImplementation('Couldn\'t drop cache entry for user', err));
+                }
             });
-            reply({success: true})
+            request.cookieAuth.clear();
+            return reply({statusCode: 200, message: 'Logout successful', success: true});
         },
         config: {
             notes: 'Removes session token from the browser & server\'s cache'

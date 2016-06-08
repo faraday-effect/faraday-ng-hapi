@@ -29,14 +29,14 @@ exports.register = function (server, options, next) {
                             return reply(Boom.badImplementation('Failed to create attendance instance', err));
                         });
                     } else {
-                return reply(Boom.badData('the code you entered was incorrect'));
+                return reply(Boom.badData('The code you entered was incorrect'));
                     }
                 } else {
                     return reply(model);
                 }
                 
             }).catch((err) => {
-                return reply(Boom.badImplementation('I blew up', err));
+                return reply(Boom.badImplementation('Failed to find your attendence records', err));
             });
         },
         config: {
