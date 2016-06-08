@@ -11,15 +11,16 @@ exports.register = function (server, options, next) {
             var code = '000000';
             console.log();
             if (request.payload.code === code) {
-                new bookshelf.Attendance({actual_class_id: 0, student_id: 0}).save().then((model) => {
+                new bookshelf.Attendance({'actual_class_id': request.payload.actual_class_id, 'student_id': request.payload.student_id}).save().then((model) => {
                     reply({model: model});
                     //send to socket to instructor projector view 'student id'
+                    server.publish('/attendence', {id: request.payload.student_id, actual_class_id: request.payload.actual_class_id});
                 }).catch((err) => {
                     return reply(Boom.badImplementation('Failed to create attendance instance', err));
                 });
             }
             else
-                reply(Boom.badData(['the code you entered was incorrect']));
+                return reply(Boom.badData(['the code you entered was incorrect']));
         },
         config: {
             notes: 'Puts a student inside the class when the course code is correct',
