@@ -90,10 +90,10 @@ exports.register = function (server, options, next) {
         method: 'POST',
         path: '/logout',
         handler: function (request, reply) {
+            request.cookieAuth.clear();
             server.app.cache.drop(request.auth.artifacts.sid, (err) => {
                 return reply(Boom.badImplementation('Couldn\'t drop cache entry for SID ' + request.auth.artifacts.sid, err));
             });
-            request.cookieAuth.clear();
             reply({success: true})
         },
         config: {
