@@ -111,7 +111,7 @@ exports.register = function (server, options, next) {
         path: '/sections/{section_id}/today',
         handler: function (request, reply) {
             new bookshelf.Actual_Class({
-                date: new Date(),
+                start_time: new Date(),
                 section_id: request.params.section_id
             })
                 .save().then(function (newModel) {
