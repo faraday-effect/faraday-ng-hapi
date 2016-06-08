@@ -265,14 +265,14 @@ var Student = Bookshelf.Model.extend({
         return this.belongsTo(Person);
     },
     attendance: function () {
-        return this.hasMany(Attendance);
+        return this.hasMany(Attendance, 'student_id');
     }
 });
 
 //Attendance
 var Attendance = Bookshelf.Model.extend({
     tableName: 'attendance',
-    student: function () {
+    students: function () {
         return this.belongsTo(Student);
     },
     actual_class: function () {

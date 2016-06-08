@@ -53,26 +53,6 @@ exports.register = function (server, options, next) {
     });
 
     server.route({
-        method: 'GET',
-        path: '/attendance',
-        handler: function (request, reply) {
-            bookshelf.Attendance.where('actual_class_id', request.params.actual_class_id).fetchAll().then((Collection) => {
-                reply(Collection);
-            }).catch(function (err) {
-                return reply(Boom.badImplementation('Couldn\'t find attendance records for class ID ' + request.params.actual_class_id, err));
-            });
-        },
-        config: {
-            notes: 'returns the attendence for a class',
-            validate: {
-                params: {
-                    actual_class_id: Joi.number().integer().required()
-                }
-            }
-        }
-    });
-
-    server.route({
         method: 'DELETE',
         path: '/attendance',
         handler: function (request, reply) {
