@@ -9,7 +9,7 @@ exports.register = function (server, options, next) {
         path: '/attendance',
         handler: function (request, reply) {
             var code = '000000';
-            console.log();
+            
             if (request.payload.code === code) {
                 new bookshelf.Attendance({'actual_class_id': request.payload.actual_class_id, 'student_id': request.payload.student_id}).save().then((model) => {
                     reply({model: model});
