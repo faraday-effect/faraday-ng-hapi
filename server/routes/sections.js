@@ -82,12 +82,18 @@ exports.register = function (server, options, next) {
                             console.log(person.attributes);
                             itemsProcessed++;
                             response.push(person.attributes);
-                            if(Collection.length === itemsProcessed){
+                            if (Collection.length === itemsProcessed) {
                                 return reply(response);
                             }
-                        });
+                        }).catch((err) => {
+                        return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));    
                     });
-                });
+                    });
+                }).catch((err) => {
+                return reply(Boom.badRequest('There are no students in this class', err));    
+            });
+            }).catch((err) => {
+                return reply(Boom.badData('The section you are requesting attendence for does not exist', err));
             });
         },
         config: {
