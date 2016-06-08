@@ -6,3 +6,4 @@ build/
 /etc/unwedge/test-db.sqlite
 /server/express-admin/settings.json
 /server/logs/
+foo.*

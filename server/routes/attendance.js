@@ -33,8 +33,6 @@ exports.register = function (server, options, next) {
             }
         }
     });
-    next();
-
 
     server.route({
         method: 'GET',

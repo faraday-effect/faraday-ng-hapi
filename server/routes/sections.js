@@ -1,3 +1,5 @@
+"use strict";
+
 const Joi = require('joi');
 const bookshelf = require('./../bookshelf');
 const Boom = require('boom');
@@ -73,28 +75,15 @@ exports.register = function (server, options, next) {
         method: 'GET',
         path: '/sections/{section_id}/students',
         handler: function (request, reply) {
-            var response = [];
-            itemsProcessed = 0;
-            bookshelf.Section.where({ id: request.params.section_id }).fetch().then(function (model) {
-                bookshelf.Student.where({ section_id: model.get('id') }).fetchAll().then(function (Collection) {
-                    Collection.forEach((student) => {
-                        bookshelf.Person.where({ id: student.get('person_id') }).fetch().then((person) => {
-                            console.log(person.attributes);
-                            itemsProcessed++;
-                            response.push(person.attributes);
-                            if (Collection.length === itemsProcessed) {
-                                return reply(response);
-                            }
-                        }).catch((err) => {
-                        return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));    
-                    });
-                    });
-                }).catch((err) => {
-                return reply(Boom.badRequest('There are no students in this class', err));    
-            });
-            }).catch((err) => {
-                return reply(Boom.badData('The section you are requesting attendence for does not exist', err));
-            });
+            new bookshelf.Section({id: request.params.section_id})
+                .students()
+                .fetch()
+                .then(function(collection) {
+                    return reply(collection.toJSON());
+                })
+                .catch(function(err) {
+                    reply(Boom.badImplementation('Failed to fetch students', err));
+                });
         },
         config: {
             notes: 'returns a list of students for a given class',
