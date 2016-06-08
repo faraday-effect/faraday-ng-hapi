@@ -17,7 +17,6 @@ exports.register = function (server, options, next) {
             .fetch()
             .then((model) => {
                 if (model == null) {
-                    console.log('I AM NULL');
                     if (request.payload.code === code) {
                         new bookshelf.Attendance({
                             'actual_class_id': request.payload.actual_class_id,
@@ -30,14 +29,14 @@ exports.register = function (server, options, next) {
                             return reply(Boom.badImplementation('Failed to create attendance instance', err));
                         });
                     } else {
-                return reply(Boom.badData('the code you entered was incorrect'));
+                return reply(Boom.badData('The code you entered was incorrect'));
                     }
                 } else {
                     return reply(model);
                 }
                 
             }).catch((err) => {
-                return reply(Boom.badImplementation('I blew up', err));
+                return reply(Boom.badImplementation('Failed to find your attendence records', err));
             });
         },
         config: {
