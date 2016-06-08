@@ -32,8 +32,10 @@ exports.register = function (server, options, next) {
                     } else {
                 return reply(Boom.badData('the code you entered was incorrect'));
                     }
+                } else {
+                    return reply(model);
                 }
-                reply(model);
+                
             }).catch((err) => {
                 return reply(Boom.badImplementation('I blew up', err));
             });
@@ -65,6 +67,35 @@ exports.register = function (server, options, next) {
             validate: {
                 params: {
                     actual_class_id: Joi.number().integer().required()
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'DELETE',
+        path: '/attendance',
+        handler: function (request, reply) {
+            bookshelf.Attendance.forge()
+                .where({actual_class_id: request.payload.actual_class_id,  
+                student_id: request.payload.student_id})
+                .save({
+                signed_out: new Date()
+            },
+            { method: 'update', patch: true })
+                .then((model) => {
+                    model.fetch()
+                    .then((newModel) => {
+                        reply(newModel);
+                    });
+                });
+        },
+        config: {
+            notes: 'Puts a student inside the class when the course code is correct',
+            validate: {
+                payload: {
+                    actual_class_id: Joi.number().integer().required(),
+                    student_id: Joi.number().integer().required()
                 }
             }
         }
