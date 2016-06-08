@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import 'rxjs/add/operator/toPromise';
+import { Observable } from 'rxjs/Observable';
 
-import { Section } from './shared';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/throw';
+
+//import { Section } from './shared';
 
 // MOCK
 const SECTIONS: any[] = [
@@ -44,17 +47,15 @@ export class SectionService {
 
   constructor(private http: Http) { }
 
-  getSections(): Promise<Section[]> {
+  getSections() {
     return this.http.get(this.sectionUrl)
-      .toPromise()
-      .then(response => response.json())
+      .map(response => response.json())
       .catch(this.handleError);
   }
 
   getSection(id: number) {
     return this.http.get(this.sectionUrl+'/'+id)
-      .toPromise()
-      .then(response => response.json())
+      .map(response => response.json())
       .catch(this.handleError);
   }
   // FIXME MOCK method
@@ -67,8 +68,13 @@ export class SectionService {
     return Promise.resolve(SECTIONS[0]);
   }
 
-  handleError(err: any) {
-    console.error("SectionService", err);
+  handleError(error: any) {
+    let errMsg = (error.message) ? error.message :
+      error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+    console.error(errMsg); // log to console instead
+    console.log('SectionService: there is an error');
+    console.log(error);
+    return Observable.throw(errMsg);
   }
 
 }

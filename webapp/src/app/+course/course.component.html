@@ -1,14 +1,18 @@
 <div class="course">
 
+  <md-card *ngIf="errorMessage" class="error">
+    Error: {{ errorMessage }}
+  </md-card>
+
   <md-card *ngIf="course">
     <md-card-title>{{course.title}}</md-card-title>
     <md-card-subtitle>{{course.prefix}} {{course.number}}</md-card-subtitle>
     <md-card-content>
       <p *ngIf="! course.hidden">
-        This course is hidden...
+        This course is not hidden...
       </p>
       <p *ngIf="course.hidden">
-        This course is not hidden!
+        This course is hidden!
       </p>
     </md-card-content>
     <md-card-actions>

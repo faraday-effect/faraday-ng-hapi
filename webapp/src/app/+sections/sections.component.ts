@@ -25,6 +25,7 @@ import {
 export class SectionsComponent implements OnInit {
 
   sections: Section[] = [];
+  errorMessage: string;
 
   constructor(
     private router: Router,
@@ -33,7 +34,10 @@ export class SectionsComponent implements OnInit {
 
   ngOnInit() {
     this.sectionService.getSections()
-      .then(sections => this.sections = sections);
+      .subscribe(
+        sections => this.sections = sections,
+        error =>  this.errorMessage = <any>error
+      );
   }
 
   gotoSection(id: number) {

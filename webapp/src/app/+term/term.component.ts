@@ -15,6 +15,7 @@ import { Term, TermService } from '../shared';
 export class TermComponent implements OnActivate {
 
   term: Term;
+  errorMessage: string;
 
   constructor(
     private termService: TermService) {
@@ -23,7 +24,10 @@ export class TermComponent implements OnActivate {
   routerOnActivate(curr: RouteSegment) {
     let id = +curr.getParam('id');
     this.termService.getTerm(id)
-      .then(term => this.term = term);
+      .subscribe(
+        term => this.term = term,
+        error =>  this.errorMessage = <any>error
+      );
   }
 
 }

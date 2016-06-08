@@ -1,7 +1,7 @@
 <md-toolbar color="primary">
-  <span *ngIf="course">
-    <b>{{course.prefix}} {{course.number}}</b>
-    {{course.title}}
+  <span *ngIf="section">
+    <b> {{ section.course.prefix }} {{ section.course.number }}</b>
+    <span> {{ section.course.title }}</span>
   </span>
   <span class="fill-space"></span>
   Cue Sheet

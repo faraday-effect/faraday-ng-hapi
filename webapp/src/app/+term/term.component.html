@@ -1,5 +1,9 @@
 <div class="term">
 
+  <md-card *ngIf="errorMessage" class="error">
+    Error: {{ errorMessage }}
+  </md-card>
+
   <md-card *ngIf="term">
     <md-card-title>{{term.name}}</md-card-title>
     <md-card-subtitle>ID: {{term.id}} </md-card-subtitle>

@@ -15,6 +15,7 @@ import { Department, DepartmentService } from '../shared';
 export class DepartmentComponent implements OnActivate {
 
   department: Department;
+  errorMessage: string;
 
   constructor(
     private departmentService: DepartmentService) {
@@ -23,7 +24,10 @@ export class DepartmentComponent implements OnActivate {
   routerOnActivate(curr: RouteSegment) {
     let id = +curr.getParam('id');
     this.departmentService.getDepartment(id)
-      .then(department => this.department = department);
+      .subscribe(
+        department => this.department = department,
+        error =>  this.errorMessage = <any>error
+      );
   }
 
 }

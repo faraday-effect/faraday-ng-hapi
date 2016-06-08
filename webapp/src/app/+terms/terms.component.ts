@@ -24,6 +24,7 @@ import {
 export class TermsComponent implements OnInit {
 
   terms: Term[] = [];
+  errorMessage: string;
 
   constructor(
     private router: Router,
@@ -32,7 +33,10 @@ export class TermsComponent implements OnInit {
 
   ngOnInit() {
     this.termService.getTerms()
-      .then(terms => this.terms = terms);
+      .subscribe(
+        terms => this.terms = terms,
+        error =>  this.errorMessage = <any>error
+      );
   }
 
   gotoTerm(id: number) {

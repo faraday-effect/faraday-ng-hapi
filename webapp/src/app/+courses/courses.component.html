@@ -1,5 +1,9 @@
 <div class="courses">
 
+  <md-card *ngIf="errorMessage" class="error">
+    Error: {{ errorMessage }}
+  </md-card>
+
   <md-checkbox (change)="showHidden = $event.checked">
     Show Hidden
   </md-checkbox>

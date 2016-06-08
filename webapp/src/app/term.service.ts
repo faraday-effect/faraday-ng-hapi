@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers } from '@angular/http';
-import 'rxjs/add/operator/toPromise';
+import { Http } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 
-import { Term } from './shared';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/throw';
+
+//import { Term } from './shared';
 
 @Injectable()
 export class TermService {
@@ -11,22 +14,25 @@ export class TermService {
 
   constructor(private http: Http) { }
 
-  getTerms(): Promise<Term[]> {
+  getTerms() {
     return this.http.get(this.termsUrl)
-      .toPromise()
-      .then(response => response.json())
+      .map(response => response.json())
       .catch(this.handleError);
   }
 
   getTerm(id: number) {
     return this.http.get(this.termsUrl+'/'+id)
-      .toPromise()
-      .then(response => response.json())
+      .map(response => response.json())
       .catch(this.handleError);
   }
 
-  handleError(err: any) {
-    console.error("TermService", err);
+  handleError(error: any) {
+    let errMsg = (error.message) ? error.message :
+      error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+    console.error(errMsg); // log to console instead
+    console.log('TermService: there is an error');
+    console.log(error);
+    return Observable.throw(errMsg);
   }
 
 }

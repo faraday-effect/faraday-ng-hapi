@@ -1,5 +1,9 @@
 <div class="terms">
 
+  <md-card *ngIf="errorMessage" class="error">
+    Error: {{ errorMessage }}
+  </md-card>
+  
   <md-card *ngFor="let term of terms">
     <button md-button (click)="gotoTerm(term.id)">{{term.name}}</button>
   </md-card>

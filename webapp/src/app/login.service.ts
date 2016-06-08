@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+
+import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/throw';
+
 
 @Injectable()
 export class LoginService {
@@ -16,20 +21,27 @@ export class LoginService {
       password: password,
     });
     return this.http.post(this.loginUrl, message)
-        .toPromise()
-        .then(response => response.json())
+        .map(response => response.json())
         .catch(this.handleError);
   }
 
   logout() {
     return this.http.post(this.logoutUrl, "")
-               .toPromise()
-               .then(response => response.json())
+               .map(response => response.json())
                .catch(this.handleError);
   }
 
-  private handleError(err) {
-    console.error("LoginService", err);
+  private handleError(error: any) {
+    let errMsg = (error.message) ? error.message :
+      error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+    console.error(errMsg); // log to console instead
+    console.log('LoginService: there is an error');
+    console.log(error);
+    return Observable.throw(errMsg);
   }
+
+//  private handleError(err) {
+//    console.error("LoginService", err);
+//  }
 
 }

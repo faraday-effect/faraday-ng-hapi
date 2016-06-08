@@ -40,7 +40,8 @@ export class AttendanceComponent implements OnInit {
 
   ngOnInit() {
     this.sectionService.getSections()
-        .then(sections => this.section_id = sections[0].id)
+        .toPromise()
+        .then(sections => this.section_id = sections.sort()[4].id)
         .then(() => this.attendanceService.getStudents(this.section_id))
         .then(students => {
           this.students = students
@@ -79,18 +80,13 @@ export class AttendanceComponent implements OnInit {
   }
 
   startClass() {
-    this.http.get('http://localhost:3000/sections')
-        .toPromise()
-        .then(response => response.json())
-        .then(sections => {
-          // this.section = sections[0];
-          // console.log("section:", this.section);
-          return this.http.post(`http://localhost:3000/sections/${this.section_id}/today`,
-                                `{"section_id": ${this.section_id}}`).toPromise();
-        })
-        .then(response => response.json())
-        .then(cl => this.classId = cl.id)
-        .then(() => console.log("classId:", this.classId));
+    let url = `http://localhost:3000/sections/${this.section_id}/today`;
+    let msg = `{"section_id": ${this.section_id}}`;
+    return this.http.post(url, msg)
+               .toPromise()
+               .then(response => response.json())
+               .then(cl => this.classId = cl.id)
+               .then(() => console.log("classId:", this.classId));
   }
 
 }
