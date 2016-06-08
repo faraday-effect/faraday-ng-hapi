@@ -4,7 +4,8 @@
   "description": "LMS 2.0",
   "main": "index.js",
   "scripts": {
-    "test": "lab"
+    "test": "lab --globals __core-js_shared__ ",
+    "test-coverage":  "lab --coverage --globals __core-js_shared__ "
   },
   "repository": {
     "type": "git",
