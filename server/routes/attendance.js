@@ -9,18 +9,34 @@ exports.register = function (server, options, next) {
         path: '/attendance',
         handler: function (request, reply) {
             var code = '000000';
-            
-            if (request.payload.code === code) {
-                new bookshelf.Attendance({'actual_class_id': request.payload.actual_class_id, 'student_id': request.payload.student_id}).save().then((model) => {
-                    reply({model: model});
-                    //send to socket to instructor projector view 'student id'
-                    server.publish('/attendence', {id: request.payload.student_id, actual_class_id: request.payload.actual_class_id});
-                }).catch((err) => {
-                    return reply(Boom.badImplementation('Failed to create attendance instance', err));
-                });
-            }
-            else
-                return reply(Boom.badData(['the code you entered was incorrect']));
+            bookshelf.Attendance
+            .forge({
+                    'actual_class_id': request.payload.actual_class_id, 
+                    'student_id': request.payload.student_id
+            })
+            .fetch()
+            .then((model) => {
+                if (model == null) {
+                    console.log('I AM NULL');
+                    if (request.payload.code === code) {
+                        new bookshelf.Attendance({
+                            'actual_class_id': request.payload.actual_class_id,
+                            'student_id': request.payload.student_id,
+                            'signed_in': new Date()
+                        }).save().then((model) => {
+                            server.publish('/attendence', { student_id: request.payload.student_id, actual_class_id: request.payload.actual_class_id });
+                            return reply(model);
+                        }).catch((err) => {
+                            return reply(Boom.badImplementation('Failed to create attendance instance', err));
+                        });
+                    } else {
+                return reply(Boom.badData('the code you entered was incorrect'));
+                    }
+                }
+                reply(model);
+            }).catch((err) => {
+                return reply(Boom.badImplementation('I blew up', err));
+            });
         },
         config: {
             notes: 'Puts a student inside the class when the course code is correct',
