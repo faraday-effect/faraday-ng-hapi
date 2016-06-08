@@ -1,5 +1,9 @@
 <div class="section">
 
+  <md-card *ngIf="errorMessage" class="error">
+    Error: {{ errorMessage }}
+  </md-card>
+
   <md-card *ngIf="section">
     <md-card-title>{{section.title}}</md-card-title>
     <md-card-subtitle>Registration Number: {{section.reg_number}}</md-card-subtitle>

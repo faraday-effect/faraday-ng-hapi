@@ -36,9 +36,10 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.loginService.login(this.email, this.password).then(
-      r => console.log(r)
-    );
+    this.loginService.login(this.email, this.password)
+      .subscribe(
+        r => console.log(r)
+      );
   }
 
   logout() {

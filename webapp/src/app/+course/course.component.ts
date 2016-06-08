@@ -16,6 +16,7 @@ export class CourseComponent implements OnActivate {
 
   course: Course;
   routeSegment: RouteSegment;
+  errorMessage: string;
 
   constructor(
     private router: Router,
@@ -26,13 +27,16 @@ export class CourseComponent implements OnActivate {
     this.routeSegment = curr;
     let id = +curr.getParam('id');
     this.courseService.getCourse(id)
-        .then(course => this.course = course);
+      .subscribe(
+        course => this.course = course,
+        error =>  this.errorMessage = <any>error
+      );
   }
 
   hideCourse() {
     let id = +this.routeSegment.getParam('id');
     this.courseService.hideCourse(id)
-        .then(() => this.router.navigate(['/admin/courses'])); // FIXME ADMIN
+        .subscribe(() => this.router.navigate(['/admin/courses'])); // FIXME ADMIN
   }
 
 }

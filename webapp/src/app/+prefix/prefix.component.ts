@@ -15,6 +15,7 @@ import { Prefix, PrefixService } from '../shared';
 export class PrefixComponent implements OnActivate {
 
   prefix: Prefix;
+  errorMessage: string;
 
   constructor(
     private prefixService: PrefixService) {
@@ -23,7 +24,10 @@ export class PrefixComponent implements OnActivate {
   routerOnActivate(curr: RouteSegment) {
     let id = +curr.getParam('id');
     this.prefixService.getPrefix(id)
-      .then(prefix => this.prefix = prefix);
+      .subscribe(
+        prefix => this.prefix = prefix,
+        error =>  this.errorMessage = <any>error
+      );
   }
 
 }

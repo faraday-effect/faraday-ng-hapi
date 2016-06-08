@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
 
 import {
+  Section,
+  SectionService,
   Course,
   CourseService,
   TodaysTopicsComponent,
@@ -25,16 +27,16 @@ import { AttendanceComponent } from './attendance';
 })
 export class CueSheetComponent implements OnInit {
 
-  course: Course;
+  section: Section;
 
   constructor(
-    private courseService: CourseService) {
+    private sectionService: SectionService) {
   }
 
   ngOnInit() {
-    // FIXME hardcoded course
-    this.courseService.getCourses().then(
-      courses => this.course = courses[0]
+    // FIXME hardcoded section
+    this.sectionService.getMockSections().then(
+      sections => this.section = sections[0]
     );
   }
 

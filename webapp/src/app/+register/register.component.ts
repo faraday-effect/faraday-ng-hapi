@@ -49,11 +49,11 @@ export class RegisterComponent implements OnInit {
       this.last_name,
       this.email,
       this.password
-    ).then(() => this.getUsers());
+    ).subscribe(() => this.getUsers());
   }
 
   private getUsers() {
-    this.registerService.getUsers().then(
+    this.registerService.getUsers().subscribe(
       users => this.users = users
     );
   }

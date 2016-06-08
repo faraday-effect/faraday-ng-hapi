@@ -25,6 +25,7 @@ import {
 export class DepartmentsComponent implements OnInit {
 
   departments: Department[] = [];
+  errorMessage: string;
 
   constructor(
     private router: Router,
@@ -33,7 +34,10 @@ export class DepartmentsComponent implements OnInit {
 
   ngOnInit() {
     this.departmentService.getDepartments()
-      .then(departments => this.departments = departments);
+      .subscribe(
+        departments => this.departments = departments,
+        error =>  this.errorMessage = <any>error
+      );
   }
 
   gotoDepartment(id: number) {

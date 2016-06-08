@@ -24,6 +24,7 @@ import {
 export class PrefixesComponent implements OnInit {
 
   prefixes: Prefix[] = [];
+  errorMessage: string;
 
   constructor(
     private router: Router,
@@ -32,7 +33,10 @@ export class PrefixesComponent implements OnInit {
 
   ngOnInit() {
     this.prefixService.getPrefixes()
-      .then(prefixes => this.prefixes = prefixes);
+      .subscribe(
+        prefixes => this.prefixes = prefixes,
+        error =>  this.errorMessage = <any>error
+      );
   }
 
   gotoPrefix(id: number) {

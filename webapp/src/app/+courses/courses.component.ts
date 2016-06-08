@@ -1,6 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
+//import {Observable} from 'rxjs/Observable';
+//import 'rxjs/add/operator/map';
+
 import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
 import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 import { MD_CHECKBOX_DIRECTIVES } from '@angular2-material/checkbox';
@@ -27,6 +30,7 @@ import {
 export class CoursesComponent implements OnInit {
 
   courses: Course[] = [];
+  errorMessage: string;
   @Input() showHidden = false;
 
   constructor(
@@ -37,7 +41,10 @@ export class CoursesComponent implements OnInit {
   ngOnInit() {
     console.log(this);
     this.courseService.getCourses()
-        .then(courses => this.courses = courses);
+        .subscribe(
+          courses => this.courses = courses,
+          error =>  this.errorMessage = <any>error
+        );
   }
 
   gotoCourse(id: number) {

@@ -1,5 +1,9 @@
 <div class="prefixes">
 
+  <md-card *ngIf="errorMessage" class="error">
+    Error: {{ errorMessage }}
+  </md-card>
+
   <md-card *ngFor="let prefix of prefixes">
     <button md-button (click)="gotoPrefix(prefix.id)">{{prefix.name}}</button>
   </md-card>

@@ -12,6 +12,7 @@ import { Section, SectionService } from '../shared';
 export class SectionComponent implements OnActivate {
 
   section: Section;
+  errorMessage: string;
 
   constructor(
     private sectionService: SectionService) {
@@ -20,7 +21,10 @@ export class SectionComponent implements OnActivate {
   routerOnActivate(curr: RouteSegment) {
    let id = +curr.getParam('id');
    this.sectionService.getSection(id)
-     .then(section => this.section = section);
+     .subscribe(
+       section => this.section = section,
+       error =>  this.errorMessage = <any>error
+     );
   }
 
 }

@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import 'rxjs/add/operator/toPromise';
+import { Observable } from 'rxjs/Observable';
+
+import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/throw';
 
 @Injectable()
 export class RegisterService {
@@ -19,20 +22,23 @@ export class RegisterService {
       password: password,
     });
     return this.http.post(this.userUrl, message)
-               .toPromise()
-               .then(response => response.json())
+               .map(response => response.json())
                .catch(this.handleError);
   }
 
   getUsers() {
     return this.http.get(this.userUrl)
-               .toPromise()
-               .then(response => response.json())
+               .map(response => response.json())
                .catch(this.handleError);
   }
 
-  private handleError(err) {
-    console.error("RegisterService", err);
+  private handleError(error: any) {
+    let errMsg = (error.message) ? error.message :
+      error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+    console.error(errMsg); // log to console instead
+    console.log('RegisterService: there is an error');
+    console.log(error);
+    return Observable.throw(errMsg);
   }
 
 }
