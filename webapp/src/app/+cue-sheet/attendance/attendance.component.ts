@@ -8,6 +8,7 @@ import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
 
 import {
   AttendanceService,
+  SectionService,
   Person,
   Section,
 } from '../../shared';
@@ -28,25 +29,25 @@ export class AttendanceComponent implements OnInit {
 
   students: Person[] = [];
   attending = {};
-  // section: Section;
   classId: number;
   section_id: number;
 
   constructor(
     private http: Http,
+    private sectionService: SectionService,
     private attendanceService: AttendanceService) {
   }
 
   ngOnInit() {
-    this.section_id = 41;
-    this.attendanceService.getStudents(this.section_id).then(
-      students => {
-        this.students = students
-        this.students.sort(
-          (a, b) => a.first_name.localeCompare(b.first_name)
-        );
-      }
-    );
+    this.sectionService.getSections()
+        .then(sections => this.section_id = sections[0].id)
+        .then(() => this.attendanceService.getStudents(this.section_id))
+        .then(students => {
+          this.students = students
+          this.students.sort(
+            (a, b) => a.first_name.localeCompare(b.first_name)
+          );
+        });
 
     this.attendanceService.handleArrive(ids => {
       for (let id of ids) {

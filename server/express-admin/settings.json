@@ -429,6 +429,22 @@
                 "editview": {
                     "show": true
                 }
+            },
+            {
+                "name": "current_class",
+                "verbose": "current_class",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
             }
         ],
         "mainview": {
@@ -529,6 +545,38 @@
                 "editview": {
                     "show": true
                 }
+            },
+            {
+                "name": "start_time",
+                "verbose": "start_time",
+                "control": {
+                    "text": true
+                },
+                "type": "timestamp",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "stop_time",
+                "verbose": "stop_time",
+                "control": {
+                    "text": true
+                },
+                "type": "timestamp",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
             }
         ],
         "mainview": {
@@ -593,6 +641,38 @@
                 },
                 "type": "integer",
                 "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "signed_in",
+                "verbose": "signed_in",
+                "control": {
+                    "text": true
+                },
+                "type": "timestamp",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "signed_out",
+                "verbose": "signed_out",
+                "control": {
+                    "text": true
+                },
+                "type": "timestamp",
+                "allowNull": true,
                 "defaultValue": null,
                 "listview": {
                     "show": true
