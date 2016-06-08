@@ -40,9 +40,7 @@ export class AttendanceService {
   constructor(
     private nesService: NesService,
     private http: Http) {
-      this.nesService.subscribe('/attendence', msg => {
-        console.log("attendance:", msg);
-      });
+      this.nesService.subscribe('/attendence', msg => this.arriveHandler([msg.id]));
   }
 
   getStudents(id) {
