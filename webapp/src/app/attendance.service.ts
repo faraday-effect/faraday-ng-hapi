@@ -31,6 +31,8 @@ const PERSONS: Person[] = [
 export class AttendanceService {
 
   sectionsUrl = "http://localhost:3000/sections";
+  attendanceUrl = "http://localhost:3000/attendance";
+  classCode = "000000";
 
   arriveHandler: Function;
   departHandler: Function;
@@ -38,16 +40,16 @@ export class AttendanceService {
   constructor(
     private nesService: NesService,
     private http: Http) {
+      this.nesService.subscribe('/attendence', msg => {
+        console.log("attendance:", msg);
+      });
   }
 
   getStudents(id) {
-    return Promise.resolve(PERSONS);
-    /*
     return this.http.get(this.sectionsUrl+`/${id}/students`)
                .toPromise()
                .then(response => response.json())
                .catch(this.handleError);
-    //*/
   }
 
   handleArrive(handler: Function) {
@@ -58,20 +60,24 @@ export class AttendanceService {
     this.departHandler = handler;
   }
 
-  attend(id: number) {
-    this.arriveHandler([id]);
+  attend(id: number, classId: number) {
+    let message = JSON.stringify({
+      student_id: id,
+      actual_class_id: classId,
+      code: this.classCode,
+    });
+    console.log(message);
+    this.http.post(this.attendanceUrl, message)
+        .toPromise()
+        .then(response => response.json());
   }
 
-  depart(id: number) {
+  depart(id: number, classId: number) {
     this.departHandler([id]);
   }
 
   handleError(err) {
     console.log("AttendanceService", err);
-  }
-
-  private randId() {
-    return Math.floor((Math.random() * PERSONS.length));
   }
 
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Http } from '@angular/http';
 
 import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
 import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
@@ -8,6 +9,7 @@ import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
 import {
   AttendanceService,
   Person,
+  Section,
 } from '../../shared';
 
 @Component({
@@ -26,14 +28,18 @@ export class AttendanceComponent implements OnInit {
 
   students: Person[] = [];
   attending = {};
+  // section: Section;
+  classId: number;
+  section_id: number;
 
   constructor(
+    private http: Http,
     private attendanceService: AttendanceService) {
   }
 
   ngOnInit() {
-    let sectionId = 41;
-    this.attendanceService.getStudents(sectionId).then(
+    this.section_id = 41;
+    this.attendanceService.getStudents(this.section_id).then(
       students => {
         this.students = students
         this.students.sort(
@@ -42,21 +48,17 @@ export class AttendanceComponent implements OnInit {
       }
     );
 
-    this.attendanceService.handleArrive(
-      ids => {
-        for (let id of ids) {
-          this.attending[id] = true;
-        }
+    this.attendanceService.handleArrive(ids => {
+      for (let id of ids) {
+        this.attending[id] = true;
       }
-    );
+    });
 
-    this.attendanceService.handleDepart(
-      ids => {
-        for (let id of ids) {
-          this.attending[id] = false;
-        }
+    this.attendanceService.handleDepart(ids => {
+      for (let id of ids) {
+        this.attending[id] = false;
       }
-    );
+    });
   }
 
   getPresent() {
@@ -68,11 +70,26 @@ export class AttendanceComponent implements OnInit {
   }
 
   attend(id: number) {
-    this.attendanceService.attend(id);
+    this.attendanceService.attend(id, this.classId);
   }
 
   depart(id: number) {
-    this.attendanceService.depart(id);
+    this.attendanceService.depart(id, this.classId);
+  }
+
+  startClass() {
+    this.http.get('http://localhost:3000/sections')
+        .toPromise()
+        .then(response => response.json())
+        .then(sections => {
+          // this.section = sections[0];
+          // console.log("section:", this.section);
+          return this.http.post(`http://localhost:3000/sections/${this.section_id}/today`,
+                                `{"section_id": ${this.section_id}}`).toPromise();
+        })
+        .then(response => response.json())
+        .then(cl => this.classId = cl.id)
+        .then(() => console.log("classId:", this.classId));
   }
 
 }
