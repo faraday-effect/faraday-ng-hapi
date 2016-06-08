@@ -17,7 +17,6 @@ exports.register = function (server, options, next) {
             .fetch()
             .then((model) => {
                 if (model == null) {
-                    console.log('I AM NULL');
                     if (request.payload.code === code) {
                         new bookshelf.Attendance({
                             'actual_class_id': request.payload.actual_class_id,
