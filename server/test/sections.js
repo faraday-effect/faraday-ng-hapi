@@ -5,8 +5,11 @@ const expect = Code.expect;
 const Lab = require('lab');
 const lab = exports.lab = Lab.script();
 
-let server = null;
+const db = require('../db');
 
+const Section = require('../models/Section');
+
+let server = null;
 lab.before((done) => {
     require('../server')((err, srv) => {
         server = srv;
@@ -14,12 +17,29 @@ lab.before((done) => {
     })
 });
 
-lab.test('I am true', (done) => {
-    expect(true).to.be.true();
-    done();
-});
-
 lab.experiment('/sections endpoint', () => {
+
+    lab.beforeEach(done => {
+        return Promise.all([
+            db.knex.raw('TRUNCATE student CASCADE'),
+            db.knex.raw('TRUNCATE section CASCADE')
+        ]).then(results => {
+            console.log("TRUNCATED");
+
+            return Promise.all([
+                Section.query().insert({
+                    id: 1, reg_number: 'REG111', title: 'Section 1' }),
+                Section.query().insert({
+                    id: 2, reg_number: 'REG222', title: 'Section 2' })
+            ])
+        }).then(results => {
+            console.log('INSERTED')
+        }).catch(err => {
+            console.log("ERROR", err)
+        });
+
+        done();
+    });
 
     lab.test('There are 10 sections', (done) => {
         server.inject(
@@ -66,5 +86,6 @@ lab.experiment('/sections endpoint', () => {
                 done();
             })
     });
-    
-});
+
+})
+;
