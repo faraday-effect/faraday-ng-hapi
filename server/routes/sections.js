@@ -3,7 +3,9 @@
 const Joi = require('joi');
 const bookshelf = require('./../bookshelf');
 const Boom = require('boom');
-const Section = require('./../models/section')
+const Section = require('./../models/Section')
+const Offering = require('./../models/Offering')
+const Course = require('./../models/Course')
 
 exports.register = function (server, options, next) {
     server.route({
@@ -59,7 +61,7 @@ exports.register = function (server, options, next) {
                 .where('id', request.params.section_id)
                 .first()
                 .then((section) => {
-                    reply(section);
+                    reply(section.$relatedQuery('offering'));
                 })
                 .catch((err) => {
                     return reply(Boom.notFound('Section ' + request.params.section_id + ' not found!', err));

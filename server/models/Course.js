@@ -36,4 +36,4 @@ class Course extends Model {
     }
 }
 
-module.exports = Section;
+module.exports = Course;

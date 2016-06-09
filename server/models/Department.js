@@ -32,4 +32,4 @@ class Department extends Model {
     }
 }
 
-module.exports = Section;
+module.exports = Department;

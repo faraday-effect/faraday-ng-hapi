@@ -32,4 +32,4 @@ class Prefix extends Model {
     }
 }
 
-module.exports = Section;
+module.exports = Prefix;

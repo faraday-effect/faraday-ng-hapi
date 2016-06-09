@@ -28,4 +28,4 @@ class Offering extends Model {
     }
 }
 
-module.exports = Section;
+module.exports = Offering;
