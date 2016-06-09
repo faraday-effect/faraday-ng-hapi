@@ -14,14 +14,14 @@ exports.register = function (server, options, next) {
         path: '/sections',
         handler: function (request, reply) {
             Section
-            .query()
-            .eager('offering.course.[prefix, department]')
-            .then((sections) => {
-                reply(sections);
-            })
-            .catch((err) => {
-                return reply(Boom.notFound('Failed to retrieve all the sections', err));
-            })
+                .query()
+                .eager('offering.course.[prefix, department]')
+                .then((sections) => {
+                    reply(sections);
+                })
+                .catch((err) => {
+                    return reply(Boom.notFound('Failed to retrieve all the sections', err));
+                })
         }
     });
 
@@ -191,7 +191,7 @@ exports.register = function (server, options, next) {
                 .then((actualClass) => {
                     Section
                         .query()
-                        .patchAndFetchById( actualClass.section_id, {
+                        .patchAndFetchById(actualClass.section_id, {
                             current_class: actualClass.id
                         })
                         .then(() => {
@@ -217,34 +217,47 @@ exports.register = function (server, options, next) {
         method: 'DELETE',
         path: '/sections/{section_id}/today',
         handler: function (request, reply) {
-            bookshelf.Section.forge({ id: request.params.section_id })
-                .current_class()
-                .where({ 'stop_time': null })
-                .save({
-                    stop_time: new Date
-                },
-                { method: 'update', patch: true })
-                .then((model) => {
-                    bookshelf.Section
-                        .forge({ id: request.params.section_id })
-                        .save({
-                            current_class: null
-                        })
-                        .then((newModel) => {
-                            model.fetch().then((section) => {
-                                reply(section);
-                            }).catch((err) => {
-                                return reply(Boom.badImplementation('Failed to end the class', err));
-                            });
-                        }).catch((err) => {
-                            return reply(Boom.badImplementation('Failed to end the class', err));
+            var actual_class_id = -1;
+
+            //Get the current_class from the database
+            Section
+                .query()
+                .select('current_class')
+                .where('id', request.params.section_id)
+                .first()
+                .then((section) => {
+                    actual_class_id = section.current_class
+                    console.log('var set');
+                    console.log(section.current_class);
+                    console.log(actual_class_id);
+                }).then((section) => {
+                    //Update current_class to be null
+                    Section
+                        .query()
+                        .where('id', request.params.section_id)
+                        .patch({ current_class: null })
+                        .then((section) => {
+
+                        }).then((section) => {
+                            //Update actual_class to have a stop_time    
+                            ActualClass
+                                .query()
+                                .patchAndFetchById(actual_class_id, {
+                                    stop_time: new Date
+                                }).then((updatedModel) => {
+                                    if(updatedModel == 0)
+                                        return reply({statusCode: 204, message: 'Class has already ended!'});
+                                    reply(updatedModel)
+                                });
+
                         });
-                }).catch((err) => {
-                    return reply(Boom.badData('This class has already ended', err));
+
                 });
+
+
         },
         config: {
-            notes: 'to be implemented - should remove current_class from section and place the end time on actual class',
+            notes: 'should remove current_class from section and place the end time on actual class',
             validate: {
                 params: {
                     section_id: Joi.number().positive().integer()
@@ -264,6 +277,8 @@ exports.register = function (server, options, next) {
                 .andWhere('stop_time', null)
                 .first()
                 .then((section) => {
+                    if(section == null)
+                        return reply({statusCode: 200, message: 'Your professor has not started class yet'});
                     reply(section);
                 })
                 .catch((err) => {
