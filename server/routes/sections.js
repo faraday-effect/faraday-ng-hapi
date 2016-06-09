@@ -257,15 +257,17 @@ exports.register = function (server, options, next) {
         method: 'GET',
         path: '/sections/{section_id}/today',
         handler: function (request, reply) {
-            new bookshelf.Section({ id: request.params.section_id })
-                .current_class()
-                .where({ 'stop_time': null })
-                .fetch()
-                .then((model) => {
-                    reply(model);
+            ActualClass
+                .query()
+                .select('id', 'start_time', 'section_id')
+                .where('section_id', request.params.section_id)
+                .andWhere('stop_time', null)
+                .first()
+                .then((section) => {
+                    reply(section);
                 })
                 .catch((err) => {
-                    return reply(Boom.badData('Your professor has not started class yet'))
+                    return reply(Boom.badRequest('Your professor has not started class yet'))
                 });
         },
         config: {
@@ -293,7 +295,7 @@ exports.register = function (server, options, next) {
                     reply(updatedModel);
                 })
                 .catch(function (err) {
-                    reply(Boom.badRequest('Failed to edit section ' + request.payload.section_id, err));
+                    reply(Boom.badData('Failed to edit section ' + request.payload.section_id, err));
                 });
         },
         config: {
