@@ -15,8 +15,6 @@ module.exports = function(defaults) {
       '@angular2-material/**/*',
       'nes/**/*',
       'jquery/**/*',
-      'hammerjs/**/*',
-      'materialize-css/**/*',
       'angular2-materialize/**/*'
     ]
   });
