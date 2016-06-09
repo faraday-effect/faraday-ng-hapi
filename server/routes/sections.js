@@ -14,6 +14,7 @@ exports.register = function (server, options, next) {
         handler: function (request, reply) {
             Section
             .query()
+            .eager('offering.course.[prefix, department]')
             .then((sections) => {
                 reply(sections);
             })
@@ -60,11 +61,9 @@ exports.register = function (server, options, next) {
                 .query()
                 .where('id', request.params.section_id)
                 .first()
+                .eager('offering.course.[prefix, department]')
                 .then((section) => {
-                    return section.$relatedQuery('offering');
-                })
-                .then((offering) => {
-                    reply(offering);
+                    reply(section);
                 })
                 .catch((err) => {
                     console.log(err.stack);
@@ -92,9 +91,9 @@ exports.register = function (server, options, next) {
                     return section.$relatedQuery('students');
                 })
                 .then((students) => {
-                    var response = {}
+                    var response = []
                     students.forEach((student) => {
-                        response[student.email] = {'id': student.id, 'first_name': student.first_name, 'last_name': student.last_name}
+                        response.push(student.stripPassword());
                     });
                     return reply(response);
                 });

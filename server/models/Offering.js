@@ -17,7 +17,7 @@ class Offering extends Model {
                 }
             },
             course: {
-                relation: Model.OneToManyRelation,
+                relation: Model.OneToOneRelation,
                 modelClass: __dirname + '/Course',
                 join: {
                     from: 'offering.course_id',

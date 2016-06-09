@@ -10,11 +10,10 @@ class Department extends Model {
         return {
             prefixes: {
                 relation: Model.ManyToManyRelation,
-                modelClass: __dirname + '/Department_Prefix',
+                modelClass: __dirname + '/Prefix',
                 join: {
                     from: 'department.id',
                     through: {
-                        //modelClass: __dirname + '/Department_Prefix'
                         from: 'department_prefix.prefix_id',
                         to: 'department_prefix.department_id'
                     },

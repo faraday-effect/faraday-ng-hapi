@@ -21,7 +21,7 @@ class Section extends Model {
                 }
             },
             offering: {
-                relation: Model.OneToManyRelation,
+                relation: Model.OneToOneRelation,
                 modelClass: __dirname + '/Offering',
                 join: {
                     from: 'section.offering_id',
