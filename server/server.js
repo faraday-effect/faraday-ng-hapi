@@ -1,7 +1,45 @@
 'use strict';
 
 const Hapi = require('hapi');
+const Good = require('good');
+const Poop = require('poop');
 const Path = require('path');
+const Nes = require('nes');
+
+const server = new Hapi.Server();
+server.connection({
+    port: 3000,
+    routes: {
+        cors: {
+          origin: ['http://localhost:4200'],
+          credentials: true
+        }
+    }
+});
+
+server.register([
+    //authentication
+    {register: require('hapi-auth-cookie')},
+    //Sockets
+    {register: require('./routes/nes')},
+    //lout requirements
+    {register: require('vision')},
+    {register: require('inert')},
+    {register: require('lout')},
+    //route plugins
+    {register: require('./routes/attendance')},
+    {register: require('./routes/authentication')},
+    {register: require('./routes/courses')},
+    {register: require('./routes/departments')},
+    {register: require('./routes/prefixes')},
+    {register: require('./routes/sections')},
+    {register: require('./routes/terms')},
+    {register: require('./routes/users')}
+], (err) => {
+    if (err) {
+        throw err;
+    }
+});
 
 module.exports = function(callback) {
 

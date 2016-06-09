@@ -1,0 +1,18 @@
+<md-toolbar color="primary">
+  <span *ngIf="section">
+    <b> {{ section.course.prefix }} {{ section.course.number }}</b>
+    <span> {{ section.course.title }}</span>
+  </span>
+  <span class="fill-space"></span>
+  Cue Sheet
+</md-toolbar>
+
+<div class="card-container">
+
+  <app-attendance></app-attendance>
+
+  <app-todays-topics></app-todays-topics>
+
+  <app-important-dates></app-important-dates>
+
+</div>
