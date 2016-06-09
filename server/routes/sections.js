@@ -54,21 +54,16 @@ exports.register = function (server, options, next) {
         method: 'GET',
         path: '/sections/{section_id}',
         handler: function (request, reply) {
-            var name = 'not set';
-            var responseJSON = {};
-            bookshelf.Section.where({ id: request.params.section_id }).fetch().then(function (model) {
-                bookshelf.Offering.where({ id: model.get('offering_id') }).fetch().then(function (model2) {
-                    bookshelf.Course.where({ id: model2.get('course_id') }).fetch().then(model3 => {
-                        bookshelf.Prefix.where({ id: model3.get('prefix_id') }).fetch().then(function (model4) {
-                            name = model4.get('name');
-                            responseJSON = model.toJSON();
-                            responseJSON['course'] = model3.toJSON();
-                            responseJSON['course']['prefix_name'] = name;
-                            reply(responseJSON);
-                        });
-                    });
+            Section
+                .query()
+                .where('id', request.params.section_id)
+                .first()
+                .then((section) => {
+                    reply(section);
+                })
+                .catch((err) => {
+                    return reply(Boom.notFound('Section ' + request.params.section_id + ' not found!', err));
                 });
-            });
         },
         config: {
             validate: {
