@@ -9,18 +9,35 @@ exports.register = function (server, options, next) {
         path: '/attendance',
         handler: function (request, reply) {
             var code = '000000';
-            console.log();
-            if (request.payload.code === code) {
-                new bookshelf.Attendance({'actual_class_id': request.payload.actual_class_id, 'student_id': request.payload.student_id}).save().then((model) => {
-                    reply({model: model});
-                    //send to socket to instructor projector view 'student id'
-                    server.publish('/attendence', {id: request.payload.student_id, actual_class_id: request.payload.actual_class_id});
-                }).catch((err) => {
-                    return reply(Boom.badImplementation('Failed to create attendance instance', err));
-                });
-            }
-            else
-                return reply(Boom.badData(['the code you entered was incorrect']));
+            bookshelf.Attendance
+            .forge({
+                    'actual_class_id': request.payload.actual_class_id, 
+                    'student_id': request.payload.student_id
+            })
+            .fetch()
+            .then((model) => {
+                if (model == null) {
+                    if (request.payload.code === code) {
+                        new bookshelf.Attendance({
+                            'actual_class_id': request.payload.actual_class_id,
+                            'student_id': request.payload.student_id,
+                            'signed_in': new Date()
+                        }).save().then((model) => {
+                            server.publish('/attendence', { student_id: request.payload.student_id, actual_class_id: request.payload.actual_class_id });
+                            return reply(model);
+                        }).catch((err) => {
+                            return reply(Boom.badImplementation('Failed to create attendance instance', err));
+                        });
+                    } else {
+                return reply(Boom.badData('The code you entered was incorrect'));
+                    }
+                } else {
+                    return reply(model);
+                }
+                
+            }).catch((err) => {
+                return reply(Boom.badImplementation('Failed to find your attendence records', err));
+            });
         },
         config: {
             notes: 'Puts a student inside the class when the course code is correct',
@@ -35,20 +52,29 @@ exports.register = function (server, options, next) {
     });
 
     server.route({
-        method: 'GET',
+        method: 'DELETE',
         path: '/attendance',
         handler: function (request, reply) {
-            bookshelf.Attendance.where('actual_class_id', request.params.actual_class_id).fetchAll().then((Collection) => {
-                reply(Collection);
-            }).catch(function (err) {
-                return reply(Boom.badImplementation('Couldn\'t find attendance records for class ID ' + request.params.actual_class_id, err));
-            });
+            bookshelf.Attendance.forge()
+                .where({actual_class_id: request.payload.actual_class_id,  
+                student_id: request.payload.student_id})
+                .save({
+                signed_out: new Date()
+            },
+            { method: 'update', patch: true })
+                .then((model) => {
+                    model.fetch()
+                    .then((newModel) => {
+                        reply(newModel);
+                    });
+                });
         },
         config: {
-            notes: 'returns the attendence for a class',
+            notes: 'Puts a student inside the class when the course code is correct',
             validate: {
-                params: {
-                    actual_class_id: Joi.number().integer().required()
+                payload: {
+                    actual_class_id: Joi.number().integer().required(),
+                    student_id: Joi.number().integer().required()
                 }
             }
         }

@@ -98,6 +98,9 @@ var Section = Bookshelf.Model.extend({
     },
     current_class: function() {
         return this.hasOne(Actual_Class);
+    },
+    section: function() {
+        return this.hasMany(Actual_Class, 'section_id')
     }
 });
 
@@ -134,6 +137,9 @@ var Actual_Class = Bookshelf.Model.extend({
     },
     current_class: function() {
         return this.belongsTo(Section, 'current_class')
+    },
+    section: function() {
+        return this.belongsTo(Section)
     }
 });
 
@@ -259,14 +265,14 @@ var Student = Bookshelf.Model.extend({
         return this.belongsTo(Person);
     },
     attendance: function () {
-        return this.hasMany(Attendance);
+        return this.hasMany(Attendance, 'student_id');
     }
 });
 
 //Attendance
 var Attendance = Bookshelf.Model.extend({
     tableName: 'attendance',
-    student: function () {
+    students: function () {
         return this.belongsTo(Student);
     },
     actual_class: function () {
