@@ -6,13 +6,13 @@ import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
 import { MD_INPUT_DIRECTIVES } from '@angular2-material/input';
 import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
 
-import { LoginService } from 'app/shared';
+import { RegisterService } from 'app/shared';
 
 @Component({
   moduleId: module.id,
-  selector: 'app-login',
-  templateUrl: 'login.component.html',
-  styleUrls: ['login.component.css'],
+  selector: 'app-register',
+  templateUrl: 'register.component.html',
+  styleUrls: ['register.component.css'],
   directives: [
     MD_BUTTON_DIRECTIVES,
     MD_CARD_DIRECTIVES,
@@ -21,29 +21,41 @@ import { LoginService } from 'app/shared';
     MD_LIST_DIRECTIVES,
   ],
 })
-export class LoginComponent implements OnInit {
+export class RegisterComponent implements OnInit {
 
-  title = 'Welcome to Faraday';
+  debug = true;
+  users: any;
+
+  title = 'Create new user';
   date: Date;
+
+  first_name: string;
+  last_name: string;
   email: string;
   password: string;
 
   constructor(
-    private loginService: LoginService) {}
+    private registerService: RegisterService) {
+  }
 
   ngOnInit() {
     this.date = new Date();
+    this.getUsers();
   }
 
-  login() {
-    this.loginService.login(this.email, this.password)
-      .subscribe(
-        r => console.log(r)
-      );
+  register() {
+    this.registerService.register(
+      this.first_name,
+      this.last_name,
+      this.email,
+      this.password
+    ).subscribe(() => this.getUsers());
   }
 
-  logout() {
-    this.loginService.logout();
+  private getUsers() {
+    this.registerService.getUsers().subscribe(
+      users => this.users = users
+    );
   }
 
 }

@@ -1,30 +1,16 @@
 import { Component } from '@angular/core';
-import { Router, Routes, ROUTER_DIRECTIVES , ROUTER_PROVIDERS} from '@angular/router';
+import { Routes, ROUTER_DIRECTIVES } from '@angular/router';
 
 import { MdIconRegistry } from '@angular2-material/icon';
 
-import {
-  // Services
-  CourseService,
-  SectionService,
-  DepartmentService,
-  PrefixService,
-  TermService,
-  AttendanceService,
-  ActivityService,
-  ImportantDateService,
-  RegisterService,
-  NesService,
-  // Components
-  LoginComponent,
-  AdminComponent,
-  WelcomeComponent,
-  CueSheetComponent,
-  LoginService,
-  RegisterComponent,
-  StoryBoardComponent,
-  ActivityDetailComponent,
-} from './shared';
+import { LoginComponent } from './+login';
+import { AdminComponent } from './+admin';
+import { ParticipantComponent } from './+participant';
+import { PodiumComponent } from './+podium';
+import { ProjectorComponent } from './+projector';
+import * as ServicesModule from 'app/shared/services';
+
+let Services = Object.keys(ServicesModule).map(k => ServicesModule[k]);
 
 @Component({
   moduleId: module.id,
@@ -34,35 +20,21 @@ import {
   directives: [ROUTER_DIRECTIVES],
   providers: [
     MdIconRegistry,
-    CourseService,
-    SectionService,
-    DepartmentService,
-    PrefixService,
-    TermService,
-    AttendanceService,
-    LoginService,
-    ActivityService,
-    ImportantDateService,
-    RegisterService,
-    NesService,
+    Services,
   ]
 })
 @Routes([
   {path: '/', component: LoginComponent},
   {path: '/login', component: LoginComponent},
   {path: '/admin', component: AdminComponent},
-  {path: '/welcome', component: WelcomeComponent},
-  {path: '/cue-sheet', component: CueSheetComponent},
-  {path: '/register', component: RegisterComponent},
-  {path: '/story-board', component: StoryBoardComponent},
-  {path: '/activity-detail', component: ActivityDetailComponent}
+  {path: '/participant', component: ParticipantComponent},
+  {path: '/podium', component: PodiumComponent},
+  {path: '/projector', component: ProjectorComponent},
 ])
 export class FaradayAppComponent {
 
   debug = true;
 
-  constructor(
-    private router: Router) {
-  }
+  constructor() {}
 
 }
