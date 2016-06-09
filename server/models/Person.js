@@ -7,14 +7,10 @@ class Person extends Model {
     static get tableName() { return 'person'; }
 
     fullName() { return this.firstName + ' ' + this.lastName }
-    stripPassword() { return {
-        'id': this.id,
-        'first_name': this.first_name,
-        'last_name': this.last_name,
-        'email': this.email,
-        'office_phone': this.office_phone,
-        'mobile_phone': this.mobile_phone
-    }}
+    stripPassword() { 
+        delete this['password']
+        return this;
+    }
 }
 
 module.exports = Person;
