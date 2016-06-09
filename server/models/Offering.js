@@ -20,7 +20,7 @@ class Offering extends Model {
                 relation: Model.OneToManyRelation,
                 modelClass: __dirname + '/Course',
                 join: {
-                    from: 'offering._course_id',
+                    from: 'offering.course_id',
                     to: 'course.id'
                 }
             }

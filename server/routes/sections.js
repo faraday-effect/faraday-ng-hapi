@@ -64,9 +64,10 @@ exports.register = function (server, options, next) {
                     return section.$relatedQuery('offering');
                 })
                 .then((offering) => {
-                    reply('offering');
+                    reply(offering);
                 })
                 .catch((err) => {
+                    console.log(err.stack);
                     return reply(Boom.notFound('Section ' + request.params.section_id + ' not found!', err));
                 });
         },
