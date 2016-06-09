@@ -3,14 +3,21 @@
 const Joi = require('joi');
 const bookshelf = require('./../bookshelf');
 const Boom = require('boom');
+const Section = require('./../models/section')
 
 exports.register = function (server, options, next) {
     server.route({
         method: 'GET',
         path: '/sections',
         handler: function (request, reply) {
-            var response = bookshelf.Sections.forge().fetch();
-            reply(response);
+            Section
+            .query()
+            .then((sections) => {
+                reply(sections);
+            })
+            .catch((err) => {
+                return reply(Boom.badImplementation('Failed to retrieve all the sections', err));
+            })
         }
     });
 
@@ -18,23 +25,24 @@ exports.register = function (server, options, next) {
         method: 'POST',
         path: '/sections',
         handler: function (request, reply) {
-            new bookshelf.Section({
-                title: request.payload.title,
-                reg_number: request.payload.reg_number,
-                course_id: request.payload.course_id,
-                term_id: request.payload.term_id
-            })
-                .save().then(function (model) {
-                    reply(model)
-                }).catch(function (err) {
+            Section
+                .query()
+                .insert({
+                    offering_id: request.payload.offering_id,
+                    reg_number: request.payload.reg_number,
+                    title: request.payload.title
+                })
+                .then((section) => {
+                    return reply(section);
+                })
+                .catch(function (err) {
                     return reply(Boom.badImplementation('Failed to create a new section', err));
                 });
         },
         config: {
             validate: {
                 payload: {
-                    course_id: Joi.number().positive().integer().required(),
-                    term_id: Joi.number().positive().integer().required(),
+                    offering_id: Joi.number().positive().integer().required(),
                     reg_number: Joi.string().required(),
                     title: Joi.string()
                 }
@@ -75,14 +83,19 @@ exports.register = function (server, options, next) {
         method: 'GET',
         path: '/sections/{section_id}/students',
         handler: function (request, reply) {
-            new bookshelf.Section({id: request.params.section_id})
-                .students()
-                .fetch()
-                .then(function(collection) {
-                    return reply(collection.toJSON());
+            Section
+                .query()
+                .where('id', request.params.section_id)
+                .first()
+                .then((section) => {
+                    return section.$relatedQuery('students');
                 })
-                .catch(function(err) {
-                    reply(Boom.badImplementation('Failed to fetch students', err));
+                .then((students) => {
+                    var response = {}
+                    students.forEach((student) => {
+                        response[student.email] = {'id': student.id, 'first_name': student.first_name, 'last_name': student.last_name}
+                    });
+                    return reply(response);
                 });
         },
         config: {
