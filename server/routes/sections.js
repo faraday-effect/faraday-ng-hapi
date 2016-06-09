@@ -19,7 +19,7 @@ exports.register = function (server, options, next) {
                 reply(sections);
             })
             .catch((err) => {
-                return reply(Boom.badImplementation('Failed to retrieve all the sections', err));
+                return reply(Boom.notFound('Failed to retrieve all the sections', err));
             })
         }
     });
@@ -39,7 +39,7 @@ exports.register = function (server, options, next) {
                     return reply(section);
                 })
                 .catch(function (err) {
-                    return reply(Boom.badImplementation('Failed to create a new section', err));
+                    return reply(Boom.badRequest('Failed to create a new section', err));
                 });
         },
         config: {
@@ -119,7 +119,7 @@ exports.register = function (server, options, next) {
                 .save().then(function (newModel) {
                     reply(newModel)
                 }).catch(function (err) {
-                    return reply(Boom.badImplementation('Failed to create a new actual class', err));
+                    return reply(Boom.badRequest('Failed to create a new actual class', err));
                 });
         },
         config: {
@@ -144,7 +144,7 @@ exports.register = function (server, options, next) {
                 ).then(function (model) {
                     reply(model)
                 }).catch(function (err) {
-                    return reply(Boom.badImplementation('Could not end the class', err));
+                    return reply(Boom.badRequest('Could not end the class', err));
                 });
         },
         config: {
@@ -181,18 +181,18 @@ exports.register = function (server, options, next) {
         method: 'PUT',
         path: '/sections/{section_id}',
         handler: function (request, reply) {
-            bookshelf.Section.forge({ 'id': request.params.section_id })
-                .save(
-                {
-                    course_id: request.payload.course_id,
-                    term_id: request.payload.term_id,
+            Section
+                .query()
+                .patchAndFetchById(request.params.section_id, {
+                    offering_id: request.payload.offering_id,
                     reg_number: request.payload.reg_number,
                     title: request.payload.title
-                }
-                ).then(function (model) {
-                    reply(model)
-                }).catch(function (err) {
-                    return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
+                })
+                .then((updatedModel) => {
+                    reply(updatedModel);
+                })
+                .catch(function (err) {
+                    reply(Boom.badRequest('Failed to edit section ' + request.payload.section_id, err));
                 });
         },
         config: {
@@ -201,8 +201,7 @@ exports.register = function (server, options, next) {
                     section_id: Joi.number().integer()
                 },
                 payload: {
-                    course_id: Joi.number().positive().integer().required(),
-                    term_id: Joi.number().positive().integer().required(),
+                    offering_id: Joi.number().positive().integer().required(),
                     reg_number: Joi.string().required(),
                     title: Joi.string()
                 }
@@ -219,6 +218,7 @@ exports.register = function (server, options, next) {
             reply(response);
         },
         config: {
+            notes: 'to be implemented',
             validate: {
                 params: {
                     section_id: Joi.number().positive().integer()
