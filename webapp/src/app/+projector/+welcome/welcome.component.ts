@@ -14,7 +14,7 @@ import {
   TodaysTopicsComponent,
   ImportantDatesComponent,
   Section,
-  SectionService,
+  ClassService,
 } from 'app/shared';
 
 @Component({
@@ -38,14 +38,14 @@ export class WelcomeComponent implements OnInit {
   section: Section;
 
   constructor(
-    private sectionService: SectionService) {
+    private classService: ClassService) {
 
   }
 
   ngOnInit() {
     this.date = new Date();
     // FIXME hardcoded course
-    this.sectionService.getMockSections().then(
+    this.classService.getMockSections().then(
       (sections) => {
         this.section = sections[0];
         console.log(this);

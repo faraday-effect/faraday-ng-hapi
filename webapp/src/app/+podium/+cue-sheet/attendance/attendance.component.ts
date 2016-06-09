@@ -7,8 +7,7 @@ import { MD_ICON_DIRECTIVES } from '@angular2-material/icon';
 import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
 
 import {
-  AttendanceService,
-  SectionService,
+  ClassService,
   Person,
   Section,
 } from 'app/shared';
@@ -34,15 +33,14 @@ export class AttendanceComponent implements OnInit {
 
   constructor(
     private http: Http,
-    private sectionService: SectionService,
-    private attendanceService: AttendanceService) {
+    private classService: ClassService) {
   }
 
   ngOnInit() {
-    this.sectionService.getSections()
+    this.classService.getSections()
         .toPromise()
         .then(sections => this.section_id = sections.sort()[4].id)
-        .then(() => this.attendanceService.getStudents(this.section_id))
+        .then(() => this.classService.getStudents(this.section_id))
         .then(students => {
           this.students = students
           this.students.sort(
@@ -50,13 +48,13 @@ export class AttendanceComponent implements OnInit {
           );
         });
 
-    this.attendanceService.handleArrive(ids => {
+    this.classService.handleArrive(ids => {
       for (let id of ids) {
         this.attending[id] = true;
       }
     });
 
-    this.attendanceService.handleDepart(ids => {
+    this.classService.handleDepart(ids => {
       for (let id of ids) {
         this.attending[id] = false;
       }
@@ -72,11 +70,11 @@ export class AttendanceComponent implements OnInit {
   }
 
   attend(id: number) {
-    this.attendanceService.attend(id, this.classId);
+    this.classService.attend(id, this.classId);
   }
 
   depart(id: number) {
-    this.attendanceService.depart(id, this.classId);
+    this.classService.depart(id, this.classId);
   }
 
   startClass() {

@@ -8,7 +8,7 @@ import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
 import {
   Section,
   Activity,
-  SectionService,
+  ClassService,
   ActivityService,
 } from 'app/shared';
 
@@ -32,7 +32,7 @@ export class ActivityDetailComponent implements OnInit {
 
   constructor(
     private activityService: ActivityService,
-    private sectionService: SectionService) {
+    private classService: ClassService) {
   }
 
   ngOnInit() {
@@ -46,7 +46,7 @@ export class ActivityDetailComponent implements OnInit {
       }
     );
     // FIXME hardcoded course
-    this.sectionService.getMockSections().then(
+    this.classService.getMockSections().then(
       (sections) => {
         this.section = sections[0];
         console.log(this);

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { OnActivate, RouteSegment } from '@angular/router';
 
-import { Section, SectionService } from 'app/shared';
+import { Section, ClassService } from 'app/shared';
 
 @Component({
   moduleId: module.id,
@@ -15,12 +15,12 @@ export class SectionComponent implements OnActivate {
   errorMessage: string;
 
   constructor(
-    private sectionService: SectionService) {
+    private classService: ClassService) {
   }
 
   routerOnActivate(curr: RouteSegment) {
    let id = +curr.getParam('id');
-   this.sectionService.getSection(id)
+   this.classService.getSection(id)
      .subscribe(
        section => this.section = section,
        error =>  this.errorMessage = <any>error
