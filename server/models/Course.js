@@ -12,8 +12,24 @@ class Course extends Model {
                 relation: Model.ManyToManyRelation,
                 modelClass: __dirname + '/Offering',
                 join: {
-                    from: 'course.id',
-                    to: 'offering.course_id'
+                    from: 'offering.course_id',
+                    to: 'course.id'
+                }
+            },
+            prefix: {
+                relation: Model.OneToManyRelation,
+                modelClass: ___dirname + '/Prefix',
+                join: {
+                    from: 'course.prefix_id',
+                    to: 'prefix.id'
+                }
+            },
+            department: {
+                relation: Model.OneToManyRelation,
+                modelClass: ____dirname + '/Department',
+                join: {
+                    from: 'course.department_id',
+                    to: 'department.id'
                 }
             }
         }
