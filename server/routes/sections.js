@@ -6,7 +6,7 @@ const Boom = require('boom');
 const Section = require('./../models/Section')
 const Offering = require('./../models/Offering')
 const Course = require('./../models/Course')
-const Actual_Class = require('./../models/Actual_Class')
+const ActualClass = require('./../models/ActualClass')
 
 exports.register = function (server, options, next) {
     server.route({
@@ -153,7 +153,6 @@ exports.register = function (server, options, next) {
         method: 'GET',
         path: '/sections/{section_id}/students',
         handler: function (request, reply) {
-<<<<<<< HEAD
             Section
                 .query()
                 .where('id', request.params.section_id)
@@ -167,16 +166,6 @@ exports.register = function (server, options, next) {
                         response.push(student.stripPassword());
                     });
                     return reply(response);
-=======
-            new bookshelf.Section({ id: request.params.section_id })
-                .students()
-                .fetch()
-                .then(function (collection) {
-                    return reply(collection.toJSON());
-                })
-                .catch(function (err) {
-                    reply(Boom.badImplementation('Failed to fetch students', err));
->>>>>>> develop
                 });
         },
         config: {
@@ -193,33 +182,24 @@ exports.register = function (server, options, next) {
         method: 'POST',
         path: '/sections/{section_id}/today',
         handler: function (request, reply) {
-<<<<<<< HEAD
-            Actual_Class
+            ActualClass
                 .query()
                 .insert({
                     start_time: new Date(),
                     section_id: request.params.section_id
                 })
-                .then((actual_class) => {
-                    reply(actual_class);
+                .then((actualClass) => {
+                    Section
+                        .query()
+                        .patchAndFetchById( actualClass.section_id, {
+                            current_class: actualClass.id
+                        })
+                        .then(() => {
+                            reply(actualClass);
+                        });
                 })
                 .catch(function (err) {
                     return reply(Boom.badRequest('Failed to create a new actual class', err));
-=======
-            new bookshelf.Actual_Class({
-                start_time: new Date(),
-                section_id: request.params.section_id
-            })
-                .save().then(function (newModel) {
-                    bookshelf.Section.forge({ id: request.params.section_id }).save({
-                        current_class: newModel.get('id')
-                    })
-                        .then(() => {
-                            reply(newModel)
-                        }).catch(function (err) {
-                            return reply(Boom.badImplementation('Failed to create a new actual class', err));
-                        });
->>>>>>> develop
                 });
 
         },
@@ -237,17 +217,6 @@ exports.register = function (server, options, next) {
         method: 'DELETE',
         path: '/sections/{section_id}/today',
         handler: function (request, reply) {
-<<<<<<< HEAD
-            bookshelf.Section.forge({ 'id': request.params.section_id })
-                .save(
-                {
-                    current_class: null
-                }
-                ).then(function (model) {
-                    reply(model)
-                }).catch(function (err) {
-                    return reply(Boom.badRequest('Could not end the class', err));
-=======
             bookshelf.Section.forge({ id: request.params.section_id })
                 .current_class()
                 .where({ 'stop_time': null })
@@ -272,7 +241,6 @@ exports.register = function (server, options, next) {
                         });
                 }).catch((err) => {
                     return reply(Boom.badData('This class has already ended', err));
->>>>>>> develop
                 });
         },
         config: {

@@ -28,9 +28,9 @@ class Section extends Model {
                     to: 'offering.id'
                 }
             },
-            actual_classes: {
+            actualClasses: {
                 relation: Model.OneToManyRelation,
-                modelClass: __dirname + '/actual_class',
+                modelClass: __dirname + '/ActualClass',
                 join: {
                     from: 'section.id',
                     to: 'actual_class.section_id'

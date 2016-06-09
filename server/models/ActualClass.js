@@ -3,7 +3,7 @@
 const Model = require('objection').Model;
 const db = require('./../db')
 
-class Actual_Class extends Model {
+class ActualClass extends Model {
     static get tableName() { return 'actual_class'; }
 
     static get relationMappings() {
@@ -28,4 +28,4 @@ class Actual_Class extends Model {
     }
 }
 
-module.exports = Actual_Class;
+module.exports = ActualClass;
