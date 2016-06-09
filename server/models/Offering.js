@@ -8,6 +8,14 @@ class Offering extends Model {
 
     static get relationMappings() {
         return {
+            term: {
+              relation: Model.OneToOneRelation,
+                modelClass: __dirname + '/Term',
+                join: {
+                    from: 'offering.id',
+                    to: 'term.offering_id'
+                }
+            },
             sections: {
                 relation: Model.OneToManyRelation,
                 modelClass: __dirname + '/Section',

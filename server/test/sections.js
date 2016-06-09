@@ -8,6 +8,9 @@ const lab = exports.lab = Lab.script();
 const db = require('../db');
 
 const Section = require('../models/Section');
+const Person = require('../models/Person');
+const Course = require('../models/Course');
+const Term = require('../models/Term');
 
 let server = null;
 lab.before((done) => {
@@ -21,19 +24,50 @@ lab.experiment('/sections endpoint', () => {
 
     lab.beforeEach(done => {
         return Promise.all([
+            db.knex.raw('TRUNCATE course CASCADE'),
             db.knex.raw('TRUNCATE student CASCADE'),
             db.knex.raw('TRUNCATE section CASCADE')
         ]).then(results => {
-            console.log("TRUNCATED");
-
+            return Term.query().insertAndFetch({
+                name: 'Fall 2016',
+                start_date: '2016-09-01',
+                end_date: '2016-12-15'
+            })
+        }).then(term => {
+            console.log("TERM", term);
             return Promise.all([
-                Section.query().insert({
-                    id: 1, reg_number: 'REG111', title: 'Section 1' }),
-                Section.query().insert({
-                    id: 2, reg_number: 'REG222', title: 'Section 2' })
+                Course.query().insertWithRelated({
+                    number: '121',
+                    title: 'Foundations of Computer Science',
+                    offerings: [{
+                        term_id: term.id,
+                        sections: [
+                            {title: 'Section 1', reg_number: 'REG111'},
+                            {title: 'Section 2', reg_number: 'REG222'}
+                        ]
+                    }]
+                }),
             ])
         }).then(results => {
-            console.log('INSERTED')
+            return Promise.all([
+                Section.query().insert({id: 1, reg_number: 'REG111', title: 'Section 1'}),
+                Section.query().insert({id: 2, reg_number: 'REG222', title: 'Section 2'})
+            ])
+        }).then(results => {
+            return Promise.all([
+                Person.query().insert({
+                    first_name: "Patty",
+                    last_name: "O'Furniture",
+                    email: 'patty@example.com',
+                    password: 'pass'
+                }),
+                Person.query().insert({
+                    first_name: "Frank",
+                    last_name: "Insense",
+                    email: 'frank@example.com',
+                    password: 'pass'
+                }),
+            ])
         }).catch(err => {
             console.log("ERROR", err)
         });
@@ -41,7 +75,7 @@ lab.experiment('/sections endpoint', () => {
         done();
     });
 
-    lab.test('There are 10 sections', (done) => {
+    lab.test('There are 2 sections', (done) => {
         server.inject(
             {
                 method: 'GET',
@@ -50,7 +84,7 @@ lab.experiment('/sections endpoint', () => {
             }, (res) => {
                 expect(res.statusCode).to.equal(200);
                 const response = JSON.parse(res.payload);
-                expect(response).to.have.length(10);
+                expect(response).to.have.length(2);
                 done();
             })
     });
@@ -87,5 +121,5 @@ lab.experiment('/sections endpoint', () => {
             })
     });
 
-})
-;
+});
+
