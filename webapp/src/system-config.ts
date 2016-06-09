@@ -5,11 +5,21 @@
 const map: any = {
   '@angular2-material': 'vendor/@angular2-material',
   'nes': 'vendor/nes',
+  'materialize-css': 'vendor/materialize-css',
+  'materialize': 'vendor/angular2-materialize',
+  'angular2-materialize': 'vendor/angular2-materialize'
 };
 
 /** User packages configuration. */
 const packages: any = {
   'nes': {main: 'client.js'},
+  'materialize-css': {
+    "main": "dist/js/materialize.js"
+  },
+  "materialize": {
+    "main": "dist/materialize-directive.js",
+    //"defaultExtension": "js"
+  }
 };
 
 const materialPkgs: string[] = [

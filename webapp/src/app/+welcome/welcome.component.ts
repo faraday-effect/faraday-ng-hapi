@@ -3,7 +3,12 @@ import { Component, OnInit} from '@angular/core';
 import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
 import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
+
+import {MaterializeDirective} from "angular2-materialize";
+
 import { ClassCodeComponent } from './class-code';
+
+
 
 import {
   TodaysTopicsComponent,
@@ -24,10 +29,11 @@ import {
     TodaysTopicsComponent,
     ImportantDatesComponent,
     ClassCodeComponent,
+    MaterializeDirective,
   ],
 })
 export class WelcomeComponent implements OnInit {
-  
+
   date: Date;
   section: Section;
 
