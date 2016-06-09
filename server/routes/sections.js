@@ -3,14 +3,25 @@
 const Joi = require('joi');
 const bookshelf = require('./../bookshelf');
 const Boom = require('boom');
+const Section = require('./../models/Section')
+const Offering = require('./../models/Offering')
+const Course = require('./../models/Course')
+const ActualClass = require('./../models/ActualClass')
 
 exports.register = function (server, options, next) {
     server.route({
         method: 'GET',
         path: '/sections',
         handler: function (request, reply) {
-            var response = bookshelf.Sections.forge().fetch();
-            reply(response);
+            Section
+                .query()
+                .eager('offering.course.[prefix, department]')
+                .then((sections) => {
+                    reply(sections);
+                })
+                .catch((err) => {
+                    return reply(Boom.notFound('Failed to retrieve all the sections', err));
+                })
         }
     });
 
@@ -87,23 +98,24 @@ exports.register = function (server, options, next) {
         method: 'POST',
         path: '/sections',
         handler: function (request, reply) {
-            new bookshelf.Section({
-                title: request.payload.title,
-                reg_number: request.payload.reg_number,
-                course_id: request.payload.course_id,
-                term_id: request.payload.term_id
-            })
-                .save().then(function (model) {
-                    reply(model)
-                }).catch(function (err) {
-                    return reply(Boom.badImplementation('Failed to create a new section', err));
+            Section
+                .query()
+                .insert({
+                    offering_id: request.payload.offering_id,
+                    reg_number: request.payload.reg_number,
+                    title: request.payload.title
+                })
+                .then((section) => {
+                    return reply(section);
+                })
+                .catch(function (err) {
+                    return reply(Boom.badRequest('Failed to create a new section', err));
                 });
         },
         config: {
             validate: {
                 payload: {
-                    course_id: Joi.number().positive().integer().required(),
-                    term_id: Joi.number().positive().integer().required(),
+                    offering_id: Joi.number().positive().integer().required(),
                     reg_number: Joi.string().required(),
                     title: Joi.string()
                 }
@@ -115,21 +127,18 @@ exports.register = function (server, options, next) {
         method: 'GET',
         path: '/sections/{section_id}',
         handler: function (request, reply) {
-            var name = 'not set';
-            var responseJSON = {};
-            bookshelf.Section.where({ id: request.params.section_id }).fetch().then(function (model) {
-                bookshelf.Offering.where({ id: model.get('offering_id') }).fetch().then(function (model2) {
-                    bookshelf.Course.where({ id: model2.get('course_id') }).fetch().then(model3 => {
-                        bookshelf.Prefix.where({ id: model3.get('prefix_id') }).fetch().then(function (model4) {
-                            name = model4.get('name');
-                            responseJSON = model.toJSON();
-                            responseJSON['course'] = model3.toJSON();
-                            responseJSON['course']['prefix_name'] = name;
-                            reply(responseJSON);
-                        });
-                    });
+            Section
+                .query()
+                .where('id', request.params.section_id)
+                .first()
+                .eager('offering.course.[prefix, department]')
+                .then((section) => {
+                    reply(section);
+                })
+                .catch((err) => {
+                    console.log(err.stack);
+                    return reply(Boom.notFound('Section ' + request.params.section_id + ' not found!', err));
                 });
-            });
         },
         config: {
             validate: {
@@ -144,14 +153,19 @@ exports.register = function (server, options, next) {
         method: 'GET',
         path: '/sections/{section_id}/students',
         handler: function (request, reply) {
-            new bookshelf.Section({ id: request.params.section_id })
-                .students()
-                .fetch()
-                .then(function (collection) {
-                    return reply(collection.toJSON());
+            Section
+                .query()
+                .where('id', request.params.section_id)
+                .first()
+                .then((section) => {
+                    return section.$relatedQuery('students');
                 })
-                .catch(function (err) {
-                    reply(Boom.badImplementation('Failed to fetch students', err));
+                .then((students) => {
+                    var response = []
+                    students.forEach((student) => {
+                        response.push(student.stripPassword());
+                    });
+                    return reply(response);
                 });
         },
         config: {
@@ -168,19 +182,24 @@ exports.register = function (server, options, next) {
         method: 'POST',
         path: '/sections/{section_id}/today',
         handler: function (request, reply) {
-            new bookshelf.Actual_Class({
-                start_time: new Date(),
-                section_id: request.params.section_id
-            })
-                .save().then(function (newModel) {
-                    bookshelf.Section.forge({ id: request.params.section_id }).save({
-                        current_class: newModel.get('id')
-                    })
+            ActualClass
+                .query()
+                .insert({
+                    start_time: new Date(),
+                    section_id: request.params.section_id
+                })
+                .then((actualClass) => {
+                    Section
+                        .query()
+                        .patchAndFetchById(actualClass.section_id, {
+                            current_class: actualClass.id
+                        })
                         .then(() => {
-                            reply(newModel)
-                        }).catch(function (err) {
-                            return reply(Boom.badImplementation('Failed to create a new actual class', err));
+                            reply(actualClass);
                         });
+                })
+                .catch(function (err) {
+                    return reply(Boom.badRequest('Failed to create a new actual class', err));
                 });
 
         },
@@ -198,34 +217,47 @@ exports.register = function (server, options, next) {
         method: 'DELETE',
         path: '/sections/{section_id}/today',
         handler: function (request, reply) {
-            bookshelf.Section.forge({ id: request.params.section_id })
-                .current_class()
-                .where({ 'stop_time': null })
-                .save({
-                    stop_time: new Date
-                },
-                { method: 'update', patch: true })
-                .then((model) => {
-                    bookshelf.Section
-                        .forge({ id: request.params.section_id })
-                        .save({
-                            current_class: null
-                        })
-                        .then((newModel) => {
-                            model.fetch().then((section) => {
-                                reply(section);
-                            }).catch((err) => {
-                                return reply(Boom.badImplementation('Failed to end the class', err));
-                            });
-                        }).catch((err) => {
-                            return reply(Boom.badImplementation('Failed to end the class', err));
+            var actual_class_id = -1;
+
+            //Get the current_class from the database
+            Section
+                .query()
+                .select('current_class')
+                .where('id', request.params.section_id)
+                .first()
+                .then((section) => {
+                    actual_class_id = section.current_class
+                    console.log('var set');
+                    console.log(section.current_class);
+                    console.log(actual_class_id);
+                }).then((section) => {
+                    //Update current_class to be null
+                    Section
+                        .query()
+                        .where('id', request.params.section_id)
+                        .patch({ current_class: null })
+                        .then((section) => {
+
+                        }).then((section) => {
+                            //Update actual_class to have a stop_time    
+                            ActualClass
+                                .query()
+                                .patchAndFetchById(actual_class_id, {
+                                    stop_time: new Date
+                                }).then((updatedModel) => {
+                                    if(updatedModel == 0)
+                                        return reply({statusCode: 204, message: 'Class has already ended!'});
+                                    reply(updatedModel)
+                                });
+
                         });
-                }).catch((err) => {
-                    return reply(Boom.badData('This class has already ended', err));
+
                 });
+
+
         },
         config: {
-            notes: 'to be implemented - should remove current_class from section and place the end time on actual class',
+            notes: 'should remove current_class from section and place the end time on actual class',
             validate: {
                 params: {
                     section_id: Joi.number().positive().integer()
@@ -238,15 +270,19 @@ exports.register = function (server, options, next) {
         method: 'GET',
         path: '/sections/{section_id}/today',
         handler: function (request, reply) {
-            new bookshelf.Section({ id: request.params.section_id })
-                .current_class()
-                .where({ 'stop_time': null })
-                .fetch()
-                .then((model) => {
-                    reply(model);
+            ActualClass
+                .query()
+                .select('id', 'start_time', 'section_id')
+                .where('section_id', request.params.section_id)
+                .andWhere('stop_time', null)
+                .first()
+                .then((section) => {
+                    if(section == null)
+                        return reply({statusCode: 200, message: 'Your professor has not started class yet'});
+                    reply(section);
                 })
                 .catch((err) => {
-                    return reply(Boom.badData('Your professor has not started class yet'))
+                    return reply(Boom.badRequest('Your professor has not started class yet'))
                 });
         },
         config: {
@@ -263,18 +299,18 @@ exports.register = function (server, options, next) {
         method: 'PUT',
         path: '/sections/{section_id}',
         handler: function (request, reply) {
-            bookshelf.Section.forge({ 'id': request.params.section_id })
-                .save(
-                {
-                    course_id: request.payload.course_id,
-                    term_id: request.payload.term_id,
+            Section
+                .query()
+                .patchAndFetchById(request.params.section_id, {
+                    offering_id: request.payload.offering_id,
                     reg_number: request.payload.reg_number,
                     title: request.payload.title
-                }
-                ).then(function (model) {
-                    reply(model)
-                }).catch(function (err) {
-                    return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
+                })
+                .then((updatedModel) => {
+                    reply(updatedModel);
+                })
+                .catch(function (err) {
+                    reply(Boom.badData('Failed to edit section ' + request.payload.section_id, err));
                 });
         },
         config: {
@@ -283,8 +319,7 @@ exports.register = function (server, options, next) {
                     section_id: Joi.number().integer()
                 },
                 payload: {
-                    course_id: Joi.number().positive().integer().required(),
-                    term_id: Joi.number().positive().integer().required(),
+                    offering_id: Joi.number().positive().integer().required(),
                     reg_number: Joi.string().required(),
                     title: Joi.string()
                 }
@@ -301,6 +336,7 @@ exports.register = function (server, options, next) {
             reply(response);
         },
         config: {
+            notes: 'to be implemented',
             validate: {
                 params: {
                     section_id: Joi.number().positive().integer()
