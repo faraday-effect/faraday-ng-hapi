@@ -61,7 +61,10 @@ exports.register = function (server, options, next) {
                 .where('id', request.params.section_id)
                 .first()
                 .then((section) => {
-                    reply(section.$relatedQuery('offering'));
+                    return section.$relatedQuery('offering');
+                })
+                .then((offering) => {
+                    reply('offering');
                 })
                 .catch((err) => {
                     return reply(Boom.notFound('Section ' + request.params.section_id + ' not found!', err));

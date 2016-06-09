@@ -14,6 +14,7 @@ class Prefix extends Model {
                 join: {
                     from: 'prefix.id',
                     through: {
+                        //modelClass: ___dirname + '/Department_Prefix'
                         from: 'department_prefix.prefix_id',
                         to: 'department_prefix.department_id'
                     },
@@ -22,7 +23,7 @@ class Prefix extends Model {
             },
             courses: {
                 relation: Model.OneToManyRelation,
-                modelClass: ___dirname + '/Course',
+                modelClass: __dirname + '/Course',
                 join: {
                     from: 'prefix.id',
                     to: 'course.prefix_id'

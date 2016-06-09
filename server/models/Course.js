@@ -18,7 +18,7 @@ class Course extends Model {
             },
             prefix: {
                 relation: Model.OneToManyRelation,
-                modelClass: ___dirname + '/Prefix',
+                modelClass: __dirname + '/Prefix',
                 join: {
                     from: 'course.prefix_id',
                     to: 'prefix.id'
@@ -26,7 +26,7 @@ class Course extends Model {
             },
             department: {
                 relation: Model.OneToManyRelation,
-                modelClass: ____dirname + '/Department',
+                modelClass: __dirname + '/Department',
                 join: {
                     from: 'course.department_id',
                     to: 'department.id'
