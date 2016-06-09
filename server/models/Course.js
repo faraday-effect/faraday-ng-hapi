@@ -9,11 +9,11 @@ class Course extends Model {
     static get relationMappings() {
         return {
             offering: {
-                relation: Model.ManyToManyRelation,
+                relation: Model.OneToManyRelation,
                 modelClass: __dirname + '/Offering',
                 join: {
-                    from: 'offering.course_id',
-                    to: 'course.id'
+                    from: 'course.id',
+                    to: 'offering.course_id'
                 }
             },
             prefix: {
