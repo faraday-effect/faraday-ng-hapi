@@ -4,10 +4,22 @@
 /** Map relative paths to URLs. */
 const map: any = {
   '@angular2-material': 'vendor/@angular2-material',
+  'nes': 'vendor/nes',
+  'materialize-css': 'vendor/materialize-css',
+  'materialize': 'vendor/angular2-materialize',
+  'angular2-materialize': 'vendor/angular2-materialize'
 };
 
 /** User packages configuration. */
 const packages: any = {
+  'nes': {main: 'client.js'},
+  'materialize-css': {
+    'main': 'dist/js/materialize.js'
+  },
+  'materialize': {
+    'main': 'dist/materialize-directive.js',
+    //'defaultExtension': 'js'
+  }
 };
 
 const materialPkgs: string[] = [
@@ -45,30 +57,34 @@ const barrels: string[] = [
   // App specific barrels.
   'app',
   'app/shared',
-  'app/+course',
-  'app/+courses',
-  'app/+section',
-  'app/+sections',
-  'app/+department',
-  'app/+departments',
-  'app/+prefix',
-  'app/+prefixes',
-  'app/+term',
-  'app/+terms',
-  'app/+section/section-edit',
+  'app/shared/models',
+  'app/shared/services',
+  'app/shared/components',
+  'app/shared/components/important-dates',
+  'app/shared/components/todays-topics',
   'app/+login',
   'app/+admin',
-  'app/+admin/shared',
-  'app/+welcome',
-  'app/todays-topics',
-  'app/important-dates',
-  'app/+cue-sheet',
-  'app/+cue-sheet/attendance',
-  'app/+welcome/class-code',
-  'app/+register',
-  'app/+story-board',
-  'app/+story-board/story',
-  'app/+activity-detail',
+  'app/+admin/+register',
+  'app/+admin/+course',
+  'app/+admin/+courses',
+  'app/+admin/+department',
+  'app/+admin/+departments',
+  'app/+admin/+prefix',
+  'app/+admin/+prefixes',
+  'app/+admin/+section',
+  'app/+admin/+sections',
+  'app/+admin/+term',
+  'app/+admin/+terms',
+  'app/+participant',
+  'app/+podium',
+  'app/+podium/+activity-detail',
+  'app/+podium/+cue-sheet',
+  'app/+podium/+cue-sheet/attendance',
+  'app/+podium/+story-board',
+  'app/+podium/+story-board/story',
+  'app/+projector',
+  'app/+projector/+welcome',
+  'app/+projector/+welcome/class-code',
   /** @cli-barrel */
 ];
 

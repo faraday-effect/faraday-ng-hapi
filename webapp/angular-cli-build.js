@@ -13,6 +13,11 @@ module.exports = function(defaults) {
       'rxjs/**/*.+(js|js.map)',
       '@angular/**/*.+(js|js.map)',
       '@angular2-material/**/*',
+      'nes/**/*',
+      'jquery/**/*',
+      'hammerjs/**/*',
+      'materialize-css/**/*',
+      'angular2-materialize/**/*'
     ]
   });
 };

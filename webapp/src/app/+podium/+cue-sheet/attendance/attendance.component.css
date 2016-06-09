@@ -1,0 +1,20 @@
+md-card {
+  margin: 20px;
+}
+
+.student-present {
+  color: darkgreen;
+}
+
+.student-absent {
+  color: red;
+}
+
+.student-container {
+  width: 250px;
+}
+
+md-list {
+  display: flex;
+  flex-flow: row wrap;
+}

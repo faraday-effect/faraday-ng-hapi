@@ -5,19 +5,17 @@ import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
 import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
 
-import {
-  CourseComponent,
-  CoursesComponent,
-  SectionComponent,
-  SectionsComponent,
-  SectionEditComponent,
-  DepartmentComponent,
-  DepartmentsComponent,
-  PrefixComponent,
-  PrefixesComponent,
-  TermComponent,
-  TermsComponent,
-} from '../shared';
+import { CourseComponent } from './+course';
+import { CoursesComponent } from './+courses';
+import { SectionComponent } from './+section';
+import { SectionsComponent } from './+sections';
+import { DepartmentComponent } from './+department';
+import { DepartmentsComponent } from './+departments';
+import { PrefixComponent } from './+prefix';
+import { PrefixesComponent } from './+prefixes';
+import { TermComponent } from './+term';
+import { TermsComponent } from './+terms';
+import { RegisterComponent } from './+register';
 
 @Component({
   moduleId: module.id,
@@ -36,7 +34,7 @@ import {
   // {path: '/course/:id/edit', component: CourseEditComponent},
   {path: '/courses/:id', component: CourseComponent},
   {path: '/courses', component: CoursesComponent},
-  {path: '/sections/create', component: SectionEditComponent},
+  // {path: '/sections/create', component: SectionEditComponent},
   {path: '/sections/:id', component: SectionComponent},
   {path: '/sections', component: SectionsComponent},
   {path: '/departments/:id', component: DepartmentComponent},
@@ -45,6 +43,7 @@ import {
   {path: '/prefixes', component: PrefixesComponent},
   {path: '/terms/:id', component: TermComponent},
   {path: '/terms', component: TermsComponent},
+  {path: '/register', component: RegisterComponent},
 ])
 export class AdminComponent {
 
@@ -70,6 +69,10 @@ export class AdminComponent {
 
   gotoTerms() {
     this.router.navigate(['/admin/terms']); // FIXME ADMIN
+  }
+
+  gotoRegister() {
+    this.router.navigate(['/admin/register']); // FIXME ADMIN
   }
 
   title = 'Admin Console';

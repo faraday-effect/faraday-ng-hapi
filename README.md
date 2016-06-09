@@ -15,7 +15,7 @@ To Import Database Data:
 `knex seed:run`
 
 To run server:
-run `node server/server.js` in terminal
+run `node server/start.js` in terminal
 
 In a browser visit `localhost:3000`
 

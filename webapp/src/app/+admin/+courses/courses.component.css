@@ -1,0 +1,11 @@
+.courses md-card {
+  margin: 20px;
+}
+
+.courses md-checkbox {
+  margin: 20px;
+}
+
+.error {
+  color: red;
+}

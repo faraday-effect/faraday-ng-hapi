@@ -1,0 +1,12 @@
+<div class="departments">
+
+  <md-card *ngIf="errorMessage" class="error">
+    Error: {{ errorMessage }}
+  </md-card>
+
+  <md-card *ngFor="let department of departments">
+    <button md-button (click)="gotoDepartment(department.id)">{{department.name}}</button>
+  </md-card>
+
+</div>
+

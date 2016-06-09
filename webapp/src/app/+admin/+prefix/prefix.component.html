@@ -1,0 +1,12 @@
+<div class="prefix">
+
+  <md-card *ngIf="errorMessage" class="error">
+    Error: {{ errorMessage }}
+  </md-card>
+
+  <md-card *ngIf="prefix">
+    <md-card-title>{{prefix.name}}</md-card-title>
+    <md-card-subtitle>ID: {{prefix.id}} </md-card-subtitle>
+  </md-card>
+
+</div>
