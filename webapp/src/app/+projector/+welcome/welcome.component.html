@@ -1,0 +1,21 @@
+<nav>
+  <div class="nav-wrapper teal">
+    <span *ngIf="section">
+      <b> Welcome to {{ section.course.prefix }} {{ section.course.number }}</b>
+      <span> {{ section.course.title }}</span>
+    </span>
+    <span class="right">{{date}}</span>
+  </div>
+</nav>
+
+<a materialize="tooltip" class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="I am tooltip">Hover me!</a>
+
+<div class="card-container">
+  <app-todays-topics></app-todays-topics>
+  <app-important-dates></app-important-dates>
+  <app-class-code></app-class-code>
+</div>
+
+
+
+

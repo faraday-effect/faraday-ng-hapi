@@ -5,6 +5,8 @@ import { ROUTER_PROVIDERS } from '@angular/router';
 
 import { FaradayAppComponent, environment } from './app/';
 
+import "angular2-materialize";
+
 @Injectable()
 class CORSBrowserXhr extends BrowserXhr {
   build() {

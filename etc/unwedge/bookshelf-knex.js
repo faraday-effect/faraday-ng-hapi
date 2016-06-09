@@ -65,6 +65,7 @@ function insert_data() {
 
         knex('roles_users').insert({user_id: 1, role_id: 10}),
         knex('roles_users').insert({user_id: 2, role_id: 11}),
+        knex('roles_users').insert({user_id: 2, role_id: 12}),
         knex('roles_users').insert({user_id: 3, role_id: 11}),
 
         () => console.log("Data inserted")
@@ -83,7 +84,8 @@ function check_data() {
         })
         .catch(function (err) {
             console.error("ERROR", err)
-        });
+        })
+        .finally(() => console.log("Data checked"));
 }
 
 function unwedge_orm() {
@@ -105,22 +107,24 @@ function unwedge_orm() {
 
     console.log("ORM configured");
 
-    return User.roles()
-        .fetchAll()
-        .then(function (collection) {
-            console.log("ROLES", collection);
-        })
-        .catch((err) => console.error("ERROR", err));
+    return Promise.join(
+        new User({id: 2})
+            .roles()
+            .fetch()
+            .then(function (collection) {
+                console.log("ROLES", collection.toJSON());
+            })
+            .catch((err) => console.error("ERROR", err)),
 
-    return User.forge()
-        .fetchAll()
-        .then(function (collection) {
-            collection.each(function(user) {
-                console.log("USER", user.get('first_name'), user.get('last_name'));
-            });
-        })
-        .finally(() => console.log("Users tested"))
-        .catch((err) => console.error("ERROR", err));
+        new Role({id: 11})
+            .users()
+            .fetch()
+            .then(function (collection) {
+                console.log("USERS", collection.toJSON());
+            })
+            .catch((err) => console.error("ERROR", err)),
+
+        () => console.log("ORM tested"))
 }
 
 reset_schema()
