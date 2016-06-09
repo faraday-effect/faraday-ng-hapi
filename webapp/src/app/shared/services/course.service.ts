@@ -7,28 +7,27 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
 
 import { Course } from '../models';
+import { CoursesUrl } from './constants';
 
 @Injectable()
 export class CourseService {
 
-  private coursesUrl = 'http://localhost:3000/courses';  // URL to web api
-
   constructor(private http: Http) { }
 
   getCourses(): Observable<Course[]> {
-    return this.http.get(this.coursesUrl)
+    return this.http.get(CoursesUrl)
       .map(response => response.json())
       .catch(this.handleError);
   }
 
   getCourse(id: number) {
-    return this.http.get(this.coursesUrl+'/'+id)
+    return this.http.get(CoursesUrl+'/'+id)
       .map(response => response.json())
       .catch(this.handleError);
   }
 
   hideCourse(id: number) {
-    return this.http.delete(this.coursesUrl+'/'+id)
+    return this.http.delete(CoursesUrl+'/'+id)
       .map(response => response.json())
       .catch(this.handleError);
   }

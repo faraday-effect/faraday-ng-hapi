@@ -6,6 +6,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
 
 //import { Section } from './shared';
+import { SectionsUrl } from './constants';
 
 // MOCK
 const SECTIONS: any[] = [
@@ -43,18 +44,16 @@ const SECTIONS: any[] = [
 @Injectable()
 export class SectionService {
 
-  private sectionUrl = 'http://localhost:3000/sections';  // URL to web api
-
   constructor(private http: Http) { }
 
   getSections() {
-    return this.http.get(this.sectionUrl)
+    return this.http.get(SectionsUrl)
       .map(response => response.json())
       .catch(this.handleError);
   }
 
   getSection(id: number) {
-    return this.http.get(this.sectionUrl+'/'+id)
+    return this.http.get(SectionsUrl+'/'+id)
       .map(response => response.json())
       .catch(this.handleError);
   }
