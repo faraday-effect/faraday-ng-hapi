@@ -14,6 +14,7 @@ exports.register = function (server, options, next) {
         handler: function (request, reply) {
             Section
             .query()
+            .eager('offering.course.[prefix, department]')
             .then((sections) => {
                 reply(sections);
             })
@@ -60,11 +61,9 @@ exports.register = function (server, options, next) {
                 .query()
                 .where('id', request.params.section_id)
                 .first()
+                .eager('offering.course.[prefix, department]')
                 .then((section) => {
-                    return section.$relatedQuery('offering');
-                })
-                .then((offering) => {
-                    reply(offering);
+                    reply(section);
                 })
                 .catch((err) => {
                     console.log(err.stack);

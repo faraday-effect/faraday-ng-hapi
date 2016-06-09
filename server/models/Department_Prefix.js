@@ -3,24 +3,16 @@
 const Model = require('objection').Model;
 const db = require('./../db')
 
-class Course extends Model {
-    static get tableName() { return 'course'; }
+class Department_Prefix extends Model {
+    static get tableName() { return 'department_prefix'; }
 
     static get relationMappings() {
         return {
-            offerings: {
-                relation: Model.OneToManyRelation,
-                modelClass: __dirname + '/Offering',
-                join: {
-                    from: 'course.id',
-                    to: 'offering.course_id'
-                }
-            },
             prefix: {
                 relation: Model.OneToOneRelation,
                 modelClass: __dirname + '/Prefix',
                 join: {
-                    from: 'course.prefix_id',
+                    from: 'department_prefix.prefix_id',
                     to: 'prefix.id'
                 }
             },
@@ -28,7 +20,7 @@ class Course extends Model {
                 relation: Model.OneToOneRelation,
                 modelClass: __dirname + '/Department',
                 join: {
-                    from: 'course.department_id',
+                    from: 'department_prefix.department_id',
                     to: 'department.id'
                 }
             }
