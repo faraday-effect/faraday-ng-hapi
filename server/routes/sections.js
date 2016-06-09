@@ -6,6 +6,7 @@ const Boom = require('boom');
 const Section = require('./../models/Section')
 const Offering = require('./../models/Offering')
 const Course = require('./../models/Course')
+const Actual_Class = require('./../models/Actual_Class')
 
 exports.register = function (server, options, next) {
     server.route({
@@ -112,13 +113,16 @@ exports.register = function (server, options, next) {
         method: 'POST',
         path: '/sections/{section_id}/today',
         handler: function (request, reply) {
-            new bookshelf.Actual_Class({
-                date: new Date(),
-                section_id: request.params.section_id
-            })
-                .save().then(function (newModel) {
-                    reply(newModel)
-                }).catch(function (err) {
+            Actual_Class
+                .query()
+                .insert({
+                    start_time: new Date(),
+                    section_id: request.params.section_id
+                })
+                .then((actual_class) => {
+                    reply(actual_class);
+                })
+                .catch(function (err) {
                     return reply(Boom.badRequest('Failed to create a new actual class', err));
                 });
         },
