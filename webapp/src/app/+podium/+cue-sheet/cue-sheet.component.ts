@@ -5,8 +5,7 @@ import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
 import {
   Section,
   Course,
-  SectionService,
-  CourseService,
+  ClassService,
   TodaysTopicsComponent,
   ImportantDatesComponent,
 } from 'app/shared';
@@ -30,12 +29,12 @@ export class CueSheetComponent implements OnInit {
   section: Section;
 
   constructor(
-    private sectionService: SectionService) {
+    private classService: ClassService) {
   }
 
   ngOnInit() {
     // FIXME hardcoded section
-    this.sectionService.getMockSections().then(
+    this.classService.getMockSections().then(
       sections => this.section = sections[0]
     );
   }

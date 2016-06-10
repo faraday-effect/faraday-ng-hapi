@@ -7,7 +7,7 @@ import { MdButton } from '@angular2-material/button';
 
 import {
   Section,
-  SectionService,
+  ClassService,
 } from 'app/shared';
 import { SectionComponent } from '../+section';
 
@@ -29,11 +29,11 @@ export class SectionsComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private sectionService: SectionService) {
+    private classService: ClassService) {
   }
 
   ngOnInit() {
-    this.sectionService.getSections()
+    this.classService.getSections()
       .subscribe(
         sections => this.sections = sections,
         error =>  this.errorMessage = <any>error

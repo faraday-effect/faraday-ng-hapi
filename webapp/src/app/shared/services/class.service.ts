@@ -55,7 +55,11 @@ export class ClassService {
 
   constructor(
     private nesService: NesService,
-    private http: Http) {}
+    private http: Http) {
+      nesService.subscribe('/attendence', msg => {
+        this.attendHandler([msg.student_id]);
+      });
+  }
 
   // courses
 
@@ -123,7 +127,6 @@ export class ClassService {
       actual_class_id: classId,
       code: CLASS_CODE,
     });
-    console.log(message);
     this.http.post(AttendanceUrl, message)
         .toPromise()
         .then(response => response.json());

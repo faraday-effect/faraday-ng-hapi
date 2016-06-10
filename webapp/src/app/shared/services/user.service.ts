@@ -13,6 +13,8 @@ import { UsersUrl } from './constants';
 @Injectable()
 export class UserService {
 
+  currentUser: any;
+
   constructor(
     private http: Http) {}
 
@@ -23,6 +25,8 @@ export class UserService {
     });
     return this.http.post(LoginUrl, message)
                .map(response => response.json())
+               .map(json => this.currentUser = json)
+               .map(() => console.log(this))
                .catch(this.handleError);
   }
 
@@ -48,7 +52,7 @@ export class UserService {
     let errMsg = (error.message) ? error.message :
       error.status ? `${error.status} - ${error.statusText}` : 'Server error';
     console.error(errMsg); // log to console instead
-    console.log('LoginService: there is an error');
+    console.log('UserService: there is an error');
     console.log(error);
     return Observable.throw(errMsg);
   }

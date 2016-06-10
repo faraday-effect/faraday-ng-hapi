@@ -5,7 +5,7 @@ import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
 import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
 import {
   Section,
-  SectionService,
+  ClassService,
 } from 'app/shared';
 
 
@@ -26,13 +26,13 @@ export class ClassCodeComponent implements OnInit {
   section: Section;
 
   constructor(
-    private sectionService: SectionService) {
+    private classService: ClassService) {
   }
 
   ngOnInit() {
     this.date = new Date();
     // FIXME hardcoded section
-    this.sectionService.getMockSections().then(
+    this.classService.getMockSections().then(
       (sections) => {
         this.section = sections[0];
         console.log(this.section);

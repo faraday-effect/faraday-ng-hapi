@@ -3,7 +3,7 @@ import { OnActivate, RouteSegment, Router } from '@angular/router';
 
 import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
 
-import { Course, CourseService } from 'app/shared';
+import { Course, ClassService } from 'app/shared';
 
 @Component({
   moduleId: module.id,
@@ -20,13 +20,13 @@ export class CourseComponent implements OnActivate {
 
   constructor(
     private router: Router,
-    private courseService: CourseService) {
+    private classService: ClassService) {
   }
 
   routerOnActivate(curr: RouteSegment) {
     this.routeSegment = curr;
     let id = +curr.getParam('id');
-    this.courseService.getCourse(id)
+    this.classService.getCourse(id)
       .subscribe(
         course => this.course = course,
         error =>  this.errorMessage = <any>error
@@ -35,7 +35,7 @@ export class CourseComponent implements OnActivate {
 
   hideCourse() {
     let id = +this.routeSegment.getParam('id');
-    this.courseService.hideCourse(id)
+    this.classService.hideCourse(id)
         .subscribe(() => this.router.navigate(['/admin/courses'])); // FIXME ADMIN
   }
 

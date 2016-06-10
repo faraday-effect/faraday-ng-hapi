@@ -11,7 +11,7 @@ import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
 
 import {
   Course,
-  CourseService,
+  ClassService,
 } from 'app/shared';
 import { CourseComponent } from '../+course';
 
@@ -35,12 +35,12 @@ export class CoursesComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private courseService: CourseService) {
+    private classService: ClassService) {
   }
 
   ngOnInit() {
     console.log(this);
-    this.courseService.getCourses()
+    this.classService.getCourses()
         .subscribe(
           courses => this.courses = courses,
           error =>  this.errorMessage = <any>error
