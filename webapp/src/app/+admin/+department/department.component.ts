@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { OnActivate, RouteSegment } from '@angular/router';
 
-import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
-
 import { Department, DepartmentService } from 'app/shared';
 
 @Component({
@@ -10,7 +8,7 @@ import { Department, DepartmentService } from 'app/shared';
   selector: 'app-department',
   templateUrl: 'department.component.html',
   styleUrls: ['department.component.css'],
-  directives: [MD_CARD_DIRECTIVES]
+  directives: []
 })
 export class DepartmentComponent implements OnActivate {
 

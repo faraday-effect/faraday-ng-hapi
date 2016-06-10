@@ -1,10 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, Routes, ROUTER_DIRECTIVES } from '@angular/router';
 
-import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
-import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
-import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
-
 import { CourseComponent } from './+course';
 import { CoursesComponent } from './+courses';
 import { SectionComponent } from './+section';
@@ -24,9 +20,6 @@ import { RegisterComponent } from './+register';
   styleUrls: ['admin.component.css'],
   directives: [
     ROUTER_DIRECTIVES,
-    MD_BUTTON_DIRECTIVES,
-    MD_CARD_DIRECTIVES,
-    MD_TOOLBAR_DIRECTIVES,
   ],
 })
 @Routes([

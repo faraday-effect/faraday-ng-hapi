@@ -1,10 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
-import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
-import { MdButton } from '@angular2-material/button';
-
 import {
   Section,
   ClassService,
@@ -16,11 +12,7 @@ import { SectionComponent } from '../+section';
   selector: 'app-sections',
   templateUrl: 'sections.component.html',
   styleUrls: ['sections.component.css'],
-  directives: [
-    MD_LIST_DIRECTIVES,
-    MD_CARD_DIRECTIVES,
-    MdButton,
-  ]
+  directives: []
 })
 export class SectionsComponent implements OnInit {
 

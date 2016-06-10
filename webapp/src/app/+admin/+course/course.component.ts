@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { OnActivate, RouteSegment, Router } from '@angular/router';
 
-import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
-
 import { Course, ClassService } from 'app/shared';
 
 @Component({
@@ -10,7 +8,7 @@ import { Course, ClassService } from 'app/shared';
   selector: 'app-course',
   templateUrl: 'course.component.html',
   styleUrls: ['course.component.css'],
-  directives: [MD_CARD_DIRECTIVES]
+  directives: []
 })
 export class CourseComponent implements OnActivate {
 

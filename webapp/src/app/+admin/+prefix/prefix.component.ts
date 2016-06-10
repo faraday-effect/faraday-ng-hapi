@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { OnActivate, RouteSegment } from '@angular/router';
 
-import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
-
 import { Prefix, PrefixService } from 'app/shared';
 
 @Component({
@@ -10,7 +8,7 @@ import { Prefix, PrefixService } from 'app/shared';
   selector: 'app-prefix',
   templateUrl: 'prefix.component.html',
   styleUrls: ['prefix.component.css'],
-  directives: [MD_CARD_DIRECTIVES]
+  directives: []
 })
 export class PrefixComponent implements OnActivate {
 

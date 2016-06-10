@@ -1,11 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 
-import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
-import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
-import { MD_ICON_DIRECTIVES } from '@angular2-material/icon';
-import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
-
 import {
   ClassService,
   Person,
@@ -17,12 +12,7 @@ import {
   selector: 'app-attendance',
   templateUrl: 'attendance.component.html',
   styleUrls: ['attendance.component.css'],
-  directives: [
-    MD_BUTTON_DIRECTIVES,
-    MD_CARD_DIRECTIVES,
-    MD_ICON_DIRECTIVES,
-    MD_LIST_DIRECTIVES,
-  ],
+  directives: [],
 })
 export class AttendanceComponent implements OnInit {
 

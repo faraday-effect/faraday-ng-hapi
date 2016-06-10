@@ -1,12 +1,12 @@
-<div class="prefix">
-
-  <md-card *ngIf="errorMessage" class="error">
-    Error: {{ errorMessage }}
-  </md-card>
-
-  <md-card *ngIf="prefix">
-    <md-card-title>{{prefix.name}}</md-card-title>
-    <md-card-subtitle>ID: {{prefix.id}} </md-card-subtitle>
-  </md-card>
-
+<div class="row">
+  <div class="col s12 m6 l4">
+    <div *ngIf="prefix" class="card">
+      <div class="card-content">
+        <span class="card-title">{{prefix.name}}</span>
+        <div>
+          ID: {{prefix.id}}
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

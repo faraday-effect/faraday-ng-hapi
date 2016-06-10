@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
-
 import {
   Section,
   Course,
@@ -18,7 +16,6 @@ import { AttendanceComponent } from './attendance';
   templateUrl: 'cue-sheet.component.html',
   styleUrls: ['cue-sheet.component.css'],
   directives: [
-    MD_TOOLBAR_DIRECTIVES,
     AttendanceComponent,
     TodaysTopicsComponent,
     ImportantDatesComponent,

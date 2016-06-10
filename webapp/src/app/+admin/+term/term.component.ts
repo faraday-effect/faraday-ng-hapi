@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { OnActivate, RouteSegment } from '@angular/router';
 
-import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
-
 import { Term, TermService } from 'app/shared';
 
 @Component({
@@ -10,7 +8,7 @@ import { Term, TermService } from 'app/shared';
   selector: 'app-term',
   templateUrl: 'term.component.html',
   styleUrls: ['term.component.css'],
-  directives: [MD_CARD_DIRECTIVES]
+  directives: []
 })
 export class TermComponent implements OnActivate {
 
