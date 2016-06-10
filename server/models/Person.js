@@ -20,6 +20,30 @@ class Person extends Model {
                         to: 'student.section_id'
                     },
                     to: 'section.id'
+                },
+            },
+            instructor_sections: {
+                relation: Model.ManyToManyRelation,
+                modelClass: __dirname + '/Section',
+                join: {
+                    from: 'person.id',
+                    through: {
+                        from: 'instructor.person_id',
+                        to: 'instructor.section_id'
+                    },
+                    to: 'section.id'
+                },
+            },
+            teaching_assistant_sections: {
+                relation: Model.ManyToManyRelation,
+                modelClass: __dirname + '/Section',
+                join: {
+                    from: 'person.id',
+                    through: {
+                        from: 'teaching_assistant.person_id',
+                        to: 'teaching_assistant.section_id'
+                    },
+                    to: 'section.id'
                 }
             }
         }
