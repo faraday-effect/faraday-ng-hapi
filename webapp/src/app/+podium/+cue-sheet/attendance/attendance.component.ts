@@ -39,7 +39,7 @@ export class AttendanceComponent implements OnInit {
   ngOnInit() {
     this.classService.getSections()
         .toPromise()
-        .then(sections => this.section_id = sections.sort()[4].id)
+        .then(sections => this.section_id = 1)
         .then(() => this.classService.getStudents(this.section_id))
         .then(students => {
           this.students = students;
