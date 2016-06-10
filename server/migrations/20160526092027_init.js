@@ -360,22 +360,12 @@ exports.up = function (knex, Promise) {
         }),
 
         knex.schema.createTableIfNotExists('member_role', function (table) {
-            table.integer('role_id')
-                .unsigned()
-                .notNullable()
-                .references('id')
-                .inTable('role');
-            table.integer('member_section_id')
-                .unsigned()
-                .notNullable()
-                .references('section_id')
-                .inTable('member');
-            table.integer('member_user_id')
-                .unsigned()
-                .notNullable()
-                .references('user_id')
-                .inTable('member');
+            table.integer('role_id').unsigned().notNullable();
+            table.integer('member_section_id').unsigned().notNullable();
+            table.integer('member_user_id').unsigned().notNullable();
             table.primary(['role_id', 'member_section_id', 'member_user_id']);
+            table.foreign('role_id').references('role.id');
+            table.foreign(['member_user_id', 'member_section_id']).references(['user_id', 'section_id']).on('member');
         })
     ])
 
@@ -418,3 +408,6 @@ exports.down = function (knex, Promise) {
         knex.schema.dropTableIfExists('user')
     ]);
 };
+
+
+
