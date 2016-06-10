@@ -42,7 +42,7 @@ export class AttendanceComponent implements OnInit {
         .then(sections => this.section_id = sections.sort()[4].id)
         .then(() => this.classService.getStudents(this.section_id))
         .then(students => {
-          this.students = students
+          this.students = students;
           this.students.sort(
             (a, b) => a.first_name.localeCompare(b.first_name)
           );
@@ -83,8 +83,7 @@ export class AttendanceComponent implements OnInit {
     return this.http.post(url, msg)
                .toPromise()
                .then(response => response.json())
-               .then(cl => this.classId = cl.id)
-               .then(() => console.log("classId:", this.classId));
+               .then(cl => this.classId = cl.id);
   }
 
 }
