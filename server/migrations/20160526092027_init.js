@@ -342,8 +342,7 @@ exports.up = function (knex, Promise) {
                 .notNullable()
                 .references('id')
                 .inTable('user');
-            //table.primary(['user_id', 'section_id'])
-            table.unique(['user_id', 'section_id']);
+            table.primary(['user_id', 'section_id']);
         }),
 
         knex.schema.createTableIfNotExists('user_permission', function (table) {
