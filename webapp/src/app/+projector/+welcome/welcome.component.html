@@ -1,5 +1,5 @@
 <nav>
-  <div class="nav-wrapper teal">
+  <div class="nav-wrapper">
     <span *ngIf="section">
       <b> Welcome to {{ section.course.prefix }} {{ section.course.number }}</b>
       <span> {{ section.course.title }}</span>
@@ -10,10 +10,12 @@
 
 <a materialize="tooltip" class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="I am tooltip">Hover me!</a>
 
-<div class="card-container">
-  <app-todays-topics></app-todays-topics>
-  <app-important-dates></app-important-dates>
-  <app-class-code></app-class-code>
+<div class="container">
+  <div class="row">
+    <app-todays-topics></app-todays-topics>
+    <app-important-dates></app-important-dates>
+    <app-class-code></app-class-code>
+  </div>
 </div>
 
 

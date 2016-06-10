@@ -1,13 +1,23 @@
 <!-- css for the title toolbar is messed up -->
-<md-toolbar color="primary">
-  <span *ngIf="activity">
-      <div class="left"> < Story Board</div>
-      <span class="fill-space"></span>
+<nav>
+  <div class="nav-wrapper">
+    <span *ngIf="activity">
+      <span class="left"> Story Board</span>
       <b>{{ activity.title }}</b>
-      <span class="fill-space"></span>
-      <div class="right">(Next Topic) > </div>
-  </span>
-</md-toolbar>
+      <span class="right">Next Topic</span>
+    </span>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="row">
+    <app-attendance></app-attendance>
+    <app-todays-topics></app-todays-topics>
+    <app-important-dates></app-important-dates>
+  </div>
+</div>
+
+
 <span *ngIf="activity">
   <div class="card-container">
     <div *ngFor="let slide of activity.slides">

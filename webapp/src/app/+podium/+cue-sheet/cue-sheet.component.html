@@ -1,18 +1,17 @@
-<md-toolbar color="primary">
-  <span *ngIf="section">
-    <b> {{ section.course.prefix }} {{ section.course.number }}</b>
-    <span> {{ section.course.title }}</span>
-  </span>
-  <span class="fill-space"></span>
-  Cue Sheet
-</md-toolbar>
+<nav>
+  <div class="nav-wrapper">
+    <span *ngIf="section">
+      <b>{{ section.course.prefix }} {{ section.course.number }}</b>
+      <span> {{ section.course.title }}</span>
+    </span>
+    <span class="right">Cue Sheet</span>
+  </div>
+</nav>
 
-<div class="card-container">
-
-  <app-attendance></app-attendance>
-
-  <app-todays-topics></app-todays-topics>
-
-  <app-important-dates></app-important-dates>
-
+<div class="container">
+  <div class="row">
+    <app-attendance></app-attendance>
+    <app-todays-topics></app-todays-topics>
+    <app-important-dates></app-important-dates>
+  </div>
 </div>

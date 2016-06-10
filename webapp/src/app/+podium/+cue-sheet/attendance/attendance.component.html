@@ -1,24 +1,39 @@
-<button (click)="startClass()" md-raised-button>Start class</button>
+<div class="col s12 m6 l4">
+  <div class="card blue-grey darken-1">
+    <div class="card-content white-text">
+      <span class="card-title">Attendance</span>
 
-<md-card>
-  <md-card-title>Attendance</md-card-title>
+      <ul class="collection">
 
-  <md-list>
+        <button *ngFor="let student of getPresent()" (click)="depart(student.id)" class="student-container">
+          <li class="collection-item avatar">
 
-    <button *ngFor="let student of getPresent()" (click)="depart(student.id)" class="student-container" md-button>
-      <md-list-item>
-        <img md-list-avatar src="http://efdreams.com/data_images/dreams/face/face-10.jpg">
-        <md-line class="student-present">{{student.first_name}} {{student.last_name}} ({{student.id}})</md-line>
-      </md-list-item>
-    </button>
+            <img src="http://efdreams.com/data_images/dreams/face/face-10.jpg" alt="" class="circle">
+            <span class="title">{{student.first_name}} {{student.last_name}} ({{student.id}})</span>
+          </li>
+        </button>
 
-    <button  *ngFor="let student of getAbsent()" (click)="attend(student.id)" class="student-container" md-button>
-      <md-list-item>
-        <img md-list-avatar src="http://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/durchschnittsgesichter/m(01-32)_gr.jpg">
-        <md-line class="student-absent">{{student.first_name}} {{student.last_name}} ({{student.id}})</md-line>
-      </md-list-item>
-    </button>
+        <button  *ngFor="let student of getAbsent()" (click)="attend(student.id)" class="student-container">
+          <li class="collection-item avatar">
+            <img src="http://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/durchschnittsgesichter/m(01-32)_gr.jpg" alt="" class="circle">
+            <span class="title">{{student.first_name}} {{student.last_name}} ({{student.id}})</span>
+          </li>
+        </button>
 
-  </md-list>
+      </ul>
 
-</md-card>
+
+    </div>
+    <div class="card-action">
+      <a href="#">This is a link</a>
+      <a href="#">This is a link</a>
+    </div>
+  </div>
+</div>
+
+
+
+<button class="btn waves-effect waves-light" (click)="startClass()">Start Class
+</button>
+
+
