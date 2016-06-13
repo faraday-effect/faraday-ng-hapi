@@ -8,14 +8,15 @@ class Section extends Model {
 
     static get relationMappings() {
         return {
-            students: {
+            member: {
                 relation: Model.ManyToManyRelation,
                 modelClass: __dirname + '/User',
                 join: {
                     from: 'section.id',
                     through: {
-                        from: 'student.section_id',
-                        to: 'student.user_id'
+                        modelClass: __dirname + '/Member',
+                        from: 'member.section_id',
+                        to: 'member.user_id'
                     },
                     to: 'user.id'
                 }
