@@ -3,47 +3,31 @@
 const Model = require('objection').Model;
 const db = require('./../db')
 
-class Member extends Model {
-    static get tableName() { return 'member'; }
+class Role extends Model {
+    static get tableName() { return 'role'; }
 
     static get relationMappings() {
         return {
-            role: {
+            member: {
                 relation: Model.ManyToManyRelation,
-                modelClass: __dirname + '/role',
+                modelClass: __dirname + '/member',
                 join: {
-                    from: [
+                    from: 'role.id',
+                    through: {
+                        from: 'member_role.role_id',
+                        to: [
+                            'member_role.section_id',
+                            'member_role.user_id'
+                        ]
+                    },
+                    to: [
                         'member.section_id',
                         'section.user_id'
                     ],
-                    through: {
-                        from: [
-                            'member_role.section_id',
-                            'member_role.user_id'
-                        ],
-                        to: 'member_role.role_id'
-                    },
-                    to: 'role.id'
-                }
-            },
-            section: {
-                relation: Model.OneToOneRelation,
-                modelClass: __dirname + '/Section',
-                join: {
-                    from: 'member.section_id',
-                    to: 'section.id'
-                }
-            },
-            user: {
-                relation: Model.OneToOneRelation,
-                modelClass: __dirname + '/User',
-                join: {
-                    from: 'member.user_id',
-                    to: 'user.id'
                 }
             }
         }
     }
 }
 
-module.exports = Member;
+module.exports = Role;
