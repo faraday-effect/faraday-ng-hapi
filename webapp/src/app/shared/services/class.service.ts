@@ -134,9 +134,6 @@ export class ClassService {
           response.json();
           console.log('hey, i got here');
         });
-
-      //.toPromise()
-      //.then(response => response.json());
   }
 
   depart(id: number, classId: number) {

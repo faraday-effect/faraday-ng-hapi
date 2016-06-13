@@ -1,78 +1,51 @@
 <!-- not currently using absent/present classes -->
 <div class="col s12 m6 l4">
-  <div class="card blue-grey darken-1">
-    <div class="card-content white-text">
+  <div class="card ">
+    <div class="card-content">
       <span class="card-title">Attendance</span>
       <div class="collection">
         <div *ngFor="let student of getPresent()"  >
           <a class="collection-item" (click)="depart(student.id)">
-            <img src="http://efdreams.com/data_images/dreams/face/face-10.jpg" alt="" class="circle">
-            <span class="title">Present: {{student.first_name}} {{student.last_name}} ({{student.id}})</span>
+            <div class="row valign-wrapper">
+              <div class="col s3">
+                <img src="http://efdreams.com/data_images/dreams/face/face-10.jpg"
+                     alt="" class="circle responsive-img">
+              </div>
+              <div class="col s9">
+                <span class="student-present">
+                  {{student.first_name}} {{student.last_name}} ({{student.id}})
+                </span>
+              </div>
+            </div>
           </a>
         </div>
-        <div *ngFor="let student of getAbsent()" >
+        <div *ngFor="let student of getAbsent()"  >
           <a class="collection-item" (click)="attend(student.id)">
-            <img src="http://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/durchschnittsgesichter/m(01-32)_gr.jpg" alt="" class="circle">
-            <span class="title">Absent: {{student.first_name}} {{student.last_name}} ({{student.id}})</span>
+            <div class="row valign-wrapper">
+              <div class="col s3">
+                <img src="http://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/durchschnittsgesichter/m(01-32)_gr.jpg"
+                     alt="" class="circle responsive-img">
+              </div>
+              <div class="col s9">
+                <span class="student-absent">
+                  {{student.first_name}} {{student.last_name}} ({{student.id}})
+                </span>
+              </div>
+            </div>
           </a>
         </div>
-        <!-- <button  *ngFor="let student of getAbsent()" (click)="attend(student.id)" >
-          <li class="collection-item avatar">
-            <img src="http://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/durchschnittsgesichter/m(01-32)_gr.jpg" alt="" class="circle">
-            <span class="title">{{student.first_name}} {{student.last_name}} ({{student.id}})</span>
-          </li>
-        </button>-->
       </div>
     </div>
-    <div class="card-action">
-      <a href="#">This is a link</a>
-      <a href="#">This is a link</a>
+  </div>
+  <div class="row">
+    <div class="col s12 m6 l4">
+      <button class="btn waves-effect waves-light" (click)="startClass()">Start Class
+      </button>
     </div>
   </div>
 </div>
 
 
 
-<ul class="collection" >
-  <li class="collection-item avatar">
-    <img src="images/yuna.jpg" alt="" class="circle">
-    <span class="title">Title</span>
-    <p>First Line <br>
-      Second Line
-    </p>
-    <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-  </li>
-  <li class="collection-item avatar">
-    <i class="material-icons circle">folder</i>
-    <span class="title">Title</span>
-    <p>First Line <br>
-      Second Line
-    </p>
-    <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-  </li>
-  <li class="collection-item avatar">
-    <i class="material-icons circle green">insert_chart</i>
-    <span class="title">Title</span>
-    <p>First Line <br>
-      Second Line
-    </p>
-    <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-  </li>
-  <li class="collection-item avatar">
-    <i class="material-icons circle red">play_arrow</i>
-    <span class="title">Title</span>
-    <p>First Line <br>
-      Second Line
-    </p>
-    <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-  </li>
-</ul>
-
-
-
-
-
-<button class="btn waves-effect waves-light" (click)="startClass()">Start Class
-</button>
 
 
