@@ -6,6 +6,7 @@ const Section = require('./../models/Section')
 const Offering = require('./../models/Offering')
 const Course = require('./../models/Course')
 const ActualClass = require('./../models/ActualClass')
+const CurrentClass = require('./../models/CurrentClass')
 
 exports.register = function (server, options, next) {
     server.route({
@@ -208,20 +209,16 @@ exports.register = function (server, options, next) {
                     start_time: new Date(),
                     section_id: request.params.section_id
                 })
-                .then((actualClass) => {
-                    Section
-                        .query()
-                        .patchAndFetchById(actualClass.section_id, {
-                            current_class: actualClass.id
-                        })
-                        .then(() => {
-                            reply(actualClass);
-                        });
-                })
-                .catch(function (err) {
-                    return reply(Boom.badRequest('Failed to create a new actual class', err));
+                .then((actual_class) => {
+                    actual_class
+                    .$relatedQuery('currentClass')
+                    .insert({
+                        actual_class_id: actual_class.id,
+                        section_id: request.params.section_id
+                    }).then((model) => {
+                        reply(model);
+                    });
                 });
-
         },
         config: {
             notes: 'when the prof hit the \'start class button\'this will start class by creating an actaul class instance allowing students to attend the class',

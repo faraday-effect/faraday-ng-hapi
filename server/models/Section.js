@@ -44,6 +44,18 @@ class Section extends Model {
                     from: 'section.id',
                     to: 'member.section_id',
                 }
+            },
+            currentClass: {
+                relation: Model.ManyToManyRelation,
+                modelClass: __dirname + '/ActualClass',
+                join: {
+                    from: 'section.id',
+                    through: {
+                        from: 'current_class.section_id',
+                        to: 'current_class.actual_class_id'
+                    },
+                    to: 'actual_class.id'
+                }
             }
         }
     }
