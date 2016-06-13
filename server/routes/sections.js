@@ -1,7 +1,6 @@
 "use strict";
 
 const Joi = require('joi');
-const bookshelf = require('./../bookshelf');
 const Boom = require('boom');
 const Section = require('./../models/Section')
 const Offering = require('./../models/Offering')
@@ -29,14 +28,22 @@ exports.register = function (server, options, next) {
         method: 'POST',
         path: '/sections/{section_id}/students',
         handler: function (request, reply) {
-            new bookshelf.Student({ section_id: request.params.section_id, person_id: request.auth.credentials.id })
-                .save()
-                .then(function (model) {
-                    return reply(model);
+            Section
+                .query()
+                .where('id', request.params.section_id)
+                .first()
+                .then((section) => {
+                    section.$relatedQuery('student').relate(request.auth.credentials.id)
+                    .then((student) => {
+                        reply(student);
+                    })
+                    .catch((err) => {
+                        reply(Boom.badData('Could not add current_user as student to section ' + request.params.section_id, err));
+                    })
                 })
-                .catch(function (err) {
-                    reply(Boom.badImplementation('Failed to add student ' + request.auth.credentials.first_name + ' ' + request.auth.credentials.last_name + ' to section ' + request.params.section_id, err));
-                });
+                .catch((err) => {
+                reply(Boom.badData('Could not find section ' + request.params.section_id, err));    
+            });
         },
         config: {
             notes: 'adds a student to a given section does not handle the case of double adding a student to a section',
@@ -52,14 +59,22 @@ exports.register = function (server, options, next) {
         method: 'POST',
         path: '/sections/{section_id}/instructors',
         handler: function (request, reply) {
-            new bookshelf.Instructor({ section_id: request.params.section_id, person_id: request.auth.credentials.id })
-                .save()
-                .then(function (model) {
-                    return reply(model);
+           Section
+                .query()
+                .where('id', request.params.section_id)
+                .first()
+                .then((section) => {
+                    section.$relatedQuery('instructor').relate(request.auth.credentials.id)
+                    .then((instructor) => {
+                        reply(instructor);
+                    })
+                    .catch((err) => {
+                        reply(Boom.badData('Could not add current_user as instructor to section ' + request.params.section_id, err));
+                    })
                 })
-                .catch(function (err) {
-                    reply(Boom.badImplementation('Failed to add student ' + request.auth.credentials.first_name + ' ' + request.auth.credentials.last_name, err));
-                });
+                .catch((err) => {
+                reply(Boom.badData('Could not find section ' + request.params.section_id, err));    
+            });
         },
         config: {
             notes: 'adds an instructor to a given section does not handle the case of double adding an instructor to a section',
@@ -75,14 +90,22 @@ exports.register = function (server, options, next) {
         method: 'POST',
         path: '/sections/{section_id}/tas',
         handler: function (request, reply) {
-            new bookshelf.Teaching_Assistant({ section_id: request.params.section_id, person_id: request.auth.credentials.id })
-                .save()
-                .then(function (model) {
-                    return reply(model);
+            Section
+                .query()
+                .where('id', request.params.section_id)
+                .first()
+                .then((section) => {
+                    section.$relatedQuery('teaching_assistant').relate(request.auth.credentials.id)
+                    .then((ta) => {
+                        reply(ta);
+                    })
+                    .catch((err) => {
+                        reply(Boom.badData('Could not add current_user as TA to section ' + request.params.section_id, err));
+                    })
                 })
-                .catch(function (err) {
-                    reply(Boom.badImplementation('Failed to add TA ' + request.auth.credentials.first_name + ' ' + request.auth.credentials.last_name, err));
-                });
+                .catch((err) => {
+                reply(Boom.badData('Could not find section ' + request.params.section_id, err));    
+            });
         },
         config: {
             notes: 'adds TA to a given section does not handle the case of double adding a TA to a section',
@@ -218,7 +241,6 @@ exports.register = function (server, options, next) {
         path: '/sections/{section_id}/today',
         handler: function (request, reply) {
             var actual_class_id = -1;
-
             //Get the current_class from the database
             Section
                 .query()
@@ -227,9 +249,6 @@ exports.register = function (server, options, next) {
                 .first()
                 .then((section) => {
                     actual_class_id = section.current_class
-                    console.log('var set');
-                    console.log(section.current_class);
-                    console.log(actual_class_id);
                 }).then((section) => {
                     //Update current_class to be null
                     Section
@@ -331,9 +350,7 @@ exports.register = function (server, options, next) {
         method: 'DELETE',
         path: '/sections/{section_id}',
         handler: function (request, reply) {
-            var response = bookshelf.Section.forge({ 'id': encodeURIComponent(request.params.section_id) }).fetch();
-            console.log('I deleted');
-            reply(response);
+            reply('I am not implemented');
         },
         config: {
             notes: 'to be implemented',
@@ -347,4 +364,4 @@ exports.register = function (server, options, next) {
     next();
 };
 
-exports.register.attributes = { name: 'sections', version: '0.0.1' };
+exports.register.attributes = { name: 'sections', version: '0.0.3' };
