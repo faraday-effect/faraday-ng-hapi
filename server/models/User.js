@@ -16,11 +16,20 @@ class User extends Model {
                 join: {
                     from: 'user.id',
                     through: {
+                        modelClass: __dirname + './../models/User',
                         from: 'member.user_id',
                         to: 'member.section_id'
                     },
                     to: 'section.id'
                 },
+            },
+            member: {
+                relation: Model.OneToManyRelation,
+                modelClass: __dirname + '/Member',
+                join: {
+                    from: 'user.id',
+                    to: 'member.user_id'
+                }
             }
         }
     }

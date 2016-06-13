@@ -8,7 +8,7 @@ class Section extends Model {
 
     static get relationMappings() {
         return {
-            member: {
+            users: {
                 relation: Model.ManyToManyRelation,
                 modelClass: __dirname + '/User',
                 join: {
@@ -35,6 +35,14 @@ class Section extends Model {
                 join: {
                     from: 'section.id',
                     to: 'actual_class.section_id'
+                }
+            },
+            members: {
+                relation: Model.OneToManyRelation,
+                modelClass: __dirname + '/Member',
+                join: {
+                    from: 'section.id',
+                    to: 'member.section_id',
                 }
             }
         }

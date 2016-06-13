@@ -174,21 +174,18 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'GET',
-        path: '/sections/{section_id}/students',
+        path: '/sections/{section_id}/members',
         handler: function (request, reply) {
             Section
                 .query()
                 .where('id', request.params.section_id)
                 .first()
+                .eager('users')
                 .then((section) => {
-                    return section.$relatedQuery('students');
-                })
-                .then((students) => {
-                    var response = []
-                    students.forEach((student) => {
-                        response.push(student.stripPassword());
+                    section.users.forEach((user) => {
+                        user.stripPassword();
                     });
-                    return reply(response);
+                    reply(section);
                 });
         },
         config: {
