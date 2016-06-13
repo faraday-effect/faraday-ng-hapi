@@ -212,10 +212,8 @@ exports.register = function (server, options, next) {
                 .then((actual_class) => {
                     actual_class
                     .$relatedQuery('currentClass')
-                    .insert({
-                        actual_class_id: actual_class.id,
-                        section_id: request.params.section_id
-                    }).then((model) => {
+                    .relate(request.params.section_id)
+                    .then((model) => {
                         reply(model);
                     });
                 });

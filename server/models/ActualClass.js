@@ -14,8 +14,8 @@ class ActualClass extends Model {
                 join: {
                     from: 'actual_class.id',
                     through: {
-                        from: 'current_class.section_id',
-                        to: 'current_class.actual_class_id'
+                        from: 'current_class.actual_class_id',
+                        to: 'current_class.section_id'
                     },
                     to: 'section.id'
                 }
