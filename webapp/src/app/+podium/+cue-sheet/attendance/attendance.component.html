@@ -3,21 +3,26 @@
   <div class="card blue-grey darken-1">
     <div class="card-content white-text">
       <span class="card-title">Attendance</span>
-      <ul class="collection">
-        <button *ngFor="let student of getPresent()" (click)="depart(student.id)" class="student-container">
-          <li class="collection-item avatar">
-
+      <div class="collection">
+        <div *ngFor="let student of getPresent()"  >
+          <a class="collection-item" (click)="depart(student.id)">
             <img src="http://efdreams.com/data_images/dreams/face/face-10.jpg" alt="" class="circle">
-            <span class="title">{{student.first_name}} {{student.last_name}} ({{student.id}})</span>
-          </li>
-        </button>
-        <button  *ngFor="let student of getAbsent()" (click)="attend(student.id)" class="student-container">
+            <span class="title">Present: {{student.first_name}} {{student.last_name}} ({{student.id}})</span>
+          </a>
+        </div>
+        <div *ngFor="let student of getAbsent()" >
+          <a class="collection-item" (click)="attend(student.id)">
+            <img src="http://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/durchschnittsgesichter/m(01-32)_gr.jpg" alt="" class="circle">
+            <span class="title">Absent: {{student.first_name}} {{student.last_name}} ({{student.id}})</span>
+          </a>
+        </div>
+        <!-- <button  *ngFor="let student of getAbsent()" (click)="attend(student.id)" >
           <li class="collection-item avatar">
             <img src="http://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/durchschnittsgesichter/m(01-32)_gr.jpg" alt="" class="circle">
             <span class="title">{{student.first_name}} {{student.last_name}} ({{student.id}})</span>
           </li>
-        </button>
-      </ul>
+        </button>-->
+      </div>
     </div>
     <div class="card-action">
       <a href="#">This is a link</a>
@@ -25,6 +30,45 @@
     </div>
   </div>
 </div>
+
+
+
+<ul class="collection" >
+  <li class="collection-item avatar">
+    <img src="images/yuna.jpg" alt="" class="circle">
+    <span class="title">Title</span>
+    <p>First Line <br>
+      Second Line
+    </p>
+    <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+  </li>
+  <li class="collection-item avatar">
+    <i class="material-icons circle">folder</i>
+    <span class="title">Title</span>
+    <p>First Line <br>
+      Second Line
+    </p>
+    <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+  </li>
+  <li class="collection-item avatar">
+    <i class="material-icons circle green">insert_chart</i>
+    <span class="title">Title</span>
+    <p>First Line <br>
+      Second Line
+    </p>
+    <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+  </li>
+  <li class="collection-item avatar">
+    <i class="material-icons circle red">play_arrow</i>
+    <span class="title">Title</span>
+    <p>First Line <br>
+      Second Line
+    </p>
+    <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+  </li>
+</ul>
+
+
 
 
 

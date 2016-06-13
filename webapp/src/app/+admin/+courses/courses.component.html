@@ -6,14 +6,13 @@
 
 
 <div class="collection">
-    <div *ngFor="let course of courses">
-      <div *ngIf="!course.hidden || showHidden">
-        <a class="collection-item"
-         (click)="gotoCourse(course.id)">{{course.title}}
-        </a>
-      </div>
+  <div *ngFor="let course of courses">
+    <div *ngIf="!course.hidden || showHidden">
+      <a class="collection-item" (click)="gotoCourse(course.id)">{{course.title}}
+      </a>
     </div>
   </div>
+</div>
   <div *ngIf="errorMessage" class="error">
     Error: {{ errorMessage }}
   </div>

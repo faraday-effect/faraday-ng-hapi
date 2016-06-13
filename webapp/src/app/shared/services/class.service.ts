@@ -127,9 +127,15 @@ export class ClassService {
       actual_class_id: classId,
       code: CLASS_CODE,
     });
+    console.log(message);
     this.http.post(AttendanceUrl, message)
-        .toPromise()
-        .then(response => response.json());
+        .toPromise().then(response => {
+          response.json();
+          console.log('hey, i got here');
+        });
+
+      //.toPromise()
+      //.then(response => response.json());
   }
 
   depart(id: number, classId: number) {

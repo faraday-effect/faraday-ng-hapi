@@ -61,6 +61,7 @@ export class AttendanceComponent implements OnInit {
 
   attend(id: number) {
     this.classService.attend(id, this.classId);
+    console.log('attending this student');
   }
 
   depart(id: number) {
