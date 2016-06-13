@@ -17,7 +17,7 @@ class User extends Model {
                     from: 'user.id',
                     through: {
                         from: 'member.user_id',
-                        to: 'section.section_id'
+                        to: 'member.section_id'
                     },
                     to: 'section.id'
                 },
