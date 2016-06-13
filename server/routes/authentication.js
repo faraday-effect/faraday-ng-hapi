@@ -1,13 +1,13 @@
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
 const Boom = require('boom');
-const bookshelf = require('./../bookshelf');
+const User = require('./../models/User')
 var uuid = 1;
 
 exports.register = function (server, options, next) {
 
     //creates the cache segment 'sessions' in the server to store cookie info
-    const cache = server.cache({segment: 'sessions', expiresIn: 24 * 60 * 60 * 1000});
+    const cache = server.cache({ segment: 'sessions', expiresIn: 24 * 60 * 60 * 1000 });
     server.app.cache = cache;
 
     //defaults to set authentication on all routes
@@ -33,45 +33,46 @@ exports.register = function (server, options, next) {
     });
 
     //secures all routes
-    server.auth.default({strategy: 'session'});
+    server.auth.default({ strategy: 'session' });
 
     server.route({
         method: 'POST',
         path: '/login',
         handler: function (request, reply) {
-            var user = {};
-            new bookshelf.Person({email: request.payload.email}).fetch().then((model) => {
-                user = model.toJSON();
+            User
+                .query()
+                .where('email', request.payload.email)
+                .first()
+                .then((user) => {
+                    console.log(user);
 
-                //checks that the user password was matched with the DB password
-                bcrypt.compare(request.payload.password, user.password, (err, isValid) => {
-                    if (!isValid) {
-                        if (err) {
-                            return reply(Boom.badRequest(err));
+                    //checks that the user password was matched with the DB password
+                    bcrypt.compare(request.payload.password, user.password, (err, isValid) => {
+                        if (!isValid) {
+                            if (err) {
+                                return reply(Boom.badRequest(err));
+                            }
+                            return reply(Boom.unauthorized('Invalid password'));
                         }
-                        return reply(Boom.unauthorized('invalid password'));
-                    }
-                    const sid = String(++uuid);
+                        const sid = String(++uuid);
 
-                    //Removes information from user object passed to browser and stored in the cache
-                    delete user['password'];
-                    delete user['office_phone'];
-                    delete user['mobile_phone'];
+                        //Removes information from user object passed to browser and stored in the cache
+                        user.stripPassword();
 
-                    //Sets the user object in the cache
-                    server.app.cache.set(sid, user, 0, (err) => {
-                        if (err) {
-                            return reply(Boom.badImplementation('Failed to set session ID ' + sid + 'for user ' + user.first_name + ' ' + user.last_name, err));
-                        }
-                        //Sets the cookie up and gives it back to the browser
-                        request.cookieAuth.set({sid: sid});
-                        reply(user);
+                        //Sets the user object in the cache
+                        server.app.cache.set(sid, user, 0, (err) => {
+                            if (err) {
+                                return reply(Boom.badRequest('Failed to set session ID ' + sid + 'for user ' + user.first_name + ' ' + user.last_name, err));
+                            }
+                            //Sets the cookie up and gives it back to the browser
+                            request.cookieAuth.set({ sid: sid });
+                            reply(user);
+                        });
                     });
-                });
 
-            }).catch(() => {
-                return reply(Boom.badRequest('invalid username or password'));
-            });
+                }).catch(() => {
+                    return reply(Boom.unauthorized('Invalid username or password'));
+                });
         },
         config: {
             auth: false,
@@ -89,14 +90,14 @@ exports.register = function (server, options, next) {
     server.route({
         method: 'POST',
         path: '/logout',
-        handler: function (request, reply) {          
+        handler: function (request, reply) {
             server.app.cache.drop(request.auth.artifacts.sid, (err) => {
-                if(err){
+                if (err) {
                     return reply(Boom.badImplementation('Couldn\'t drop cache entry for user', err));
                 }
             });
             request.cookieAuth.clear();
-            return reply({statusCode: 200, message: 'Logout successful', success: true});
+            return reply({ statusCode: 200, message: 'Logout successful', success: true });
         },
         config: {
             notes: 'Removes session token from the browser & server\'s cache'
@@ -106,4 +107,4 @@ exports.register = function (server, options, next) {
     next();
 };
 
-exports.register.attributes = {name: 'authentication', version: '0.0.2'};
+exports.register.attributes = { name: 'authentication', version: '0.0.3' };
