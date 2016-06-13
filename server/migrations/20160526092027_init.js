@@ -308,6 +308,22 @@ exports.up = function (knex, Promise) {
                 .inTable('submission');
         }),
 
+        knex.schema.createTableIfNotExists('assessment', function(table) {
+            table.increments('id').primary();
+            table.text('discussion');
+            table.integer('submission_id')
+                .unsigned()
+                .notNullable()
+                .references('id')
+                .inTable('submission');
+            table.dateTime('assessed_at');
+            table.integer('assessed_by')
+                .unsigned()
+                .notNullable()
+                .references('id')
+                .inTable('user');
+        }),
+
         //orange
         knex.schema.createTableIfNotExists('user', function (table) {
             table.increments('id').primary();
@@ -383,6 +399,7 @@ exports.down = function (knex, Promise) {
         knex.schema.dropTableIfExists('member'),
         knex.schema.dropTableIfExists('user_permission'),
         knex.schema.dropTableIfExists('attachment'),
+        knex.schema.dropTableIfExists('assessment'),
         knex.schema.dropTableIfExists('submission'),
         knex.schema.dropTableIfExists('actual_class'),
         knex.schema.dropTableIfExists('actual_activity'),
