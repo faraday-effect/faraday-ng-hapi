@@ -12,7 +12,6 @@ module.exports = function(defaults) {
       'reflect-metadata/**/*.+(js|js.map)',
       'rxjs/**/*.+(js|js.map)',
       '@angular/**/*.+(js|js.map)',
-      '@angular2-material/**/*',
       'nes/**/*',
       'jquery/**/*',
       'angular2-materialize/**/*'

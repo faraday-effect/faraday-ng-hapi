@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { Routes, ROUTER_DIRECTIVES } from '@angular/router';
 
-import { MdIconRegistry } from '@angular2-material/icon';
-
 import { LoginComponent } from './+login';
 import { AdminComponent } from './+admin';
 import { ParticipantComponent } from './+participant';
@@ -19,7 +17,6 @@ let Services = Object.keys(ServicesModule).map(k => ServicesModule[k]);
   styleUrls: ['faraday.component.css'],
   directives: [ROUTER_DIRECTIVES],
   providers: [
-    MdIconRegistry,
     Services,
   ]
 })
