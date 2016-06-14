@@ -13,6 +13,9 @@ let server = null;
 lab.before((done) => {
     require('../server')((err, srv) => {
         server = srv;
+        server.start(() => {
+            console.log('Server started for caching');
+        });
         done();
     })
 });
