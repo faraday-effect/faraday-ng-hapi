@@ -33,7 +33,7 @@ exports.register = function (server, options, next) {
     });
 
     //secures all routes
-    //server.auth.default({ strategy: 'session' });
+    server.auth.default({ strategy: 'session' });
 
     server.route({
         method: 'POST',
@@ -44,8 +44,6 @@ exports.register = function (server, options, next) {
                 .where('email', request.payload.email)
                 .first()
                 .then((user) => {
-                    console.log(user);
-
                     //checks that the user password was matched with the DB password
                     bcrypt.compare(request.payload.password, user.password, (err, isValid) => {
                         if (!isValid) {
@@ -62,7 +60,7 @@ exports.register = function (server, options, next) {
                         //Sets the user object in the cache
                         server.app.cache.set(sid, user, 0, (err) => {
                             if (err) {
-                                return reply(Boom.badRequest('Failed to set session ID ' + sid + 'for user ' + user.first_name + ' ' + user.last_name, err));
+                                return reply(Boom.badRequest('Failed to set session ID ' + sid + ' for user ' + user.first_name + ' ' + user.last_name, err));
                             }
                             //Sets the cookie up and gives it back to the browser
                             request.cookieAuth.set({ sid: sid });
@@ -84,6 +82,19 @@ exports.register = function (server, options, next) {
                     password: Joi.string().required()
                 }
             }
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/login',
+        handler: function (request, reply) {
+            var user = request.auth.credentials;
+            console.log(request.auth);
+            reply(user);
+        },
+        config: {
+            notes: 'Returns the current user object without the password'
         }
     });
 

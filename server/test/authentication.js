@@ -1,0 +1,164 @@
+"use strict";
+
+const Code = require('code');
+const expect = Code.expect;
+const Lab = require('lab');
+const lab = exports.lab = Lab.script();
+
+const db = require('../db');
+
+const User = require('../models/User');
+//const Authentication = require('../models/Authentication');
+
+let server = null;
+lab.before((done) => {
+    require('../server')((err, srv) => {
+        server = srv;
+        done();
+    })
+});
+
+lab.experiment('/login endpoint', () => {
+
+    let user_id = null;
+
+    lab.beforeEach(done => {
+
+            return Promise.all([
+                db.knex('user').del()
+            ]).then(results => {
+                return Promise.all ([
+                    User.query().insertAndFetch({
+                        first_name: "Patty",
+                        last_name: "O'Furniture",
+                        email: 'patty@example.com',
+                        password: '$2a$10$UzIsxXsVTPTru5NjfSXy.uGiptYgFmtfNrYCU9BzjIp2YEEXLUCGG'
+                }).then(user => {
+                    user_id = user.id;
+                }),
+                User.query().insert({
+                    first_name: "Sammy",
+                    last_name: "Morris",
+                    email: 'sam@example.com',
+                    password: '$2a$10$UzIsxXsVTPTru5NjfSXy.uGiptYgFmtfNrYCU9BzjIp2YEEXLUCGG',
+                    mobile_phone: '0123456789',
+                    office_phone: '0123456789'
+                })
+                ])
+         }).catch(err => {
+             console.log("ERROR", err);
+        });
+
+    });
+
+        // No need to invoke done();  According to documentation,
+        // you can return a promise instead.
+
+    lab.test('Login success', (done) => {
+        server.inject(
+            {
+                method: 'POST',
+                url: '/login',
+                payload: {
+                    email: 'sam@example.com',
+                    password: 'pass',
+                }
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(200);
+                const response = JSON.parse(res.payload);
+                console.log('hello');
+                console.log(response);
+                expect(response.first_name).to.equal('Sammy');
+                expect(response.last_name).to.equal('Morris');
+                expect(response.email).to.equal('sam@example.com');
+                expect(response.mobile_phone).to.equal('0123456789');
+                expect(response.office_phone).to.equal('0123456789');
+                expect(response.password).to.be.undefined();
+                done();
+            })
+    });
+
+    lab.test('Login fails with bad password', (done) => {
+        server.inject(
+            {
+                method: 'POST',
+                url: '/login',
+                credentials: {mode: 'try'},
+                payload: {
+                    email: 'sam@example.com',
+                    password: 'badPassword',
+                }
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(401);
+                const response = JSON.parse(res.payload);
+                expect(response.message).to.equal('Invalid password');
+                done();
+            })
+    });
+
+        lab.test('Login fails with email that does not exist in the database', (done) => {
+        server.inject(
+            {
+                method: 'POST',
+                url: '/login',
+                credentials: {mode: 'try'},
+                payload: {
+                    email: 'iDontExistInTheDatabase@example.com',
+                    password: 'pass',
+                }
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(401);
+                const response = JSON.parse(res.payload);
+                expect(response.message).to.equal('Invalid username or password');
+                done();
+            })
+    });
+
+    lab.test('Checks the current user route to make sure it returns the current user object', (done) => {
+        var user = {
+            id: '10000',
+            first_name: "Milo",
+            last_name: "Rediger",
+            email: 'milo@example.com',
+            mobile_phone: '0123456789',
+            office_phone: '0123456789'
+        };
+
+        server.inject(
+            {
+                method: 'GET',
+                url: '/login',
+                credentials: user
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(200);
+                const response = JSON.parse(res.payload);
+                expect(response.id).to.equal('10000');
+                expect(response.first_name).to.equal('Milo');
+                expect(response.last_name).to.equal('Rediger');
+                expect(response.email).to.equal('milo@example.com');
+                done();
+            })
+    });
+
+        lab.test('Checks the current user route to make sure it returns 401 if not logged in', (done) => {
+        var user = null;
+
+        server.inject(
+            {
+                method: 'GET',
+                url: '/login',
+                credentials: user
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(401);
+                const response = JSON.parse(res.payload);
+                done();
+            })
+    });
+
+});
+
