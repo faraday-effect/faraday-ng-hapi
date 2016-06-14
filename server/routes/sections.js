@@ -213,8 +213,8 @@ exports.register = function (server, options, next) {
                     actual_class
                     .$relatedQuery('currentClass')
                     .relate(request.params.section_id)
-                    .then((model) => {
-                        reply(model);
+                    .then(() => {
+                        reply(actual_class);
                     });
                 });
         },

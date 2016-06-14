@@ -29,10 +29,10 @@ exports.register = function (server, options, next) {
         handler: function (request, reply) {
             User
                 .query()
-                .where('id', user_id)
+                .where('id', request.params.user_id)
                 .first()    
                 .then((user) => {
-                    reply(user)
+                    reply(user.stripPassword())
                 }).catch(function (err) {
                     return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
             });

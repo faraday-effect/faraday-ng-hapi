@@ -8,7 +8,7 @@ const lab = exports.lab = Lab.script();
 const db = require('../db');
 
 const Section = require('../models/Section');
-const Person = require('../models/Person');
+const User = require('../models/User');
 const Course = require('../models/Course');
 const Term = require('../models/Term');
 
@@ -26,7 +26,7 @@ lab.experiment('/sections endpoint', () => {
 
     lab.beforeEach(done => {
         return Promise.all([
-            db.knex.raw('TRUNCATE person CASCADE'),
+            db.knex.raw('TRUNCATE user CASCADE'),
             db.knex.raw('TRUNCATE course CASCADE'),
             db.knex.raw('TRUNCATE term CASCADE')
         ]).then(results => {
@@ -51,15 +51,15 @@ lab.experiment('/sections endpoint', () => {
             foundations_section_id = course.offerings[0].sections[0].id;
 
             return Promise.all([
-                Person.query().insertAndFetch({
+                User.query().insertAndFetch({
                     first_name: "Patty",
                     last_name: "O'Furniture",
                     email: 'patty@example.com',
                     password: 'pass'
-                }).then(person => {
-                    return person.$relatedQuery('student_sections').relate(foundations_section_id);
+                }).then(user => {
+                    return user.$relatedQuery('student_sections').relate(foundations_section_id);
                 }),
-                Person.query().insert({
+                User.query().insert({
                     first_name: "Frank",
                     last_name: "Insense",
                     email: 'frank@example.com',
