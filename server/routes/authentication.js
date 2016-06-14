@@ -58,7 +58,7 @@ exports.register = function (server, options, next) {
                         //Removes information from user object passed to browser and stored in the cache
                         user.stripPassword();
 
-                        // Sets the user object in the cache
+                        //Sets the user object in the cache
                         server.app.cache.set(sid, user, 0, (err) => {
                             if (err) {
                                 return reply(Boom.badRequest('Failed to set session ID ' + sid + ' for user ' + user.first_name + ' ' + user.last_name, err));
