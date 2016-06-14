@@ -8,7 +8,6 @@ const lab = exports.lab = Lab.script();
 const db = require('../db');
 
 const User = require('../models/User');
-//const Authentication = require('../models/Authentication');
 
 let server = null;
 lab.before((done) => {
@@ -54,27 +53,26 @@ lab.experiment('/login endpoint', () => {
         // No need to invoke done();  According to documentation,
         // you can return a promise instead.
 
-    lab.test('Login success', (done) => {
+        lab.test('Log in passes', (done) => {
+
         server.inject(
             {
                 method: 'POST',
                 url: '/login',
                 payload: {
-                    email: 'sam@example.com',
+                    email: 'patty@example.com',
                     password: 'pass',
                 }
             },
             (res) => {
                 expect(res.statusCode).to.equal(200);
+                const header = res.headers['set-cookie'].toString();
                 const response = JSON.parse(res.payload);
-                console.log('hello');
-                console.log(response);
-                expect(response.first_name).to.equal('Sammy');
-                expect(response.last_name).to.equal('Morris');
-                expect(response.email).to.equal('sam@example.com');
-                expect(response.mobile_phone).to.equal('0123456789');
-                expect(response.office_phone).to.equal('0123456789');
-                expect(response.password).to.be.undefined();
+                expect(header).startsWith('faraday-cookie=');
+                expect(response.id).to.equal(user_id);
+                expect(response.first_name).to.equal('Patty');
+                expect(response.last_name).to.equal('O\'Furniture');
+                expect(response.email).to.equal('patty@example.com');
                 done();
             })
     });
@@ -84,7 +82,6 @@ lab.experiment('/login endpoint', () => {
             {
                 method: 'POST',
                 url: '/login',
-                credentials: {mode: 'try'},
                 payload: {
                     email: 'sam@example.com',
                     password: 'badPassword',
@@ -103,7 +100,6 @@ lab.experiment('/login endpoint', () => {
             {
                 method: 'POST',
                 url: '/login',
-                credentials: {mode: 'try'},
                 payload: {
                     email: 'iDontExistInTheDatabase@example.com',
                     password: 'pass',
