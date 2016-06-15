@@ -42,6 +42,32 @@ class User extends Model {
                     },
                     to: 'offering.id'
                 }
+            },
+            course: {
+                relation: Model.ManyToManyRelation,
+                modelClass: __dirname + '/Course',
+                join: {
+                    from: 'user.id',
+                    through: {
+                        modelClass: __dirname + '/User_Relationship',
+                        from: 'user_relationship.user_id',
+                        to: 'user_relationship.coruse_id'
+                    },
+                    to: 'course.id'
+                }
+            },
+            section: {
+                relation: Model.ManyToManyRelation,
+                modelClass: ___dirname + '/Section',
+                join: {
+                    from: 'user.id',
+                    through: {
+                        modelClass: __dirname + '/User_Relationship',
+                        from: 'user_relationship.user_id',
+                        to: 'user_relationship.course_id'
+                    },
+                    to: 'section.id'
+                }
             }
         }
     }
