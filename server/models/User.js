@@ -23,11 +23,15 @@ class User extends Model {
                     to: 'section.id'
                 },
             },
-            member: {
-                relation: Model.OneToManyRelation,
-                modelClass: __dirname + '/Member',
+            role: {
+                relation: Model.ManyToManyRelation,
+                modelClass: __dirname + '/Role',
                 join: {
                     from: 'user.id',
+                    through: {
+                        from: 'user_role.user_id',
+                        to: 'user_role.role_id'
+                    },
                     to: 'member.user_id'
                 }
             }

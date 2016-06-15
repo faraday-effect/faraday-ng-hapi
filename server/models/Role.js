@@ -8,22 +8,16 @@ class Role extends Model {
 
     static get relationMappings() {
         return {
-            member: {
+            user: {
                 relation: Model.ManyToManyRelation,
-                modelClass: __dirname + '/member',
+                modelClass: __dirname + '/User',
                 join: {
                     from: 'role.id',
                     through: {
-                        from: 'member_role.role_id',
-                        to: [
-                            'member_role.section_id',
-                            'member_role.user_id'
-                        ]
+                        from: 'user_role.role_id',
+                        to: 'user_role.user_id'
                     },
-                    to: [
-                        'member.section_id',
-                        'section.user_id'
-                    ],
+                    to: 'user.id'
                 }
             }
         }
