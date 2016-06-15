@@ -1,6 +1,6 @@
 const course_prefix_name = 8;
 const Joi = require('joi');
-const bookshelf = require('./../bookshelf');
+const bookshelf = require('../bookshelf');
 const Boom = require('boom');
 
 exports.register = function (server, options, next) {

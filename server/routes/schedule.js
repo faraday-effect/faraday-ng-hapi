@@ -2,10 +2,10 @@
 
 const Joi = require('joi');
 const Boom = require('boom');
-const Section = require('./../models/Section')
-const Offering = require('./../models/Offering')
-const Course = require('./../models/Course')
-const ActualClass = require('./../models/ActualClass')
+const Section = require('../models/Section')
+const Offering = require('../models/Offering')
+const Course = require('../models/Course')
+const ActualClass = require('../models/ActualClass')
 
 exports.register = function (server, options, next) {
 

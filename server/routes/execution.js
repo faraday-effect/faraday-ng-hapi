@@ -1,7 +1,7 @@
 const Nes = require('nes');
 const Boom = require('boom');
 const Joi = require('joi');
-const bookshelf = require('./../bookshelf');
+const bookshelf = require('../bookshelf');
 const attendance_code_length = 6;
 
 exports.register = function (server, options, next) {
