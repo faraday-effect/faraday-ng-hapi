@@ -2,7 +2,7 @@ exports.up = function (knex, Promise) {
 
     return Promise.all([
 
-        //orange
+        //orange - user
         knex.schema.createTableIfNotExists('user', function (table) {
             table.increments('id').primary();
             table.string('first_name');
@@ -64,7 +64,7 @@ exports.up = function (knex, Promise) {
             table.primary(['user_id', 'role_id']);
         }),
 
-        //Golden
+        //Golden - departments
         knex.schema.createTableIfNotExists('prefix', function (table) {
             table.increments('id').primary();
             table.string('name').notNullable();
@@ -117,7 +117,7 @@ exports.up = function (knex, Promise) {
             table.primary(['department_id', 'user_id']);
         }),
 
-        //Blue
+        //Blue - Catalog
         knex.schema.createTableIfNotExists('course', function (table) {
             table.increments('id').primary();
             table.string('number').notNullable();
@@ -145,7 +145,7 @@ exports.up = function (knex, Promise) {
                 .inTable('course');
         }),
 
-        //pink
+        //pink - scheduling
         knex.schema.createTableIfNotExists('term', function (table) {
             table.increments('id').primary();
             table.string('name').notNullable();
@@ -201,7 +201,7 @@ exports.up = function (knex, Promise) {
 
 
 
-        //red
+        //red - syllabus
         knex.schema.createTableIfNotExists('planned_class', function (table) {
             table.increments('id').primary();
             table.date('date').notNullable();
@@ -283,7 +283,7 @@ exports.up = function (knex, Promise) {
                 .inTable('criterion');
         }),
 
-        //green
+        //green - outcomes
         knex.schema.createTableIfNotExists('knowledge_area', function (table) {
             table.increments('id').primary();
             table.string('title').notNullable();
@@ -327,7 +327,7 @@ exports.up = function (knex, Promise) {
             table.primary(['offering_outcome_id', 'activity_id']);
         }),
 
-        //purple
+        //purple - execution
         knex.schema.createTableIfNotExists('actual_class', function (table) {
             table.increments('id').primary();
             table.dateTime('start_time').notNullable();
@@ -409,8 +409,7 @@ exports.up = function (knex, Promise) {
                 .inTable('submission');
         }),
 
-        //Teal
-
+        //Teal - assessment
         knex.schema.createTableIfNotExists('assessment', function(table) {
             table.increments('id').primary();
             table.text('discussion');
