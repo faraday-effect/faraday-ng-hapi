@@ -22,12 +22,9 @@ export class ImportantDatesComponent implements OnInit {
 
   ngOnInit() {
     // FIXME hardcoded activities
-    console.log("got here");
-    console.log(this.importantDateService);
     this.importantDateService.getImportantDates().then(
       (importantDates) => {
         this.importantDates = importantDates;
-        console.log(this);
       }
     );
 

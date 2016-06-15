@@ -31,7 +31,6 @@ export class ActivityDetailComponent implements OnInit {
   ngOnInit() {
     this.date = new Date();
     // FIXME hardcoded activities
-    console.log("got here");
     this.activityService.getTodaysActivities().then(
       (activities) => {
         this.activity = activities[0];

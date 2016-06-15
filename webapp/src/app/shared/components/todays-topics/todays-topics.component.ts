@@ -22,12 +22,9 @@ export class TodaysTopicsComponent implements OnInit {
 
   ngOnInit() {
     // FIXME hardcoded activities
-    console.log("got here");
-    console.log(this.activities);
     this.activityService.getTodaysActivities().then(
       (activities) => {
         this.activities = activities;
-        console.log(this);
       }
     );
 
