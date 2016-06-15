@@ -1,24 +1,12 @@
 "use strict";
 
-const Code = require('code');
-const expect = Code.expect;
-const Lab = require('lab');
+const support = require('./support');
 const lab = exports.lab = Lab.script();
-
-const db = require('../db');
 
 const Section = require('../models/Section');
 const User = require('../models/User');
 const Course = require('../models/Course');
 const Term = require('../models/Term');
-
-let server = null;
-lab.before((done) => {
-    require('../server')((err, srv) => {
-        server = srv;
-        done();
-    })
-});
 
 lab.experiment('/sections endpoint', () => {
 

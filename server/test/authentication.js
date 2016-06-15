@@ -1,19 +1,20 @@
 "use strict";
 
 const support = require('./support');
+const lab = exports.lab = Lab.script();
 
 const User = require('../models/User');
 
-support.startServer();
+support.startServer(lab);
 
-support.lab.experiment('/login endpoint', () => {
+lab.experiment('/login endpoint', () => {
 
     var users = null;
 
-    support.lab.beforeEach(done => {
+    lab.beforeEach(done => {
 
         return Promise.all([
-            support.db.knex('user').del()
+            db.knex('user').del()
         ]).then(results => {
             return Promise.all([
                 User.query().insertWithRelated([{
@@ -43,9 +44,9 @@ support.lab.experiment('/login endpoint', () => {
     // No need to invoke done();  According to documentation,
     // you can return a promise instead.
 
-    support.lab.test('Log in passes', (done) => {
+    lab.test('Log in passes', (done) => {
 
-        support.server.inject(
+        server.inject(
             {
                 method: 'POST',
                 url: '/login',
@@ -55,21 +56,21 @@ support.lab.experiment('/login endpoint', () => {
                 }
             },
             (res) => {
-                support.expect(res.statusCode).to.equal(200);
+                expect(res.statusCode).to.equal(200);
                 const header = res.headers['set-cookie'].toString();
                 const response = JSON.parse(res.payload);
-                support.expect(header).startsWith('faraday-cookie=');
-                support.expect(response.id).to.equal(users[0].id);
-                support.expect(response.first_name).to.equal('Patty');
-                support.expect(response.last_name).to.equal('O\'Furniture');
-                support.expect(response.email).to.equal('patty@example.com');
+                expect(header).startsWith('faraday-cookie=');
+                expect(response.id).to.equal(users[0].id);
+                expect(response.first_name).to.equal('Patty');
+                expect(response.last_name).to.equal('O\'Furniture');
+                expect(response.email).to.equal('patty@example.com');
                 done();
             });
     });
 
-    support.lab.test('Log out passes', (done) => {
+    lab.test('Log out passes', (done) => {
 
-        support.server.inject(
+        server.inject(
             {
                 method: 'POST',
                 url: '/login',
@@ -80,28 +81,28 @@ support.lab.experiment('/login endpoint', () => {
             },
             (res) => {
                 const header = res.headers['set-cookie'];
-                support.expect(header.length).to.equal(1);
+                expect(header.length).to.equal(1);
                 const cookie = header[0].match(/(?:[^\x00-\x20\(\)<>@\,;\:\\"\/\[\]\?\=\{\}\x7F]+)\s*=\s*(?:([^\x00-\x20\"\,\;\\\x7F]*))/);
 
-                support.server.inject(
+                server.inject(
                     {
                         method: 'POST',
                         url: '/logout',
                         headers: { cookie: 'faraday-cookie=' + cookie[1] }
                     },
                     (res2) => {
-                        support.expect(res2.statusCode).to.equal(200);
+                        expect(res2.statusCode).to.equal(200);
                         const response = JSON.parse(res2.payload);
                         const cookie = res2.headers['set-cookie'].toString().split('; ');
-                        support.expect(response.message).to.equal('Logout successful');
-                        support.expect(cookie[2]).to.equal('Expires=Thu, 01 Jan 1970 00:00:00 GMT');
-                        support.expect(response.success).to.equal(true);
+                        expect(response.message).to.equal('Logout successful');
+                        expect(cookie[2]).to.equal('Expires=Thu, 01 Jan 1970 00:00:00 GMT');
+                        expect(response.success).to.equal(true);
                         done();
                 });
             });
     });
 
-    support.lab.test('Login fails with bad password', (done) => {
+    lab.test('Login fails with bad password', (done) => {
         server.inject(
             {
                 method: 'POST',
@@ -112,15 +113,15 @@ support.lab.experiment('/login endpoint', () => {
                 }
             },
             (res) => {
-                support.expect(res.statusCode).to.equal(401);
+                expect(res.statusCode).to.equal(401);
                 const response = JSON.parse(res.payload);
-                support.expect(response.message).to.equal('Invalid password');
+                expect(response.message).to.equal('Invalid password');
                 done();
             });
     });
 
-    support.lab.test('Login fails with email that does not exist in the database', (done) => {
-        support.server.inject(
+    lab.test('Login fails with email that does not exist in the database', (done) => {
+        server.inject(
             {
                 method: 'POST',
                 url: '/login',
@@ -130,14 +131,14 @@ support.lab.experiment('/login endpoint', () => {
                 }
             },
             (res) => {
-                support.expect(res.statusCode).to.equal(401);
+                expect(res.statusCode).to.equal(401);
                 const response = JSON.parse(res.payload);
-                support.expect(response.message).to.equal('Invalid username or password');
+                expect(response.message).to.equal('Invalid username or password');
                 done();
             });
     });
 
-    support.lab.test('Checks the current user route to make sure it returns the current user object', (done) => {
+    lab.test('Checks the current user route to make sure it returns the current user object', (done) => {
         var user = {
             id: '10000',
             first_name: "Milo",
@@ -147,34 +148,34 @@ support.lab.experiment('/login endpoint', () => {
             office_phone: '0123456789'
         };
 
-        support.server.inject(
+        server.inject(
             {
                 method: 'GET',
                 url: '/login',
                 credentials: user
             },
             (res) => {
-                support.expect(res.statusCode).to.equal(200);
+                expect(res.statusCode).to.equal(200);
                 const response = JSON.parse(res.payload);
-                support.expect(response.id).to.equal('10000');
-                support.expect(response.first_name).to.equal('Milo');
-                support.expect(response.last_name).to.equal('Rediger');
-                support.expect(response.email).to.equal('milo@example.com');
+                expect(response.id).to.equal('10000');
+                expect(response.first_name).to.equal('Milo');
+                expect(response.last_name).to.equal('Rediger');
+                expect(response.email).to.equal('milo@example.com');
                 done();
             });
     });
 
-    support.lab.test('Checks the current user route to make sure it returns 401 if not logged in', (done) => {
+    lab.test('Checks the current user route to make sure it returns 401 if not logged in', (done) => {
         var user = null;
 
-        support.server.inject(
+        server.inject(
             {
                 method: 'GET',
                 url: '/login',
                 credentials: user
             },
             (res) => {
-                support.expect(res.statusCode).to.equal(401);
+                expect(res.statusCode).to.equal(401);
                 const response = JSON.parse(res.payload);
                 done();
             });
