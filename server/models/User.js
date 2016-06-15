@@ -10,17 +10,12 @@ class User extends Model {
 
     static get relationMappings() {
         return {
-            member_sections: {
-                relation: Model.ManyToManyRelation,
-                modelClass: __dirname + '/Section',
+            user_relationship: {
+                relation: Model.OneToManyRelation,
+                modelClass: __dirname + '/User_Relationship',
                 join: {
                     from: 'user.id',
-                    through: {
-                        modelClass: __dirname + './../models/User',
-                        from: 'member.user_id',
-                        to: 'member.section_id'
-                    },
-                    to: 'section.id'
+                    to: 'user_relationship.id'
                 },
             },
             role: {
