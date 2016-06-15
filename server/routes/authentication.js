@@ -119,4 +119,4 @@ exports.register = function (server, options, next) {
     next();
 };
 
-exports.register.attributes = { name: 'authentication', version: '0.0.3' };
+exports.register.attributes = { name: 'authentication', version: '0.0.4' };

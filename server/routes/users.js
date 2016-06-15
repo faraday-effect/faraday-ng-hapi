@@ -89,4 +89,4 @@ exports.register = function (server, options, next) {
     next();
 };
 
-exports.register.attributes = {name: 'users', version: '0.0.2'};
+exports.register.attributes = {name: 'users', version: '0.0.3'};

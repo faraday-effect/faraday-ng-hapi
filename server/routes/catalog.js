@@ -141,4 +141,4 @@ exports.register = function (server, options, next) {
     next();
 };
 
-exports.register.attributes = {name: 'courses', version: '0.0.1'};
+exports.register.attributes = {name: 'catalog', version: '0.0.1'};
