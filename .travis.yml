@@ -21,7 +21,7 @@ before_install:
 #install:
 
 before_script:
-  - echo /etc/postgresql/$VERSION/main/postgresql.conf
+  - psql -c 'SELECT version();'
   - psql -U postgres -c 'create database faraday;'
   - psql -U postgres -c "create role faraday login password 'pass';"
 
