@@ -16,6 +16,14 @@ class Course extends Model {
                     to: 'offering.course_id'
                 }
             },
+            sections: {
+                relation: Model.OneToManyRelation,
+                modelClass: __dirname + '/Section',
+                join: {
+                    from: 'course.id',
+                    to: 'section.course_id'
+                }
+            },
             prefix: {
                 relation: Model.OneToOneRelation,
                 modelClass: __dirname + '/Prefix',

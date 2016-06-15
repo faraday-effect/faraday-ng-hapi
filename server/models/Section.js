@@ -8,15 +8,14 @@ class Section extends Model {
 
     static get relationMappings() {
         return {
-            users: {
+            user: {
                 relation: Model.ManyToManyRelation,
                 modelClass: __dirname + '/User',
                 join: {
                     from: 'section.id',
                     through: {
-                        modelClass: __dirname + '/Member',
-                        from: 'member.section_id',
-                        to: 'member.user_id'
+                        from: 'user_relationship.section_id',
+                        to: 'user_relationship.user_id'
                     },
                     to: 'user.id'
                 }
@@ -29,32 +28,20 @@ class Section extends Model {
                     to: 'offering.id'
                 }
             },
-            actualClasses: {
-                relation: Model.OneToManyRelation,
-                modelClass: __dirname + '/ActualClass',
+            term: {
+                relation: Model.OneToOneRelation,
+                modelClass: __dirname + '/Term',
                 join: {
-                    from: 'section.id',
-                    to: 'actual_class.section_id'
+                    from: 'section.term_id',
+                    to: 'term.id'
                 }
             },
-            members: {
-                relation: Model.OneToManyRelation,
-                modelClass: __dirname + '/Member',
+            course: {
+                relation: Model.OneToOneRelation,
+                modelClass: __dirname + '/Course',
                 join: {
-                    from: 'section.id',
-                    to: 'member.section_id',
-                }
-            },
-            currentClass: {
-                relation: Model.ManyToManyRelation,
-                modelClass: __dirname + '/ActualClass',
-                join: {
-                    from: 'section.id',
-                    through: {
-                        from: 'current_class.section_id',
-                        to: 'current_class.actual_class_id'
-                    },
-                    to: 'actual_class.id'
+                    from: 'section.course_id',
+                    to: 'course.id'
                 }
             }
         }
