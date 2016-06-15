@@ -7,29 +7,32 @@ const User = require('../models/User');
 
 lab.experiment('/users endpoint', () => {
 
-    let user_id = null;
+    let users = null;
 
     lab.beforeEach(done => {
 
             return Promise.all([
                 db.knex('user').del()
             ]).then(results => {
-                return Promise.all ([
-                    User.query().insertAndFetch({
-                        first_name: "Patty",
-                        last_name: "O'Furniture",
-                        email: 'patty@example.com',
-                        password: 'pass'
-                }).then(user => {
-                    user_id = user.id;
-                }),
-                User.query().insert({
-                    first_name: "Frank",
-                    last_name: "Insense",
-                    email: 'frank@example.com',
-                    password: 'pass'
+                return Promise.all([
+                User.query().insertWithRelated([{
+                    first_name: "Patty",
+                    last_name: "O'Furniture",
+                    email: 'patty@example.com',
+                    password: '$2a$10$UzIsxXsVTPTru5NjfSXy.uGiptYgFmtfNrYCU9BzjIp2YEEXLUCGG'
+                },
+        	    {
+                    first_name: "Sammy",
+                    last_name: "Morris",
+                    email: 'sam@example.com',
+                    password: '$2a$10$UzIsxXsVTPTru5NjfSXy.uGiptYgFmtfNrYCU9BzjIp2YEEXLUCGG',
+                    mobile_phone: '0123456789',
+                    office_phone: '0123456789'
+                }])
+                .then((collection) => {
+                    users = collection;
                 })
-                ])
+            ]);
          }).catch(err => {
              console.log("ERROR", err);
         });
