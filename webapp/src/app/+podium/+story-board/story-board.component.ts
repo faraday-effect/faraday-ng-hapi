@@ -31,19 +31,15 @@ export class StoryBoardComponent implements OnInit {
   ngOnInit() {
     this.date = new Date();
     // FIXME hardcoded activities
-    console.log("got here");
-    console.log(this.activities);
     this.activityService.getTodaysActivities().then(
       (activities) => {
         this.activities = activities;
-        console.log(this);
       }
     );
     // FIXME hardcoded course
     this.classService.getMockSections().then(
       (sections) => {
         this.section = sections[0];
-        console.log(this);
       }
     );
 
