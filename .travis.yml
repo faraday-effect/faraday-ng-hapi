@@ -21,9 +21,10 @@ before_install:
 #install:
 
 before_script:
-  - psql -c 'SELECT version();'
   - psql -U postgres -c 'create database faraday;'
   - psql -U postgres -c "create role faraday login password 'pass';"
+  - postgres -V
+  - postgres -V | awk '{print $NF}'
 
 script: cd $TEST_DIR && npm install && ./node_modules/.bin/knex migrate:latest && npm test
 
