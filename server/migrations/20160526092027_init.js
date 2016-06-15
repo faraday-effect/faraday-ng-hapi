@@ -154,7 +154,7 @@ exports.up = function (knex, Promise) {
             table.text('description');
             table.boolean('in_class').notNullable();
             table.integer('duration').notNullable();
-            table.json('details');
+            table.jsonb('details');
             table.integer('topic_id')
                 .unsigned()
                 .notNullable()
@@ -284,7 +284,7 @@ exports.up = function (knex, Promise) {
         //Teal
         knex.schema.createTableIfNotExists('submission', function (table) {
             table.increments('id').primary();
-            table.json('details');
+            table.jsonb('details');
             table.text('discussion');
             table.integer('submitted_by')
                 .unsigned()

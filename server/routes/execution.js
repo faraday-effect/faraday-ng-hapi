@@ -25,7 +25,7 @@ exports.register = function (server, options, next) {
                             'student_id': request.payload.student_id,
                             'signed_in': new Date()
                         }).save().then((model) => {
-                            server.publish('/attendence', { student_id: request.payload.student_id, actual_class_id: request.payload.actual_class_id });
+                            server.publish('/attendance', { student_id: request.payload.student_id, actual_class_id: request.payload.actual_class_id });
                             return reply(model);
                         }).catch((err) => {
                             return reply(Boom.badImplementation('Failed to create attendance instance', err));
@@ -38,7 +38,7 @@ exports.register = function (server, options, next) {
                 }
                 
             }).catch((err) => {
-                return reply(Boom.badImplementation('Failed to find your attendence records', err));
+                return reply(Boom.badImplementation('Failed to find your attendance records', err));
             });
         },
         config: {
