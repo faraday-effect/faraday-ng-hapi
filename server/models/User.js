@@ -10,14 +10,6 @@ class User extends Model {
 
     static get relationMappings() {
         return {
-            user_relationship: {
-                relation: Model.OneToManyRelation,
-                modelClass: __dirname + '/User_Relationship',
-                join: {
-                    from: 'user.id',
-                    to: 'user_relationship.id'
-                },
-            },
             role: {
                 relation: Model.ManyToManyRelation,
                 modelClass: __dirname + '/Role',
@@ -27,7 +19,7 @@ class User extends Model {
                         from: 'user_role.user_id',
                         to: 'user_role.role_id'
                     },
-                    to: 'member.user_id'
+                    to: 'role.id'
                 }
             },
             relationshipType: {
@@ -48,7 +40,6 @@ class User extends Model {
                 join: { 
                     from: 'user.id',
                     through: {
-                        modelClass: __dirname + '/User_Relationship',
                         from: 'user_relationship.user_id',
                         to: 'user_relationship.offering_id'
                     },
@@ -61,7 +52,6 @@ class User extends Model {
                 join: {
                     from: 'user.id',
                     through: {
-                        modelClass: __dirname + '/User_Relationship',
                         from: 'user_relationship.user_id',
                         to: 'user_relationship.section_id'
                     },
