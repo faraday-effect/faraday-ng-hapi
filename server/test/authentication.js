@@ -1,12 +1,6 @@
 "use strict";
 
-const Code = require('code');
-const expect = Code.expect;
-const Lab = require('lab');
-const lab = exports.lab = Lab.script();
 const support = require('./support');
-
-const db = require('../db');
 
 const User = require('../models/User');
 
