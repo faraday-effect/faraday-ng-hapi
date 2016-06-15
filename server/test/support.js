@@ -1,12 +1,13 @@
 module.exports = {
 
     Code : require('code'),
-    expect : Code.expect,
+    expect : require('code').expect,
     Lab : require('lab'),
-    lab : exports.lab = Lab.script(),
+    lab : exports.lab = require('lab').script(),
     db : require('../db'),
+    server: null,
 
-    startServer: function (lab, server) {
+    startServer: function () {
     lab.before((done) => {
         require('../server')((err, srv) => {
             server = srv;
