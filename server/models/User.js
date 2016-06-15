@@ -29,6 +29,19 @@ class User extends Model {
                     },
                     to: 'member.user_id'
                 }
+            },
+            offering: {
+                relation: Model.ManyToManyRelation,
+                modelClass: __dirname + '/Offering',
+                join: { 
+                    from: 'user.id',
+                    through: {
+                        modelClass: __dirname + '/User_Relationship',
+                        from: 'user_relationship.user_id',
+                        to: 'user_relationship.offering_id'
+                    },
+                    to: 'offering.id'
+                }
             }
         }
     }
