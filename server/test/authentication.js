@@ -4,21 +4,14 @@ const Code = require('code');
 const expect = Code.expect;
 const Lab = require('lab');
 const lab = exports.lab = Lab.script();
+const support = require('./support');
 
 const db = require('../db');
 
 const User = require('../models/User');
 
 let server = null;
-lab.before((done) => {
-    require('../server')((err, srv) => {
-        server = srv;
-        server.start(() => {
-            console.log('Server started for caching');
-        });
-        done();
-    })
-});
+support.startServer(lab, server);
 
 lab.experiment('/login endpoint', () => {
 
