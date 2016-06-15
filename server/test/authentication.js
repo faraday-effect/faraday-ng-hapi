@@ -22,7 +22,7 @@ lab.before((done) => {
 
 lab.experiment('/login endpoint', () => {
 
-    let user_id = null;
+    var users = null;
 
     lab.beforeEach(done => {
 
@@ -30,23 +30,24 @@ lab.experiment('/login endpoint', () => {
             db.knex('user').del()
         ]).then(results => {
             return Promise.all([
-                User.query().insertAndFetch({
+                User.query().insertWithRelated([{
                     first_name: "Patty",
                     last_name: "O'Furniture",
                     email: 'patty@example.com',
                     password: '$2a$10$UzIsxXsVTPTru5NjfSXy.uGiptYgFmtfNrYCU9BzjIp2YEEXLUCGG'
-                }).then(user => {
-                    user_id = user.id;
-                }),
-                User.query().insert({
+                },
+        	    {
                     first_name: "Sammy",
                     last_name: "Morris",
                     email: 'sam@example.com',
                     password: '$2a$10$UzIsxXsVTPTru5NjfSXy.uGiptYgFmtfNrYCU9BzjIp2YEEXLUCGG',
                     mobile_phone: '0123456789',
                     office_phone: '0123456789'
+                }])
+                .then((collection) => {
+                    users = collection;
                 })
-            ])
+            ]);
         }).catch(err => {
             console.log("ERROR", err);
         });
@@ -72,7 +73,7 @@ lab.experiment('/login endpoint', () => {
                 const header = res.headers['set-cookie'].toString();
                 const response = JSON.parse(res.payload);
                 expect(header).startsWith('faraday-cookie=');
-                expect(response.id).to.equal(user_id);
+                expect(response.id).to.equal(users[0].id);
                 expect(response.first_name).to.equal('Patty');
                 expect(response.last_name).to.equal('O\'Furniture');
                 expect(response.email).to.equal('patty@example.com');

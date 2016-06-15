@@ -26,7 +26,7 @@ module.exports = function(callback) {
             {register: require('hapi-auth-cookie')},
 
             // Web Sockets
-            {register: require('./routes/nes')},
+            //{register: require('./routes/nes')},
 
             // Traditional content (including lout)
             {register: require('vision')},
@@ -34,13 +34,11 @@ module.exports = function(callback) {
             {register: require('lout')},
 
             // Route plugins
-            {register: require('./routes/attendance')},
             {register: require('./routes/authentication')},
-            {register: require('./routes/courses')},
+            {register: require('./routes/catalog')},
             {register: require('./routes/departments')},
-            {register: require('./routes/prefixes')},
-            {register: require('./routes/sections')},
-            {register: require('./routes/terms')},
+            {register: require('./routes/execution')},
+            {register: require('./routes/schedule')},
             {register: require('./routes/users')},
 
             // Logging and reporting
