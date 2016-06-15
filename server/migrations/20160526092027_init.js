@@ -182,7 +182,7 @@ exports.up = function (knex, Promise) {
                 .inTable('course');
             table.integer('offering_id')
                 .unsigned()
-                .Nullable()
+                .nullable()
                 .references('id')
                 .inTable('offering');
         }),
