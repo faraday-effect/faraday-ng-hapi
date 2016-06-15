@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Routes, ROUTER_DIRECTIVES } from '@angular/router';
+import { ROUTER_DIRECTIVES } from '@angular/router';
 
 import { LoginComponent } from './+login';
 import { AdminComponent } from './+admin';
@@ -20,14 +20,6 @@ let Services = Object.keys(ServicesModule).map(k => ServicesModule[k]);
     Services,
   ]
 })
-@Routes([
-  {path: '/', component: LoginComponent},
-  {path: '/login', component: LoginComponent},
-  {path: '/admin', component: AdminComponent},
-  {path: '/participant', component: ParticipantComponent},
-  {path: '/podium', component: PodiumComponent},
-  {path: '/projector', component: ProjectorComponent},
-])
 export class FaradayAppComponent {
 
   debug = true;

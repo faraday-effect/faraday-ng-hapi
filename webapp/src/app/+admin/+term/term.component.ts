@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { OnActivate, RouteSegment } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { Term, TermService } from 'app/shared';
 
@@ -10,7 +10,7 @@ import { Term, TermService } from 'app/shared';
   styleUrls: ['term.component.css'],
   directives: []
 })
-export class TermComponent implements OnActivate {
+export class TermComponent {
 
   term: Term;
   errorMessage: string;
@@ -19,6 +19,7 @@ export class TermComponent implements OnActivate {
     private termService: TermService) {
   }
 
+  /*
   routerOnActivate(curr: RouteSegment) {
     let id = +curr.getParam('id');
     this.termService.getTerm(id)
@@ -27,6 +28,7 @@ export class TermComponent implements OnActivate {
         error =>  this.errorMessage = <any>error
       );
   }
+  */
 
 }
 

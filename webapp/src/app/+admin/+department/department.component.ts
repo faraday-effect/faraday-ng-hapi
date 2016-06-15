@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { OnActivate, RouteSegment } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { Department, DepartmentService } from 'app/shared';
 
@@ -10,7 +10,7 @@ import { Department, DepartmentService } from 'app/shared';
   styleUrls: ['department.component.css'],
   directives: []
 })
-export class DepartmentComponent implements OnActivate {
+export class DepartmentComponent {
 
   department: Department;
   errorMessage: string;
@@ -19,6 +19,7 @@ export class DepartmentComponent implements OnActivate {
     private departmentService: DepartmentService) {
   }
 
+  /*
   routerOnActivate(curr: RouteSegment) {
     let id = +curr.getParam('id');
     this.departmentService.getDepartment(id)
@@ -27,5 +28,6 @@ export class DepartmentComponent implements OnActivate {
         error =>  this.errorMessage = <any>error
       );
   }
+  */
 
 }

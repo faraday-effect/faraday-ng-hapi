@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { OnActivate, RouteSegment, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { Course, ClassService } from 'app/shared';
 import {MaterializeDirective} from "angular2-materialize";
@@ -15,17 +15,32 @@ declare var Materialize: any;
     MaterializeDirective, //required for dynamic behaviour of Materialize CSS that is using javascript
   ],
 })
-export class CourseComponent implements OnActivate {
+export class CourseComponent implements OnInit {
 
   course: Course;
-  routeSegment: RouteSegment;
   errorMessage: string;
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private classService: ClassService) {
   }
 
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      let id = +params['id'];
+      this.classService.getCourse(id)
+          .subscribe(
+            course => this.course = course,
+            error => {
+              this.errorMessage = <any>error;
+              Materialize.toast('There is an error: '+this.errorMessage, 4000);
+            }
+          );
+    });
+  }
+
+  /*
   routerOnActivate(curr: RouteSegment) {
     this.routeSegment = curr;
     let id = +curr.getParam('id');
@@ -48,5 +63,6 @@ export class CourseComponent implements OnActivate {
     this.classService.hideCourse(id)
         .subscribe(() => this.router.navigate(['/admin/courses'])); // FIXME ADMIN
   }
+  */
 
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { OnActivate, RouteSegment } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { Section, ClassService } from 'app/shared';
 
@@ -9,7 +9,7 @@ import { Section, ClassService } from 'app/shared';
   templateUrl: 'section.component.html',
   styleUrls: ['section.component.css'],
 })
-export class SectionComponent implements OnActivate {
+export class SectionComponent {
 
   section: Section;
   errorMessage: string;
@@ -18,6 +18,7 @@ export class SectionComponent implements OnActivate {
     private classService: ClassService) {
   }
 
+  /*
   routerOnActivate(curr: RouteSegment) {
    let id = +curr.getParam('id');
    this.classService.getSection(id)
@@ -26,6 +27,7 @@ export class SectionComponent implements OnActivate {
        error =>  this.errorMessage = <any>error
      );
   }
+  */
 
 }
 
