@@ -28,7 +28,7 @@ class User extends Model {
                 join: {
                     from: 'user.id',
                     through: {
-                        from: 'user_relationship.id',
+                        from: 'user_relationship.user_id',
                         to: 'user_relationship.relationship_type_id'
                     },
                     to: 'relationship_type.id'
@@ -56,6 +56,14 @@ class User extends Model {
                         to: 'user_relationship.section_id'
                     },
                     to: 'section.id'
+                }
+            },
+            userRelationship: {
+                relation: Model.OneToManyRelation,
+                modelClass: __dirname + '/UserRelationship',
+                join: {
+                    from: 'user.id',
+                    to: 'user_relationship.user_id'
                 }
             }
         }

@@ -8,7 +8,7 @@ class Offering extends Model {
 
     static get relationMappings() {
         return {
-            sections: {
+            section: {
                 relation: Model.OneToManyRelation,
                 modelClass: __dirname + '/Section',
                 join: {

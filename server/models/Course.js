@@ -8,7 +8,7 @@ class Course extends Model {
 
     static get relationMappings() {
         return {
-            offerings: {
+            offering: {
                 relation: Model.OneToManyRelation,
                 modelClass: __dirname + '/Offering',
                 join: {
@@ -16,7 +16,7 @@ class Course extends Model {
                     to: 'offering.course_id'
                 }
             },
-            sections: {
+            section: {
                 relation: Model.OneToManyRelation,
                 modelClass: __dirname + '/Section',
                 join: {
