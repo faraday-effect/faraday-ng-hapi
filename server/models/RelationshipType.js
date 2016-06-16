@@ -33,7 +33,7 @@ class RelationshipType extends Model {
                 }
             },
             userRelationship: {
-                relation: Model.OneToManyRelation,
+                relation: Model.HasManyRelation,
                 modelClass: __dirname + '/UserRelationship',
                 join: {
                     from: 'relationship_type.id',

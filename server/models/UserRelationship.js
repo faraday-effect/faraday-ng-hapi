@@ -9,7 +9,7 @@ class UserRelationship extends Model {
     static get relationMappings() {
         return {
             user: {
-                relation: Model.OneToOneRelation,
+                relation: Model.BelongsToOneRelation,
                 modelClass: __dirname + '/User',
                 join: {
                     from: 'user_relationship.user_id',
@@ -17,7 +17,7 @@ class UserRelationship extends Model {
                 }
             },
             offering: {
-                relation: Model.OneToOneRelation,
+                relation: Model.BelongsToOneRelation,
                 modelClass: __dirname + '/Offering',
                 join: {
                     from: 'user_relationship.offering_id',
@@ -25,7 +25,7 @@ class UserRelationship extends Model {
                 }
             },
             relationshipType: {
-                relation: Model.OneToOneRelation,
+                relation: Model.BelongsToOneRelation,
                 modelClass: __dirname + '/RelationshipType',
                 join: {
                     from: 'user_relationship.relationship_type_id',

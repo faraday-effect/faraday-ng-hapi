@@ -21,7 +21,7 @@ class Prefix extends Model {
                 }
             },
             course: {
-                relation: Model.OneToManyRelation,
+                relation: Model.HasManyRelation,
                 modelClass: __dirname + '/Course',
                 join: {
                     from: 'prefix.id',
