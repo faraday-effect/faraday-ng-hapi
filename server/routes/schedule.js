@@ -284,7 +284,7 @@ server.route({
                 .query()
                 .where('id', request.params.section_id)
                 .first()
-                .eager('users')
+                .eager('[users, user.member]')
                 .then((section) => {
                     section.users.forEach((user) => {
                         user.stripPassword();
