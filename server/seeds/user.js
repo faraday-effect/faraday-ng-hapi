@@ -1,6 +1,7 @@
 const User = require('../models/User')
 const Offering = require('../models/Offering')
 const RelationshipType = require('../models/RelationshipType')
+//const jsonfile = require('jsonfile');
 
 exports.seed = function (knex, Promise) {
 
@@ -210,7 +211,19 @@ exports.seed = function (knex, Promise) {
                   })
 
             )).then(() => Promise.join(
-                  console.log(dataModel)
+                  //jsonfile.writeFileSync('./seed.json', dataModel, {spaces: 4})
+                  User 
+                        .query()
+                        .where('id', dataModel['Users'][0].id)
+                        .first()
+                        .then((user) => {
+                              return user
+                              .$relatedQuery('section')
+                              .relate({
+                                    'section_id': dataModel['offering'][0].section.id,
+                                    'relationship_type_id': dataModel['RelationshipType'][0].id
+                              });
+                        }).then(() => { })
             )
       );
 };
