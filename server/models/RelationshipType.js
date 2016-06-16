@@ -31,14 +31,6 @@ class RelationshipType extends Model {
                     },
                     to: 'offering.id'
                 }
-            },
-            userRelationship: {
-                relation: Model.OneToManyRelation,
-                modelClass: __dirname + '/UserRelationship',
-                join: {
-                    from: 'relationship_type.id',
-                    to: 'user_relationship.relationship_type_id'
-                }
             }
         }
     }

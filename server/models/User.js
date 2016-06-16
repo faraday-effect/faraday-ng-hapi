@@ -22,18 +22,6 @@ class User extends Model {
                     to: 'role.id'
                 }
             },
-            relationshipType: {
-                relation: Model.ManyToManyRelation,
-                modelClass: __dirname + '/RelationshipType',
-                join: {
-                    from: 'user.id',
-                    through: {
-                        from: 'user_relationship.user_id',
-                        to: 'user_relationship.relationship_type_id'
-                    },
-                    to: 'relationship_type.id'
-                }
-            },
             offering: {
                 relation: Model.ManyToManyRelation,
                 modelClass: __dirname + '/Offering',
@@ -56,14 +44,6 @@ class User extends Model {
                         to: 'user_relationship.section_id'
                     },
                     to: 'section.id'
-                }
-            },
-            userRelationship: {
-                relation: Model.OneToManyRelation,
-                modelClass: __dirname + '/UserRelationship',
-                join: {
-                    from: 'user.id',
-                    to: 'user_relationship.user_id'
                 }
             }
         }
