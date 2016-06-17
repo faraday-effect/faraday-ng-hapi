@@ -22,6 +22,9 @@ module.exports = function(callback) {
 
     server.register(
         [
+            // Simple test
+            {register: require('./routes/ping')},
+
             // Authentication
             {register: require('hapi-auth-cookie')},
 
