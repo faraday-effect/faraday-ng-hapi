@@ -10,7 +10,7 @@ class Term extends db.Model {
     static get relationMappings() {
         return {
             offerings: {
-                relation: db.Model.OneToManyRelation,
+                relation: db.Model.HasManyRelation,
                 modelClass: __dirname + '/Offering',
                 join: {
                     from: 'term.id',

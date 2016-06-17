@@ -21,7 +21,7 @@ class Section extends Model {
                 }
             },
             offering: {
-                relation: Model.OneToOneRelation,
+                relation: Model.BelongsToOneRelation,
                 modelClass: __dirname + '/Offering',
                 join: {
                     from: 'section.offering_id',
@@ -29,7 +29,7 @@ class Section extends Model {
                 }
             },
             term: {
-                relation: Model.OneToOneRelation,
+                relation: Model.BelongsToOneRelation,
                 modelClass: __dirname + '/Term',
                 join: {
                     from: 'section.term_id',
@@ -37,7 +37,7 @@ class Section extends Model {
                 }
             },
             course: {
-                relation: Model.OneToOneRelation,
+                relation: Model.BelongsToOneRelation,
                 modelClass: __dirname + '/Course',
                 join: {
                     from: 'section.course_id',

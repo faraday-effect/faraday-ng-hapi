@@ -43,7 +43,7 @@ class UserRole extends Model {
     static get relationMappings() {
         return {
             role: {
-                relation: Model.OneToOneRelation,
+                relation: Model.BelongsToOneRelation,
                 modelClass: Role,
                 join: {
                     from: 'user_role.role_id',
@@ -51,7 +51,7 @@ class UserRole extends Model {
                 }
             },
             user: {
-                relation: Model.OneToOneRelation,
+                relation: Model.BelongsToOneRelation,
                 modelClass: User,
                 join: {
                     from: 'user_role.user_id',

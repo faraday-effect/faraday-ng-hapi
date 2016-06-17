@@ -9,7 +9,7 @@ class Course extends Model {
     static get relationMappings() {
         return {
             offering: {
-                relation: Model.OneToManyRelation,
+                relation: Model.HasManyRelation,
                 modelClass: __dirname + '/Offering',
                 join: {
                     from: 'course.id',
@@ -17,7 +17,7 @@ class Course extends Model {
                 }
             },
             section: {
-                relation: Model.OneToManyRelation,
+                relation: Model.HasManyRelation,
                 modelClass: __dirname + '/Section',
                 join: {
                     from: 'course.id',
@@ -25,7 +25,7 @@ class Course extends Model {
                 }
             },
             prefix: {
-                relation: Model.OneToOneRelation,
+                relation: Model.BelongsToOneRelation,
                 modelClass: __dirname + '/Prefix',
                 join: {
                     from: 'course.prefix_id',
@@ -33,7 +33,7 @@ class Course extends Model {
                 }
             },
             department: {
-                relation: Model.OneToOneRelation,
+                relation: Model.BelongsToOneRelation,
                 modelClass: __dirname + '/Department',
                 join: {
                     from: 'course.department_id',

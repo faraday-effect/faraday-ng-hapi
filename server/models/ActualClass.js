@@ -21,7 +21,7 @@ class ActualClass extends Model {
                 }
             },
             section: {
-                relation: Model.OneToOneRelation,
+                relation: Model.BelongsToOneRelation,
                 modelClass: __dirname + '/Section',
                 join: {
                     from: 'actual_class.section_id',

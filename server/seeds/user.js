@@ -53,7 +53,6 @@ exports.seed = function (knex, Promise) {
                         password: 'password',
                         office_phone: '7659981234',
                         mobile_phone: '7659985131',
-
                         role: {
                             '#id': 'faculty',
                             title: 'Faculty',
@@ -127,7 +126,7 @@ exports.seed = function (knex, Promise) {
 
             RelationshipType
                 .query()
-                .insertWithRelated([
+                .insert([
                     {
                         title: 'Student',
                         description: 'I am learning'
