@@ -1,13 +1,28 @@
 "use strict";
 
-import { lab, expect, server, db } from './support';
-exports.lab = lab;
+const Code = require('code');
+const expect = Code.expect;
+const Lab = require('lab');
+const lab = exports.lab = Lab.script();
+
+export const db = require('../db');
 
 const User = require('../models/User');
 
+let server = null;
+lab.before((done) => {
+    require('../server')((err, srv) => {
+        server = srv;
+        server.start(() => {
+            console.log('Server started for caching');
+        });
+        done();
+    })
+});
+
+
 lab.experiment('/login endpoint', () => {
 
- 
     var users = null;
 
     lab.beforeEach(done => {
@@ -22,17 +37,17 @@ lab.experiment('/login endpoint', () => {
                     email: 'patty@example.com',
                     password: '$2a$10$UzIsxXsVTPTru5NjfSXy.uGiptYgFmtfNrYCU9BzjIp2YEEXLUCGG'
                 },
-        	    {
-                    first_name: "Sammy",
-                    last_name: "Morris",
-                    email: 'sam@example.com',
-                    password: '$2a$10$UzIsxXsVTPTru5NjfSXy.uGiptYgFmtfNrYCU9BzjIp2YEEXLUCGG',
-                    mobile_phone: '0123456789',
-                    office_phone: '0123456789'
-                }])
-                .then((collection) => {
-                    users = collection;
-                })
+                    {
+                        first_name: "Sammy",
+                        last_name: "Morris",
+                        email: 'sam@example.com',
+                        password: '$2a$10$UzIsxXsVTPTru5NjfSXy.uGiptYgFmtfNrYCU9BzjIp2YEEXLUCGG',
+                        mobile_phone: '0123456789',
+                        office_phone: '0123456789'
+                    }])
+                    .then((collection) => {
+                        users = collection;
+                    })
             ]);
         }).catch(err => {
             console.log("ERROR", err);
@@ -97,7 +112,7 @@ lab.experiment('/login endpoint', () => {
                         expect(cookie[2]).to.equal('Expires=Thu, 01 Jan 1970 00:00:00 GMT');
                         expect(response.success).to.equal(true);
                         done();
-                });
+                    });
             });
     });
 

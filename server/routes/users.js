@@ -57,6 +57,7 @@ exports.register = function (server, options, next) {
                 .insert({
                     first_name: request.payload.first_name,
                     last_name: request.payload.last_name,
+                    campus_id: request.payload.campus_id,
                     email: request.payload.email,
                     password: hash,
                     mobile_phone: request.payload.mobile_phone,
@@ -77,6 +78,7 @@ exports.register = function (server, options, next) {
                 payload: {
                     first_name: Joi.string().required(),
                     last_name: Joi.string().required(),
+                    campus_id: Joi.string(),
                     email: Joi.string().email().lowercase().required(),
                     password: Joi.string().required(),
                     mobile_phone: Joi.string().length(10),
