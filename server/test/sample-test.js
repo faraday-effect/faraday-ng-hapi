@@ -4,8 +4,8 @@
  * Sample test set up.
  */
 
-import { lab, expect, server } from './support';
-exports.lab = lab;
+import { init_test, expect, server } from './support';
+const lab = exports.lab = init_test();
 
 lab.experiment('all truth', () => {
 

@@ -6,7 +6,7 @@ const Poop = require('poop');
 const Path = require('path');
 const Nes = require('nes');
 
-module.exports = function(callback) {
+module.exports = function (callback) {
 
     const server = new Hapi.Server();
 
@@ -69,6 +69,7 @@ module.exports = function(callback) {
                     }
                 }
             }
+        ],
 
-        ], (err) => callback(err, server));
+        (err) => callback(err, server));
 };

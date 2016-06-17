@@ -1,7 +1,7 @@
 "use strict";
 
-import { lab, expect, server, db } from './support';
-exports.lab = lab;
+import { init_test, expect, server, db } from './support';
+const lab = exports.lab = init_test();
 
 const User = require('../models/User');
 
@@ -11,38 +11,34 @@ lab.experiment('/users endpoint', () => {
 
     lab.beforeEach(done => {
 
+        return Promise.all([
+            db.knex('user').del()
+        ]).then(results => {
             return Promise.all([
-                db.knex('user').del()
-            ]).then(results => {
-                return Promise.all([
-                User.query().insertWithRelated([{
-                    first_name: "Patty",
-                    last_name: "O'Furniture",
-                    email: 'patty@example.com',
-                    campus_id: '123456700',
-                    password: '$2a$10$UzIsxXsVTPTru5NjfSXy.uGiptYgFmtfNrYCU9BzjIp2YEEXLUCGG'
-                },
-        	    {
-                    first_name: "Sammy",
-                    last_name: "Morris",
-                    email: 'sam@example.com',
-                    campus_id: '987654321',
-                    password: '$2a$10$UzIsxXsVTPTru5NjfSXy.uGiptYgFmtfNrYCU9BzjIp2YEEXLUCGG',
-                    mobile_phone: '0123456789',
-                    office_phone: '0123456789'
-                }])
-                .then((collection) => {
-                    users = collection;
-                })
+                User.query().insertWithRelated([
+                    {
+                        first_name: "Patty",
+                        last_name: "O'Furniture",
+                        email: 'patty@example.com',
+                        password: '$2a$10$UzIsxXsVTPTru5NjfSXy.uGiptYgFmtfNrYCU9BzjIp2YEEXLUCGG'
+                    },
+                    {
+                        first_name: "Sammy",
+                        last_name: "Morris",
+                        email: 'sam@example.com',
+                        password: '$2a$10$UzIsxXsVTPTru5NjfSXy.uGiptYgFmtfNrYCU9BzjIp2YEEXLUCGG',
+                        mobile_phone: '0123456789',
+                        office_phone: '0123456789'
+                    }])
+                    .then((collection) => {
+                        users = collection;
+                    })
             ]);
-         }).catch(err => {
-             console.log("ERROR", err);
+        }).catch(err => {
+            console.log("ERROR", err);
         });
 
     });
-
-        // No need to invoke done();  According to documentation,
-        // you can return a promise instead.
 
     lab.test('There are a known number of users', (done) => {
         server.inject(
@@ -60,12 +56,10 @@ lab.experiment('/users endpoint', () => {
     });
 
     lab.test('One of the user objects is set correctly', (done) => {
-        const user_id = users[0].id;
-        
         server.inject(
             {
                 method: 'GET',
-                url: `/users/${user_id}`,
+                url: `/users/${users[0].id}`,
                 credentials: {}
             },
             (res) => {
@@ -79,32 +73,29 @@ lab.experiment('/users endpoint', () => {
             })
     });
 
-        lab.test('Creates a new user correctly', (done) => {
+    lab.test('Creates a new user correctly', (done) => {
         server.inject(
             {
                 method: 'POST',
                 url: '/users',
                 credentials: {},
                 payload: {
-                    first_name: 'Milo',
-                    last_name: 'Rediger',
-                    email: 'milo@example.com',
+                    first_name: 'Dee',
+                    last_name: 'Hydration',
+                    email: 'dee@example.com',
                     password: 'pass',
-                    campus_id: '123456789',
-                    mobile_phone: '0123456789',
-                    office_phone: '0123456789'
+                    mobile_phone: '7655551111',
+                    office_phone: '7655552222'
                 }
             },
             (res) => {
-                //expect(res.statusCode).to.equal(200);
+                expect(res.statusCode).to.equal(200);
                 const response = JSON.parse(res.payload);
-                console.log(response);
-                expect(response.first_name).to.equal('Milo');
-                expect(response.last_name).to.equal('Rediger');
-                expect(response.email).to.equal('milo@example.com');
-                expect(response.campus_id).to.equal('123456789');
-                expect(response.mobile_phone).to.equal('0123456789');
-                expect(response.office_phone).to.equal('0123456789');
+                expect(response.first_name).to.equal('Dee');
+                expect(response.last_name).to.equal('Hydration');
+                expect(response.email).to.equal('dee@example.com');
+                expect(response.mobile_phone).to.equal('7655551111');
+                expect(response.office_phone).to.equal('7655552222');
                 expect(response.password).to.be.undefined();
                 done();
             })

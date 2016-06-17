@@ -3,8 +3,8 @@
 /**
  * Set-up code for HAPI testing.  Use it like this:
  *
- * import { lab, expect, server } from './support';
- * exports.lab = lab;
+ * import { init_test, expect, server, db } from './support';
+ * lab = exports.lab = init_test();
  *
  * lab.experiment(...);
  *
@@ -12,24 +12,30 @@
  * the lab object itself to run properly.
  */
 
-// Test framework
 const Lab = require('lab');
-export const lab = Lab.script();
 
-// Assertion library
 const Code = require('code');
-export const expect = Code.expect;
+exports.expect = Code.expect;
 
-// Server initialization (before all tests)
 const Server = require('../server');
-export let server = null;
-lab.before((done) => {
-    Server((err, srv) => {
-        server = srv;
-        console.log("Server initialized");
-        done();
-    })
-});
+exports.server = null;
 
-// Database connection
-export const db = require('../db');
+exports.init_test = function() {
+    const lab = Lab.script();
+
+    lab.before(done => {
+        Server((err, server) => {
+            if (err) {
+                console.log("Server didn't initialize", err);
+                throw err;
+            }
+            exports.server = server;
+            console.log("Server initialized");
+            done();
+        })
+    });
+
+    return lab;
+}
+
+exports.db = require('../db');
