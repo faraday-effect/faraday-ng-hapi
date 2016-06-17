@@ -58,6 +58,8 @@ lab.experiment('/users endpoint', () => {
     });
 
     lab.test('One of the user objects is set correctly', (done) => {
+        const user_id = users[0].id;
+        
         server.inject(
             {
                 method: 'GET',
