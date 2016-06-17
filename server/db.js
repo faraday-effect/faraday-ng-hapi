@@ -9,7 +9,7 @@ const knex = exports.knex = require('knex')({
         database: 'faraday',
         charset: 'utf8'
     },
-    debug: true
+    debug: false
 });
 
 const Model = exports.Model = require('objection').Model;

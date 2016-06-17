@@ -1,7 +1,7 @@
 "use strict";
 
-const support = require('./support');
-const lab = exports.lab = Lab.script();
+import { lab, expect, server, db } from './support';
+exports.lab = lab;
 
 const User = require('../models/User');
 
