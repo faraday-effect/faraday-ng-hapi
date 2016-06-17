@@ -230,5 +230,154 @@ exports.seed = function (knex, Promise) {
             .catch(err => {
                 console.log("ERR", err);
             });
+    }).then(() => {
+        const user_id = dataModel['Users'][2].id;
+
+        return User
+            .query()
+            .where('id', user_id)
+            .first()
+            .then(user => {
+                return user
+                    .$relatedQuery('section')
+                    .relate({
+                        id: dataModel['offering'][0].section.id,
+                        relationship_type_id: dataModel['RelationshipType'][0].id
+                    });
+            })
+            .catch(err => {
+                console.log("ERR", err);
+            });
+   }).then(() => {
+        const user_id = dataModel['Users'][4].id;
+
+        return User
+            .query()
+            .where('id', user_id)
+            .first()
+            .then(user => {
+                return user
+                    .$relatedQuery('section')
+                    .relate({
+                        id: dataModel['offering'][0].section.id,
+                        relationship_type_id: dataModel['RelationshipType'][0].id
+                    });
+            })
+            .catch(err => {
+                console.log("ERR", err);
+            });
+   }).then(() => {
+        const user_id = dataModel['Users'][5].id;
+
+        return User
+            .query()
+            .where('id', user_id)
+            .first()
+            .then(user => {
+                return user
+                    .$relatedQuery('section')
+                    .relate({
+                        id: dataModel['offering'][0].section.id,
+                        relationship_type_id: dataModel['RelationshipType'][1].id
+                    });
+            })
+            .catch(err => {
+                console.log("ERR", err);
+            });
+
+    }).then(() => {
+        const user_id = dataModel['Users'][1].id;
+
+        return User
+            .query()
+            .where('id', user_id)
+            .first()
+            .then(user => {
+                return user
+                    .$relatedQuery('section')
+                    .relate({
+                        id: dataModel['offering'][0].section.id,
+                        relationship_type_id: dataModel['RelationshipType'][2].id
+                    });
+            })
+            .catch(err => {
+                console.log("ERR", err);
+            });
+
+       }).then(() => {
+        const user_id = dataModel['Users'][0].id;
+
+        return User
+            .query()
+            .where('id', user_id)
+            .first()
+            .then(user => {
+                return user
+                    .$relatedQuery('section')
+                    .relate({
+                        id: dataModel['offering'][1].section.id,
+                        relationship_type_id: dataModel['RelationshipType'][0].id
+                    });
+            })
+            .catch(err => {
+                console.log("ERR", err);
+            });
+
+       }).then(() => {
+        const user_id = dataModel['Users'][2].id;
+
+        return User
+            .query()
+            .where('id', user_id)
+            .first()
+            .then(user => {
+                return user
+                    .$relatedQuery('section')
+                    .relate({
+                        id: dataModel['offering'][1].section.id,
+                        relationship_type_id: dataModel['RelationshipType'][0].id
+                    });
+            })
+            .catch(err => {
+                console.log("ERR", err);
+            });
+        }).then(() => {
+        const user_id = dataModel['Users'][2].id;
+
+        return User
+            .query()
+            .where('id', user_id)
+            .first()
+            .then(user => {
+                return user
+                    .$relatedQuery('offering')
+                    .relate({
+                        id: dataModel['offering'][1].id,
+                        relationship_type_id: dataModel['RelationshipType'][2].id
+                    });
+            })
+            .catch(err => {
+                console.log("ERR", err);
+            });
+        
+        //        }).then(() => {
+        // const user_id = dataModel['Users'][5].id;
+
+        // return User
+        //     .query()
+        //     .where('id', user_id)
+        //     .first()
+        //     .then(user => {
+        //         return user
+        //             .$relatedQuery('offering')
+        //             .relate({
+        //                 id: dataModel['offering'][1].id,
+        //                 relationship_type_id: dataModel['RelationshipType'][1].id
+        //             });
+        //     })
+        //     .catch(err => {
+        //         console.log("ERR", err);
+        //     });
+     
     }).catch(err => console.error("ERROR", err));
 };
