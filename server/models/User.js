@@ -29,7 +29,8 @@ class User extends Model {
                     from: 'user.id',
                     through: {
                         from: 'user_relationship.user_id',
-                        to: 'user_relationship.offering_id'
+                        to: 'user_relationship.offering_id',
+                        extra: ['relationship_type_id']
                     },
                     to: 'offering.id'
                 }

@@ -43,6 +43,14 @@ class Section extends Model {
                     from: 'section.course_id',
                     to: 'course.id'
                 }
+            },
+            sectionSchedule: {
+                relation: Model.HasManyRelation,
+                modelClass: __dirname + '/SectionSchedule',
+                join: {
+                    from: 'section.id',
+                    to: 'section_schedule.section_id'
+                }
             }
         }
     }
