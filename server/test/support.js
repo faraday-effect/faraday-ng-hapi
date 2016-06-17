@@ -1,23 +1,35 @@
-global.Code = require('code');
-global.expect = require('code').expect;
-global.Lab = require('lab');
-// global.lab = exports.lab = Lab.script();
-global.db = require('../db');
-// const lab = Lab.script();
+"use strict";
 
-module.exports = {
+/**
+ * Set-up code for HAPI testing.  Use it like this:
+ *
+ * import { lab, expect, server } from './support';
+ * exports.lab = lab;
+ *
+ * lab.experiment(...);
+ *
+ * Apparently, hapi-lab requires that the test file itself export
+ * the lab object itself to run properly.
+ */
 
-    server: null,
-    // lab: lab,
-    startServer: function (lab) {
-    lab.before((done) => {
-        require('../server')((err, srv) => {
-            server = srv;
-            server.start(() => {
-                console.log('Server started for caching');
-            });
-            done();
-        })
-    });
-    }
-}
+// Test framework
+const Lab = require('lab');
+export const lab = Lab.script();
+
+// Assertion library
+const Code = require('code');
+export const expect = Code.expect;
+
+// Server initialization (before all tests)
+const Server = require('../server');
+export let server = null;
+lab.before((done) => {
+    Server((err, srv) => {
+        server = srv;
+        console.log("Server initialized");
+        done();
+    })
+});
+
+// Database connection
+export const db = require('../db');
