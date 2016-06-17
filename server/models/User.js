@@ -47,6 +47,30 @@ class User extends Model {
                     },
                     to: 'section.id'
                 }
+            },
+            departmentMember: {
+                relation: Model.ManyToManyRelation,
+                modelClass: __dirname + '/Department',
+                join: {
+                    from: 'user.id',
+                    through: {
+                        from: 'department_member.user_id',
+                        to: 'department_member.department_id'
+                    },
+                    to: 'department.id'
+                }
+            },
+            departmentChair: {
+                relation: Model.ManyToManyRelation,
+                modelClass: __dirname + '/Department',
+                join: {
+                    from: 'user.id',
+                    through: {
+                        from: 'department_chair.user_id',
+                        to: 'department_chair.department_id'
+                    },
+                    to: 'department.id'
+                }
             }
         }
     }

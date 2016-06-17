@@ -44,7 +44,7 @@ exports.seed = function (knex, Promise) {
                             '#id': 'student',
                             title: 'Student',
                             description: 'I am a student'
-                        },
+                        }
                     },
                     {
                         first_name: 'Tom',
@@ -94,6 +94,18 @@ exports.seed = function (knex, Promise) {
                         mobile_phone: null,
                         role: {
                             '#ref': 'student'
+                        }
+                    },
+                    {
+                        first_name: 'Andrew',
+                        last_name: 'Draper',
+                        email: 'andrew@example.com',
+                        campus_id: '006859745',
+                        password: 'pass',
+                        office_phone: '7659981234',
+                        mobile_phone: null,
+                        role: {
+                            '#ref': 'faculty'
                         }
                     },
                     {
@@ -154,7 +166,7 @@ exports.seed = function (knex, Promise) {
                             prefix: {
                                 name: 'COS',
                                 department: {
-                                    name: 'Computer Science & Engineering',
+                                    name: 'Computer Science and Engineering',
                                     '#id': 'cos'
                                 }
                             },
@@ -454,7 +466,7 @@ exports.seed = function (knex, Promise) {
                 console.log("ERR", err);
             });
     }).then(() => {
-        const user_id = dataModel['Users'][3].id;
+        const user_id = dataModel['Users'][5].id;
 
         return User
             .query()
@@ -473,7 +485,7 @@ exports.seed = function (knex, Promise) {
             });
 
     }).then(() => {
-        const user_id = dataModel['Users'][5].id;
+        const user_id = dataModel['Users'][6].id;
 
         return User
             .query()
