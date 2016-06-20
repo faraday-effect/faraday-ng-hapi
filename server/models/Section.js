@@ -20,6 +20,14 @@ class Section extends Model {
                     to: 'user.id'
                 }
             },
+            userRelationship: {
+                relation: Model.HasManyRelation,
+                modelClass: __dirname + '/UserRelationship',
+                join: {
+                    from: 'section.id',
+                    to: 'user_relationship.section_id'
+                }
+            },
             offering: {
                 relation: Model.BelongsToOneRelation,
                 modelClass: __dirname + '/Offering',

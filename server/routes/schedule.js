@@ -2,10 +2,12 @@
 
 const Joi = require('joi');
 const Boom = require('boom');
-const Section = require('../models/Section')
-const Offering = require('../models/Offering')
-const Course = require('../models/Course')
-const ActualClass = require('../models/ActualClass')
+const Section = require('../models/Section');
+const Offering = require('../models/Offering');
+const Course = require('../models/Course');
+const ActualClass = require('../models/ActualClass');
+const User = require('../models/User');
+const Term = require('../models/Term');
 
 exports.register = function (server, options, next) {
 
@@ -13,8 +15,14 @@ server.route({
         method: 'GET',
         path: '/terms',
         handler: function (request, reply) {
-            var response = bookshelf.Terms.forge().fetch();
-            reply(response);
+            Term
+                .query()
+                .then((terms) => {
+                    reply(terms);
+                })
+        },
+        config: {
+            notes: 'retrieves all the terms from the database'
         }
     });
 
@@ -22,24 +30,27 @@ server.route({
         method: 'POST',
         path: '/terms',
         handler: function (request, reply) {
-            new bookshelf.Term({
-                name: request.payload.name,
-                start_date: request.payload.start_date,
-                end_date: request.payload.end_date
-            })
-                .save().then(function (model) {
-                reply(model)
-            }).catch(function (err) {
-                return reply(Boom.badImplementation('Failed to create a new term', err));
-            });
+            Term
+                .query()
+                .insert({
+                    name: request.payload.name,
+                    start_date: request.payload.start_date,
+                    end_date: request.payload.end_date
+                })
+                .then((newTerm) => {
+                    reply(newTerm);
+                })
+                .catch(function (err) {
+                    return reply(Boom.badRequest('Failed to create a new term', err));
+                });
         },
         config: {
             notes: 'creates a new term',
             validate: {
                 payload: {
                     name: Joi.string().required(),
-                    start_date: Joi.date().format('YYYY/MM/DD').required(),
-                    end_date: Joi.date().format('YYYY/MM/DD').required()
+                    start_date: Joi.date().format('YYYY-MM-DD').required(),
+                    end_date: Joi.date().format('YYYY-MM-DD').required()
                 }
             }
         }
@@ -98,9 +109,7 @@ server.route({
         method: 'DELETE',
         path: '/terms/{term_id}',
         handler: function (request, reply) {
-            var response = bookshelf.Term.forge({'id': encodeURIComponent(request.params.term_id)}).fetch();
-            console.log('I deleted');
-            reply(response);
+            reply('to be implemented');
         },
         config: {
             notes: 'to be implemented',
@@ -109,24 +118,6 @@ server.route({
                     term_id: Joi.number().positive().integer()
                 }
             }
-        }
-    });
-
-    server.route({
-        method: 'GET',
-        path: '/sections',
-        handler: function (request, reply) {
-            var current_user = request.auth.credentials;
-            console.log(current_user);
-            Section
-                .query()
-                //.eager('offering.course.[prefix, department]')
-                .then((sections) => {
-                    reply(sections);
-                })
-                .catch((err) => {
-                    return reply(Boom.notFound('Failed to retrieve all the sections', err));
-                })
         }
     });
 
@@ -215,87 +206,6 @@ server.route({
         },
         config: {
             notes: 'adds TA to a given section does not handle the case of double adding a TA to a section',
-            validate: {
-                params: {
-                    section_id: Joi.number().positive().integer()
-                }
-            }
-        }
-    });
-
-    server.route({
-        method: 'POST',
-        path: '/sections',
-        handler: function (request, reply) {
-            Section
-                .query()
-                .insert({
-                    offering_id: request.payload.offering_id,
-                    reg_number: request.payload.reg_number,
-                    title: request.payload.title
-                })
-                .then((section) => {
-                    return reply(section);
-                })
-                .catch(function (err) {
-                    return reply(Boom.badRequest('Failed to create a new section', err));
-                });
-        },
-        config: {
-            validate: {
-                payload: {
-                    offering_id: Joi.number().positive().integer().required(),
-                    reg_number: Joi.string().required(),
-                    title: Joi.string()
-                }
-            }
-        }
-    });
-
-    server.route({
-        method: 'GET',
-        path: '/sections/{section_id}',
-        handler: function (request, reply) {
-            Section
-                .query()
-                .where('id', request.params.section_id)
-                .first()
-                .eager('offering.course.[prefix, department]')
-                .then((section) => {
-                    reply(section);
-                })
-                .catch((err) => {
-                    console.log(err.stack);
-                    return reply(Boom.notFound('Section ' + request.params.section_id + ' not found!', err));
-                });
-        },
-        config: {
-            validate: {
-                params: {
-                    section_id: Joi.number().positive().integer()
-                }
-            }
-        }
-    });
-
-    server.route({
-        method: 'GET',
-        path: '/sections/{section_id}/members',
-        handler: function (request, reply) {
-            Section
-                .query()
-                .where('id', request.params.section_id)
-                .first()
-                .eager('[users, user.member]')
-                .then((section) => {
-                    section.users.forEach((user) => {
-                        user.stripPassword();
-                    });
-                    reply(section);
-                });
-        },
-        config: {
-            notes: 'returns a list of students for a given class',
             validate: {
                 params: {
                     section_id: Joi.number().positive().integer()
@@ -412,6 +322,98 @@ server.route({
     });
 
     server.route({
+        method: 'GET',
+        path: '/sections',
+        handler: function (request, reply) {
+            //get the current_user object
+            var current_user = request.auth.credentials;
+            User
+                .query()
+                .where('id', current_user.id)
+                .first()
+                .then((user) => {
+                    return user
+                    .$relatedQuery('section')
+                    //load all the related data fromt the db into a JSON object
+                    .eager('[userRelationship.relationshipType, sectionSchedule, offering.course.[prefix, department]]')
+                    //filter the userRelationship by user_id & section_id
+                    .filterEager('userRelationship', builder => {
+                        builder.where('user_id', current_user.id)
+                    });
+                }).then((user_sections) => {
+                    reply(user_sections);
+                })
+                .catch((err) => {
+                    return reply(Boom.notFound('Failed to retrieve all the sections for the current_user', err));
+                });
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/sections/{section_id}',
+        handler: function (request, reply) {
+            Section
+                .query()
+                .where('id', request.params.section_id)
+                .first()
+                .eager('[userRelationship.relationshipType, sectionSchedule, offering.course.[prefix, department]]')
+                .filterEager('userRelationship', builder => {
+                    builder.where('user_id', request.auth.credentials.id)
+                })
+                .then((section) => {
+                    reply(section);
+                })
+                .catch((err) => {
+                    console.log(err.stack);
+                    return reply(Boom.notFound('Section ' + request.params.section_id + ' not found!', err));
+                });
+        },
+        config: {
+            validate: {
+                params: {
+                    section_id: Joi.number().positive().integer()
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'POST',
+        path: '/sections',
+        handler: function (request, reply) {
+            Section
+                .query()
+                .insert({
+                    offering_id: request.payload.offering_id,
+                    course_id: request.payload.course_id,
+                    term_id: request.payload.term_id,
+                    credit_hours: request.payload.credit_hours,
+                    reg_number: request.payload.reg_number,
+                    title: request.payload.title
+                })
+                .then((section) => {
+                    return reply(section);
+                })
+                .catch(function (err) {
+                    return reply(Boom.badRequest('Failed to create a new section', err));
+                });
+        },
+        config: {
+            validate: {
+                payload: {
+                    offering_id: Joi.number().positive().integer().required(),
+                    course_id: Joi.number().positive().integer().required(),
+                    term_id: Joi.number().positive().integer().required(),
+                    credit_hours: Joi.number().positive().integer().required(),
+                    reg_number: Joi.string().required(),
+                    title: Joi.string()
+                }
+            }
+        }
+    });
+
+    server.route({
         method: 'PUT',
         path: '/sections/{section_id}',
         handler: function (request, reply) {
@@ -419,6 +421,9 @@ server.route({
                 .query()
                 .patchAndFetchById(request.params.section_id, {
                     offering_id: request.payload.offering_id,
+                    course_id: request.payload.course_id,
+                    term_id: request.payload.term_id,
+                    credit_hours: request.payload.credit_hours,
                     reg_number: request.payload.reg_number,
                     title: request.payload.title
                 })
@@ -436,6 +441,9 @@ server.route({
                 },
                 payload: {
                     offering_id: Joi.number().positive().integer().required(),
+                    course_id: Joi.number().positive().integer().required(),
+                    term_id: Joi.number().positive().integer().required(),
+                    credit_hours: Joi.number().positive().integer().required(),
                     reg_number: Joi.string().required(),
                     title: Joi.string()
                 }
