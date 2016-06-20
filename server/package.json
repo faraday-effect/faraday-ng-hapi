@@ -4,8 +4,9 @@
   "description": "LMS 2.0",
   "main": "index.js",
   "scripts": {
-    "test": "lab --globals __core-js_shared__ ",
-    "test-cov": "lab --coverage --globals __core-js_shared__ "
+    "test": "lab --verbose --transform node_modules/lab-babel --globals __core-js_shared__ test/user.js test/sample-test.js test/authentication.js",
+    "test-one": "lab --verbose --transform node_modules/lab-babel --globals __core-js_shared__ test/user.js",
+    "test-cov": "lab --transform node_modules/lab-babel --coverage --globals __core-js_shared__ "
   },
   "repository": {
     "type": "git",
@@ -33,14 +34,18 @@
     "lodash": "^4.13.1",
     "lout": "^9.0.0",
     "nes": "^6.1.2",
-    "objection": "^0.4.0",
+    "objection": "^0.5.1",
     "pg": "^4.5.5",
     "poop": "^2.0.0",
+    "shot": "^3.1.0",
     "vision": "^4.1.0",
     "when": "^3.7.7"
   },
   "devDependencies": {
+    "babel-cli": "^6.10.1",
+    "babel-preset-es2015": "^6.9.0",
     "code": "^3.0.1",
-    "lab": "^10.7.1"
+    "lab": "^10.8.2",
+    "lab-babel": "^1.1.1"
   }
 }

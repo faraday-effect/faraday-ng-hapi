@@ -16,8 +16,6 @@ exports.register = function (server, options, next) {
             }
         });
 
-        server.subscription('/attendence', {auth: false});
-
     });
     next();
 };

@@ -6,42 +6,7 @@ const Poop = require('poop');
 const Path = require('path');
 const Nes = require('nes');
 
-const server = new Hapi.Server();
-server.connection({
-    port: 3000,
-    routes: {
-        cors: {
-          origin: ['http://localhost:4200'],
-          credentials: true
-        }
-    }
-});
-
-server.register([
-    //authentication
-    {register: require('hapi-auth-cookie')},
-    //Sockets
-    {register: require('./routes/nes')},
-    //lout requirements
-    {register: require('vision')},
-    {register: require('inert')},
-    {register: require('lout')},
-    //route plugins
-    {register: require('./routes/attendance')},
-    {register: require('./routes/authentication')},
-    {register: require('./routes/courses')},
-    {register: require('./routes/departments')},
-    {register: require('./routes/prefixes')},
-    {register: require('./routes/sections')},
-    {register: require('./routes/terms')},
-    {register: require('./routes/users')}
-], (err) => {
-    if (err) {
-        throw err;
-    }
-});
-
-module.exports = function(callback) {
+module.exports = function (callback) {
 
     const server = new Hapi.Server();
 
@@ -57,11 +22,14 @@ module.exports = function(callback) {
 
     server.register(
         [
+            // Simple test
+            {register: require('./routes/ping')},
+
             // Authentication
             {register: require('hapi-auth-cookie')},
 
             // Web Sockets
-            {register: require('./routes/nes')},
+            //{register: require('./routes/nes')},
 
             // Traditional content (including lout)
             {register: require('vision')},
@@ -69,13 +37,11 @@ module.exports = function(callback) {
             {register: require('lout')},
 
             // Route plugins
-            {register: require('./routes/attendance')},
             {register: require('./routes/authentication')},
-            {register: require('./routes/courses')},
+            {register: require('./routes/catalog')},
             {register: require('./routes/departments')},
-            {register: require('./routes/prefixes')},
-            {register: require('./routes/sections')},
-            {register: require('./routes/terms')},
+            {register: require('./routes/execution')},
+            {register: require('./routes/schedule')},
             {register: require('./routes/users')},
 
             // Logging and reporting
@@ -103,6 +69,7 @@ module.exports = function(callback) {
                     }
                 }
             }
+        ],
 
-        ], (err) => callback(err, server));
+        (err) => callback(err, server));
 };

@@ -1,9 +1,11 @@
-const Joi = require('joi');
+const Nes = require('nes');
 const Boom = require('boom');
-const bookshelf = require('./../bookshelf');
+const Joi = require('joi');
+const bookshelf = require('../bookshelf');
 const attendance_code_length = 6;
 
 exports.register = function (server, options, next) {
+
     server.route({
         method: 'POST',
         path: '/attendance',
@@ -23,7 +25,7 @@ exports.register = function (server, options, next) {
                             'student_id': request.payload.student_id,
                             'signed_in': new Date()
                         }).save().then((model) => {
-                            server.publish('/attendence', { student_id: request.payload.student_id, actual_class_id: request.payload.actual_class_id });
+                            server.publish('/attendance', { student_id: request.payload.student_id, actual_class_id: request.payload.actual_class_id });
                             return reply(model);
                         }).catch((err) => {
                             return reply(Boom.badImplementation('Failed to create attendance instance', err));
@@ -36,7 +38,7 @@ exports.register = function (server, options, next) {
                 }
                 
             }).catch((err) => {
-                return reply(Boom.badImplementation('Failed to find your attendence records', err));
+                return reply(Boom.badImplementation('Failed to find your attendance records', err));
             });
         },
         config: {
@@ -79,7 +81,11 @@ exports.register = function (server, options, next) {
             }
         }
     });
+
+    server.register(Nes, function (err) {
+        server.subscription('/attendance');
+    });
     next();
 };
 
-exports.register.attributes = {name: 'attendance', version: '0.0.2'};
+exports.register.attributes = {name: 'execution', version: '0.0.1'};

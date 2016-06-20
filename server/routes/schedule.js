@@ -2,19 +2,125 @@
 
 const Joi = require('joi');
 const Boom = require('boom');
-const Section = require('./../models/Section')
-const Offering = require('./../models/Offering')
-const Course = require('./../models/Course')
-const ActualClass = require('./../models/ActualClass')
+const Section = require('../models/Section')
+const Offering = require('../models/Offering')
+const Course = require('../models/Course')
+const ActualClass = require('../models/ActualClass')
 
 exports.register = function (server, options, next) {
+
+server.route({
+        method: 'GET',
+        path: '/terms',
+        handler: function (request, reply) {
+            var response = bookshelf.Terms.forge().fetch();
+            reply(response);
+        }
+    });
+
+    server.route({
+        method: 'POST',
+        path: '/terms',
+        handler: function (request, reply) {
+            new bookshelf.Term({
+                name: request.payload.name,
+                start_date: request.payload.start_date,
+                end_date: request.payload.end_date
+            })
+                .save().then(function (model) {
+                reply(model)
+            }).catch(function (err) {
+                return reply(Boom.badImplementation('Failed to create a new term', err));
+            });
+        },
+        config: {
+            notes: 'creates a new term',
+            validate: {
+                payload: {
+                    name: Joi.string().required(),
+                    start_date: Joi.date().format('YYYY/MM/DD').required(),
+                    end_date: Joi.date().format('YYYY/MM/DD').required()
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/terms/{term_id}',
+        handler: function (request, reply) {
+            var response = bookshelf.Term.forge({'id': encodeURIComponent(request.params.term_id)}).fetch();
+            reply(response);
+        },
+        config: {
+            notes: 'returns the term information for a given term_id',
+            validate: {
+                params: {
+                    term_id: Joi.number().positive().integer()
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'PUT',
+        path: '/terms/{term_id}',
+        handler: function (request, reply) {
+            bookshelf.Term.forge({'id': request.params.term_id})
+                .save(
+                    {
+                        name: request.payload.name,
+                        start_date: request.payload.start_date,
+                        end_date: request.payload.end_date
+                    }
+                ).then(function (model) {
+                reply(model)
+            }).catch(function (err) {
+                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
+            });
+        },
+        config: {
+            notes: 'Updates the term information for a given term_id',
+            validate: {
+                params: {
+                    term_id: Joi.number().positive().integer()
+                },
+                payload: {
+                    name: Joi.string().required(),
+                    start_date: Joi.date().format('YYYY/MM/DD').required(),
+                    end_date: Joi.date().format('YYYY/MM/DD').required()
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'DELETE',
+        path: '/terms/{term_id}',
+        handler: function (request, reply) {
+            var response = bookshelf.Term.forge({'id': encodeURIComponent(request.params.term_id)}).fetch();
+            console.log('I deleted');
+            reply(response);
+        },
+        config: {
+            notes: 'to be implemented',
+            validate: {
+                params: {
+                    term_id: Joi.number().positive().integer()
+                }
+            }
+        }
+    });
+
     server.route({
         method: 'GET',
         path: '/sections',
         handler: function (request, reply) {
+            var current_user = request.auth.credentials;
+            console.log(current_user);
             Section
                 .query()
-                .eager('offering.course.[prefix, department]')
+                //.eager('offering.course.[prefix, department]')
                 .then((sections) => {
                     reply(sections);
                 })
@@ -174,21 +280,18 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'GET',
-        path: '/sections/{section_id}/students',
+        path: '/sections/{section_id}/members',
         handler: function (request, reply) {
             Section
                 .query()
                 .where('id', request.params.section_id)
                 .first()
+                .eager('[users, user.member]')
                 .then((section) => {
-                    return section.$relatedQuery('students');
-                })
-                .then((students) => {
-                    var response = []
-                    students.forEach((student) => {
-                        response.push(student.stripPassword());
+                    section.users.forEach((user) => {
+                        user.stripPassword();
                     });
-                    return reply(response);
+                    reply(section);
                 });
         },
         config: {
@@ -211,20 +314,14 @@ exports.register = function (server, options, next) {
                     start_time: new Date(),
                     section_id: request.params.section_id
                 })
-                .then((actualClass) => {
-                    Section
-                        .query()
-                        .patchAndFetchById(actualClass.section_id, {
-                            current_class: actualClass.id
-                        })
-                        .then(() => {
-                            reply(actualClass);
-                        });
-                })
-                .catch(function (err) {
-                    return reply(Boom.badRequest('Failed to create a new actual class', err));
+                .then((actual_class) => {
+                    actual_class
+                    .$relatedQuery('currentClass')
+                    .relate(request.params.section_id)
+                    .then(() => {
+                        reply(actual_class);
+                    });
                 });
-
         },
         config: {
             notes: 'when the prof hit the \'start class button\'this will start class by creating an actaul class instance allowing students to attend the class',
@@ -364,4 +461,4 @@ exports.register = function (server, options, next) {
     next();
 };
 
-exports.register.attributes = { name: 'sections', version: '0.0.3' };
+exports.register.attributes = { name: 'schedule', version: '0.0.1' };

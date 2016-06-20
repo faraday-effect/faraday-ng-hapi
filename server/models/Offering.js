@@ -8,16 +8,8 @@ class Offering extends Model {
 
     static get relationMappings() {
         return {
-            term: {
-              relation: Model.OneToOneRelation,
-                modelClass: __dirname + '/Term',
-                join: {
-                    from: 'offering.id',
-                    to: 'term.offering_id'
-                }
-            },
-            sections: {
-                relation: Model.OneToManyRelation,
+            section: {
+                relation: Model.HasManyRelation,
                 modelClass: __dirname + '/Section',
                 join: {
                     from: 'offering.id',
@@ -25,11 +17,23 @@ class Offering extends Model {
                 }
             },
             course: {
-                relation: Model.OneToOneRelation,
+                relation: Model.BelongsToOneRelation,
                 modelClass: __dirname + '/Course',
                 join: {
                     from: 'offering.course_id',
                     to: 'course.id'
+                }
+            },
+            user: {
+                relation: Model.ManyToManyRelation,
+                modelClass: __dirname + '/User',
+                join: {
+                    from: 'offering.id',
+                    through: {
+                        from: 'user_relationship.offering_id',
+                        to: 'user_relationship.user_id'
+                    },
+                    to: 'user.id'
                 }
             }
         }

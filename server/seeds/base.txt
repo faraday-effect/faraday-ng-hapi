@@ -10,27 +10,39 @@ exports.seed = function (knex, Promise) {
     return Promise.join(
         // Deletes ALL existing entries
         knex('department_prefix').del(),
-        knex('attendance').del(),
-        knex('teaching_assistant').del(),
-        knex('student').del(),
-        knex('instructor').del(),
         knex('offering_weekday').del(),
         knex('section_weekday').del(),
-        knex('person_role').del(),
-
-
-        knex('holiday').del(),
-        knex('planned_class').del(),
+        knex('attendance').del(),
+        knex('current_class').del(),
+        knex('member_role').del(),
+        knex('member').del(),
+        knex('user_permission').del(),
+        knex('attachment').del(),
+        knex('assessment').del(),
+        knex('submission').del(),
         knex('actual_class').del(),
+        knex('actual_activity').del(),
+        knex('activity').del(),
+        knex('intended_outcome').del(),
+        knex('offering_outcome').del(),
+        knex('learning_outcome').del(),
+        knex('planned_class').del(),
+        knex('topic').del(),
         knex('section').del(),
         knex('offering').del(),
         knex('course').del(),
+        knex('holiday').del(),
+
+        //tables without fk
         knex('department').del(),
         knex('prefix').del(),
+        knex('knowledge_area').del(),
         knex('term').del(),
         knex('role').del(),
-        knex('person').del(),
+        knex('permission').del(),
         knex('weekday').del(),
+        knex('user').del(),
+        knex('term').del(),
         () => console.log("delete_promise complete")
 
     ).then(() => Promise.join(
@@ -53,75 +65,67 @@ exports.seed = function (knex, Promise) {
         insert_and_grab_id('weekday', {name: 'Friday'}, 'w6'),
         insert_and_grab_id('weekday', {name: 'Saturday'}, 'w7'),
 
-        insert_and_grab_id('person', {
+        insert_and_grab_id('user', {
             first_name: 'Abram',
             last_name: 'Stamper',
             email: 'abram_stamper@taylor.edu',
             password: '$2a$10$LZcZ8PDh1ow7bcXBkRqIf.i9uWlpBAXyO.wZOr.fKczvxL624TzXe',
             office_phone: null,
             mobile_phone: '765-480-4409'
-        }, 'person1'),
-        insert_and_grab_id('person', {
+        }, 'user1'),
+        insert_and_grab_id('user', {
             first_name: 'Tom',
             last_name: 'Nurkkala',
             email: 'tom_nurkkala@taylor.edu',
             password: '$2a$10$LZcZ8PDh1ow7bcXBkRqIf.i9uWlpBAXyO.wZOr.fKczvxL624TzXe',
             office_phone: null,
             mobile_phone: '765-998-4131'
-        }, 'person2'),
-        insert_and_grab_id('person', {
+        }, 'user2'),
+        insert_and_grab_id('user', {
             first_name: 'Keith',
             last_name: 'Bauson',
             email: 'keith_bauson@taylor.edu',
             password: '$2a$10$LZcZ8PDh1ow7bcXBkRqIf.i9uWlpBAXyO.wZOr.fKczvxL624TzXe',
             office_phone: null,
             mobile_phone: '765-457-4371'
-        }, 'person3'),
-        insert_and_grab_id('person', {
+        }, 'user3'),
+        insert_and_grab_id('user', {
             first_name: 'Ken',
             last_name: 'Kiers',
             email: 'ken_kiers@taylor.edu',
             password: '$2a$10$LZcZ8PDh1ow7bcXBkRqIf.i9uWlpBAXyO.wZOr.fKczvxL624TzXe',
             office_phone: null,
             mobile_phone: '765-251-4154'
-        }, 'person4'),
-        insert_and_grab_id('person', {
+        }, 'user4'),
+        insert_and_grab_id('user', {
             first_name: 'test',
             last_name: 'test',
             email: 'test@test.com',
             password: '$2a$10$LZcZ8PDh1ow7bcXBkRqIf.i9uWlpBAXyO.wZOr.fKczvxL624TzXe',
             office_phone: null,
             mobile_phone: null
-        }, 'person4'),
-        insert_and_grab_id('person', {
+        }, 'user5'),
+        insert_and_grab_id('user', {
             first_name: 'test',
             last_name: 'test',
             email: 'test@example.com',
             password: '$2a$10$LZcZ8PDh1ow7bcXBkRqIf.i9uWlpBAXyO.wZOr.fKczvxL624TzXe',
             office_phone: null,
             mobile_phone: null
-        }, 'person4'),
+        }, 'user6'),
 
-        insert_and_grab_id('role', {
-            title: 'Superuser',
-            description: "I am superman!"
-        }, 'role1'),
         insert_and_grab_id('role', {
             title: 'Student',
             description: "I am learning!"
-        }, 'role2'),
+        }, 'role1'),
         insert_and_grab_id('role', {
             title: 'Instructor',
             description: "I am teaching!"
-        }, 'role3'),
+        }, 'role2'),
         insert_and_grab_id('role', {
             title: 'Teacher\'s Assistant',
             description: "I am learning to teach!"
-        }, 'role4'),
-        insert_and_grab_id('role', {
-            title: 'Department Chair',
-            description: "I am large and in charge."
-        }, 'role5'),
+        }, 'role3'),
 
         insert_and_grab_id('term', {
             name: 'Fall 2016',
@@ -349,19 +353,19 @@ exports.seed = function (knex, Promise) {
             stop_time: '13:50:00'
         }),
         knex('section_weekday').insert({
-            section_id: key_by_id['section1'],
+            section_id: key_by_id['section3'],
             weekday_id: key_by_id['w4'],
             start_time: '11:00:00',
             stop_time: '11:50:00'
         }),
         knex('section_weekday').insert({
-            section_id: key_by_id['section1'],
+            section_id: key_by_id['section3'],
             weekday_id: key_by_id['w5'],
             start_time: '11:00:00',
             stop_time: '11:50:00'
         }),
         knex('section_weekday').insert({
-            section_id: key_by_id['section1'],
+            section_id: key_by_id['section3'],
             weekday_id: key_by_id['w6'],
             start_time: '11:00:00',
             stop_time: '11:50:00'
@@ -415,71 +419,47 @@ exports.seed = function (knex, Promise) {
 
         () => console.log("planned class, actual class complete")
     )).then(() => Promise.join(
-        insert_and_grab_id('student', {
+        knex('member').insert({
             section_id: key_by_id['section1'],
-            person_id: key_by_id['person1']
-        }, 'student1'),
-        insert_and_grab_id('student', {
+            user_id: key_by_id['user1']
+        }),
+         knex('member').insert({
             section_id: key_by_id['section2'],
-            person_id: key_by_id['person1']
-        }, 'student2'),
-        insert_and_grab_id('student', {
+            user_id: key_by_id['user2']
+        }),
+         knex('member').insert({
             section_id: key_by_id['section6'],
-            person_id: key_by_id['person1']
-        }, 'student3'),
-        insert_and_grab_id('student', {
+            user_id: key_by_id['user3']
+        }),
+         knex('member').insert({
             section_id: key_by_id['section7'],
-            person_id: key_by_id['person1']
-        }, 'student4'),
-        knex('student').insert({
-            section_id: key_by_id['section3'],
-            person_id: key_by_id['person3']
+            user_id: key_by_id['user4']
         }),
-        knex('student').insert({
-            section_id: key_by_id['section4'],
-            person_id: key_by_id['person3']
+         knex('member').insert({
+            section_id: key_by_id['section7'],
+            user_id: key_by_id['user5']
         }),
-        knex('student').insert({
-            section_id: key_by_id['section2'],
-            person_id: key_by_id['person1']
+         knex('member').insert({
+            section_id: key_by_id['section7'],
+            user_id: key_by_id['user6']
         }),
-        knex('teaching_assistant').insert({
-            section_id: key_by_id['section9'],
-            person_id: key_by_id['person3']
-        }),
-        knex('instructor').insert({
+         knex('member').insert({
             section_id: key_by_id['section1'],
-            person_id: key_by_id['person2']
+            user_id: key_by_id['user2']
         }),
-        knex('instructor').insert({
-            section_id: key_by_id['section2'],
-            person_id: key_by_id['person2']
+         knex('member').insert({
+            section_id: key_by_id['section1'],
+            user_id: key_by_id['user3']
         }),
-        knex('instructor').insert({
-            section_id: key_by_id['section3'],
-            person_id: key_by_id['person4']
+        knex('member').insert({
+            section_id: key_by_id['section1'],
+            user_id: key_by_id['user5']
         }),
-        knex('instructor').insert({
-            section_id: key_by_id['section4'],
-            person_id: key_by_id['person4']
+        knex('member').insert({
+            section_id: key_by_id['section1'],
+            user_id: key_by_id['user6']
         }),
-        knex('person_role').insert({
-            person_id: key_by_id['person1'],
-            role_id: key_by_id['role2']
-        }),
-        knex('person_role').insert({
-            person_id: key_by_id['person2'],
-            role_id: key_by_id['role3']
-        }),
-        knex('person_role').insert({
-            person_id: key_by_id['person1'],
-            role_id: key_by_id['role3']
-        }),
-        knex('person_role').insert({
-            person_id: key_by_id['person4'],
-            role_id: key_by_id['role1']
-        }),
-        () => console.log("student, teaching_assistant, person_role, instructor complete")
+        () => console.log("member complete")
     )).then(() => Promise.join(
         knex('holiday').insert({
             term_id: key_by_id['term1'],
@@ -493,6 +473,32 @@ exports.seed = function (knex, Promise) {
             start_date: '2016-03-01',
             stop_date: '2016-03-07'
         }),
+        knex('member_role').insert({
+            role_id: key_by_id['role1'],
+            member_section_id: key_by_id['section1'],
+            member_user_id: key_by_id['user1']
+        }),
+        knex('member_role').insert({
+            role_id: key_by_id['role1'],
+            member_section_id: key_by_id['section1'],
+            member_user_id: key_by_id['user5']
+        }),
+        knex('member_role').insert({
+            role_id: key_by_id['role1'],
+            member_section_id: key_by_id['section1'],
+            member_user_id: key_by_id['user3']
+        }),
+        knex('member_role').insert({
+            role_id: key_by_id['role1'],
+            member_section_id: key_by_id['section1'],
+            member_user_id: key_by_id['user6']
+        }),
+        knex('member_role').insert({
+            role_id: key_by_id['role2'],
+            member_section_id: key_by_id['section1'],
+            member_user_id: key_by_id['user2']
+        }),
+        
         () => console.log("Holidays complete"),
         () => console.log("attendance was has no entries by design and null current class in Section")
     ));

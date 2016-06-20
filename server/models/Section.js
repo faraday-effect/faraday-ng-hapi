@@ -8,56 +8,48 @@ class Section extends Model {
 
     static get relationMappings() {
         return {
-            students: {
+            user: {
                 relation: Model.ManyToManyRelation,
-                modelClass: __dirname + '/Person',
+                modelClass: __dirname + '/User',
                 join: {
                     from: 'section.id',
                     through: {
-                        from: 'student.section_id',
-                        to: 'student.person_id'
+                        from: 'user_relationship.section_id',
+                        to: 'user_relationship.user_id'
                     },
-                    to: 'person.id'
-                }
-            },
-            instructors: {
-                relation: Model.ManyToManyRelation,
-                modelClass: __dirname + '/Person',
-                join: {
-                    from: 'section.id',
-                    through: {
-                        from: 'instructors.section_id',
-                        to: 'instructors.person_id'
-                    },
-                    to: 'person.id'
-                }
-            },
-            teaching_assistant: {
-                relation: Model.ManyToManyRelation,
-                modelClass: __dirname + '/Person',
-                join: {
-                    from: 'section.id',
-                    through: {
-                        from: 'teaching_assistant.section_id',
-                        to: 'teaching_assistant.person_id'
-                    },
-                    to: 'person.id'
+                    to: 'user.id'
                 }
             },
             offering: {
-                relation: Model.OneToOneRelation,
+                relation: Model.BelongsToOneRelation,
                 modelClass: __dirname + '/Offering',
                 join: {
                     from: 'section.offering_id',
                     to: 'offering.id'
                 }
             },
-            actualClasses: {
-                relation: Model.OneToManyRelation,
-                modelClass: __dirname + '/ActualClass',
+            term: {
+                relation: Model.BelongsToOneRelation,
+                modelClass: __dirname + '/Term',
+                join: {
+                    from: 'section.term_id',
+                    to: 'term.id'
+                }
+            },
+            course: {
+                relation: Model.BelongsToOneRelation,
+                modelClass: __dirname + '/Course',
+                join: {
+                    from: 'section.course_id',
+                    to: 'course.id'
+                }
+            },
+            sectionSchedule: {
+                relation: Model.HasManyRelation,
+                modelClass: __dirname + '/SectionSchedule',
                 join: {
                     from: 'section.id',
-                    to: 'actual_class.section_id'
+                    to: 'section_schedule.section_id'
                 }
             }
         }

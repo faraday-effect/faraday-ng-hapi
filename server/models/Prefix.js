@@ -8,7 +8,7 @@ class Prefix extends Model {
 
     static get relationMappings() {
         return {
-            departments: {
+            department: {
                 relation: Model.ManyToManyRelation,
                 modelClass: __dirname + '/Department',
                 join: {
@@ -20,8 +20,8 @@ class Prefix extends Model {
                     to: 'department.id'
                 }
             },
-            courses: {
-                relation: Model.OneToManyRelation,
+            course: {
+                relation: Model.HasManyRelation,
                 modelClass: __dirname + '/Course',
                 join: {
                     from: 'prefix.id',

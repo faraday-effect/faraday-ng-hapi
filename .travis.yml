@@ -9,6 +9,13 @@ env:
 
 notifications:
   slack: quantum-bits:qYEIHmdw3vBD1Q3XRxh2neXY
+  email: false
+
+services:
+  - postgresql
+
+addons:
+  postgresql: "9.4"
 
 before_install:
   - sudo apt-get install python-software-properties
@@ -23,6 +30,7 @@ before_install:
 before_script:
   - psql -U postgres -c 'create database faraday;'
   - psql -U postgres -c "create role faraday login password 'pass';"
+  - postgres -V
 
 script: cd $TEST_DIR && npm install && ./node_modules/.bin/knex migrate:latest && npm test
 
