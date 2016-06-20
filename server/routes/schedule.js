@@ -116,9 +116,11 @@ server.route({
         method: 'GET',
         path: '/sections',
         handler: function (request, reply) {
+            var current_user = request.auth.credentials;
+            console.log(current_user);
             Section
                 .query()
-                .eager('offering.course.[prefix, department]')
+                //.eager('offering.course.[prefix, department]')
                 .then((sections) => {
                     reply(sections);
                 })
