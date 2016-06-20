@@ -1,6 +1,6 @@
 const course_prefix_name = 8;
 const Joi = require('joi');
-const bookshelf = require('./../bookshelf');
+const bookshelf = require('../bookshelf');
 const Boom = require('boom');
 
 exports.register = function (server, options, next) {
@@ -141,4 +141,4 @@ exports.register = function (server, options, next) {
     next();
 };
 
-exports.register.attributes = {name: 'courses', version: '0.0.1'};
+exports.register.attributes = {name: 'catalog', version: '0.0.1'};

@@ -1,24 +1,12 @@
 "use strict";
 
-const Code = require('code');
-const expect = Code.expect;
-const Lab = require('lab');
-const lab = exports.lab = Lab.script();
-
-const db = require('../db');
+import { lab, expect, server, db } from './support';
+exports.lab = lab;
 
 const Section = require('../models/Section');
-const Person = require('../models/Person');
+const User = require('../models/User');
+const Department = require('../models/Department');
 const Course = require('../models/Course');
-const Term = require('../models/Term');
-
-let server = null;
-lab.before((done) => {
-    require('../server')((err, srv) => {
-        server = srv;
-        done();
-    })
-});
 
 lab.experiment('/sections endpoint', () => {
 
@@ -26,46 +14,51 @@ lab.experiment('/sections endpoint', () => {
 
     lab.beforeEach(done => {
         return Promise.all([
-            db.knex.raw('TRUNCATE person CASCADE'),
+            db.knex.raw('TRUNCATE public.user CASCADE'),
             db.knex.raw('TRUNCATE course CASCADE'),
             db.knex.raw('TRUNCATE term CASCADE')
         ]).then(results => {
-            return Term.query().insertAndFetch({
-                name: 'Fall 2016',
-                start_date: '2016-09-01',
-                end_date: '2016-12-15'
-            })
-        }).then(term => {
             return Course.query().insertWithRelated({
-                    number: '121',
-                    title: 'Foundations of Computer Science',
-                    offerings: [{
-                        term_id: term.id,
-                        sections: [
-                            {title: 'Section 1', reg_number: 'REG111'},
-                            {title: 'Section 2', reg_number: 'REG222'}
-                        ]
-                    }]
-                })
+                prefix: {
+                    "name": "COS"
+                },
+                number: '121',
+                title: 'Foundations of Computer Science',
+                department: {
+                    name: 'Computer Science and Engineering'
+                },
+                offerings: [{
+                    term: {
+                        name: 'Fall 2016',
+                        start_date: '2016-09-01',
+                        end_date: '2016-12-15'
+                    },
+                    sections: [
+                        {
+                            title: 'Section 1',
+                            reg_number: 'REG111',
+                            users: [
+                                {
+                                    first_name: "Patty",
+                                    last_name: "O'Furniture",
+                                    email: 'patty@example.com',
+                                    password: 'pass'
+                                },
+                                {
+                                    first_name: "Frank",
+                                    last_name: "Insense",
+                                    email: 'frank@example.com',
+                                    password: 'pass'
+                                }
+                            ]
+
+                        },
+                        {title: 'Section 2', reg_number: 'REG222'}
+                    ]
+                }]
+            })
         }).then(course => {
             foundations_section_id = course.offerings[0].sections[0].id;
-
-            return Promise.all([
-                Person.query().insertAndFetch({
-                    first_name: "Patty",
-                    last_name: "O'Furniture",
-                    email: 'patty@example.com',
-                    password: 'pass'
-                }).then(person => {
-                    return person.$relatedQuery('student_sections').relate(foundations_section_id);
-                }),
-                Person.query().insert({
-                    first_name: "Frank",
-                    last_name: "Insense",
-                    email: 'frank@example.com',
-                    password: 'pass'
-                })
-            ])
         }).catch(err => {
             console.log("ERROR", err);
         });
