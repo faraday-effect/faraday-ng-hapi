@@ -28,12 +28,12 @@ class Section extends Model {
                     to: 'user_relationship.section_id'
                 }
             },
-            offering: {
+            sequence: {
                 relation: Model.BelongsToOneRelation,
-                modelClass: __dirname + '/Offering',
+                modelClass: __dirname + '/Sequence',
                 join: {
-                    from: 'section.offering_id',
-                    to: 'offering.id'
+                    from: 'section.sequence_id',
+                    to: 'sequence.id'
                 }
             },
             term: {

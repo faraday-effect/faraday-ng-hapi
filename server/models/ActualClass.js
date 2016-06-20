@@ -8,6 +8,14 @@ class ActualClass extends Model {
 
     static get relationMappings() {
         return {
+            sequence: {
+                relation: Model.BelongsToOneRelation,
+                modelClass: __dirname + '/Sequence',
+                join: {
+                    from: 'actual_class.sequence_id',
+                    to: 'sequence.id'
+                }
+            }
         }
     }
 }

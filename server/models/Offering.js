@@ -8,12 +8,12 @@ class Offering extends Model {
 
     static get relationMappings() {
         return {
-            section: {
+            sequence: {
                 relation: Model.HasManyRelation,
-                modelClass: __dirname + '/Section',
+                modelClass: __dirname + '/Sequence',
                 join: {
                     from: 'offering.id',
-                    to: 'section.offering_id'
+                    to: 'sequence.offering_id'
                 }
             },
             course: {
