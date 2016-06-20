@@ -1,5 +1,5 @@
 <nav>
-  <div class="nav-wrapper teal">
+  <div class="nav-wrapper">
     <span *ngIf="section">
       <b> Welcome to {{ section.course.prefix }} {{ section.course.number }}</b>
       <span> {{ section.course.title }}</span>
@@ -8,12 +8,45 @@
   </div>
 </nav>
 
-<a materialize="tooltip" class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="I am tooltip">Hover me!</a>
 
-<div class="card-container">
-  <app-todays-topics></app-todays-topics>
-  <app-important-dates></app-important-dates>
-  <app-class-code></app-class-code>
+<div class="container">
+  <div class="row">
+    <app-todays-topics></app-todays-topics>
+    <app-important-dates></app-important-dates>
+    <app-class-code></app-class-code>
+  </div>
+</div>
+
+
+<a materialize="tooltip" class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="I am tooltip">Hover me!</a>
+<a class="btn" onclick="Materialize.toast('I am a toast', 4000)">Toast!</a>
+
+<ul materialize="collapsible" class="collapsible" data-collapsible="accordion">
+  <li>
+    <div class="collapsible-header"><i class="material-icons">filter_drama</i>First</div>
+    <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+  </li>
+  <li>
+    <div class="collapsible-header"><i class="material-icons">place</i>Second</div>
+    <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+  </li>
+  <li>
+    <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
+    <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+  </li>
+</ul>
+
+<!-- Modal Trigger -->
+<a materialize="leanModal" [materializeParams]="[{dismissible: false}]" class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>
+<!-- Modal Structure -->
+<div id="modal1" class="modal">
+  <div class="modal-content">
+    <h4>Modal Header</h4>
+    <p>A bunch of text</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+  </div>
 </div>
 
 

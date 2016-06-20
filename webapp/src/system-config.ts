@@ -3,9 +3,8 @@
  **********************************************************************************************/
 /** Map relative paths to URLs. */
 const map: any = {
-  '@angular2-material': 'vendor/@angular2-material',
   'nes': 'vendor/nes',
-  'materialize-css': 'vendor/materialize-css',
+  'materialize-css': 'materialize-src',
   'materialize': 'vendor/angular2-materialize',
   'angular2-materialize': 'vendor/angular2-materialize'
 };
@@ -13,29 +12,14 @@ const map: any = {
 /** User packages configuration. */
 const packages: any = {
   'nes': {main: 'client.js'},
-  'materialize-css': {
-    'main': 'dist/js/materialize.js'
+  'materialize-src': {
+    'main': 'js/bin/materialize.min.js'
   },
   'materialize': {
     'main': 'dist/materialize-directive.js',
     //'defaultExtension': 'js'
   }
 };
-
-const materialPkgs: string[] = [
-  'button',
-  'card',
-  'checkbox',
-  'core',
-  'icon',
-  'input',
-  'list',
-  'toolbar',
-];
-
-materialPkgs.forEach((pkg) => {
-  packages[`@angular2-material/${pkg}`] = {main: `${pkg}.js`};
-});
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /***********************************************************************************************

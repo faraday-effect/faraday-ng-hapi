@@ -1,14 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 
-import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
-import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
-import { MD_ICON_DIRECTIVES } from '@angular2-material/icon';
-import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
-
 import {
-  AttendanceService,
-  SectionService,
+  ClassService,
   Person,
   Section,
 } from 'app/shared';
@@ -18,12 +12,7 @@ import {
   selector: 'app-attendance',
   templateUrl: 'attendance.component.html',
   styleUrls: ['attendance.component.css'],
-  directives: [
-    MD_BUTTON_DIRECTIVES,
-    MD_CARD_DIRECTIVES,
-    MD_ICON_DIRECTIVES,
-    MD_LIST_DIRECTIVES,
-  ],
+  directives: [],
 })
 export class AttendanceComponent implements OnInit {
 
@@ -34,29 +23,28 @@ export class AttendanceComponent implements OnInit {
 
   constructor(
     private http: Http,
-    private sectionService: SectionService,
-    private attendanceService: AttendanceService) {
+    private classService: ClassService) {
   }
 
   ngOnInit() {
-    this.sectionService.getSections()
+    this.classService.getSections()
         .toPromise()
-        .then(sections => this.section_id = sections.sort()[4].id)
-        .then(() => this.attendanceService.getStudents(this.section_id))
+        .then(sections => this.section_id = 1)
+        .then(() => this.classService.getStudents(this.section_id))
         .then(students => {
-          this.students = students
+          this.students = students;
           this.students.sort(
             (a, b) => a.first_name.localeCompare(b.first_name)
           );
         });
 
-    this.attendanceService.handleArrive(ids => {
+    this.classService.handleArrive(ids => {
       for (let id of ids) {
         this.attending[id] = true;
       }
     });
 
-    this.attendanceService.handleDepart(ids => {
+    this.classService.handleDepart(ids => {
       for (let id of ids) {
         this.attending[id] = false;
       }
@@ -72,11 +60,11 @@ export class AttendanceComponent implements OnInit {
   }
 
   attend(id: number) {
-    this.attendanceService.attend(id, this.classId);
+    this.classService.attend(id, this.classId);
   }
 
   depart(id: number) {
-    this.attendanceService.depart(id, this.classId);
+    this.classService.depart(id, this.classId);
   }
 
   startClass() {
@@ -85,8 +73,7 @@ export class AttendanceComponent implements OnInit {
     return this.http.post(url, msg)
                .toPromise()
                .then(response => response.json())
-               .then(cl => this.classId = cl.id)
-               .then(() => console.log("classId:", this.classId));
+               .then(cl => this.classId = cl.id);
   }
 
 }

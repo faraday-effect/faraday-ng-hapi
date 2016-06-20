@@ -3,9 +3,10 @@ import { Injectable } from '@angular/core';
 declare var require: any;
 var Nes = require('nes/client');
 
+import { WebSocketUrl } from './constants';
+
 @Injectable()
 export class NesService {
-  wsUrl = 'ws://localhost:3000';
   client: any;
   connected = false;
   toSubscribe = [];
@@ -16,7 +17,7 @@ export class NesService {
   }
 
   startNes() {
-    this.client = new Nes.Client(this.wsUrl);
+    this.client = new Nes.Client(WebSocketUrl);
     this.client.connect(this.handleError);
     this.client.onConnect = () => {
       this.connected = true;

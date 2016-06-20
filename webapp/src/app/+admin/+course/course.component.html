@@ -1,26 +1,22 @@
-<div class="course">
-
-  <md-card *ngIf="errorMessage" class="error">
-    Error: {{ errorMessage }}
-  </md-card>
-
-  <md-card *ngIf="course">
-    <md-card-title>{{course.title}}</md-card-title>
-    <md-card-subtitle>{{course.prefix}} {{course.number}}</md-card-subtitle>
-    <md-card-content>
-      <p *ngIf="! course.hidden">
-        This course is not hidden...
-      </p>
-      <p *ngIf="course.hidden">
-        This course is hidden!
-      </p>
-    </md-card-content>
-    <md-card-actions>
-      <button md-raised-button (click)="hideCourse()">Hide</button>
-      <button md-raised-button (click)="editCourse()">Edit</button>
-    </md-card-actions>
-  </md-card>
-
+<div class="row">
+  <div class="col s12 m6 l4">
+    <div *ngIf="course" class="card">
+      <div class="card-content">
+        <span class="card-title">{{course.title}}</span>
+        <div>
+          PREFIX (broken) {{course.prefix}} {{course.number}}
+          <p *ngIf="! course.hidden">
+            This course is not hidden...
+          </p>
+          <p *ngIf="course.hidden">
+            This course is hidden!
+          </p>
+        </div>
+      </div>
+      <div class="card-action">
+        <button class="waves-effect waves-light btn" (click)="hideCourse()">Hide</button>
+        <button class="waves-effect waves-light btn" (click)="editCourse()">Edit</button>
+      </div>
+    </div>
+  </div>
 </div>
-
-<router-outlet></router-outlet>

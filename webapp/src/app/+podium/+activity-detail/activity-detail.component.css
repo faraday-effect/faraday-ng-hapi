@@ -16,22 +16,3 @@
   flex-flow: row wrap;
 }
 
-md-card {
-  width: 400px;
-  box-sizing: border-box;
-  margin: 16px;
-}
-
-
-.left {
-  float:left;
-  width:200px;
-}
-
-
-
-.right {
-  float:right;
-  width:200px;
-  text-align: right;
-}

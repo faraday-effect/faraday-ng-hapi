@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
-import { OnActivate, RouteSegment } from '@angular/router';
-
-import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
+import { Router } from '@angular/router';
 
 import { Prefix, PrefixService } from 'app/shared';
 
@@ -10,9 +8,9 @@ import { Prefix, PrefixService } from 'app/shared';
   selector: 'app-prefix',
   templateUrl: 'prefix.component.html',
   styleUrls: ['prefix.component.css'],
-  directives: [MD_CARD_DIRECTIVES]
+  directives: []
 })
-export class PrefixComponent implements OnActivate {
+export class PrefixComponent {
 
   prefix: Prefix;
   errorMessage: string;
@@ -21,6 +19,7 @@ export class PrefixComponent implements OnActivate {
     private prefixService: PrefixService) {
   }
 
+  /*
   routerOnActivate(curr: RouteSegment) {
     let id = +curr.getParam('id');
     this.prefixService.getPrefix(id)
@@ -29,6 +28,7 @@ export class PrefixComponent implements OnActivate {
         error =>  this.errorMessage = <any>error
       );
   }
+  */
 
 }
 

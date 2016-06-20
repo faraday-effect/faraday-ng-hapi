@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
-import { OnActivate, RouteSegment } from '@angular/router';
-
-import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
+import { Router } from '@angular/router';
 
 import { Department, DepartmentService } from 'app/shared';
 
@@ -10,9 +8,9 @@ import { Department, DepartmentService } from 'app/shared';
   selector: 'app-department',
   templateUrl: 'department.component.html',
   styleUrls: ['department.component.css'],
-  directives: [MD_CARD_DIRECTIVES]
+  directives: []
 })
-export class DepartmentComponent implements OnActivate {
+export class DepartmentComponent {
 
   department: Department;
   errorMessage: string;
@@ -21,6 +19,7 @@ export class DepartmentComponent implements OnActivate {
     private departmentService: DepartmentService) {
   }
 
+  /*
   routerOnActivate(curr: RouteSegment) {
     let id = +curr.getParam('id');
     this.departmentService.getDepartment(id)
@@ -29,5 +28,6 @@ export class DepartmentComponent implements OnActivate {
         error =>  this.errorMessage = <any>error
       );
   }
+  */
 
 }
