@@ -91,7 +91,6 @@ exports.register = function (server, options, next) {
         path: '/login',
         handler: function (request, reply) {
             var user = request.auth.credentials;
-            console.log(request.auth);
             reply(user);
         },
         config: {
