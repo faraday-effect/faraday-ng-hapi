@@ -145,6 +145,16 @@ exports.up = function (knex, Promise) {
                 .inTable('course');
         }),
 
+        knex.schema.createTableIfNotExists('sequence', function (table) {
+            table.increments('id').primary();
+            table.string('title');
+            table.integer('offering_id')
+                .unsigned()
+                .notNullable()
+                .references('id')
+                .inTable('offering');
+        }),
+
         //pink - scheduling
         knex.schema.createTableIfNotExists('term', function (table) {
             table.increments('id').primary();
@@ -180,11 +190,11 @@ exports.up = function (knex, Promise) {
                 .notNullable()
                 .references('id')
                 .inTable('course');
-            table.integer('offering_id')
+            table.integer('sequence_id')
                 .unsigned()
                 .nullable()
                 .references('id')
-                .inTable('offering');
+                .inTable('sequence');
         }),
 
         knex.schema.createTableIfNotExists('section_schedule', function (table) {
@@ -333,11 +343,11 @@ exports.up = function (knex, Promise) {
             table.dateTime('start_time').notNullable();
             table.dateTime('stop_time')
             table.text('reflection');
-            table.integer('offering_id')
+            table.integer('sequence_id')
                 .unsigned()
                 .notNullable()
                 .references('id')
-                .inTable('offering');
+                .inTable('sequence');
         }),
 
         knex.schema.createTableIfNotExists('actual_activity', function (table) {
@@ -483,6 +493,7 @@ exports.down = function (knex, Promise) {
         knex.schema.dropTableIfExists('planned_class'),
         knex.schema.dropTableIfExists('topic'),
         knex.schema.dropTableIfExists('section'),
+        knex.schema.dropTableIfExists('sequence'),
         knex.schema.dropTableIfExists('offering'),
         knex.schema.dropTableIfExists('course'),
 
