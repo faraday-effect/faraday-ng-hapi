@@ -1,11 +1,11 @@
-<div class="prefixes">
-
-  <md-card *ngIf="errorMessage" class="error">
-    Error: {{ errorMessage }}
-  </md-card>
-
-  <md-card *ngFor="let prefix of prefixes">
-    <button md-button (click)="gotoPrefix(prefix.id)">{{prefix.name}}</button>
-  </md-card>
-
+<div class="collection">
+  <div *ngFor="let prefix of prefixes">
+    <a class="collection-item"
+       (click)="gotoPrefix(prefix.id)">{{prefix.name}}
+    </a>
+  </div>
 </div>
+<div *ngIf="errorMessage" class="error">
+  Error: {{ errorMessage }}
+</div>
+

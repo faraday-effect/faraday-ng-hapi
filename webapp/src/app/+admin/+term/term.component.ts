@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
-import { OnActivate, RouteSegment } from '@angular/router';
-
-import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
+import { Router } from '@angular/router';
 
 import { Term, TermService } from 'app/shared';
 
@@ -10,9 +8,9 @@ import { Term, TermService } from 'app/shared';
   selector: 'app-term',
   templateUrl: 'term.component.html',
   styleUrls: ['term.component.css'],
-  directives: [MD_CARD_DIRECTIVES]
+  directives: []
 })
-export class TermComponent implements OnActivate {
+export class TermComponent {
 
   term: Term;
   errorMessage: string;
@@ -21,6 +19,7 @@ export class TermComponent implements OnActivate {
     private termService: TermService) {
   }
 
+  /*
   routerOnActivate(curr: RouteSegment) {
     let id = +curr.getParam('id');
     this.termService.getTerm(id)
@@ -29,6 +28,7 @@ export class TermComponent implements OnActivate {
         error =>  this.errorMessage = <any>error
       );
   }
+  */
 
 }
 

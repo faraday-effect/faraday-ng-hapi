@@ -1,13 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
-import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
-import { MdButton } from '@angular2-material/button';
-
 import {
   Section,
-  SectionService,
+  ClassService,
 } from 'app/shared';
 import { SectionComponent } from '../+section';
 
@@ -16,11 +12,7 @@ import { SectionComponent } from '../+section';
   selector: 'app-sections',
   templateUrl: 'sections.component.html',
   styleUrls: ['sections.component.css'],
-  directives: [
-    MD_LIST_DIRECTIVES,
-    MD_CARD_DIRECTIVES,
-    MdButton,
-  ]
+  directives: []
 })
 export class SectionsComponent implements OnInit {
 
@@ -29,11 +21,11 @@ export class SectionsComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private sectionService: SectionService) {
+    private classService: ClassService) {
   }
 
   ngOnInit() {
-    this.sectionService.getSections()
+    this.classService.getSections()
       .subscribe(
         sections => this.sections = sections,
         error =>  this.errorMessage = <any>error

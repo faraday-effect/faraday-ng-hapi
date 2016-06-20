@@ -1,16 +1,14 @@
-<div class="section">
-
-  <md-card *ngIf="errorMessage" class="error">
-    Error: {{ errorMessage }}
-  </md-card>
-
-  <md-card *ngIf="section">
-    <md-card-title>{{section.title}}</md-card-title>
-    <md-card-subtitle>Registration Number: {{section.reg_number}}</md-card-subtitle>
-    <md-card-content>
-      <div>Term ID: {{section.term_id}}</div>
-      <div>Course ID for this Section:{{section.course_id}}</div>
-    </md-card-content>
-  </md-card>
-
+<div class="row">
+  <div class="col s12 m6 l4">
+    <div *ngIf="section" class="card">
+      <div class="card-content">
+        <span class="card-title">{{section.title}}</span>
+        <div>
+          Registration Number: {{section.reg_number}}
+          <div>Term ID: {{section.term_id}} (broken)</div>
+          <div>Course ID for this Section:{{section.course_id}} (broken)</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

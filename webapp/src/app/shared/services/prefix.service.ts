@@ -7,22 +7,21 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
 
 //import { Prefix } from './shared';
+import { PrefixesUrl } from './constants';
 
 @Injectable()
 export class PrefixService {
 
-  private prefixesUrl = 'http://localhost:3000/prefixes';  // URL to web api
-
   constructor(private http: Http) { }
 
   getPrefixes() {
-    return this.http.get(this.prefixesUrl)
+    return this.http.get(PrefixesUrl)
       .map(response => response.json())
       .catch(this.handleError);
   }
 
   getPrefix(id: number) {
-    return this.http.get(this.prefixesUrl+'/'+id)
+    return this.http.get(PrefixesUrl+'/'+id)
       .map(response => response.json())
       .catch(this.handleError);
   }

@@ -1,14 +1,20 @@
-<md-toolbar color="primary">
-  <span>{{title}}</span>
-</md-toolbar>
+<nav>
+  <div class="nav-wrapper">
+    <span class="brand-logo">{{title}}</span>
+  </div>
+</nav>
 
-<md-card>
-  <button (click)="gotoCourses()" md-raised-button>Courses</button>
-  <button (click)="gotoSections()" md-raised-button>Sections</button>
-  <button (click)="gotoDepartments()" md-raised-button>Departments</button>
-  <button (click)="gotoPrefixes()" md-raised-button>Prefixes</button>
-  <button (click)="gotoTerms()" md-raised-button>Terms</button>
-  <button (click)="gotoRegister()" md-raised-button>Register</button>
-</md-card>
+<div class="container">
+  <div class="row">
+    <button (click)="gotoCourses()" class="waves-effect waves-light btn">Courses</button>
+    <button (click)="gotoSections()" class="waves-effect waves-light btn">Sections</button>
+    <button (click)="gotoDepartments()" class="waves-effect waves-light btn">Departments</button>
+    <button (click)="gotoPrefixes()" class="waves-effect waves-light btn">Prefixes</button>
+    <button (click)="gotoTerms()" class="waves-effect waves-light btn">Terms</button>
+    <button (click)="gotoRegister()" class="waves-effect waves-light btn">Register</button>
+  </div>
+  <router-outlet></router-outlet>
+</div>
 
-<router-outlet></router-outlet>
+
+

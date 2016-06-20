@@ -1,24 +1,51 @@
-<button (click)="startClass()" md-raised-button>Start class</button>
+<!-- not currently using absent/present classes -->
+<div class="col s12 m6 l4">
+  <div class="card ">
+    <div class="card-content">
+      <span class="card-title">Attendance</span>
+      <div class="collection">
+        <div *ngFor="let student of getPresent()"  >
+          <a class="collection-item" (click)="depart(student.id)">
+            <div class="row valign-wrapper">
+              <div class="col s3">
+                <img src="http://efdreams.com/data_images/dreams/face/face-10.jpg"
+                     alt="" class="circle responsive-img">
+              </div>
+              <div class="col s9">
+                <span class="student-present">
+                  {{student.first_name}} {{student.last_name}} ({{student.id}})
+                </span>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div *ngFor="let student of getAbsent()"  >
+          <a class="collection-item" (click)="attend(student.id)">
+            <div class="row valign-wrapper">
+              <div class="col s3">
+                <img src="http://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/durchschnittsgesichter/m(01-32)_gr.jpg"
+                     alt="" class="circle responsive-img">
+              </div>
+              <div class="col s9">
+                <span class="student-absent">
+                  {{student.first_name}} {{student.last_name}} ({{student.id}})
+                </span>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s12 m6 l4">
+      <button class="btn waves-effect waves-light" (click)="startClass()">Start Class
+      </button>
+    </div>
+  </div>
+</div>
 
-<md-card>
-  <md-card-title>Attendance</md-card-title>
 
-  <md-list>
 
-    <button *ngFor="let student of getPresent()" (click)="depart(student.id)" class="student-container" md-button>
-      <md-list-item>
-        <img md-list-avatar src="http://efdreams.com/data_images/dreams/face/face-10.jpg">
-        <md-line class="student-present">{{student.first_name}} {{student.last_name}} ({{student.id}})</md-line>
-      </md-list-item>
-    </button>
 
-    <button  *ngFor="let student of getAbsent()" (click)="attend(student.id)" class="student-container" md-button>
-      <md-list-item>
-        <img md-list-avatar src="http://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/durchschnittsgesichter/m(01-32)_gr.jpg">
-        <md-line class="student-absent">{{student.first_name}} {{student.last_name}} ({{student.id}})</md-line>
-      </md-list-item>
-    </button>
 
-  </md-list>
-
-</md-card>

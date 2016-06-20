@@ -6,22 +6,21 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
 
 //import { Term } from './shared';
+import { TermsUrl } from './constants';
 
 @Injectable()
 export class TermService {
 
-  private termsUrl = 'http://localhost:3000/terms';  // URL to web api
-
   constructor(private http: Http) { }
 
   getTerms() {
-    return this.http.get(this.termsUrl)
+    return this.http.get(TermsUrl)
       .map(response => response.json())
       .catch(this.handleError);
   }
 
   getTerm(id: number) {
-    return this.http.get(this.termsUrl+'/'+id)
+    return this.http.get(TermsUrl+'/'+id)
       .map(response => response.json())
       .catch(this.handleError);
   }

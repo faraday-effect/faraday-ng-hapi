@@ -1,11 +1,10 @@
-<div class="terms">
-
-  <md-card *ngIf="errorMessage" class="error">
-    Error: {{ errorMessage }}
-  </md-card>
-  
-  <md-card *ngFor="let term of terms">
-    <button md-button (click)="gotoTerm(term.id)">{{term.name}}</button>
-  </md-card>
-
+<div class="collection">
+  <div *ngFor="let term of terms">
+    <a class="collection-item"
+       (click)="gotoTerm(term.id)">{{term.name}}
+    </a>
+  </div>
+</div>
+<div *ngIf="errorMessage" class="error">
+  Error: {{ errorMessage }}
 </div>

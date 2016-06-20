@@ -1,17 +1,14 @@
-<div class="term">
-
-  <md-card *ngIf="errorMessage" class="error">
-    Error: {{ errorMessage }}
-  </md-card>
-
-  <md-card *ngIf="term">
-    <md-card-title>{{term.name}}</md-card-title>
-    <md-card-subtitle>ID: {{term.id}} </md-card-subtitle>
-    <md-card-content>
-      <div>Start Date: {{term.start_date}}</div>
-      <div>End Date: {{term.end_date}}</div>
-    </md-card-content>
-  </md-card>
-
+<div class="row">
+  <div class="col s12 m6 l4">
+    <div *ngIf="term" class="card">
+      <div class="card-content">
+        <span class="card-title">{{term.name}}</span>
+        <div>
+          ID: {{term.id}}
+          <div>Start Date: {{term.start_date}}</div>
+          <div>End Date: {{term.end_date}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
