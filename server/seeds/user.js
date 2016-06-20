@@ -37,6 +37,7 @@ exports.seed = function (knex, Promise) {
                         last_name: 'Stamper',
                         email: 'abram_stamper@taylor.edu',
                         campus_id: '006699885',
+                        //hash of 'pass'
                         password: '$2a$10$75WOPbDaP1aUl5zrddUULeV9LMd2CZ61l4r7gBBUhV9lgqoJmCAbO',
                         office_phone: null,
                         mobile_phone: '7654804409',
@@ -51,6 +52,7 @@ exports.seed = function (knex, Promise) {
                         last_name: 'Nurkkala',
                         email: 'tom_nurkkala@taylor.edu',
                         campus_id: '006699751',
+                        //hash of 'pass'
                         password: '$2a$10$75WOPbDaP1aUl5zrddUULeV9LMd2CZ61l4r7gBBUhV9lgqoJmCAbO',
                         office_phone: '7659981234',
                         mobile_phone: '7659985131',
@@ -65,6 +67,7 @@ exports.seed = function (knex, Promise) {
                         last_name: 'Bauson',
                         email: 'keith_bauson@taylor.edu',
                         campus_id: '006696325',
+                        //hash of 'pass'
                         password: '$2a$10$75WOPbDaP1aUl5zrddUULeV9LMd2CZ61l4r7gBBUhV9lgqoJmCAbO',
                         office_phone: null,
                         mobile_phone: '7654574371',
@@ -77,6 +80,7 @@ exports.seed = function (knex, Promise) {
                         last_name: 'Kiers',
                         email: 'ken_kiers@taylor.edu',
                         campus_id: '006755123',
+                        //hash of 'pass'
                         password: '$2a$10$75WOPbDaP1aUl5zrddUULeV9LMd2CZ61l4r7gBBUhV9lgqoJmCAbO',
                         office_phone: '7659984321',
                         mobile_phone: '7652514154',
@@ -89,6 +93,7 @@ exports.seed = function (knex, Promise) {
                         last_name: 'test',
                         email: 'test@test.com',
                         campus_id: '006697891',
+                        //hash of 'pass'
                         password: '$2a$10$75WOPbDaP1aUl5zrddUULeV9LMd2CZ61l4r7gBBUhV9lgqoJmCAbO',
                         office_phone: null,
                         mobile_phone: null,
@@ -101,6 +106,7 @@ exports.seed = function (knex, Promise) {
                         last_name: 'Draper',
                         email: 'andrew@example.com',
                         campus_id: '006859745',
+                        //hash of 'pass'
                         password: '$2a$10$75WOPbDaP1aUl5zrddUULeV9LMd2CZ61l4r7gBBUhV9lgqoJmCAbO',
                         office_phone: '7659981234',
                         mobile_phone: null,
@@ -113,6 +119,7 @@ exports.seed = function (knex, Promise) {
                         last_name: 'test',
                         email: 'test@example.com',
                         campus_id: '006694321',
+                        //hash of 'pass'
                         password: '$2a$10$75WOPbDaP1aUl5zrddUULeV9LMd2CZ61l4r7gBBUhV9lgqoJmCAbO',
                         office_phone: null,
                         mobile_phone: null,
@@ -125,6 +132,7 @@ exports.seed = function (knex, Promise) {
                         last_name: 'User',
                         email: 'test_sup@example.com',
                         campus_id: '006694550',
+                        //hash of 'pass'
                         password: '$2a$10$75WOPbDaP1aUl5zrddUULeV9LMd2CZ61l4r7gBBUhV9lgqoJmCAbO',
                         office_phone: null,
                         mobile_phone: null,
