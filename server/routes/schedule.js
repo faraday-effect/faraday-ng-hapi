@@ -131,7 +131,7 @@ server.route({
                     return user
                     .$relatedQuery('section')
                     //load all the related data fromt the db into a JSON object
-                    .eager('[userRelationship.relationshipType, sectionSchedule, offering.course.[prefix, department]]')
+                    .eager('[userRelationship.relationshipType, sectionSchedule, sequence.offering.course.[prefix, department]]')
                     //filter the userRelationship by user_id & section_id
                     .filterEager('userRelationship', builder => {
                         builder.where('user_id', current_user.id)
@@ -153,7 +153,7 @@ server.route({
                 .query()
                 .where('id', request.params.section_id)
                 .first()
-                .eager('[userRelationship.relationshipType, sectionSchedule, offering.course.[prefix, department]]')
+                .eager('[userRelationship.relationshipType, sectionSchedule, sequence.offering.course.[prefix, department]]')
                 .filterEager('userRelationship', builder => {
                     builder.where('user_id', request.auth.credentials.id)
                 })
@@ -183,7 +183,7 @@ server.route({
             Section
                 .query()
                 .insert({
-                    offering_id: request.payload.offering_id,
+                    sequence_id: request.payload.offering_id,
                     course_id: request.payload.course_id,
                     term_id: request.payload.term_id,
                     credit_hours: request.payload.credit_hours,
@@ -200,7 +200,7 @@ server.route({
         config: {
             validate: {
                 payload: {
-                    offering_id: Joi.number().positive().integer().required(),
+                    sequence_id: Joi.number().positive().integer().required(),
                     course_id: Joi.number().positive().integer().required(),
                     term_id: Joi.number().positive().integer().required(),
                     credit_hours: Joi.number().positive().integer().required(),
@@ -218,7 +218,7 @@ server.route({
             Section
                 .query()
                 .patchAndFetchById(request.params.section_id, {
-                    offering_id: request.payload.offering_id,
+                    sequence_id: request.payload.offering_id,
                     course_id: request.payload.course_id,
                     term_id: request.payload.term_id,
                     credit_hours: request.payload.credit_hours,
@@ -238,7 +238,7 @@ server.route({
                     section_id: Joi.number().integer()
                 },
                 payload: {
-                    offering_id: Joi.number().positive().integer().required(),
+                    sequence_id: Joi.number().positive().integer().required(),
                     course_id: Joi.number().positive().integer().required(),
                     term_id: Joi.number().positive().integer().required(),
                     credit_hours: Joi.number().positive().integer().required(),
@@ -251,4 +251,4 @@ server.route({
     next();
 };
 
-exports.register.attributes = { name: 'schedule', version: '0.0.1' };
+exports.register.attributes = { name: 'schedule', version: '0.0.3' };
