@@ -1,0 +1,53 @@
+<nav>
+  <div class="nav-wrapper">
+    <a class="brand-logo" href="#!">Faraday</a>
+    <ul id="nav-mobile" class="right">
+      <li><a href="#!">Log Out</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="row">
+  <div class="col">
+
+    <h5>My Classes</h5>
+    <div *ngFor="let class of classes | async" class="card hoverable">
+      <div class="card-content">
+        <a [routerLink]="'./'+class.id" class="card-title black-text">
+          {{class.prefix}} {{class.number}} &mdash; {{class.title}}
+        </a>
+        <div>{{class.teacher}}</div>
+        <div>{{class.start_time}} &ndash; {{class.stop_time}} ({{class.days}})</div>
+      </div>
+      <div [ngSwitch]="class.role">
+        <div *ngSwitchCase="'student'" class="card-action">
+          <a (click)="attendClass(class.id)" class="btn">Attend</a>
+        </div>
+        <div *ngSwitchCase="'teacher'" class="card-action">
+          <a [routerLink]="'./'+class.id+'/podium'" class="btn">Podium</a>
+          <a [routerLink]="'./'+class.id+'/projector'" class="btn">Projector</a>
+        </div>
+      </div>
+    </div>
+
+    <h5>All Courses</h5>
+    <div *ngFor="let course of courses | async" class="card hoverable">
+      <div class="card-content">
+        <a [routerLink]="'../courses/'+course.id" class="card-title black-text">
+          {{course.prefix}} {{course.number}} &mdash; {{course.title}}
+        </a>
+        <ul class="collection">
+          <li *ngFor="let section of course.sections" class="collection-item">
+            <a class="btn secondary-content">Enroll</a>
+            {{section.teacher}}
+            <br>
+            {{section.start_time}} &ndash; {{section.stop_time}} ({{section.days}})
+            <br>
+            {{section.credits}} {{ section.credits == 1 ? "Credit" : "Credits" }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>

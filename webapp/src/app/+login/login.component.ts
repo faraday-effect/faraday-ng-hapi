@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { UserService } from 'app/shared';
 
@@ -17,21 +18,29 @@ export class LoginComponent implements OnInit {
   password: string;
 
   constructor(
+    private router: Router,
     private userService: UserService) {}
 
   ngOnInit() {
     this.date = new Date();
+    if (this.userService.isLoggedIn) {
+      this.gotoClasses();
+    }
   }
 
   login() {
     this.userService.login(this.email, this.password)
       .subscribe(
-        r => console.log(r)
+        r => this.gotoClasses()
       );
   }
 
   logout() {
     this.userService.logout();
+  }
+
+  gotoClasses() {
+    this.router.navigate(['/classes']);
   }
 
 }

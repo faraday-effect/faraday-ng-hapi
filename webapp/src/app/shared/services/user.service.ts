@@ -13,7 +13,8 @@ import { UsersUrl } from './constants';
 @Injectable()
 export class UserService {
 
-  currentUser: any;
+  public user: any;
+  public isLoggedIn = false;
 
   constructor(
     private http: Http) {}
@@ -25,7 +26,7 @@ export class UserService {
     });
     return this.http.post(LoginUrl, message)
                .map(response => response.json())
-               .map(json => this.currentUser = json)
+               .map(json => this.user = json)
                .map(() => console.log(this))
                .catch(this.handleError);
   }
