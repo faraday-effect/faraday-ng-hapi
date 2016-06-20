@@ -41,23 +41,6 @@ export class CourseComponent implements OnInit {
   }
 
   /*
-  routerOnActivate(curr: RouteSegment) {
-    this.routeSegment = curr;
-    let id = +curr.getParam('id');
-    this.classService.getCourse(id)
-      .subscribe(
-        //course => this.course = course,
-        //error =>  this.errorMessage = <any>error
-        (course) => {
-          this.course = course;
-        },
-        (error) => {
-          this.errorMessage = <any>error;
-          Materialize.toast('There is an error: '+this.errorMessage, 4000);
-        }
-      );
-  }
-
   hideCourse() {
     let id = +this.routeSegment.getParam('id');
     this.classService.hideCourse(id)

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { Term, TermService } from 'app/shared';
 
@@ -16,19 +16,20 @@ export class TermComponent {
   errorMessage: string;
 
   constructor(
+    private route: ActivatedRoute,
     private termService: TermService) {
   }
 
-  /*
-  routerOnActivate(curr: RouteSegment) {
-    let id = +curr.getParam('id');
-    this.termService.getTerm(id)
-      .subscribe(
-        term => this.term = term,
-        error =>  this.errorMessage = <any>error
-      );
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      let id = +params['id'];
+      this.termService.getTerm(id)
+        .subscribe(
+          term => this.term = term,
+          error =>  this.errorMessage = <any>error
+        );
+    });
   }
-  */
 
 }
 

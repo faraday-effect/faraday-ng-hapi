@@ -29,7 +29,7 @@ export class ClassesComponent implements OnInit {
 
   attendClass(id: number) {
     console.log("Attending!", id);
-    this.router.navigate([id, 'participant'], this.route);
+    this.router.navigate([id, 'participant'], {relativeTo: this.route});
   }
 
 }
