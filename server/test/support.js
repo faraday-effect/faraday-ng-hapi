@@ -12,6 +12,8 @@
  * the lab object itself to run properly.
  */
 
+const Hoek = require('hoek');
+
 const Lab = require('lab');
 
 const Code = require('code');
@@ -26,11 +28,13 @@ exports.init_test = function() {
     lab.before(done => {
         Server((err, server) => {
             if (err) {
-                console.log("Server didn't initialize", err);
-                throw err;
+                Hoek.assert(!err, err);
             }
+            server.initialize(err => {
+                Hoek.assert(!err, err);
+            });
             exports.server = server;
-            console.log("Server initialized");
+            server.log("Server initialized");
             done();
         })
     });

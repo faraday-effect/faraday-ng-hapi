@@ -1,24 +1,9 @@
 "use strict";
 
-const Code = require('code');
-const expect = Code.expect;
-const Lab = require('lab');
-const lab = exports.lab = Lab.script();
-
-export const db = require('../db');
+import { init_test, expect, server, db } from './support';
+const lab = exports.lab = init_test();
 
 const User = require('../models/User');
-
-let server = null;
-lab.before((done) => {
-    require('../server')((err, srv) => {
-        server = srv;
-        server.start(() => {
-            console.log('Server started for caching');
-        });
-        done();
-    })
-});
 
 lab.experiment('/login endpoint', () => {
 
