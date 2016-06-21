@@ -34,8 +34,11 @@ exports.register = function (server, options, next) {
                 .where('id', request.params.course_id)
                 .eager('[prefix, department, section.sectionSchedule]')
                 .first()
-                .then((courses) => {
-                    reply(courses);
+                .then((course) => {
+                    if(course)
+                        reply(course);
+                    else
+                        reply(Boom.notFound('Course ID ' + request.params.course_id + ' was not found!'));
                 })
                 .catch((err) => {
                     reply(Boom.badImplementation(err));
@@ -129,9 +132,13 @@ exports.register = function (server, options, next) {
             Section
                 .query()
                 .where('course_id', request.params.course_id)
+                .eager('sectionSchedule')
                 .then((sections) => {
                     reply(sections);
-                });
+                })
+                .catch((err) => {
+                    reply(Boom.badImplementation(err));
+                })
         },
         config: {
             notes: 'retrieves the section objects for a given course object',
