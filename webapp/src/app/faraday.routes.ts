@@ -4,7 +4,7 @@ import { AdminRoutes } from './+admin/admin.routes';
 import { ParticipantRoutes } from './+participant/participant.routes';
 import { PodiumRoutes } from './+podium/podium.routes';
 import { ProjectorRoutes } from './+projector/projector.routes';
-import { ClassesRoutes } from './classes/classes.routes';
+import { CoursesRoutes } from './courses/courses.routes';
 
 import { LoginComponent } from './+login';
 
@@ -15,7 +15,7 @@ const routes: RouterConfig = [
   ...ParticipantRoutes,
   ...PodiumRoutes,
   ...ProjectorRoutes,
-  ...ClassesRoutes,
+  ...CoursesRoutes,
 ];
 
 export const FARADAY_ROUTER_PROVIDERS = [

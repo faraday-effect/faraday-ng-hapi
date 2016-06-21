@@ -2,39 +2,39 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from '@angular/router';
 
-import { ClassService } from './class.service';
+import { CourseService } from './course.service';
 
 @Component({
   moduleId: module.id,
-  selector: 'app-classes',
-  templateUrl: 'classes.component.html',
-  styleUrls: ['classes.component.css'],
+  selector: 'app-courses',
+  templateUrl: 'courses.component.html',
+  styleUrls: ['courses.component.css'],
   directives: [ROUTER_DIRECTIVES],
-  providers: [ClassService],
+  providers: [CourseService],
 })
-export class ClassesComponent implements OnInit {
+export class CoursesComponent implements OnInit {
 
-  classes: Observable<any>;
   courses: Observable<any>;
+  allCourses: Observable<any>;
   enrolled = {};
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private classService: ClassService) {}
+    private courseService: CourseService) {}
 
   ngOnInit() {
-    this.classes = this.classService.getClasses();
-    this.courses = this.classService.getCourses();
-    this.classes.subscribe(classes => {
+    this.courses = this.courseService.getCourses();
+    this.allCourses = this.courseService.getAllCourses();
+    this.courses.subscribe(courses => {
       this.enrolled = {};
-      for (let c of classes) {
+      for (let c of courses) {
         this.enrolled[c.id] = true;
       }
     });
   }
 
-  attendClass(id: number) {
+  attend(id: number) {
     console.log(`Attending ${id}!`);
     this.router.navigate([id, 'participant'], {relativeTo: this.route});
   }
@@ -43,17 +43,13 @@ export class ClassesComponent implements OnInit {
     return id != 25;
   }
 
-  canEnroll(id: number) {
-    return !this.enrolled[id];
-  }
-
   enroll(id: number) {
     console.log(`Enrolling in ${id}!`);
-    this.classes.retry().delay(1000);
+    this.courses.retry().delay(1000);
   }
 
-  withdraw(id: number) {
-    console.log(`Withdrawing from ${id}!`);
+  canEnroll(id: number) {
+    return !this.enrolled[id];
   }
 
 }

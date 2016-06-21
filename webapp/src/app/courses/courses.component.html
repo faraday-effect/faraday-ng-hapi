@@ -10,29 +10,29 @@
 <div class="row">
   <div class="col">
 
-    <h5>My Classes</h5>
-    <div *ngFor="let class of classes | async" class="card hoverable">
+    <h5>My Courses</h5>
+    <div *ngFor="let course of courses | async" class="card hoverable">
       <div class="card-content">
-        <a [routerLink]="'./'+class.id" class="card-title black-text">
-          {{class.prefix}} {{class.number}} &mdash; {{class.title}}
+        <a [routerLink]="'./'+course.id" class="card-title black-text">
+          {{course.prefix}} {{course.number}} &mdash; {{course.title}}
         </a>
-        <div>{{class.teacher}}</div>
-        <div>{{class.start_time}} &ndash; {{class.stop_time}} ({{class.days}})</div>
+        <div>{{course.teacher}}</div>
+        <div>{{course.start_time}} &ndash; {{course.stop_time}} ({{course.days}})</div>
       </div>
-      <div [ngSwitch]="class.role">
-        <div *ngIf="canAttend(class.id)">
+      <div [ngSwitch]="course.role">
+        <div *ngIf="canAttend(course.id)">
           <div *ngSwitchCase="'student'" class="card-action">
-            <a (click)="attendClass(class.id)" class="btn-flat">Attend</a>
+            <a (click)="attend(course.id)" class="btn-flat">Attend</a>
           </div>
         </div>
         <div *ngSwitchCase="'teacher'" class="card-action">
-          <a [routerLink]="'./'+class.id+'/podium'" class="btn-flat">Teach</a>
+          <a [routerLink]="'./'+course.id+'/podium'" class="btn-flat">Teach</a>
         </div>
       </div>
     </div>
 
     <h5>All Courses</h5>
-    <div *ngFor="let course of courses | async" class="card hoverable">
+    <div *ngFor="let course of allCourses | async" class="card hoverable">
       <div class="card-content">
         <a [routerLink]="'../courses/'+course.id" class="card-title black-text">
           {{course.prefix}} {{course.number}} &mdash; {{course.title}}

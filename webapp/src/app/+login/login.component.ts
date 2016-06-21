@@ -24,14 +24,14 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.date = new Date();
     if (this.userService.isLoggedIn) {
-      this.gotoClasses();
+      this.gotoCourses();
     }
   }
 
   login() {
     this.userService.login(this.email, this.password)
       .subscribe(
-        r => this.gotoClasses()
+        r => this.gotoCourses()
       );
   }
 
@@ -39,8 +39,8 @@ export class LoginComponent implements OnInit {
     this.userService.logout();
   }
 
-  gotoClasses() {
-    this.router.navigate(['/classes']);
+  gotoCourses() {
+    this.router.navigate(['/courses']);
   }
 
 }

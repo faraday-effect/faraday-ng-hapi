@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
-const CLASSES = [
+const COURSES = [
   {
     id: 21,
     prefix: "COS",
@@ -59,7 +59,7 @@ const CLASSES = [
   },
 ];
 
-const COURSES = [
+const ALL_COURSES = [
   {
     id: 1,
     prefix: "PHY",
@@ -119,20 +119,20 @@ const COURSES = [
 ];
 
 @Injectable()
-export class ClassService {
+export class CourseService {
 
   num: number;
 
   constructor() {}
 
-  getClasses() {
+  getCourses() {
     // let obj = {id:1, prefix: "", number: this.num, title: "", teacher: "", start_time: "", stop_time: "", days: "", role: "student"};
     // return Observable.of(CLASSES.concat([obj]));
-    return Observable.of(CLASSES);
+    return Observable.of(COURSES);
   }
 
-  getCourses() {
-    return Observable.of(COURSES);
+  getAllCourses() {
+    return Observable.of(ALL_COURSES);
   }
 
 }
