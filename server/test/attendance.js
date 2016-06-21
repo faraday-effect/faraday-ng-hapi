@@ -187,7 +187,7 @@ lab.experiment('/attendance endpoint', () => {
             });
     });
 
-    lab.test('Reply error with wrong code', (done) => {
+    lab.test('Error out with wrong code', (done) => {
 
         server.inject(
             {
@@ -207,7 +207,7 @@ lab.experiment('/attendance endpoint', () => {
             });
     });
 
-    lab.test('Reply error class not in session', (done) => {
+    lab.test('Error out class not in session', (done) => {
 
         ActualClass
             .query()
@@ -232,7 +232,7 @@ lab.experiment('/attendance endpoint', () => {
             });
     });
 
-    lab.test('Reply error class already ended', (done) => {
+    lab.test('Error out class already ended', (done) => {
 
         ActualClass
             .query()
