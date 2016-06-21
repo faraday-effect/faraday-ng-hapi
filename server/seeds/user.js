@@ -10,11 +10,14 @@ exports.seed = function (knex, Promise) {
 
     return Promise.join(
         //tables with fk
+        knex('attendance').del(),
+        knex('actual_class').del(),
         knex('department_prefix').del(),
         knex('section_schedule').del(),
         knex('user_role').del(),
         knex('user_relationship').del(),
         knex('section').del(),
+        knex('sequence').del(),
         knex('offering').del(),
         knex('course').del(),
 
@@ -169,6 +172,7 @@ exports.seed = function (knex, Promise) {
                     {
                         title: 'Spring Foundations of CS',
                         course: {
+                            '#id': 'foundations CS course',
                             number: '121',
                             title: 'Foundations of Computer Science',
                             prefix: {
@@ -180,18 +184,21 @@ exports.seed = function (knex, Promise) {
                             },
                             department: {
                                 '#ref': 'cos'
-                            },
+                            }
+                        },
+                        sequence: {
+                            title: 'this is the sequence title for foundations CS',
                             section: {
                                 title: 'Foundations of CS Section Title',
                                 reg_number: '012345',
                                 credit_hours: '4',
-                                '#id': 'section-foundations-cs',
                                 term: {
                                     '#id': 'term',
                                     name: 'Spring 2017',
                                     start_date: '2017-01-01',
                                     end_date: '2017-05-15'
                                 },
+                                course: { '#ref': 'foundations CS course' },
                                 sectionSchedule: [
                                     {
                                         weekday: 'Monday',
@@ -215,14 +222,12 @@ exports.seed = function (knex, Promise) {
                                     }
                                 ]
                             }
-                        },
-                        section: {
-                            '#ref': 'section-foundations-cs'
                         }
                     },
                     {
                         title: 'Spring Historic',
                         course: {
+                            '#id': 'spring historic course',
                             number: '313',
                             title: 'Historic Christiain Belief',
                             prefix: {
@@ -235,41 +240,46 @@ exports.seed = function (knex, Promise) {
                             department: {
                                 '#ref': 'rel'
                             },
-                            section: [
-                                {
-                                    term: {
-                                        '#ref': 'term'
-                                    },
-                                    title: 'Historic Section I Title',
-                                    reg_number: '654321',
-                                    credit_hours: '3',
-                                    '#id': 'section_HS1',
-                                    sectionSchedule: [
-                                        {
-                                            weekday: 'Monday',
-                                            start_time: '9:00:00',
-                                            stop_time: '9:50:00'
-                                        },
-                                        {
-                                            weekday: 'Wednesday',
-                                            start_time: '9:00:00',
-                                            stop_time: '9:50:00'
-                                        },
-                                        {
-                                            weekday: 'Friday',
-                                            start_time: '9:00:00',
-                                            stop_time: '9:50:00'
-                                        },
-                                    ]
+                        },
+                        sequence: [{
+                            title: 'Historic spring I sequence',
+                            section:
+                            {
+                                term: {
+                                    '#ref': 'term'
                                 },
-                                {
+                                title: 'Historic Section I Title',
+                                reg_number: '654321',
+                                credit_hours: '3',
+                                course: { '#ref': 'spring historic course' },
+                                sectionSchedule: [
+                                    {
+                                        weekday: 'Monday',
+                                        start_time: '9:00:00',
+                                        stop_time: '9:50:00'
+                                    },
+                                    {
+                                        weekday: 'Wednesday',
+                                        start_time: '9:00:00',
+                                        stop_time: '9:50:00'
+                                    },
+                                    {
+                                        weekday: 'Friday',
+                                        start_time: '9:00:00',
+                                        stop_time: '9:50:00'
+                                    },
+                                ]
+                            },
+                        }, {
+                                title: 'Historic spring II sequence',
+                                section: {
                                     term: {
                                         '#ref': 'term'
                                     },
                                     title: 'Historic Section II Title',
                                     reg_number: '123654',
                                     credit_hours: '3',
-                                    '#id': 'section_HS2',
+                                    course: { '#ref': 'spring historic course' },
                                     sectionSchedule: [
                                         {
                                             weekday: 'Monday',
@@ -285,30 +295,20 @@ exports.seed = function (knex, Promise) {
                                             weekday: 'Friday',
                                             start_time: '11:00:00',
                                             stop_time: '11:50:00'
-                                        },
+                                        }
                                     ]
                                 }
-                            ]
-                        },
-                        section: [
-                            {
-                                '#ref': 'section_HS1'
-                            },
-                            {
-                                '#ref': 'section_HS2'
                             }
                         ]
-
                     }
                 ]).then((offering) => {
                     dataModel['offering'] = offering;
                 }),
 
-            () => console.log('offering, course, section, section_schedule seeded')
+            () => console.log('offering, course, section, sequence, section_schedule seeded')
         )
     }).then(() => {
         const user_id = dataModel['Users'][0].id;
-
         return User
             .query()
             .where('id', user_id)
@@ -317,7 +317,7 @@ exports.seed = function (knex, Promise) {
                 return user
                     .$relatedQuery('section')
                     .relate({
-                        id: dataModel['offering'][0].section.id,
+                        id: dataModel['offering'][0]['sequence'].section.id,
                         relationship_type_id: dataModel['RelationshipType'][0].id
                     });
             })
@@ -335,7 +335,7 @@ exports.seed = function (knex, Promise) {
                 return user
                     .$relatedQuery('section')
                     .relate({
-                        id: dataModel['offering'][0].section.id,
+                        id: dataModel['offering'][0]['sequence'].section.id,
                         relationship_type_id: dataModel['RelationshipType'][0].id
                     });
             })
@@ -353,7 +353,7 @@ exports.seed = function (knex, Promise) {
                 return user
                     .$relatedQuery('section')
                     .relate({
-                        id: dataModel['offering'][0].section.id,
+                        id: dataModel['offering'][0]['sequence'].section.id,
                         relationship_type_id: dataModel['RelationshipType'][0].id
                     });
             })
@@ -371,7 +371,7 @@ exports.seed = function (knex, Promise) {
                 return user
                     .$relatedQuery('section')
                     .relate({
-                        id: dataModel['offering'][0].section.id,
+                        id: dataModel['offering'][0]['sequence'].section.id,
                         relationship_type_id: dataModel['RelationshipType'][1].id
                     });
             })
@@ -390,7 +390,7 @@ exports.seed = function (knex, Promise) {
                 return user
                     .$relatedQuery('section')
                     .relate({
-                        id: dataModel['offering'][0].section.id,
+                        id: dataModel['offering'][0]['sequence'].section.id,
                         relationship_type_id: dataModel['RelationshipType'][2].id
                     });
             })
@@ -409,7 +409,7 @@ exports.seed = function (knex, Promise) {
                 return user
                     .$relatedQuery('section')
                     .relate({
-                        id: dataModel['offering'][1].section[0].id,
+                        id: dataModel['offering'][1]['sequence'][0].section.id,
                         relationship_type_id: dataModel['RelationshipType'][0].id
                     });
             })
@@ -427,7 +427,7 @@ exports.seed = function (knex, Promise) {
                 return user
                     .$relatedQuery('section')
                     .relate({
-                        id: dataModel['offering'][1].section[1].id,
+                        id: dataModel['offering'][1]['sequence'][1].section.id,
                         relationship_type_id: dataModel['RelationshipType'][0].id
                     });
             })
@@ -446,7 +446,7 @@ exports.seed = function (knex, Promise) {
                 return user
                     .$relatedQuery('section')
                     .relate({
-                        id: dataModel['offering'][1].section[0].id,
+                        id: dataModel['offering'][1]['sequence'][0].section.id,
                         relationship_type_id: dataModel['RelationshipType'][0].id
                     });
             })
@@ -466,7 +466,7 @@ exports.seed = function (knex, Promise) {
                 return user
                     .$relatedQuery('section')
                     .relate({
-                        id: dataModel['offering'][1].section[1].id,
+                        id: dataModel['offering'][1]['sequence'][1].section.id,
                         relationship_type_id: dataModel['RelationshipType'][0].id
                     });
             })
@@ -484,7 +484,7 @@ exports.seed = function (knex, Promise) {
                 return user
                     .$relatedQuery('offering')
                     .relate({
-                        id: dataModel['offering'][1].id,
+                        id: dataModel['offering'][1]['sequence'][0].offering_id,
                         relationship_type_id: dataModel['RelationshipType'][2].id
                     });
             })
@@ -503,7 +503,7 @@ exports.seed = function (knex, Promise) {
                 return user
                     .$relatedQuery('offering')
                     .relate({
-                        id: dataModel['offering'][1].id,
+                        id: dataModel['offering'][1]['sequence'][0].offering_id,
                         relationship_type_id: dataModel['RelationshipType'][1].id
                     });
             })

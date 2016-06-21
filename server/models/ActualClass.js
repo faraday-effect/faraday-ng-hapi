@@ -8,24 +8,12 @@ class ActualClass extends Model {
 
     static get relationMappings() {
         return {
-            currentClass: {
-                relation: Model.ManyToManyRelation,
-                modelClass: __dirname + '/Section',
-                join: {
-                    from: 'actual_class.id',
-                    through: {
-                        from: 'current_class.actual_class_id',
-                        to: 'current_class.section_id'
-                    },
-                    to: 'section.id'
-                }
-            },
-            section: {
+            sequence: {
                 relation: Model.BelongsToOneRelation,
-                modelClass: __dirname + '/Section',
+                modelClass: __dirname + '/Sequence',
                 join: {
-                    from: 'actual_class.section_id',
-                    to: 'section.id'
+                    from: 'actual_class.sequence_id',
+                    to: 'sequence.id'
                 }
             }
         }
