@@ -84,6 +84,123 @@ lab.experiment('/attendance endpoint', () => {
     // No need to invoke done();  According to documentation,
     // you can return a promise instead.
 
+lab.test('Retrieves all the actualClasses', (done) => {
+
+        server.inject(
+            {
+                method: 'GET',
+                credentials: user,
+                url: `/sections/${section.id}/classes`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(200);
+                const response = JSON.parse(res.payload);
+                expect(response).to.be.instanceOf(Array);
+                expect(response).to.have.length(1);
+                expect(response[0].id).to.exist();
+                expect(response[0].start_time).to.exist();
+                done();
+            });
+    });
+
+    lab.test('Errors out if the section has no classes', (done) => {
+         ActualClass
+            .query()
+            .deleteById(section.sequence.actualClass.id)
+            .then(() => {
+                server.inject(
+                    {
+                        method: 'GET',
+                        credentials: user,
+                        url: `/sections/${section.id}/classes`
+                    },
+                    (res) => {
+                        expect(res.statusCode).to.equal(400);
+                        const response = JSON.parse(res.payload);
+                        expect(response.error).to.equal('Bad Request');
+                        expect(response.message).to.equal('It appears no classes have been started for this section');
+                        done();
+                    });
+            });
+    });
+
+    lab.test('Errors out if section is not found when retrieving the actualClasses', (done) => {
+
+        server.inject(
+            {
+                method: 'GET',
+                credentials: user,
+                url: `/sections/100000000/classes`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(404);
+                const response = JSON.parse(res.payload);
+                expect(response.error).to.equal('Not Found');
+                expect(response.message).to.equal('Section ID 100000000 was not found!');
+                done();
+            });
+    });
+
+    lab.test('Retrieves a single actual class instance', (done) => {
+
+        server.inject(
+            {
+                method: 'GET',
+                credentials: user,
+                url: `/classes/1`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(200);
+                const response = JSON.parse(res.payload);
+                expect(response.id).to.equal(section.sequence.actualClass.id);
+                expect(response.start_time).to.exist();
+                expect(response.stop_time).to.be.null();
+                expect(response.reflection).to.be.null();
+                expect(response.sequence_id).to.equal(section.sequence.id);
+                done();
+            });
+    });
+
+    lab.test('Errors out not found if cannot find a single actual class instance', (done) => {
+
+        server.inject(
+            {
+                method: 'GET',
+                credentials: user,
+                url: `/classes/100`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(404);
+                const response = JSON.parse(res.payload);
+                expect(response.error).to.equal('Not Found');
+                expect(response.message).to.equal('Actual Class ID 100 not found!');
+                done();
+            });
+    });
+
+    lab.test('Posts reflection successfully', (done) => {
+
+        server.inject(
+            {
+                method: 'POST',
+                credentials: user,
+                url: '/classes/1',
+                payload: {
+                    reflection: 'abcxyz'
+                }
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(200);
+                const response = JSON.parse(res.payload);
+                expect(response.id).to.equal(section.sequence.actualClass.id);
+                expect(response.start_time).to.exist();
+                expect(response.stop_time).to.be.null();
+                expect(response.reflection).to.startWith('abcxyz');
+                expect(response.sequence_id).to.equal(section.sequence.id);
+                done();
+            });
+    });
+
     lab.test('Mark oneself as present to a class', (done) => {
 
         server.inject(
