@@ -1,6 +1,6 @@
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
-const User = require('../models/User')
+const User = require('../models/User');
 const Boom = require('boom');
 const saltRounds = 10;
 

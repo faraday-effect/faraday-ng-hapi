@@ -1,53 +1,58 @@
-const Nes = require('nes');
 const Boom = require('boom');
 const Joi = require('joi');
-const bookshelf = require('../bookshelf');
-const attendance_code_length = 6;
+
+const Section = require('../models/Section');
+const ActualClass = require('../models/ActualClass')
 
 exports.register = function (server, options, next) {
 
     server.route({
         method: 'POST',
-        path: '/attendance',
+        path: '/sections/{section_id}/classes',
         handler: function (request, reply) {
-            var code = '000000';
-            bookshelf.Attendance
-            .forge({
-                    'actual_class_id': request.payload.actual_class_id, 
-                    'student_id': request.payload.student_id
-            })
-            .fetch()
-            .then((model) => {
-                if (model == null) {
-                    if (request.payload.code === code) {
-                        new bookshelf.Attendance({
-                            'actual_class_id': request.payload.actual_class_id,
-                            'student_id': request.payload.student_id,
-                            'signed_in': new Date()
-                        }).save().then((model) => {
-                            server.publish('/attendance', { student_id: request.payload.student_id, actual_class_id: request.payload.actual_class_id });
-                            return reply(model);
-                        }).catch((err) => {
-                            return reply(Boom.badImplementation('Failed to create attendance instance', err));
-                        });
+            //Get the sequence ID
+            Section
+                .query()
+                .where('id', request.params.section_id)
+                .eager('sequence')
+                .first()
+                .then((section) => {
+                    //Checks to make sure the section exists
+                    if (section != null) {
+                        section
+                            .sequence
+                            .$relatedQuery('actualClass')
+                            .where('stop_time', null)
+                            .first()
+                            .then((existingActualClass) => {
+                                //checks to make sure that the professor hasn't already started class
+                                if (existingActualClass == null) {
+                                    section
+                                        .sequence
+                                        .$relatedQuery('actualClass')
+                                        .insert({
+                                            start_time: new Date(),
+                                            sequence_id: section.sequence.id
+                                        }).then((actualClass) => {
+                                            reply(actualClass);
+                                        });
+                                } else {
+                                    reply(Boom.badRequest('Class is already in session!'));
+                                }
+                            });
                     } else {
-                return reply(Boom.badData('The code you entered was incorrect'));
+                        reply(Boom.notFound('Section ID ' + request.params.section_id + ' was not found!'));
                     }
-                } else {
-                    return reply(model);
-                }
-                
-            }).catch((err) => {
-                return reply(Boom.badImplementation('Failed to find your attendance records', err));
-            });
+                })
+                .catch((err) => {
+                    reply(Boom.badImplementation(err));
+                });
         },
         config: {
-            notes: 'Puts a student inside the class when the course code is correct',
+            notes: 'Allows a professor to start class',
             validate: {
-                payload: {
-                    actual_class_id: Joi.number().integer().required(),
-                    student_id: Joi.number().integer().required(),
-                    code: Joi.string().length(attendance_code_length).required()
+                params: {
+                    section_id: Joi.number().positive().integer()
                 }
             }
         }
@@ -55,37 +60,56 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'DELETE',
-        path: '/attendance',
+        path: '/sections/{section_id}/classes',
         handler: function (request, reply) {
-            bookshelf.Attendance.forge()
-                .where({actual_class_id: request.payload.actual_class_id,  
-                student_id: request.payload.student_id})
-                .save({
-                signed_out: new Date()
-            },
-            { method: 'update', patch: true })
-                .then((model) => {
-                    model.fetch()
-                    .then((newModel) => {
-                        reply(newModel);
-                    });
-                });
+            //Get the sequence ID
+            Section
+                .query()
+                .where('id', request.params.section_id)
+                .eager('sequence')
+                .first()
+                .then((section) => {
+                    //Checks to make sure the section exists
+                    if (section != null) {
+                        section
+                            .sequence
+                            .$relatedQuery('actualClass')
+                            .where('stop_time', null)
+                            .first()
+                            .then((existingActualClass) => {
+                                //checks to make sure that the professor has already started class
+                                if (existingActualClass != null) {
+                                    section
+                                        .sequence
+                                        .$relatedQuery('actualClass')
+                                        .patchAndFetchById(existingActualClass.id, {
+                                            stop_time: new Date()
+                                        }).then((actualClass) => {
+                                            reply(actualClass);
+                                        });
+                                } else {
+                                    reply(Boom.badRequest('Class has not been started or has already ended for the day!'));
+                                }
+                            });
+                    } else {
+                        reply(Boom.notFound('Section ID ' + request.params.section_id + ' was not found!'));
+                    }
+                })
+                .catch((err) => {
+                    reply(Boom.badImplementation(err));
+                })
         },
         config: {
-            notes: 'Puts a student inside the class when the course code is correct',
+            notes: 'Allows a professor to end class',
             validate: {
-                payload: {
-                    actual_class_id: Joi.number().integer().required(),
-                    student_id: Joi.number().integer().required()
+                params: {
+                    section_id: Joi.number().positive().integer()
                 }
             }
         }
     });
 
-    server.register(Nes, function (err) {
-        server.subscription('/attendance');
-    });
     next();
 };
 
-exports.register.attributes = {name: 'execution', version: '0.0.1'};
+exports.register.attributes = { name: 'execution', version: '0.0.1' };

@@ -35,6 +35,14 @@ class Offering extends Model {
                     },
                     to: 'user.id'
                 }
+            },
+            actualClass: {
+                relation: Model.HasManyRelation,
+                modelClass: __dirname + '/ActualClass',
+                join: {
+                    from: 'offering.id',
+                    to: 'actual_class.offering_id'
+                }
             }
         }
     }

@@ -12,7 +12,7 @@ lab.experiment('/login endpoint', () => {
     lab.beforeEach(done => {
 
         return Promise.all([
-            db.knex('user').del()
+            db.knex.raw('TRUNCATE public.user CASCADE')
         ]).then(results => {
             return Promise.all([
                 User.query().insertWithRelated([{
@@ -62,6 +62,7 @@ lab.experiment('/login endpoint', () => {
                 expect(response.first_name).to.equal('Patty');
                 expect(response.last_name).to.equal('O\'Furniture');
                 expect(response.email).to.equal('patty@example.com');
+                expect(response.password).to.not.exist();
                 done();
             });
     });
@@ -159,6 +160,7 @@ lab.experiment('/login endpoint', () => {
                 expect(response.first_name).to.equal('Milo');
                 expect(response.last_name).to.equal('Rediger');
                 expect(response.email).to.equal('milo@example.com');
+                expect(response.password).to.not.exist();
                 done();
             });
     });

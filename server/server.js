@@ -37,6 +37,7 @@ module.exports = function (callback) {
             {register: require('lout')},
 
             // Route plugins
+            {register: require('./routes/attendance')},
             {register: require('./routes/authentication')},
             {register: require('./routes/catalog')},
             {register: require('./routes/departments')},
