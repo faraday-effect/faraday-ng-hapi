@@ -3,8 +3,8 @@ const Boom = require('boom');
 const Joi = require('joi');
 
 const Section = require('../models/Section');
-const ActualClass = require('../models/ActualClass')
-const Attendance = require('../models/Attendance')
+const ActualClass = require('../models/ActualClass');
+const Attendance = require('../models/Attendance');
 const attendance_code_length = 6;
 
 exports.register = function (server, options, next) {
