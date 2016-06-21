@@ -3,7 +3,6 @@ const Boom = require('boom');
 
 exports.register = function (server, options, next) {
 
-    server.register(Nes, function (err) {
         server.route({
             method: 'GET',
             path: '/hello',
@@ -15,9 +14,8 @@ exports.register = function (server, options, next) {
                 id: 'hello'
             }
         });
-
-    });
+        
     next();
 };
 
-exports.register.attributes = {name: 'sockets_nes', version: '0.0.1'};
+exports.register.attributes = {name: 'sockets_nes', version: '0.0.2'};

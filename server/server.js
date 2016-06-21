@@ -4,7 +4,6 @@ const Hapi = require('hapi');
 const Good = require('good');
 const Poop = require('poop');
 const Path = require('path');
-const Nes = require('nes');
 
 module.exports = function (callback) {
 
@@ -29,7 +28,11 @@ module.exports = function (callback) {
             {register: require('hapi-auth-cookie')},
 
             // Web Sockets
-            //{register: require('./routes/nes')},
+            {register: require('nes'),
+            options: {
+                auth: { type: "cookie", isSecure: false }
+                },
+            },
 
             // Traditional content (including lout)
             {register: require('vision')},
@@ -42,6 +45,7 @@ module.exports = function (callback) {
             {register: require('./routes/catalog')},
             {register: require('./routes/departments')},
             {register: require('./routes/execution')},
+            {register: require('./routes/nes')},
             {register: require('./routes/schedule')},
             {register: require('./routes/users')},
 
