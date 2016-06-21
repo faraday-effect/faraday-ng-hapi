@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { UserService } from 'app/shared';
+import {
+  ToolbarConfigService,
+  UserService,
+} from 'app/shared';
 
 @Component({
   moduleId: module.id,
@@ -18,14 +21,13 @@ export class LoginComponent implements OnInit {
   password: string;
 
   constructor(
+    private toolbarConfig: ToolbarConfigService,
     private router: Router,
     private userService: UserService) {}
 
   ngOnInit() {
     this.date = new Date();
-    if (this.userService.isLoggedIn) {
-      this.gotoCourses();
-    }
+    this.toolbarConfig.title = this.title;
   }
 
   login() {
@@ -33,10 +35,6 @@ export class LoginComponent implements OnInit {
       .subscribe(
         r => this.gotoCourses()
       );
-  }
-
-  logout() {
-    this.userService.logout();
   }
 
   gotoCourses() {

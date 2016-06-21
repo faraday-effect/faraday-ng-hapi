@@ -11,11 +11,21 @@ import { UsersUrl } from './constants';
 @Injectable()
 export class UserService {
 
-  public user: any;
-  public isLoggedIn = false;
+  public user: any = {};
+  public isLoggedIn: boolean = false;
 
   constructor(
-    private http: Http) {}
+    private http: Http) {
+    this.getCurrentUser().subscribe();
+  }
+
+  getCurrentUser() {
+    return this.http.get(LoginUrl)
+      .map(response => response.json())
+      .map(json => this.user = json)
+      .map(() => this.isLoggedIn = true)
+      .catch(this.handleError);
+  }
 
   login(email: string, password: string) {
     let message = JSON.stringify({
@@ -25,13 +35,14 @@ export class UserService {
     return this.http.post(LoginUrl, message)
                .map(response => response.json())
                .map(json => this.user = json)
-               .map(() => console.log(this))
+               .map(() => this.isLoggedIn = true)
                .catch(this.handleError);
   }
 
   logout() {
     return this.http.post(LogoutUrl, "")
-               .map(response => response.json())
+               .map(() => this.isLoggedIn = false)
+               .map(() => this.user = {})
                .catch(this.handleError);
   }
 

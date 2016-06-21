@@ -1,0 +1,25 @@
+<nav>
+  <div class="nav-wrapper">
+    <a class="brand-logo" [routerLink]="[config.titleLink]">{{config.title}}</a>
+    <ul id="nav-mobile" class="right">
+      <div *ngIf="userService.isLoggedIn">
+        <li>{{userService.user.first_name}} {{userService.user.last_name}}</li>
+        <li><a (click)="logout()">Log Out</a></li>
+      <li><a (click)="debug = !debug">Debug</a></li>
+      </div>
+      <div *ngIf="!userService.isLoggedIn">
+        <li><a [routerLink]="['/login']">Log In</a></li>
+      <li><a (click)="debug = !debug">Debug</a></li>
+      </div>
+    </ul>
+  </div>
+</nav>
+
+<div *ngIf="debug">
+  <div *ngFor="let route of routes">
+    <a [routerLink]="['/', route.path]">/{{route.path}}</a>
+    <span *ngFor="let child of route.children">
+      <a [routerLink]="['/', route.path, child.path]">/{{child.path}}</a>
+    </span>
+  </div>
+</div>
