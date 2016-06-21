@@ -97,7 +97,7 @@ exports.register = function (server, options, next) {
                 })
                 .catch((err) => {
                     reply(Boom.badImplementation(err));
-                })
+                });
         },
         config: {
             notes: 'Allows a professor to end class',
