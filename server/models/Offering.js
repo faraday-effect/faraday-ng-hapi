@@ -8,12 +8,12 @@ class Offering extends Model {
 
     static get relationMappings() {
         return {
-            section: {
+            sequence: {
                 relation: Model.HasManyRelation,
-                modelClass: __dirname + '/Section',
+                modelClass: __dirname + '/Sequence',
                 join: {
                     from: 'offering.id',
-                    to: 'section.offering_id'
+                    to: 'sequence.offering_id'
                 }
             },
             course: {
@@ -34,6 +34,14 @@ class Offering extends Model {
                         to: 'user_relationship.user_id'
                     },
                     to: 'user.id'
+                }
+            },
+            actualClass: {
+                relation: Model.HasManyRelation,
+                modelClass: __dirname + '/ActualClass',
+                join: {
+                    from: 'offering.id',
+                    to: 'actual_class.offering_id'
                 }
             }
         }
