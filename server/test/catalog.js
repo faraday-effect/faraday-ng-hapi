@@ -211,7 +211,7 @@ lab.experiment('/Catalog endpoint', () => {
             });
     });
 
-    lab.test('Updates a course successfully', (done) => {
+    lab.test('Gets the sections and schedule for a course_id', (done) => {
         server.inject(
             {
                 method: 'GET',
