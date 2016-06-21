@@ -18,4 +18,4 @@ exports.register = function (server, options, next) {
     next();
 };
 
-exports.register.attributes = {name: 'sockets_nes', version: '0.0.1'};
+exports.register.attributes = {name: 'sockets_nes', version: '0.0.2'};

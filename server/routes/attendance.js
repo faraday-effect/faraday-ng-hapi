@@ -1,4 +1,3 @@
-const Nes = require('nes');
 const Boom = require('boom');
 const Joi = require('joi');
 
@@ -254,9 +253,7 @@ exports.register = function (server, options, next) {
         }
     });
 
-    server.register(Nes, function (err) {
-        server.subscription('/attendance');
-    });
+    server.subscription('/attendance');
     next();
 };
 
