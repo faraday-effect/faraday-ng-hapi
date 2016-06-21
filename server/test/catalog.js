@@ -18,7 +18,6 @@ lab.experiment('/Catalog endpoint', () => {
             db.knex.raw('TRUNCATE public.attendance CASCADE'),
             db.knex.raw('TRUNCATE public.user CASCADE'),
             db.knex.raw('TRUNCATE public.actual_class CASCADE'),
-            db.knex.raw('TRUNCATE public.sequence CASCADE'),
             db.knex.raw('TRUNCATE public.section_schedule CASCADE'),
             db.knex.raw('TRUNCATE public.section CASCADE'),
             db.knex.raw('TRUNCATE public.course CASCADE'),
