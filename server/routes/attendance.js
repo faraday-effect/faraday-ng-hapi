@@ -84,56 +84,56 @@ exports.register = function (server, options, next) {
         }
     });
 
-        server.route({
+    server.route({
         method: 'GET',
         path: '/sections/{section_id}/attendance',
         handler: function (request, reply) {
-                //Get the section and sequence information
-                Section
-                    .query()
-                    .where('id', request.params.section_id)
-                    .eager('sequence')
-                    .first()
-                    .then((section) => {
-                        //handle error case if section is not valid
-                        if (section != null) {
-                            ActualClass
-                                .query()
-                                //find the actual class for today after the professor has started class
-                                .where('sequence_id', section.sequence.id)
-                                .andWhere('stop_time', null)
-                                .first()
-                                .then((actual_class) => {
-                                    //handle the case to make sure the professor has started class
-                                    if (actual_class != null) {
-                                        //Load attendance object for current_user using today's actual_class_id
-                                        Attendance
-                                            .query()
-                                            .where('actual_class_id', actual_class.id)
-                                            .andWhere('user_id', request.auth.credentials.id)
-                                            .first()
-                                            .then((alreadyRegisteredAttendanceRecord) => {
-                                                //check to see if they are already listed as attending class today
-                                                if (alreadyRegisteredAttendanceRecord != null) {
-                                                    return reply({attending: true});
-                                                } else {
-                                                    return reply({attending: false});
-                                                }
-                                            });
-                                    } else {
-                                        reply(Boom.badRequest('Your professor has not started class yet!'))
-                                    }
-                                });
-                        } else {
-                            reply(Boom.notFound('Section ID ' + request.params.section_id + ' was not found!'));
-                        }
-                    })
-                    .catch((err) => {
-                        return reply(Boom.badImplementation(err));
-                    });
+            //Get the section and sequence information
+            Section
+                .query()
+                .where('id', request.params.section_id)
+                .eager('sequence')
+                .first()
+                .then((section) => {
+                    //handle error case if section is not valid
+                    if (section != null) {
+                        ActualClass
+                            .query()
+                            //find the actual class for today after the professor has started class
+                            .where('sequence_id', section.sequence.id)
+                            .andWhere('stop_time', null)
+                            .first()
+                            .then((actual_class) => {
+                                //handle the case to make sure the professor has started class
+                                if (actual_class != null) {
+                                    //Load attendance object for current_user using today's actual_class_id
+                                    Attendance
+                                        .query()
+                                        .where('actual_class_id', actual_class.id)
+                                        .andWhere('user_id', request.auth.credentials.id)
+                                        .first()
+                                        .then((alreadyRegisteredAttendanceRecord) => {
+                                            //check to see if they are already listed as attending class today
+                                            if (alreadyRegisteredAttendanceRecord != null) {
+                                                return reply({ attending: true, message: 'You\'re already listed as attending for this class' });
+                                            } else {
+                                                return reply({ attending: false, message: 'You are not attending this class' });
+                                            }
+                                        });
+                                } else {
+                                    return reply({ attending: false, message: 'Your professor has not yet started class' });
+                                }
+                            });
+                    } else {
+                        reply(Boom.notFound('Section ID ' + request.params.section_id + ' was not found!'));
+                    }
+                })
+                .catch((err) => {
+                    return reply(Boom.badImplementation(err));
+                });
         },
         config: {
-            notes: 'Tells the whether the current_user is listed as attending or not for a given section',
+            notes: 'Tells the whether the current_user is listed as attending a given section of class',
             validate: {
                 params: {
                     section_id: Joi.number().positive().integer()
@@ -291,8 +291,8 @@ exports.register = function (server, options, next) {
                 .where('id', request.params.actual_class_id)
                 .first()
                 .then((actualClass) => {
-                    if(actualClass != null)
-                    //return the new object
+                    if (actualClass != null)
+                        //return the new object
                         reply(actualClass);
                     else
                         reply(Boom.notFound('Actual Class ID ' + request.params.actual_class_id + ' not found!'));
