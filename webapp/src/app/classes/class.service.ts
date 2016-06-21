@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
 
 const CLASSES = [
   {
-    id: 1,
+    id: 21,
     prefix: "COS",
     number: "120",
     title: "Introduction to Computational Problem Solving",
@@ -15,7 +14,7 @@ const CLASSES = [
     role: "student",
   },
   {
-    id: 2,
+    id: 25,
     prefix: "COS",
     number: "121",
     title: "Foundations of Computer Science",
@@ -23,10 +22,10 @@ const CLASSES = [
     start_time: "1:00 PM",
     stop_time: "1:50 PM",
     days: "MWF",
-    role: "teacher",
+    role: "student",
   },
   {
-    id: 3,
+    id: 9,
     prefix: "SYS",
     number: "101",
     title: "Introduction to Systems",
@@ -37,7 +36,18 @@ const CLASSES = [
     role: "teacher",
   },
   {
-    id: 4,
+    id: 10,
+    prefix: "SYS",
+    number: "101",
+    title: "Introduction to Systems",
+    teacher: "Bill Bauson",
+    start_time: "3:00 PM",
+    stop_time: "3:50 PM",
+    days: "TR",
+    role: "teacher",
+  },
+  {
+    id: 2,
     prefix: "PHY",
     number: "211",
     title: "University Physics I",
@@ -111,9 +121,13 @@ const COURSES = [
 @Injectable()
 export class ClassService {
 
+  num: number;
+
   constructor() {}
 
   getClasses() {
+    // let obj = {id:1, prefix: "", number: this.num, title: "", teacher: "", start_time: "", stop_time: "", days: "", role: "student"};
+    // return Observable.of(CLASSES.concat([obj]));
     return Observable.of(CLASSES);
   }
 

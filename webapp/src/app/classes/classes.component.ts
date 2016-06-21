@@ -16,6 +16,7 @@ export class ClassesComponent implements OnInit {
 
   classes: Observable<any>;
   courses: Observable<any>;
+  enrolled = {};
 
   constructor(
     private router: Router,
@@ -25,11 +26,34 @@ export class ClassesComponent implements OnInit {
   ngOnInit() {
     this.classes = this.classService.getClasses();
     this.courses = this.classService.getCourses();
+    this.classes.subscribe(classes => {
+      this.enrolled = {};
+      for (let c of classes) {
+        this.enrolled[c.id] = true;
+      }
+    });
   }
 
   attendClass(id: number) {
-    console.log("Attending!", id);
+    console.log(`Attending ${id}!`);
     this.router.navigate([id, 'participant'], {relativeTo: this.route});
+  }
+
+  canAttend(id: number) {
+    return id != 25;
+  }
+
+  canEnroll(id: number) {
+    return !this.enrolled[id];
+  }
+
+  enroll(id: number) {
+    console.log(`Enrolling in ${id}!`);
+    this.classes.retry().delay(1000);
+  }
+
+  withdraw(id: number) {
+    console.log(`Withdrawing from ${id}!`);
   }
 
 }

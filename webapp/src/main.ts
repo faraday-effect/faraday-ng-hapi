@@ -2,6 +2,14 @@ import { bootstrap } from '@angular/platform-browser-dynamic';
 import { enableProdMode, Injectable, provide } from '@angular/core';
 import { HTTP_PROVIDERS, BrowserXhr } from '@angular/http';
 
+import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/delay';
+import 'rxjs/add/operator/retry';
+
 import { FARADAY_ROUTER_PROVIDERS } from './app/faraday.routes';
 import { FaradayAppComponent, environment } from './app';
 

@@ -20,12 +20,13 @@
         <div>{{class.start_time}} &ndash; {{class.stop_time}} ({{class.days}})</div>
       </div>
       <div [ngSwitch]="class.role">
-        <div *ngSwitchCase="'student'" class="card-action">
-          <a (click)="attendClass(class.id)" class="btn">Attend</a>
+        <div *ngIf="canAttend(class.id)">
+          <div *ngSwitchCase="'student'" class="card-action">
+            <a (click)="attendClass(class.id)" class="btn-flat">Attend</a>
+          </div>
         </div>
         <div *ngSwitchCase="'teacher'" class="card-action">
-          <a [routerLink]="'./'+class.id+'/podium'" class="btn">Podium</a>
-          <a [routerLink]="'./'+class.id+'/projector'" class="btn">Projector</a>
+          <a [routerLink]="'./'+class.id+'/podium'" class="btn-flat">Teach</a>
         </div>
       </div>
     </div>
@@ -38,7 +39,8 @@
         </a>
         <ul class="collection">
           <li *ngFor="let section of course.sections" class="collection-item">
-            <a class="btn secondary-content">Enroll</a>
+            <a *ngIf="canEnroll(section.id)" (click)="enroll(section.id)" class="btn-flat secondary-content orange-text">Enroll</a>
+            <!-- <a *ngIf="canWithdraw(section.id)" (click)="withdraw(section.id)" class="btn-flat secondary-content red">Withdraw</a> -->
             {{section.teacher}}
             <br>
             {{section.start_time}} &ndash; {{section.stop_time}} ({{section.days}})
