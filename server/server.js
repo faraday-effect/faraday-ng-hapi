@@ -29,7 +29,10 @@ module.exports = function (callback) {
             {register: require('hapi-auth-cookie')},
 
             // Web Sockets
-            //{register: require('./routes/nes')},
+            {register: require('./routes/nes'), options: {
+                auth: { type: "cookie", isSecure: false }
+                },
+            },
 
             // Traditional content (including lout)
             {register: require('vision')},
