@@ -12,7 +12,7 @@ lab.experiment('/users endpoint', () => {
     lab.beforeEach(done => {
 
         return Promise.all([
-            db.knex('user').del()
+            db.knex.raw('TRUNCATE public.user CASCADE')
         ]).then(results => {
             return Promise.all([
                 User.query().insertWithRelated([
@@ -20,7 +20,8 @@ lab.experiment('/users endpoint', () => {
                         first_name: "Patty",
                         last_name: "O'Furniture",
                         email: 'patty@example.com',
-                        password: '$2a$10$UzIsxXsVTPTru5NjfSXy.uGiptYgFmtfNrYCU9BzjIp2YEEXLUCGG'
+                        password: '$2a$10$UzIsxXsVTPTru5NjfSXy.uGiptYgFmtfNrYCU9BzjIp2YEEXLUCGG',
+                        campus_id: '654321'
                     },
                     {
                         first_name: "Sammy",
@@ -28,7 +29,8 @@ lab.experiment('/users endpoint', () => {
                         email: 'sam@example.com',
                         password: '$2a$10$UzIsxXsVTPTru5NjfSXy.uGiptYgFmtfNrYCU9BzjIp2YEEXLUCGG',
                         mobile_phone: '0123456789',
-                        office_phone: '0123456789'
+                        office_phone: '0123456789',
+                        campus_id: '123456'
                     }])
                     .then((collection) => {
                         users = collection;
@@ -68,7 +70,8 @@ lab.experiment('/users endpoint', () => {
                 expect(response.first_name).to.equal('Patty');
                 expect(response.last_name).to.equal('O\'Furniture');
                 expect(response.email).to.equal('patty@example.com');
-                expect(response.password).to.be.undefined();
+                expect(response.campus_id).to.equal('654321');
+                expect(response.password).to.not.exist();
                 done();
             })
     });
@@ -85,7 +88,8 @@ lab.experiment('/users endpoint', () => {
                     email: 'dee@example.com',
                     password: 'pass',
                     mobile_phone: '7655551111',
-                    office_phone: '7655552222'
+                    office_phone: '7655552222',
+                    campus_id: '9876543'
                 }
             },
             (res) => {
@@ -96,7 +100,8 @@ lab.experiment('/users endpoint', () => {
                 expect(response.email).to.equal('dee@example.com');
                 expect(response.mobile_phone).to.equal('7655551111');
                 expect(response.office_phone).to.equal('7655552222');
-                expect(response.password).to.be.undefined();
+                expect(response.campus_id).to.equal('9876543');
+                expect(response.password).to.not.exist();
                 done();
             })
     });
