@@ -225,7 +225,7 @@ exports.register = function (server, options, next) {
                             .sequence
                             .$relatedQuery('actualClass')
                             .then((existingActualClasses) => {
-                                //checks to make sure that there has been atleast one class started before
+                                // Check to make sure that there has been at least one class started before
                                 if (existingActualClasses.length) {
                                     reply(existingActualClasses)
                                 } else {
@@ -241,7 +241,7 @@ exports.register = function (server, options, next) {
                 });
         },
         config: {
-            notes: 'retreives all the actual class instances for a section',
+            notes: 'retrieves all the actual class instances for a section',
             validate: {
                 params: {
                     section_id: Joi.number().positive().integer()
@@ -269,7 +269,7 @@ exports.register = function (server, options, next) {
                 });
         },
         config: {
-            notes: 'retreives all the actual class instances for a section',
+            notes: 'Retrieves all the actual class instances for a section',
             validate: {
                 params: {
                     actual_class_id: Joi.number().positive().integer()
@@ -302,7 +302,7 @@ exports.register = function (server, options, next) {
                 });
         },
         config: {
-            notes: 'retreives all the actual class instances for a section',
+            notes: 'Retrieves all the actual class instances for a section',
             validate: {
                 params: {
                     actual_class_id: Joi.number().positive().integer()

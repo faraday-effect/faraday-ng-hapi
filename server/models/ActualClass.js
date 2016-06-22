@@ -1,7 +1,7 @@
 'use strict';
 
 const Model = require('objection').Model;
-const db = require('./../db')
+const db = require('../db');
 
 class ActualClass extends Model {
     static get tableName() { return 'actual_class'; }

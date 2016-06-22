@@ -1,6 +1,6 @@
 'use strict';
 
-const db = require('./../db')
+const db = require('../db');
 
 class Term extends db.Model {
     static get tableName() {

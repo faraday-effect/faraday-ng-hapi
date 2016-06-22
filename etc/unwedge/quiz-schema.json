@@ -1,0 +1,44 @@
+{
+  "title": "Faraday Quiz",
+  "description": "Multiple choice quiz",
+  "type": "object",
+  "properties": {
+    "title": {
+      "description": "Quiz title",
+      "type": "string"
+    },
+    "questions": {
+      "description": "Quiz questions",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "description": "Text of a question",
+            "type": "string"
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "correct": {
+                  "description": "Whether this answer is correct",
+                  "type": "boolean"
+                },
+                "answer": {
+                  "description": "Possible answer",
+                  "type": "string"
+                },
+                "feedback": {
+                  "description": "Feedback regarding the answer",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
