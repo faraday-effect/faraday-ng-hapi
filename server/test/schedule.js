@@ -16,10 +16,10 @@ lab.experiment('/Schedule endpoint', () => {
     lab.beforeEach(done => {
 
         return Promise.all([
-            db.knex.raw('TRUNCATE public.term CASCADE'),
             db.knex.raw('TRUNCATE public.section_schedule CASCADE'),
+            db.knex.raw('TRUNCATE public.relationship_type CASCADE'),
+            db.knex.raw('TRUNCATE public.term CASCADE'),
             db.knex.raw('TRUNCATE public.section CASCADE'),
-            db.knex.raw('TRUNCATE public.course CASCADE'),
             db.knex.raw('TRUNCATE public.prefix CASCADE'),
             db.knex.raw('TRUNCATE public.department CASCADE'),
             db.knex.raw('TRUNCATE public.user CASCADE')
