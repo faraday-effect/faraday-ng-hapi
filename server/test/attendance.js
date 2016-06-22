@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 import { init_test, expect, server, db } from './support';
 const lab = exports.lab = init_test();
@@ -19,7 +19,7 @@ lab.experiment('/attendance endpoint', () => {
             db.knex.raw('TRUNCATE public.user CASCADE'),
             db.knex.raw('TRUNCATE public.actual_class CASCADE'),
             db.knex.raw('TRUNCATE public.sequence CASCADE'),
-            db.knex.raw('TRUNCATE public.section CASCADE'),
+            db.knex.raw('TRUNCATE public.section CASCADE')
         ])
             .then(results => {
                 return Promise.all([

@@ -1,8 +1,6 @@
 'use strict';
 
 const Hapi = require('hapi');
-const Good = require('good');
-const Poop = require('poop');
 const Path = require('path');
 
 module.exports = function (callback) {
@@ -31,7 +29,7 @@ module.exports = function (callback) {
             {register: require('nes'),
             options: {
                 auth: { type: "cookie", isSecure: false }
-                },
+                }
             },
 
             // Traditional content (including lout)

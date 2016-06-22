@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const knex = exports.knex = require('knex')({
     client: 'pg',

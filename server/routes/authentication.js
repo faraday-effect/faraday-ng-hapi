@@ -1,7 +1,7 @@
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
 const Boom = require('boom');
-const User = require('../models/User')
+const User = require('../models/User');
 var uuid = 1;
 
 exports.register = function (server, options, next) {

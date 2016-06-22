@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const Joi = require('joi');
 const Boom = require('boom');
@@ -130,9 +130,9 @@ server.route({
                 .then((user) => {
                     return user
                     .$relatedQuery('section')
-                    //load all the related data fromt the db into a JSON object
+                    // Load all the related data from the db into a JSON object
                     .eager('[userRelationship.relationshipType, sectionSchedule, sequence.offering.course.[prefix, department]]')
-                    //filter the userRelationship by user_id & section_id
+                    // Filter the userRelationship by user_id and section_id
                     .filterEager('userRelationship', builder => {
                         builder.where('user_id', current_user.id)
                     });

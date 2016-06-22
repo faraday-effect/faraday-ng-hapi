@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 /**
  * Set-up code for HAPI testing.  Use it like this:
