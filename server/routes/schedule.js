@@ -8,7 +8,7 @@ const Term = require('../models/Term');
 
 exports.register = function (server, options, next) {
 
-server.route({
+    server.route({
         method: 'GET',
         path: '/terms',
         handler: function (request, reply) {
@@ -30,15 +30,15 @@ server.route({
         method: 'GET',
         path: '/terms/{term_id}',
         handler: function (request, reply) {
-             Term
+            Term
                 .query()
                 .where('id', request.params.term_id)
                 .first()
                 .then((terms) => {
-                    if(terms != null)
+                    if (terms != null)
                         reply(terms);
                     else
-                        reply(Boom.notFound('Term ID ' + request.params.section_id + ' not found!'))
+                        reply(Boom.notFound('Term ID ' + request.params.term_id + ' was not found!'))
                 })
                 .catch(function (err) {
                     return reply(Boom.badRequest('Failed to retrieve term id ' + request.params.term_id, err));
@@ -121,21 +121,19 @@ server.route({
         method: 'GET',
         path: '/sections',
         handler: function (request, reply) {
-            //get the current_user object
-            var current_user = request.auth.credentials;
             User
                 .query()
-                .where('id', current_user.id)
+                .where('id', request.auth.credentials.id)
                 .first()
                 .then((user) => {
                     return user
-                    .$relatedQuery('section')
-                    // Load all the related data from the db into a JSON object
-                    .eager('[userRelationship.relationshipType, sectionSchedule, sequence.offering.course.[prefix, department]]')
-                    // Filter the userRelationship by user_id and section_id
-                    .filterEager('userRelationship', builder => {
-                        builder.where('user_id', current_user.id)
-                    });
+                        .$relatedQuery('section')
+                        // Load all the related data from the db into a JSON object
+                        .eager('[userRelationship.relationshipType, sectionSchedule, sequence.offering.course.[prefix, department]]')
+                        // Filter the userRelationship by user_id and section_id
+                        .filterEager('userRelationship', builder => {
+                            builder.where('user_id', request.auth.credentials.id)
+                        });
                 }).then((user_sections) => {
                     reply(user_sections);
                 })
@@ -158,10 +156,10 @@ server.route({
                     builder.where('user_id', request.auth.credentials.id)
                 })
                 .then((section) => {
-                    if(section != null)
+                    if (section)
                         reply(section);
                     else
-                        reply(Boom.notFound('Section ' + request.params.section_id + ' not found!', err));
+                        reply(Boom.notFound('Section ID ' + request.params.section_id + ' was not found!'))
                 })
                 .catch((err) => {
                     return reply(Boom.badRequest('Failed to retrieve section id ' + request.params.section_id, err));
@@ -183,7 +181,7 @@ server.route({
             Section
                 .query()
                 .insert({
-                    sequence_id: request.payload.offering_id,
+                    sequence_id: request.payload.sequence_id,
                     course_id: request.payload.course_id,
                     term_id: request.payload.term_id,
                     credit_hours: request.payload.credit_hours,
