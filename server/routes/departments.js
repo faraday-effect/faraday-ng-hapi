@@ -1,6 +1,5 @@
 const course_prefix_name = 8;
 const Joi = require('joi');
-const bookshelf = require('../bookshelf');
 const Boom = require('boom');
 
 exports.register = function (server, options, next) {
@@ -80,25 +79,6 @@ exports.register = function (server, options, next) {
             }
         }
     });
-
-    server.route({
-        method: 'DELETE',
-        path: '/prefixes/{prefix_id}',
-        handler: function (request, reply) {
-            var response = bookshelf.Prefix.forge({'id': encodeURIComponent(request.params.prefix_id)}).fetch();
-            console.log('I deleted');
-            reply(response);
-        },
-        config: {
-            notes: 'to be implemented',
-            validate: {
-                params: {
-                    prefix_id: Joi.number().positive().integer()
-                }
-            }
-        }
-    });
-
 
     server.route({
         method: 'GET',
@@ -206,23 +186,6 @@ exports.register = function (server, options, next) {
         }
     });
 
-    server.route({
-        method: 'DELETE',
-        path: '/departments/{department_id}',
-        handler: function (request, reply) {
-            var response = bookshelf.Department.forge({'id': encodeURIComponent(request.params.department_id)}).fetch();
-            console.log('I deleted');
-            reply(response);
-        },
-        config: {
-            notes: 'to be implemented',
-            validate: {
-                params: {
-                    department_id: Joi.number().positive().integer()
-                }
-            }
-        }
-    });
     next();
 };
 
