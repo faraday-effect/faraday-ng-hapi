@@ -1,0 +1,45 @@
+{
+  "title": "All About Our Favorite Metal",
+  "questions": [
+    {
+      "question": "What is the atomic weight of Selenium?",
+      "answers": [
+        {
+          "correct": true,
+          "answer": "78.96",
+          "feedback": "Right!"
+        },
+        {
+          "correct": false,
+          "answer": "71",
+          "feedback": "Sorry; too low"
+        },
+        {
+          "correct": false,
+          "answer": "83.44",
+          "feedback": "Sorry; too high"
+        }
+      ]
+    },
+    {
+      "question": "What color is Selenium?",
+      "answers": [
+        {
+          "correct": true,
+          "answer": "Deep red",
+          "feedback": "Crystalline monoclinic selenium is a deep red color!"
+        },
+        {
+          "correct": false,
+          "answer": "Green",
+          "feedback": "No; that's not it"
+        },
+        {
+          "correct": false,
+          "answer": "Silver",
+          "feedback": "Sorry; not silver"
+        }
+      ]
+    }
+  ]
+}
