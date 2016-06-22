@@ -24,7 +24,7 @@ exports.register = function (server, options, next) {
             notes: 'retrieves all the prefixes from the database'
         }
     });
- 
+
     server.route({
         method: 'GET',
         path: '/prefixes/{prefix_id}',
@@ -135,7 +135,7 @@ exports.register = function (server, options, next) {
                 .where('id', request.params.department_id)
                 .first()
                 .then((department) => {
-                    if(department)
+                    if (department)
                         reply(department);
                     else
                         reply(Boom.notFound('Department ID ' + request.params.department_id + ' was not found!'));
@@ -158,20 +158,20 @@ exports.register = function (server, options, next) {
         method: 'GET',
         path: '/departments/{department_id}/prefixes',
         handler: function (request, reply) {
-            new bookshelf.Department({ id: request.params.department_id }).fetch().then(function (model) {
-                new bookshelf.Department_Prefix().where({ department_id: request.params.department_id }).fetchAll().then(model2 => {
-                    var responseJSON = {
-                        id: model.get('id'),
-                        name: model.get('name'),
-                        prefixes: model2
-                    };
-                    reply(responseJSON);
-                }).catch((err) => {
-                    return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
+            Department
+                .query()
+                .where('id', request.params.department_id)
+                .eager('prefix')
+                .first()
+                .then((department) => {
+                    if(department)
+                        reply(department);
+                    else
+                        reply(Boom.notFound('Department ID ' + request.params.department_id + ' was not found!'))
+                })
+                .catch((err) => {
+                    reply(Boom.badImplementation(err));
                 });
-            }).catch((err) => {
-                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
-            });
         },
         config: {
             notes: 'returns the prefixes in an array and department name for a given department_id',
@@ -185,9 +185,47 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'POST',
+        path: '/departments/{department_id}/prefixes/{prefix_id}',
+        handler: function (request, reply) {
+            Department
+                .query()
+                .where('id', request.params.department_id)
+                .first()
+                .then((department) => {
+                    return department
+                        .$relatedQuery('prefix')
+                        .relate(request.params.prefix_id);
+                })
+                .then((response) => {
+                    Department
+                        .query()
+                        .where('id', request.params.department_id)
+                        .eager('prefix')
+                        .first()
+                        .then((department) => {
+                            reply(department)
+                        });
+                })
+                .catch((err) => {
+                    reply(Boom.badRequest('Could not associate department ID ' + request.params.department_id + ' with prefix ID ' + request.params.prefix_id));
+                });
+        },
+        config: {
+            notes: 'Associates a department_id with a prefix_id',
+            validate: {
+                params: {
+                    department_id: Joi.number().positive().integer(),
+                    prefix_id: Joi.number().positive().integer()
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'POST',
         path: '/departments',
         handler: function (request, reply) {
-Department
+            Department
                 .query()
                 .insert({
                     name: request.payload.name
@@ -213,7 +251,7 @@ Department
         method: 'PUT',
         path: '/departments/{department_id}',
         handler: function (request, reply) {
-          Department
+            Department
                 .query()
                 .patchAndFetchById(request.params.department_id, {
                     name: request.payload.name
