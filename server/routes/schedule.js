@@ -18,7 +18,7 @@ exports.register = function (server, options, next) {
                     reply(terms);
                 })
                 .catch(function (err) {
-                    return reply(Boom.badRequest('Failed to retrieve the terms', err));
+                    reply(Boom.badImplementation(err));
                 });
         },
         config: {
@@ -41,7 +41,7 @@ exports.register = function (server, options, next) {
                         reply(Boom.notFound('Term ID ' + request.params.term_id + ' was not found!'))
                 })
                 .catch(function (err) {
-                    return reply(Boom.badRequest('Failed to retrieve term id ' + request.params.term_id, err));
+                   reply(Boom.badImplementation(err));
                 });
         },
         config: {
@@ -69,7 +69,7 @@ exports.register = function (server, options, next) {
                     reply(newTerm);
                 })
                 .catch(function (err) {
-                    return reply(Boom.badRequest('Failed to create a new term', err));
+                    reply(Boom.badImplementation(err));
                 });
         },
         config: {
@@ -99,7 +99,7 @@ exports.register = function (server, options, next) {
                     reply(newTerm);
                 })
                 .catch(function (err) {
-                    return reply(Boom.badRequest('Failed to update a term ' + request.params.term_id, err));
+                    reply(Boom.badImplementation(err));
                 });
         },
         config: {
@@ -138,7 +138,7 @@ exports.register = function (server, options, next) {
                     reply(user_sections);
                 })
                 .catch((err) => {
-                    return reply(Boom.notFound('Failed to retrieve all the sections for the current_user', err));
+                    reply(Boom.badImplementation(err));
                 });
         }
     });
@@ -162,7 +162,7 @@ exports.register = function (server, options, next) {
                         reply(Boom.notFound('Section ID ' + request.params.section_id + ' was not found!'))
                 })
                 .catch((err) => {
-                    return reply(Boom.badRequest('Failed to retrieve section id ' + request.params.section_id, err));
+                    reply(Boom.badImplementation(err));
                 });
         },
         config: {
@@ -192,7 +192,7 @@ exports.register = function (server, options, next) {
                     return reply(section);
                 })
                 .catch(function (err) {
-                    return reply(Boom.badRequest('Failed to create a new section', err));
+                    reply(Boom.badImplementation(err));
                 });
         },
         config: {
@@ -227,7 +227,7 @@ exports.register = function (server, options, next) {
                     reply(updatedModel);
                 })
                 .catch(function (err) {
-                    reply(Boom.badData('Failed to edit section ' + request.payload.section_id, err));
+                   reply(Boom.badImplementation(err));
                 });
         },
         config: {
@@ -249,4 +249,4 @@ exports.register = function (server, options, next) {
     next();
 };
 
-exports.register.attributes = { name: 'schedule', version: '0.0.3' };
+exports.register.attributes = { name: 'schedule', version: '0.0.4' };
