@@ -9,28 +9,23 @@ const Prefix = require('../models/Prefix');
 lab.experiment('/Department endpoint', () => {
 
     var prefix = null;
-    var user = null;
+    var user = {
+        id: 1,
+        first_name: "Sammy",
+        last_name: "Morris",
+        email: 'sam@example.com',
+        mobile_phone: '0123456789',
+        office_phone: '0123456789'
+    }
 
     lab.beforeEach(done => {
 
         return Promise.all([
-            db.knex.raw('TRUNCATE public.user CASCADE'),
-            db.knex.raw('TRUNCATE public.prefix CASCADE'),
             db.knex.raw('TRUNCATE public.department CASCADE'),
+            db.knex.raw('TRUNCATE public.prefix CASCADE'),
         ])
             .then(results => {
                 return Promise.all([
-                    User
-                        .query()
-                        .insert({
-                            id: 1,
-                            first_name: "Sammy",
-                            last_name: "Morris",
-                            email: 'sam@example.com',
-                            mobile_phone: '0123456789',
-                            office_phone: '0123456789',
-                            password: 'pass'
-                        }),
                     Prefix
                         .query()
                         .insertWithRelated([
@@ -56,8 +51,7 @@ lab.experiment('/Department endpoint', () => {
                         ])
                 ])
             }).then(results => {
-                user = results[0];
-                prefix = results[1];
+                prefix = results[0];
             });
     });
 
@@ -222,8 +216,7 @@ lab.experiment('/Department endpoint', () => {
             });
     });
 
-        lab.test('Updates a department successfully', (done) => {
-            console.log(prefix[0].department);
+    lab.test('Updates a department successfully', (done) => {
         server.inject(
             {
                 method: 'PUT',
