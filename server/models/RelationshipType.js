@@ -9,7 +9,7 @@ class RelationshipType extends Model {
     static get relationMappings() {
         return {
             user: {
-                relation: Model.ManyToManyRelation,
+                relation: Model.HasManyRelation,
                 modelClass: __dirname + '/User',
                 join: {
                     from: 'relationship_type.id',

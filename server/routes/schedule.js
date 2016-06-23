@@ -312,7 +312,7 @@ exports.register = function (server, options, next) {
         }
     });
 
-        server.route({
+    server.route({
         method: 'POST',
         path: '/sections/{section_id}/users/{user_id}/enroll',
         handler: function (request, reply) {
@@ -362,7 +362,7 @@ exports.register = function (server, options, next) {
                         })
                         .catch((err) => {
                             //check to see if the error was caused by an invalid section_id or user_id
-                            if(err.constraint == 'user_relationship_section_id_foreign')
+                            if (err.constraint == 'user_relationship_section_id_foreign')
                                 reply(Boom.notFound(`Section ID ${request.params.section_id} was not found!`));
                             else
                                 reply(Boom.notFound(`User ID ${request.params.user_id} was not found!`))
@@ -375,6 +375,41 @@ exports.register = function (server, options, next) {
                 params: {
                     section_id: Joi.number().positive().integer(),
                     user_id: Joi.number().positive().integer()
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/sections/{section_id}/students',
+        handler: function (request, reply) {
+            var studentRelationship = null;
+            RelationshipType
+                .query()
+                .where('title', 'student')
+                .first()
+                .then((relationship) => {
+                    studentRelationship = relationship;
+                });
+
+            Section
+                .query()
+                .where('id', request.params.section_id)
+                .first()
+                .eager('user.relationshipType')
+                .then((section) => {
+                    reply(section)
+                // })
+                // .catch((err) => {
+                //     reply(Boom.badImplementation(err));
+                });
+        },
+        config: {
+            notes: 'gets all the users for a given section_id',
+            validate: {
+                params: {
+                    section_id: Joi.number().positive().integer()
                 }
             }
         }

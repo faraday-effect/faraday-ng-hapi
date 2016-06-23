@@ -48,6 +48,19 @@ class User extends Model {
                     to: 'section.id'
                 }
             },
+            relationshipType: {
+                relation: Model.HasManyRelation,
+                modelClass: __dirname + '/RelationshipType',
+                join: {
+                    from: 'user.id',
+                    through: {
+                        from: 'user_relationship.user_id',
+                        to: 'user_relationship.relationship_type_id',
+                        extra: ['section_id']
+                    },
+                    to: 'relationship_type.id'
+                }
+            },
             userRelationship: {
                 relation: Model.HasManyRelation,
                 modelClass: __dirname + '/UserRelationship',

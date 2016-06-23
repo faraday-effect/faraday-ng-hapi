@@ -484,4 +484,39 @@ lab.experiment('/Schedule endpoint', () => {
             });
     });
 
+    lab.test('Error out when a section_id does not exist when attempting to retreive a list of users for a given section', (done) => {
+        server.inject(
+            {
+                method: 'GET',
+                credentials: user,
+                url: `/sections/1000000000/students`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(404);
+                const response = JSON.parse(res.payload);
+                expect(response.error).to.equal('Not Found');
+                expect(response.message).to.equal('Section ID 1000000000 was not found!');
+                done();
+            });
+    });
+
+    lab.test('Retrieve a list of students from the database for a given section successfully', (done) => {
+        server.inject(
+            {
+                method: 'GET',
+                credentials: user,
+                url: `/sections/${section.id}/students`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(200);
+                const response = JSON.parse(res.payload);
+                expect(response[0].id).to.equal(user.id);
+                expect(response[0].first_name).to.equal(user.first_name);
+                expect(response[0].last_name).to.equal(user.last_name);
+                expect(response[0].email).to.equal(user.email);
+                expect(response[0].relationshipType.title).to.equal(studentRelationship.title);
+                done();
+            });
+    });
+
 });
