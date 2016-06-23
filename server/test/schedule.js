@@ -6,6 +6,7 @@ const lab = exports.lab = init_test();
 const User = require('../models/User');
 const Section = require('../models/Section');
 const RelationshipType = require('../models/RelationshipType');
+const UserRelationship = require('../models/UserRelationship');
 
 lab.experiment('/Schedule endpoint', () => {
 
@@ -16,6 +17,7 @@ lab.experiment('/Schedule endpoint', () => {
     lab.beforeEach(done => {
 
         return Promise.all([
+            db.knex.raw('TRUNCATE public.relationship_type CASCADE'),
             db.knex.raw('TRUNCATE public.term CASCADE'),
             db.knex.raw('TRUNCATE public.sequence CASCADE'),
             db.knex.raw('TRUNCATE public.user CASCADE')
@@ -36,7 +38,7 @@ lab.experiment('/Schedule endpoint', () => {
                     RelationshipType
                         .query()
                         .insert({
-                            title: 'Student',
+                            title: 'student',
                             description: 'I am learning'
                         }),
                     Section
@@ -308,7 +310,7 @@ lab.experiment('/Schedule endpoint', () => {
             });
     });
 
-        lab.test('Updates a section successfully', (done) => {
+    lab.test('Updates a section successfully', (done) => {
         server.inject(
             {
                 method: 'PUT',
@@ -337,4 +339,63 @@ lab.experiment('/Schedule endpoint', () => {
                 done();
             });
     });
+
+    lab.test('Errors out when a students attempts to self enroll in a section twice', (done) => {
+        server.inject(
+            {
+                method: 'POST',
+                credentials: user,
+                url: `/sections/${section.id}/enroll`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(400);
+                const response = JSON.parse(res.payload);
+                expect(response.error).to.equal('Bad Request');
+                expect(response.message).to.equal(`You are already enrolled in section ID ${section.id}`);
+                done();
+            });
+    });
+
+    lab.test('Successfully allows a user to self assign to a section as a student', (done) => {
+        UserRelationship
+            .query()
+            .delete()
+            .where('user_id', user.id)
+            .andWhere('section_id', section.id)
+            .andWhere('relationship_type_id', studentRelationship.id)
+            .then((numDeleted) => {
+                server.inject(
+                    {
+                        method: 'POST',
+                        credentials: user,
+                        url: `/sections/${section.id}/enroll`
+                    },
+                    (res) => {
+                        expect(res.statusCode).to.equal(200);
+                        const response = JSON.parse(res.payload);
+                        expect(response.id).to.exist();
+                        expect(response.id).to.equal(section.id);
+                        expect(response.user_id).to.equal(user.id);
+                        expect(response.relationship_type_id).to.equal(studentRelationship.id);
+                        done();
+                    });
+            });
+    });
+
+    lab.test('Error out when a section_id does not exist when attempting to self enroll in a section', (done) => {
+        server.inject(
+            {
+                method: 'POST',
+                credentials: user,
+                url: '/sections/1000000000/enroll'
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(404);
+                const response = JSON.parse(res.payload);
+                expect(response.error).to.equal('Not Found');
+                expect(response.message).to.equal('Section ID 1000000000 was not found!');
+                done();
+            });
+    });
+
 });

@@ -261,20 +261,25 @@ exports.register = function (server, options, next) {
                 .andWhere('user_id', request.auth.credentials.id)
                 .first()
                 .then((userRelationship) => {
+                    //set previous relationship to a larger var scope
                     hasPreviousRelationship = userRelationship;
                 });
 
+            //Get the relationship type object for a student
             RelationshipType
                 .query()
                 .where('title', 'student')
                 .first()
                 .then((relationshipType) => {
+                    //Get the user object based on the current_user credentials
                     User
                         .query()
                         .where('id', request.auth.credentials.id)
                         .first()
                         .then((user) => {
-                            if(!hasPreviousRelationship){
+                            //if they have a relationship already, error out, else make the relationship
+                            //between section and the user ID with the relationshipType of student
+                            if (!hasPreviousRelationship) {
                                 return user
                                     .$relatedQuery('section')
                                     .relate({
@@ -286,13 +291,13 @@ exports.register = function (server, options, next) {
                             }
                         })
                         .then((newUserRelation) => {
-                            if(newUserRelation.id == request.params.section_id){
+                            if (newUserRelation.id == request.params.section_id) {
                                 newUserRelation.user_id = request.auth.credentials.id;
                                 return reply(newUserRelation);
                             }
                         })
-                        .catch(function (err) {
-                            reply(Boom.badImplementation(err));
+                        .catch((err) => {
+                            return reply(Boom.notFound(`Section ID ${request.params.section_id} was not found!`));
                         });
                 });
         },
