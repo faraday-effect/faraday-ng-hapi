@@ -384,25 +384,33 @@ exports.register = function (server, options, next) {
         method: 'GET',
         path: '/sections/{section_id}/students',
         handler: function (request, reply) {
+            //create a response object
             var response = [];
-           Section
+            //get the section object
+            Section
                 .query()
                 .where('id', request.params.section_id)
                 .first()
                 .then((section) => {
                     return section
+                    //Get the users and their relationship_type for the section object
                         .$relatedQuery('user')
                         .eager('relationshipType')
                         .filterEager('relationshipType', builder => {
+                            //it still gets all users, but we only want relationshipType to be added if the user is a student
                             builder.where('title', 'student'),
-                            builder.andWhere('section_id', request.params.section_id),
-                            builder.andWhere('offering_id', null)
+                                builder.andWhere('section_id', request.params.section_id),
+                                builder.andWhere('offering_id', null)
                         })
                 })
                 .then((output) => {
-                    for(var i = 0; i < output.length; i++){
+                    //Format the response object
+                    for (var i = 0; i < output.length; i++) {
+                        //remove the password
                         delete output[i]['password'];
-                        if(output[i].relationshipType[0]){
+                        //if there is a relationship type, add it to the response object
+                        if (output[i].relationshipType[0]) {
+                            //remove the relationshipType JSON since this is only returning students
                             delete output[i].relationshipType
                             response.push(output[i]);
                         }
@@ -414,7 +422,7 @@ exports.register = function (server, options, next) {
                 });
         },
         config: {
-            notes: 'gets all the users for a given section_id',
+            notes: 'gets all the students for a given section_id',
             validate: {
                 params: {
                     section_id: Joi.number().positive().integer()
@@ -425,4 +433,4 @@ exports.register = function (server, options, next) {
     next();
 };
 
-exports.register.attributes = { name: 'schedule', version: '0.0.5' };
+exports.register.attributes = { name: 'schedule', version: '0.0.6' };
