@@ -398,4 +398,87 @@ lab.experiment('/Schedule endpoint', () => {
             });
     });
 
+    lab.test('Errors out when a student attempts enroll a user_id in a section twice', (done) => {
+        server.inject(
+            {
+                method: 'POST',
+                credentials: user,
+                url: `/sections/${section.id}/users/${user.id}/enroll`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(400);
+                const response = JSON.parse(res.payload);
+                expect(response.error).to.equal('Bad Request');
+                expect(response.message).to.equal(`You are already enrolled in section ID ${section.id}`);
+                done();
+            });
+    });
+
+    lab.test('Successfully allows a user to assign a user_id to a section as a student', (done) => {
+        UserRelationship
+            .query()
+            .delete()
+            .where('user_id', user.id)
+            .andWhere('section_id', section.id)
+            .andWhere('relationship_type_id', studentRelationship.id)
+            .then((numDeleted) => {
+                server.inject(
+                    {
+                        method: 'POST',
+                        credentials: user,
+                        url: `/sections/${section.id}/users/${user.id}/enroll`
+                    },
+                    (res) => {
+                        expect(res.statusCode).to.equal(200);
+                        const response = JSON.parse(res.payload);
+                        expect(response.id).to.exist();
+                        expect(response.id).to.equal(section.id);
+                        expect(response.user_id).to.equal(user.id);
+                        expect(response.relationship_type_id).to.equal(studentRelationship.id);
+                        done();
+                    });
+            });
+    });
+
+    lab.test('Error out when a section_id does not exist when attempting to enroll a user_id to a section', (done) => {
+        server.inject(
+            {
+                method: 'POST',
+                credentials: user,
+                url: `/sections/1000000000/users/${user.id}/enroll`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(404);
+                const response = JSON.parse(res.payload);
+                expect(response.error).to.equal('Not Found');
+                expect(response.message).to.equal('Section ID 1000000000 was not found!');
+                done();
+            });
+    });
+
+    lab.test('Error out when a user_id does not exist when attempting to enroll a user_id to a section', (done) => {
+        UserRelationship
+            .query()
+            .delete()
+            .where('user_id', user.id)
+            .andWhere('section_id', section.id)
+            .andWhere('relationship_type_id', studentRelationship.id)
+            .then((numDeleted) => {
+                server.inject(
+                    {
+                        method: 'POST',
+                        credentials: user,
+                        url: `/sections/${section.id}/users/1000000000/enroll`
+                    },
+                    (res) => {
+                        console.log(response);
+                        expect(res.statusCode).to.equal(404);
+                        const response = JSON.parse(res.payload);
+                        expect(response.error).to.equal('Not Found');
+                        expect(response.message).to.equal('User ID 1000000000 was not found!');
+                        done();
+                    });
+            });
+    });
+
 });

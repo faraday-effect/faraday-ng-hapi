@@ -235,7 +235,7 @@ exports.register = function (server, options, next) {
         config: {
             validate: {
                 params: {
-                    section_id: Joi.number().integer()
+                    section_id: Joi.number().positive().integer()
                 },
                 payload: {
                     sequence_id: Joi.number().positive().integer().required(),
@@ -305,7 +305,73 @@ exports.register = function (server, options, next) {
             notes: 'Allows a student to self-enroll into a given section_id, prevents against double enrolling in the same section',
             validate: {
                 params: {
-                    section_id: Joi.number().integer()
+                    section_id: Joi.number().positive().integer()
+                }
+            }
+        }
+    });
+
+        server.route({
+        method: 'POST',
+        path: '/sections/{section_id}/users/{user_id}/enroll',
+        handler: function (request, reply) {
+            var hasPreviousRelationship = null;
+            //Get any of the previous relationships
+            UserRelationship
+                .query()
+                .where('section_id', request.params.section_id)
+                .andWhere('user_id', request.params.user_id)
+                .first()
+                .then((userRelationship) => {
+                    //set previous relationship to a larger var scope
+                    hasPreviousRelationship = userRelationship;
+                });
+
+            //Get the relationship type object for a student
+            RelationshipType
+                .query()
+                .where('title', 'student')
+                .first()
+                .then((relationshipType) => {
+                    //Get the user object based on the current_user credentials
+                    User
+                        .query()
+                        .where('id', request.params.user_id)
+                        .first()
+                        .then((user) => {
+                            //if they have a relationship already, error out, else make the relationship
+                            //between section and the user ID with the relationshipType of student
+                            if (!hasPreviousRelationship) {
+                                return user
+                                    .$relatedQuery('section')
+                                    .relate({
+                                        id: request.params.section_id,
+                                        relationship_type_id: relationshipType.id
+                                    });
+                            } else {
+                                return reply(Boom.badRequest(`You are already enrolled in section ID ${request.params.section_id}`));
+                            }
+                        })
+                        .then((newUserRelation) => {
+                            if (newUserRelation.id == request.params.section_id) {
+                                newUserRelation.user_id = request.params.user_id;
+                                return reply(newUserRelation);
+                            }
+                        })
+                        .catch((err) => {
+                            if(err.constraint == 'user_relationship_section_id_foreign')
+                                reply(Boom.notFound(`Section ID ${request.params.section_id} was not found!`));
+                            else
+                                reply(Boom.notFound(`User ID ${request.params.user_id} was not found!`))
+                        });
+                });
+        },
+        config: {
+            notes: 'Allows a student to self-enroll into a given section_id, prevents against double enrolling in the same section',
+            validate: {
+                params: {
+                    section_id: Joi.number().positive().integer(),
+                    user_id: Joi.number().positive().integer()
                 }
             }
         }
