@@ -9,13 +9,14 @@ class RelationshipType extends Model {
     static get relationMappings() {
         return {
             user: {
-                relation: Model.HasManyRelation,
+                relation: Model.ManyToManyRelation,
                 modelClass: __dirname + '/User',
                 join: {
                     from: 'relationship_type.id',
                     through: {
                         from: 'user_relationship.relationship_type',
-                        to: 'user_relationship.user_id'
+                        to: 'user_relationship.user_id',
+                        extra: ['user_relationship.section_id', 'user_relationship.offering_id']
                     },
                     to: 'user.id'
                 }
@@ -33,7 +34,7 @@ class RelationshipType extends Model {
                 }
             },
             userRelationship: {
-                relation: Model.HasManyRelation,
+                relation: Model.BelongsToOneRelation,
                 modelClass: __dirname + '/UserRelationship',
                 join: {
                     from: 'relationship_type.id',

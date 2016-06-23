@@ -510,11 +510,12 @@ lab.experiment('/Schedule endpoint', () => {
             (res) => {
                 expect(res.statusCode).to.equal(200);
                 const response = JSON.parse(res.payload);
+                expect(response).to.be.instanceOf(Array);
+                expect(response).to.have.length(1);
                 expect(response[0].id).to.equal(user.id);
                 expect(response[0].first_name).to.equal(user.first_name);
                 expect(response[0].last_name).to.equal(user.last_name);
                 expect(response[0].email).to.equal(user.email);
-                expect(response[0].relationshipType.title).to.equal(studentRelationship.title);
                 done();
             });
     });

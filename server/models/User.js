@@ -49,14 +49,14 @@ class User extends Model {
                 }
             },
             relationshipType: {
-                relation: Model.HasManyRelation,
+                relation: Model.ManyToManyRelation,
                 modelClass: __dirname + '/RelationshipType',
                 join: {
                     from: 'user.id',
                     through: {
                         from: 'user_relationship.user_id',
                         to: 'user_relationship.relationship_type_id',
-                        extra: ['section_id']
+                        extra: ['section_id', 'offering_id']
                     },
                     to: 'relationship_type.id'
                 }

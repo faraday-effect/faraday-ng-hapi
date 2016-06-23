@@ -384,25 +384,33 @@ exports.register = function (server, options, next) {
         method: 'GET',
         path: '/sections/{section_id}/students',
         handler: function (request, reply) {
-            var studentRelationship = null;
-            RelationshipType
-                .query()
-                .where('title', 'student')
-                .first()
-                .then((relationship) => {
-                    studentRelationship = relationship;
-                });
-
-            Section
+            var response = [];
+           Section
                 .query()
                 .where('id', request.params.section_id)
                 .first()
-                .eager('user.relationshipType')
                 .then((section) => {
-                    reply(section)
-                // })
-                // .catch((err) => {
-                //     reply(Boom.badImplementation(err));
+                    return section
+                        .$relatedQuery('user')
+                        .eager('relationshipType')
+                        .filterEager('relationshipType', builder => {
+                            builder.where('title', 'student'),
+                            builder.andWhere('section_id', request.params.section_id),
+                            builder.andWhere('offering_id', null)
+                        })
+                })
+                .then((output) => {
+                    for(var i = 0; i < output.length; i++){
+                        delete output[i]['password'];
+                        if(output[i].relationshipType[0]){
+                            delete output[i].relationshipType
+                            response.push(output[i]);
+                        }
+                    }
+                    reply(response);
+                })
+                .catch((err) => {
+                    reply(Boom.notFound(`Section ID ${request.params.section_id} was not found!`));
                 });
         },
         config: {
