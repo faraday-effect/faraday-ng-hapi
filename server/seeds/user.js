@@ -152,13 +152,13 @@ exports.seed = function (knex, Promise) {
                 .query()
                 .insert([
                     {
-                        title: 'Student',
+                        title: 'student',
                         description: 'I am learning'
                     }, {
-                        title: 'Teacher\'s Assistant',
+                        title: 'teacher\'s assistant',
                         description: 'I am grading'
                     }, {
-                        title: 'Teacher',
+                        title: 'instructor',
                         description: 'I am teaching'
                     }
                 ]).then((relationshipType) => {

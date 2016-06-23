@@ -5,6 +5,8 @@ const Boom = require('boom');
 const Section = require('../models/Section');
 const User = require('../models/User');
 const Term = require('../models/Term');
+const RelationshipType = require('../models/RelationshipType');
+const UserRelationship = require('../models/UserRelationship');
 
 exports.register = function (server, options, next) {
 
@@ -41,7 +43,7 @@ exports.register = function (server, options, next) {
                         reply(Boom.notFound('Term ID ' + request.params.term_id + ' was not found!'))
                 })
                 .catch(function (err) {
-                   reply(Boom.badImplementation(err));
+                    reply(Boom.badImplementation(err));
                 });
         },
         config: {
@@ -227,7 +229,7 @@ exports.register = function (server, options, next) {
                     reply(updatedModel);
                 })
                 .catch(function (err) {
-                   reply(Boom.badImplementation(err));
+                    reply(Boom.badImplementation(err));
                 });
         },
         config: {
@@ -242,6 +244,63 @@ exports.register = function (server, options, next) {
                     credit_hours: Joi.number().positive().integer().required(),
                     reg_number: Joi.string().required(),
                     title: Joi.string()
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'POST',
+        path: '/sections/{section_id}/enroll',
+        handler: function (request, reply) {
+            var hasPreviousRelationship = null;
+            //Get any of the previous relationships
+            UserRelationship
+                .query()
+                .where('section_id', request.params.section_id)
+                .andWhere('user_id', request.auth.credentials.id)
+                .first()
+                .then((userRelationship) => {
+                    hasPreviousRelationship = userRelationship;
+                });
+
+            RelationshipType
+                .query()
+                .where('title', 'student')
+                .first()
+                .then((relationshipType) => {
+                    User
+                        .query()
+                        .where('id', request.auth.credentials.id)
+                        .first()
+                        .then((user) => {
+                            if(!hasPreviousRelationship){
+                                return user
+                                    .$relatedQuery('section')
+                                    .relate({
+                                        id: request.params.section_id,
+                                        relationship_type_id: relationshipType.id
+                                    });
+                            } else {
+                                return reply(Boom.badRequest(`You are already enrolled in section ID ${request.params.section_id}`));
+                            }
+                        })
+                        .then((newUserRelation) => {
+                            if(newUserRelation.id == request.params.section_id){
+                                newUserRelation.user_id = request.auth.credentials.id;
+                                return reply(newUserRelation);
+                            }
+                        })
+                        .catch(function (err) {
+                            reply(Boom.badImplementation(err));
+                        });
+                });
+        },
+        config: {
+            notes: 'Allows a student to self-enroll into a given section_id, prevents against double enrolling in the same section',
+            validate: {
+                params: {
+                    section_id: Joi.number().integer()
                 }
             }
         }
