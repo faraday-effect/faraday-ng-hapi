@@ -29,7 +29,7 @@ lab.experiment('all truth', () => {
                 expect(res.statusCode).to.equal(200);
                 expect(res.payload).to.equal('pong');
                 done();
-            })
+            });
     });
 
 });

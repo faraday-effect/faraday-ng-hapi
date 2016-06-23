@@ -25,7 +25,7 @@ exports.server = null;
 exports.init_test = function() {
     const lab = Lab.script();
 
-    lab.before(done => {
+    lab.before((done) => {
         Server((err, server) => {
             if (err) {
                 Hoek.assert(!err, err);

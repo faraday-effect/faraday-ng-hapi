@@ -46,6 +46,9 @@ module.exports = function (callback) {
             {register: require('./routes/nes')},
             {register: require('./routes/schedule')},
             {register: require('./routes/users')},
+            
+            // Other plugins
+            {register: require('./plugins/quiz')},
 
             // Logging and reporting
             {
