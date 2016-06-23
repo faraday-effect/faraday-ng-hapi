@@ -18,8 +18,10 @@ lab.experiment('/Execution endpoint', () => {
             db.knex.raw('TRUNCATE public.attendance CASCADE'),
             db.knex.raw('TRUNCATE public.user CASCADE'),
             db.knex.raw('TRUNCATE public.actual_class CASCADE'),
-            db.knex.raw('TRUNCATE public.sequence CASCADE'),
+            db.knex.raw('TRUNCATE public.course CASCADE'),
             db.knex.raw('TRUNCATE public.section CASCADE'),
+            db.knex.raw('TRUNCATE public.prefix CASCADE'),
+            db.knex.raw('TRUNCATE public.department CASCADE')
         ])
             .then(results => {
                 return Promise.all([
@@ -39,7 +41,7 @@ lab.experiment('/Execution endpoint', () => {
                         .insertWithRelated({
                             title: 'Section xyz',
                             reg_number: '123456',
-                            credit_hours: '3',
+                            credit_hours: 3,
                             sequence: {
                                 title: 'seq xyz',
                                 offering: {

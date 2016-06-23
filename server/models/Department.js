@@ -14,8 +14,8 @@ class Department extends Model {
                 join: {
                     from: 'department.id',
                     through: {
-                        from: 'department_prefix.prefix_id',
-                        to: 'department_prefix.department_id'
+                        from: 'department_prefix.department_id',
+                        to: 'department_prefix.prefix_id'
                     },
                     to: 'prefix.id'
                 }

@@ -9,7 +9,6 @@ exports.register = function (server, options, next) {
             return reply('This is a confirmation of a working instantiation of a socket with NES!');
         },
         config: {
-            auth: false,
             id: 'hello'
         }
     });

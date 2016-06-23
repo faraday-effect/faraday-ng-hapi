@@ -19,6 +19,7 @@ lab.experiment('/Catalog endpoint', () => {
             db.knex.raw('TRUNCATE public.user CASCADE'),
             db.knex.raw('TRUNCATE public.actual_class CASCADE'),
             db.knex.raw('TRUNCATE public.section_schedule CASCADE'),
+            db.knex.raw('TRUNCATE public.term CASCADE'),
             db.knex.raw('TRUNCATE public.section CASCADE'),
             db.knex.raw('TRUNCATE public.course CASCADE'),
         ])
@@ -40,7 +41,7 @@ lab.experiment('/Catalog endpoint', () => {
                         .insertWithRelated({
                             title: 'Section xyz',
                             reg_number: '123456',
-                            credit_hours: '3',
+                            credit_hours: 3,
                             sequence: {
                                 title: 'seq xyz',
                                 offering: {
