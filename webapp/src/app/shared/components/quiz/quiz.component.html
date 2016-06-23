@@ -1,3 +1,18 @@
-<p>
-  quiz works!
-</p>
+<div *ngIf = "quiz">
+  <div class="container">
+    <div class="card">
+      <div class="card-content">
+        <div class="card-title">{{quiz.title}}</div>
+        <div *ngFor ="let question of quiz.questions">
+          {{question.question}}
+          <div *ngFor ="let answer of question.answers">
+            {{answer.answer}} (<b>Hint:</b> {{answer.feedback}})
+          </div>
+        </div>
+      </div>
+      <div class="card-action">
+        <a href="#" class="btn">Ready, set...submit!</a>
+      </div>
+    </div>
+  </div>
+</div>

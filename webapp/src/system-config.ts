@@ -75,6 +75,7 @@ const barrels: string[] = [
   'app/courses/participant',
   'app/courses/course-detail',
   'app/toolbar',
+  'app/shared/components/quiz',
   /** @cli-barrel */
 ];
 
