@@ -220,7 +220,6 @@ exports.register = function (server, options, next) {
                 .then((user) => {
                     if (!user){
                        reply(Boom.notFound(`User ID ${request.params.user_id} was not found!`));
-                       console.log('we made it')
                     } else {
                         Section
                             .query()
