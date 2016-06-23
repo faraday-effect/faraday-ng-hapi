@@ -290,6 +290,7 @@ exports.register = function (server, options, next) {
                                 return reply(Boom.badRequest(`You are already enrolled in section ID ${request.params.section_id}`));
                             }
                         })
+                        //if it makes the new row, send it back to the client
                         .then((newUserRelation) => {
                             if (newUserRelation.id == request.params.section_id) {
                                 newUserRelation.user_id = request.auth.credentials.id;
@@ -352,6 +353,7 @@ exports.register = function (server, options, next) {
                                 return reply(Boom.badRequest(`You are already enrolled in section ID ${request.params.section_id}`));
                             }
                         })
+                        //if it makes the new row, send it back to the client
                         .then((newUserRelation) => {
                             if (newUserRelation.id == request.params.section_id) {
                                 newUserRelation.user_id = request.params.user_id;
@@ -359,6 +361,7 @@ exports.register = function (server, options, next) {
                             }
                         })
                         .catch((err) => {
+                            //check to see if the error was caused by an invalid section_id or user_id
                             if(err.constraint == 'user_relationship_section_id_foreign')
                                 reply(Boom.notFound(`Section ID ${request.params.section_id} was not found!`));
                             else
@@ -379,4 +382,4 @@ exports.register = function (server, options, next) {
     next();
 };
 
-exports.register.attributes = { name: 'schedule', version: '0.0.4' };
+exports.register.attributes = { name: 'schedule', version: '0.0.5' };
