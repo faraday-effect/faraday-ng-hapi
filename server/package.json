@@ -4,8 +4,8 @@
   "description": "LMS 2.0",
   "main": "index.js",
   "scripts": {
-    "test": "lab --verbose --transform node_modules/lab-babel --globals __core-js_shared__",
-    "test-cov": "lab --transform node_modules/lab-babel --globals __core-js_shared__ --reporter html --output foo-coverage.html"
+    "test": "lab --verbose --transform node_modules/lab-babel --shuffle --globals __core-js_shared__",
+    "test-cov": "lab --transform node_modules/lab-babel --globals __core-js_shared__ --reporter html --output foo-coverage.html --reporter console --output stdout"
   },
   "repository": {
     "type": "git",
