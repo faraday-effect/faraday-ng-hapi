@@ -1,6 +1,9 @@
 {
+  "id": "http://faraday.cse.taylor.edu/schemas/quiz.json",
+
   "title": "All About Our Favorite Metal",
   "uuid": "110ec58a-a0f2-4ac4-8393-c866d8135196",
+
   "questions": [
     {
       "question": "What is the atomic weight of Selenium?",

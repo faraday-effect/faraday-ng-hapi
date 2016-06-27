@@ -1,0 +1,22 @@
+{
+  "id": "http://faraday.cse.taylor.edu/schemas/quiz-response.json",
+
+  "submitted_by": {
+    "id": 142,
+    "email": "fred@ziffle.com",
+    "first_name": "Fred",
+    "last_name": "Ziffle"
+  },
+  "submitted_at": "2016-06-27T16:29:37+00:00",
+  "quiz_uuid": "110ec58a-a0f2-4ac4-8393-c866d8135196",
+  "responses": [
+    {
+      "question_uuid": "110ec58a-a0f2-4ac4-8393-c866d813b8d1",
+      "response_id": 3
+    },
+    {
+      "question_uuid": "110ec58a-a0f2-4ac4-8393-c8663fb3b8d1",
+      "response_id": 17
+    }
+  ]
+}
