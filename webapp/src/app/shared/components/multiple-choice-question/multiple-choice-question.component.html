@@ -1,0 +1,23 @@
+<div materialize class="row">
+  <div class="card col s12 m6 offset-m3 l6 offset-l3">
+    <div class="card-content">
+      <p>{{questionNumber+1}}. {{multipleChoiceQuestion.question}}</p>
+
+      <div *ngFor="let answer of multipleChoiceQuestion.answers; let i=index">
+        <input type="radio"
+               name="{{multipleChoiceQuestion.uuid}}"
+               id="f_{{i}}{{multipleChoiceQuestion.uuid}}"
+               class="with-gap"
+               (click)="selectAnswer(multipleChoiceQuestion.uuid, answer.id)"
+               [checked] = "answer.id===checkedAnswerID">
+         <label [attr.for]="'f_' + i+multipleChoiceQuestion.uuid">{{answer.answer}} </label>
+      </div>
+
+
+
+    </div>
+  </div>
+</div>
+
+
+
