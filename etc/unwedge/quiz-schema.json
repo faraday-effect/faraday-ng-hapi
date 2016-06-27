@@ -7,6 +7,10 @@
       "description": "Quiz title",
       "type": "string"
     },
+    "uuid": {
+      "description": "Universally Unique ID for Quiz",
+      "type": "string"
+    },
     "questions": {
       "description": "Quiz questions",
       "type": "array",
@@ -17,14 +21,18 @@
             "description": "Text of a question",
             "type": "string"
           },
+          "uuid": {
+            "description": "Universally Unique ID for Question",
+            "type": "string"
+          },
           "answers": {
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
-                "correct": {
-                  "description": "Whether this answer is correct",
-                  "type": "boolean"
+                "id": {
+                  "description": "Answer ID; unique within question",
+                  "type": "integer"
                 },
                 "answer": {
                   "description": "Possible answer",
@@ -34,11 +42,23 @@
                   "description": "Feedback regarding the answer",
                   "type": "string"
                 }
+              },
+              "required": ["id", "answer"]
+            }
+          },
+          "scoring": {
+            "type": "object",
+            "properties": {
+              "correct": {
+                "description": "ID of correct answer",
+                "type": "integer"
               }
             }
           }
-        }
+        },
+        "required": ["question", "uuid", "answers", "scoring"]
       }
     }
-  }
+  },
+  "required": ["title", "uuid", "questions"]
 }
