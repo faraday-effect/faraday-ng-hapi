@@ -14,28 +14,20 @@ const QUIZ = {
       'sodales.',
       answers: [
         {
-          answer: 'Zinc',
-          correct: false,
-          feedback: 'You have not chosen wisely...think pennies....',
-          chosen: false
+          id: 1,
+          answer: 'Zinc'
         },
         {
-          answer: 'Copper',
-          correct: true,
-          feedback: 'Yes, young grasshopper, you are learning.',
-          chosen: false
+          id: 2,
+          answer: 'Copper'
         },
         {
-          answer: 'Selenium',
-          correct: false,
-          feedback: 'Think more pennies and less non-metalic....',
-          chosen: false
+          id: 3,
+          answer: 'Selenium'
         },
         {
-          answer: 'Titanium',
-          correct: false,
-          feedback: 'Strong, but not penny-ish enough....',
-          chosen: false
+          id: 4,
+          answer: 'Titanium'
         }
       ]
     },
@@ -46,28 +38,20 @@ const QUIZ = {
       'dui tempor vel.',
       answers: [
         {
-          answer: 'Zinc',
-          correct: false,
-          feedback: 'Not so zincish in this case....',
-          chosen: false
+          id: 1,
+          answer: 'Zinc'
         },
         {
-          answer: 'Copper',
-          correct: false,
-          feedback: 'Remember, when in doubt, go with (c).',
-          chosen: false
+          id: 2,
+          answer: 'Copper'
         },
         {
-          answer: 'Selenium',
-          correct: true,
-          feedback: 'Indeed :)',
-          chosen: false
+          id: 3,
+          answer: 'Selenium'
         },
         {
-          answer: 'Titanium',
-          correct: false,
-          feedback: 'Uh...not quite.',
-          chosen: false
+          id: 4,
+          answer: 'Titanium'
         }
       ]
     }

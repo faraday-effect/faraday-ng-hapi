@@ -1,18 +1,52 @@
 <div *ngIf = "quiz">
   <div class="container">
-    <div class="card">
-      <div class="card-content">
-        <div class="card-title">{{quiz.title}}</div>
-        <div *ngFor ="let question of quiz.questions">
-          {{question.question}}
-          <div *ngFor ="let answer of question.answers">
-            {{answer.answer}} (<b>Hint:</b> {{answer.feedback}})
+    <h4 class="card-title">{{quiz.title}}</h4>
+    <div *ngFor ="let question of quiz.questions; let i = index">
+      <div class="row">
+        <div class="card col s12 m6 offset-m3 l6 offset-l3">
+          <div class="card-content">
+            {{i + 1}}.  {{question.question}}
+            <div *ngFor ="let answer of question.answers">
+            <input class="with-gap" name="group3" type="radio" id="test5" checked />
+              <label for="test5">
+                {{answer.answer}}
+              </label>
+              <!-- (<b>Hint:</b> {{answer.feedback}}) -->
+        </div>
+
+
           </div>
         </div>
       </div>
-      <div class="card-action">
-        <a href="#" class="btn">Ready, set...submit!</a>
-      </div>
+
+
     </div>
+    <a href="#" class="btn">Ready, set...submit!</a>
+  </div>
+</div>
+
+<div *ngIf = "quiz">
+  <div class="container">
+    <h4 class="card-title">{{quiz.title}}</h4>
+    <div *ngFor ="let question of quiz.questions; let i = index">
+      <div class="row">
+        <div class="card col s12 m6 offset-m3 l6 offset-l3">
+          <div class="card-content">
+            {{i + 1}}.  {{question.question}}
+            <label *ngFor="let answer of question.answers">
+              <input type="radio" name="options" (click)="model.options = item"
+                     [checked]="answer === model.options">
+              {{answer}}
+            </label>
+
+
+
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+    <a href="#" class="btn">Ready, set...submit!</a>
   </div>
 </div>

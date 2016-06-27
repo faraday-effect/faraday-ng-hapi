@@ -12,6 +12,9 @@ import { QuizService } from '../../services/quiz.service';
 export class QuizComponent implements OnInit {
 
   quiz={};
+
+  model = { options: 'two' };
+
   constructor(
     private quizService: QuizService) {}
 
