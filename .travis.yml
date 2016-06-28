@@ -38,7 +38,7 @@ before_script:
 script:
   - cd $SERVER_DIR && npm install && ./node_modules/.bin/knex migrate:latest && npm test && cd ..
   - cd $SERVER_DIR && node start.js & sleep 3 && cd ..
-  - cd $WEBAPP_DIR && npm install && ng e2e && cd ..
+  - cd $WEBAPP_DIR && npm install && ./node_modules/.bin/ng e2e && cd ..
 
 #after_success:
 #after_failure:
