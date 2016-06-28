@@ -4,8 +4,8 @@ node_js:
   - "6"
 
 env:
- - TEST_DIR=server
-# - TEST_DIR=webapp
+  - SERVER_DIR=server
+  - WEBAPP_DIR=webapp
 
 notifications:
   slack: quantum-bits:qYEIHmdw3vBD1Q3XRxh2neXY
@@ -31,8 +31,14 @@ before_script:
   - psql -U postgres -c 'create database faraday;'
   - psql -U postgres -c "create role faraday login password 'pass';"
   - postgres -V
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - sleep 3
 
-script: cd $TEST_DIR && npm install && ./node_modules/.bin/knex migrate:latest && npm test
+script:
+  - cd $SERVER_DIR && npm install && ./node_modules/.bin/knex migrate:latest && npm test && cd ..
+  - cd $SERVER_DIR && node start.js & sleep 3 && cd ..
+  - cd $WEBAPP_DIR && npm install && ng e2e && cd ..
 
 #after_success:
 #after_failure:
