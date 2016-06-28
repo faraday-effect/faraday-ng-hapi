@@ -18,6 +18,11 @@ exports.seed = function (knex, Promise) {
         knex('user_relationship').del(),
         knex('section').del(),
         knex('sequence').del(),
+        knex('specification').del(),
+        knex('criterion').del(),
+        knex('deliverable').del(),
+        knex('activity').del(),
+        knex('topic').del(),
         knex('offering').del(),
         knex('course').del(),
 
@@ -152,13 +157,13 @@ exports.seed = function (knex, Promise) {
                 .query()
                 .insert([
                     {
-                        title: 'Student',
+                        title: 'student',
                         description: 'I am learning'
                     }, {
-                        title: 'Teacher\'s Assistant',
+                        title: 'teacher\'s assistant',
                         description: 'I am grading'
                     }, {
-                        title: 'Teacher',
+                        title: 'instructor',
                         description: 'I am teaching'
                     }
                 ]).then((relationshipType) => {
