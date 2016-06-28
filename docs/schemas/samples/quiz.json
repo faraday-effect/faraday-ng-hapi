@@ -1,45 +1,57 @@
 {
+  "id": "http://faraday.cse.taylor.edu/schemas/quiz.json",
+
   "title": "All About Our Favorite Metal",
+  "uuid": "110ec58a-a0f2-4ac4-8393-c866d8135196",
+
   "questions": [
     {
       "question": "What is the atomic weight of Selenium?",
+      "uuid": "110ec58a-a0f2-4ac4-8393-c866d813b8d1",
       "answers": [
         {
-          "correct": true,
+          "id": 1,
           "answer": "78.96",
           "feedback": "Right!"
         },
         {
-          "correct": false,
+          "id": 2,
           "answer": "71",
           "feedback": "Sorry; too low"
         },
         {
-          "correct": false,
+          "id": 3,
           "answer": "83.44",
           "feedback": "Sorry; too high"
         }
-      ]
+      ],
+      "scoring": {
+        "correct": 1
+      }
     },
     {
       "question": "What color is Selenium?",
+      "uuid": "110ec58a-a0f2-4ac4-8393-c8663fb3b8d1",
       "answers": [
         {
-          "correct": true,
+          "id": 17,
           "answer": "Deep red",
           "feedback": "Crystalline monoclinic selenium is a deep red color!"
         },
         {
-          "correct": false,
+          "id": 2,
           "answer": "Green",
           "feedback": "No; that's not it"
         },
         {
-          "correct": false,
+          "id": 3,
           "answer": "Silver",
           "feedback": "Sorry; not silver"
         }
-      ]
+      ],
+      "scoring": {
+        "correct": 17
+      }
     }
   ]
 }
