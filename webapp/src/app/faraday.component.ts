@@ -18,8 +18,6 @@ let Services = Object.keys(ServicesModule).map(k => ServicesModule[k]);
 })
 export class FaradayAppComponent {
 
-  debug = true;
-
   constructor() {}
 
 }
