@@ -7,6 +7,7 @@ const User = require('../models/User');
 const Term = require('../models/Term');
 const RelationshipType = require('../models/RelationshipType');
 const UserRelationship = require('../models/UserRelationship');
+const Offering = require('../models/Offering');
 
 exports.register = function (server, options, next) {
 
@@ -142,6 +143,9 @@ exports.register = function (server, options, next) {
                 .catch((err) => {
                     reply(Boom.badImplementation(err));
                 });
+        },
+        config: {
+            notes: 'retrieves all the sections for a given user from the database'
         }
     });
 
@@ -168,6 +172,79 @@ exports.register = function (server, options, next) {
                 });
         },
         config: {
+            notes: 'retrieves a given section and all related information from the database',
+            validate: {
+                params: {
+                    section_id: Joi.number().positive().integer()
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/sections/{section_id}/instructors',
+        handler: function (request, reply) {
+            var sectionSeq = null;
+            RelationshipType
+                .query()
+                .where('title', 'instructor')
+                .first()
+                .then((rt) => {
+                    Section
+                        .query()
+                        .where('id', request.params.section_id)
+                        .eager('sequence')
+                        .first()
+                        .then((section) => {
+                            sectionSeq = section.sequence;
+                            return section
+                                .$relatedQuery('userRelationship')
+                                .pluck('user_id')
+                                .where('relationship_type_id', rt.id)
+                        })
+                        .then((output) => {
+                            if (output.length == 0) {
+                                Offering
+                                    .query()
+                                    .where('id', sectionSeq.offering_id)
+                                    .first()
+                                    .then((section) => {
+                                        sectionSeq = section.sequence;
+                                        return section
+                                            .$relatedQuery('userRelationship')
+                                            .pluck('user_id')
+                                            .where('relationship_type_id', rt.id)
+                                    })
+                                    .then((op) => {
+                                        User
+                                            .query()
+                                            .whereIn('id', op)
+                                            .then((users) => {
+                                                for (var i = 0; i < users.length; i++) {
+                                                    users[i].stripPassword();
+                                                }
+                                                reply(users);
+                                            });
+                                    });
+                                return;
+                            } else {
+                                User
+                                    .query()
+                                    .whereIn('id', output)
+                                    .then((users) => {
+                                        for (var i = 0; i < users.length; i++) {
+                                            users[i].stripPassword();
+                                        }
+                                        reply(users);
+                                    });
+                            }
+                        })
+                });
+
+        },
+        config: {
+            notes: 'retrieves the professors for a given section ID even if the professor is tied only to the offering',
             validate: {
                 params: {
                     section_id: Joi.number().positive().integer()
@@ -393,7 +470,7 @@ exports.register = function (server, options, next) {
                 .first()
                 .then((section) => {
                     return section
-                    //Get the users and their relationship_type for the section object
+                        //Get the users and their relationship_type for the section object
                         .$relatedQuery('user')
                         .eager('relationshipType')
                         .filterEager('relationshipType', builder => {
