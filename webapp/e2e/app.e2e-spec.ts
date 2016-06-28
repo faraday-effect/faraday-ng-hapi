@@ -1,25 +1,21 @@
 import { FaradayPage } from './app.po';
+import { expectToMatch } from './utils';
 
 describe('faraday App', function() {
   let page: FaradayPage;
 
   beforeEach(() => {
     page = new FaradayPage();
-    page.navigateToRoot();
+    page.navigateTo();
   });
 
-  it('should display welcome', () => {
-    expect(page.getTitle()).toEqual('Welcome to Faraday');
+  it('should have toolbar with welcome and log in', () => {
+    let bar = page.getToolbar();
+    expectToMatch(bar, /Welcome to Faraday/);
+    expectToMatch(bar, /Log In/);
   });
 
-  it('should show login', () => {
-    let body = page.getBody();
-    expect(body).toEqual(jasmine.stringMatching(/Login/));
-    expect(body).toEqual(jasmine.stringMatching(/Email/));
-    expect(body).toEqual(jasmine.stringMatching(/Password/));
-  });
-
-  it('should have link to log in', () => {
-    expect(page.getToolbar()).toEqual(jasmine.stringMatching(/Log In/));
+  it('should redirect to login', () => {
+    expectToMatch(browser.getCurrentUrl(), /\/login$/);
   });
 });

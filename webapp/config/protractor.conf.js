@@ -11,7 +11,6 @@ exports.config = {
   ],
   capabilities: {
     browserName: 'chrome',
-    //chromeOptions: { 'binary': '/home/keith/.nix-profile/bin/google-chrome-stable' },
   },
   directConnect: true,
   baseUrl: 'http://localhost:4200/',

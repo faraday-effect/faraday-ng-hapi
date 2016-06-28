@@ -1,5 +1,5 @@
 export class FaradayPage {
-  navigateToRoot() {
+  navigateTo() {
     return browser.get('/');
   }
 
@@ -9,9 +9,5 @@ export class FaradayPage {
 
   getTitle() {
     return $('.brand-logo').getText();
-  }
-
-  getBody() {
-    return $('body').getText();
   }
 }
