@@ -28,8 +28,8 @@ class User extends Model {
                 join: { 
                     from: 'user.id',
                     through: {
-                        from: 'user_relationship.user_id',
-                        to: 'user_relationship.offering_id',
+                        from: 'user_offering.user_id',
+                        to: 'user_offering.offering_id',
                         extra: ['relationship_type_id']
                     },
                     to: 'offering.id'
@@ -41,32 +41,11 @@ class User extends Model {
                 join: {
                     from: 'user.id',
                     through: {
-                        from: 'user_relationship.user_id',
-                        to: 'user_relationship.section_id',
+                        from: 'user_section.user_id',
+                        to: 'user_section.section_id',
                         extra: ['relationship_type_id']
                     },
                     to: 'section.id'
-                }
-            },
-            relationshipType: {
-                relation: Model.ManyToManyRelation,
-                modelClass: __dirname + '/RelationshipType',
-                join: {
-                    from: 'user.id',
-                    through: {
-                        from: 'user_relationship.user_id',
-                        to: 'user_relationship.relationship_type_id',
-                        extra: ['section_id', 'offering_id']
-                    },
-                    to: 'relationship_type.id'
-                }
-            },
-            userRelationship: {
-                relation: Model.HasManyRelation,
-                modelClass: __dirname + '/UserRelationship',
-                join: {
-                    from: 'user.id',
-                    to: 'user_relationship.user_id'
                 }
             },
             departmentMember: {

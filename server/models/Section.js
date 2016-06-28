@@ -14,18 +14,11 @@ class Section extends Model {
                 join: {
                     from: 'section.id',
                     through: {
-                        from: 'user_relationship.section_id',
-                        to: 'user_relationship.user_id'
+                        // modelClass: 'UserSection',
+                        from: 'user_section.section_id',
+                        to: 'user_section.user_id'
                     },
                     to: 'user.id'
-                }
-            },
-            userRelationship: {
-                relation: Model.HasManyRelation,
-                modelClass: __dirname + '/UserRelationship',
-                join: {
-                    from: 'section.id',
-                    to: 'user_relationship.section_id'
                 }
             },
             sequence: {

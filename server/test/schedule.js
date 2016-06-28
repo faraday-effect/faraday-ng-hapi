@@ -4,9 +4,6 @@ import { init_test, expect, server, db } from './support';
 const lab = exports.lab = init_test();
 
 const User = require('../models/User');
-const Section = require('../models/Section');
-const RelationshipType = require('../models/RelationshipType');
-const UserRelationship = require('../models/UserRelationship');
 
 lab.experiment('/Schedule endpoint', () => {
 
@@ -19,11 +16,10 @@ lab.experiment('/Schedule endpoint', () => {
         return Promise.all([
             db.knex.raw(
                 'TRUNCATE public.department CASCADE; ' +
-                'TRUNCATE public.prefix CASCADE; ' + 
+                'TRUNCATE public.prefix CASCADE; ' +
                 'TRUNCATE public.user CASCADE; ' +
-                'TRUNCATE public.term CASCADE; ' +
-                'TRUNCATE public.relationship_type CASCADE; '
-                )
+                'TRUNCATE public.term CASCADE; '
+            )
         ])
             .then(results => {
                 return Promise.all([
@@ -36,79 +32,57 @@ lab.experiment('/Schedule endpoint', () => {
                             email: 'sam@example.com',
                             mobile_phone: '0123456789',
                             office_phone: '0123456789',
-                            password: 'pass'
-                        }),
-                    RelationshipType
-                        .query()
-                        .insert({
-                            title: 'student',
-                            description: 'I am learning'
-                        }),
-                    Section
-                        .query()
-                        .insertWithRelated({
-                            title: 'Section xyz',
-                            reg_number: '123456',
-                            credit_hours: 3,
-                            sequence: {
-                                id: 1,
-                                title: 'seq xyz',
-                                offering: {
-                                    course: {
-                                        '#id': 'this_course',
-                                        title: 'Course Title',
-                                        number: '123',
-                                        prefix: {
-                                            name: 'COS'
-                                        },
-                                        department: {
-                                            name: 'CSE Department'
+                            password: 'pass',
+                            relationshipType: {
+                                title: 'student',
+                                description: 'I am learning'
+                            },
+                            section: {
+                                title: 'Section xyz',
+                                reg_number: '123456',
+                                credit_hours: 3,
+                                sequence: {
+                                    id: 1,
+                                    title: 'seq xyz',
+                                    offering: {
+                                        course: {
+                                            '#id': 'this_course',
+                                            title: 'Course Title',
+                                            number: '123',
+                                            prefix: {
+                                                name: 'COS'
+                                            },
+                                            department: {
+                                                name: 'CSE Department'
+                                            }
                                         }
                                     }
-                                }
-                            },
-                            course: {
-                                '#ref': 'this_course'
-                            },
-                            term: {
-                                name: 'Fall 2016',
-                                start_date: '2016-09-01',
-                                end_date: '2016-12-15'
-                            },
-                            sectionSchedule: [{
-                                weekday: 'Monday',
-                                start_time: '3:00 PM',
-                                stop_time: '3:50 PM'
-                            },
-                                {
-                                    weekday: 'Friday',
-                                    start_time: '4:00 PM',
-                                    stop_time: '4:50 PM'
-                                }]
-                        }),
-                ])
-            }).then(results => {
-                user = results[0];
-                studentRelationship = results[1];
-                section = results[2];
-            })
-            .then(() => {
-                return User
-                    .query()
-                    .where('id', user.id)
-                    .first()
-                    .then(user => {
-                        return user
-                            .$relatedQuery('section')
-                            .relate({
-                                id: section.id,
-                                relationship_type_id: studentRelationship.id
-                            });
-                    })
-                    .catch(err => {
-                        console.log("ERROR", err);
-                    });
-
+                                },
+                                course: {
+                                    '#ref': 'this_course'
+                                },
+                                term: {
+                                    name: 'Fall 2016',
+                                    start_date: '2016-09-01',
+                                    end_date: '2016-12-15'
+                                },
+                                sectionSchedule: [{
+                                    weekday: 'Monday',
+                                    start_time: '3:00 PM',
+                                    stop_time: '3:50 PM'
+                                },
+                                    {
+                                        weekday: 'Friday',
+                                        start_time: '4:00 PM',
+                                        stop_time: '4:50 PM'
+                                    }]
+                            }
+                        })
+                ]).then(results => {
+                    user = results[0];
+                    studentRelationship = results[1];
+                    section = results[2];
+                });
             });
     });
 

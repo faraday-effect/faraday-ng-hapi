@@ -8,39 +8,22 @@ class RelationshipType extends Model {
 
     static get relationMappings() {
         return {
-            user: {
-                relation: Model.ManyToManyRelation,
-                modelClass: __dirname + '/User',
+            section: {
+                relation: Model.HasManyRelation,
+                modelClass: __dirname + '/UserSection',
                 join: {
                     from: 'relationship_type.id',
-                    through: {
-                        from: 'user_relationship.relationship_type',
-                        to: 'user_relationship.user_id',
-                        extra: ['user_relationship.section_id', 'user_relationship.offering_id']
-                    },
-                    to: 'user.id'
+                    to: 'user_section.relationship_type_id'
                 }
             },
-            offering: {
-                relation: Model.ManyToManyRelation,
-                modelClass: __dirname + '/Offering',
-                join: {
-                    from: 'relationship_type.id',
-                    through: {
-                        from: 'user_relationship.relationship_type_id',
-                        to: 'user_relationship.offering_id'
-                    },
-                    to: 'offering.id'
-                }
-            },
-            userRelationship: {
-                relation: Model.BelongsToOneRelation,
-                modelClass: __dirname + '/UserRelationship',
-                join: {
-                    from: 'relationship_type.id',
-                    to: 'user_relationship.relationship_type_id'
-                }
-            }
+            // offering: {
+            //     relation: Model.HasManyRelation,
+            //     modelClass: __dirname + '/UserOffering',
+            //     join: {
+            //         from: 'relationship_type.id',
+            //         to: 'user_offering.relationship_type_id'
+            //     }
+            // }
         }
     }
 }

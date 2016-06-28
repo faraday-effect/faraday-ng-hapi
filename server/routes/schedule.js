@@ -6,7 +6,6 @@ const Section = require('../models/Section');
 const User = require('../models/User');
 const Term = require('../models/Term');
 const RelationshipType = require('../models/RelationshipType');
-const UserRelationship = require('../models/UserRelationship');
 const Offering = require('../models/Offering');
 
 exports.register = function (server, options, next) {

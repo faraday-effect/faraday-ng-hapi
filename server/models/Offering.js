@@ -30,8 +30,9 @@ class Offering extends Model {
                 join: {
                     from: 'offering.id',
                     through: {
-                        from: 'user_relationship.offering_id',
-                        to: 'user_relationship.user_id'
+                        // modelClass: 'UserOffering',
+                        from: 'user_offering.offering_id',
+                        to: 'user_offering.user_id'
                     },
                     to: 'user.id'
                 }
@@ -42,14 +43,6 @@ class Offering extends Model {
                 join: {
                     from: 'offering.id',
                     to: 'actual_class.offering_id'
-                }
-            },
-            userRelationship: {
-                relation: Model.HasManyRelation,
-                modelClass: __dirname + '/UserRelationship',
-                join: {
-                    from: 'offering.id',
-                    to: 'user_relationship.offering_id'
                 }
             }
         }
