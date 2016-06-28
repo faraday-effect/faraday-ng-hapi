@@ -25,7 +25,7 @@ class UserRelationship extends Model {
                 }
             },
             relationshipType: {
-                relation: Model.BelongsToOneRelation,
+                relation: Model.HasOneRelation,
                 modelClass: __dirname + '/RelationshipType',
                 join: {
                     from: 'user_relationship.relationship_type_id',

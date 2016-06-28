@@ -4,6 +4,7 @@ const Joi = require('joi');
 const Section = require('../models/Section');
 const ActualClass = require('../models/ActualClass');
 const Attendance = require('../models/Attendance');
+const User = require('../models/User');
 const attendance_code_length = 6;
 
 exports.register = function (server, options, next) {
@@ -41,7 +42,7 @@ exports.register = function (server, options, next) {
                                             .then((alreadyRegisteredAttendanceRecord) => {
                                                 //check to see if they are already listed as attending class today
                                                 if (alreadyRegisteredAttendanceRecord != null) {
-                                                    return reply(Boom.badRequest('You already are listed as present for this class!', alreadyRegisteredAttendanceRecord));
+                                                    return reply(Boom.badRequest('You already are listed as present for this class!'));
                                                 } else {
                                                     //insert the attendance record with a time stamp
                                                     Attendance
@@ -79,6 +80,72 @@ exports.register = function (server, options, next) {
                 },
                 payload: {
                     code: Joi.string().length(attendance_code_length).required()
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'DELETE',
+        path: '/sections/{section_id}/attendance',
+        handler: function (request, reply) {
+            //Get the section and sequence information
+            Section
+                .query()
+                .where('id', request.params.section_id)
+                .eager('sequence')
+                .first()
+                .then((section) => {
+                    //handle error case if section is not valid
+                    if (section != null) {
+                        ActualClass
+                            .query()
+                            //find the actual class for today after the professor has started class
+                            .where('sequence_id', section.sequence.id)
+                            .andWhere('stop_time', null)
+                            .first()
+                            .then((actual_class) => {
+                                //handle the case to make sure the professor has started class
+                                if (actual_class != null) {
+                                    //Load attendance object for current_user using today's actual_class_id
+                                    Attendance
+                                        .query()
+                                        .where('actual_class_id', actual_class.id)
+                                        .andWhere('user_id', request.auth.credentials.id)
+                                        .first()
+                                        .then((alreadyRegisteredAttendanceRecord) => {
+                                            //check to see if they are already listed as attending class today
+                                            if (alreadyRegisteredAttendanceRecord == null) {
+                                                return reply(Boom.badRequest('You are not marked as present for this class!'));
+                                            } else {
+                                                //insert the attendance record with a time stamp
+                                                Attendance
+                                                    .query()
+                                                    .patchAndFetchById(alreadyRegisteredAttendanceRecord.id, {
+                                                        signed_out: new Date()
+                                                    })
+                                                    .then((attendanceEntry) => {
+                                                        reply(attendanceEntry);
+                                                    });
+                                            }
+                                        });
+                                } else {
+                                    reply(Boom.badRequest('Class has already ended!'))
+                                }
+                            });
+                    } else {
+                        reply(Boom.notFound('Section ID ' + request.params.section_id + ' was not found!'));
+                    }
+                })
+                .catch((err) => {
+                    return reply(Boom.badImplementation(err));
+                });
+        },
+        config: {
+            notes: 'Sets the student\'s signed_out time in their attendance record',
+            validate: {
+                params: {
+                    section_id: Joi.number().positive().integer()
                 }
             }
         }
@@ -143,66 +210,160 @@ exports.register = function (server, options, next) {
     });
 
     server.route({
-        method: 'DELETE',
-        path: '/sections/{section_id}/attendance',
+        method: 'POST',
+        path: '/sections/{section_id}/users/{user_id}/attendance',
         handler: function (request, reply) {
-            //Get the section and sequence information
-            Section
+            User
                 .query()
-                .where('id', request.params.section_id)
-                .eager('sequence')
+                .where('id', request.params.user_id)
                 .first()
-                .then((section) => {
-                    //handle error case if section is not valid
-                    if (section != null) {
-                        ActualClass
+                .then((user) => {
+                    if (!user){
+                       reply(Boom.notFound(`User ID ${request.params.user_id} was not found!`));
+                    } else {
+                        Section
                             .query()
-                            //find the actual class for today after the professor has started class
-                            .where('sequence_id', section.sequence.id)
-                            .andWhere('stop_time', null)
+                            .where('id', request.params.section_id)
+                            .eager('sequence')
                             .first()
-                            .then((actual_class) => {
-                                //handle the case to make sure the professor has started class
-                                if (actual_class != null) {
-                                    //Load attendance object for current_user using today's actual_class_id
-                                    Attendance
+                            .then((section) => {
+                                //handle error case if section is not valid
+                                if (section != null) {
+                                    ActualClass
                                         .query()
-                                        .where('actual_class_id', actual_class.id)
-                                        .andWhere('user_id', request.auth.credentials.id)
+                                        //find the actual class for today after the professor has started class
+                                        .where('sequence_id', section.sequence.id)
+                                        .andWhere('stop_time', null)
                                         .first()
-                                        .then((alreadyRegisteredAttendanceRecord) => {
-                                            //check to see if they are already listed as attending class today
-                                            if (alreadyRegisteredAttendanceRecord == null) {
-                                                return reply(Boom.badRequest('You are not marked as present for this class!', alreadyRegisteredAttendanceRecord));
-                                            } else {
-                                                //insert the attendance record with a time stamp
+                                        .then((actual_class) => {
+                                            //handle the case to make sure the professor has started class
+                                            if (actual_class != null) {
+                                                //Load attendance object for current_user using today's actual_class_id
                                                 Attendance
                                                     .query()
-                                                    .patchAndFetchById(alreadyRegisteredAttendanceRecord.id, {
-                                                        signed_out: new Date()
-                                                    })
-                                                    .then((attendanceEntry) => {
-                                                        reply(attendanceEntry);
+                                                    .where('actual_class_id', actual_class.id)
+                                                    .andWhere('user_id', request.params.user_id)
+                                                    .first()
+                                                    .then((alreadyRegisteredAttendanceRecord) => {
+                                                        //check to see if they are already listed as attending class today
+                                                        if (alreadyRegisteredAttendanceRecord != null) {
+                                                            return reply(Boom.badRequest(request.params.user_id + ' is already listed as present for this class!'));
+                                                        } else {
+                                                            //insert the attendance record with a time stamp
+                                                            Attendance
+                                                                .query()
+                                                                .insert({
+                                                                    signed_in: new Date(),
+                                                                    user_id: request.params.user_id,
+                                                                    actual_class_id: actual_class.id
+                                                                })
+                                                                .then((attendanceEntry) => {
+                                                                    reply(attendanceEntry);
+                                                                });
+                                                        }
                                                     });
+                                            } else {
+                                                reply(Boom.badRequest('The professor has not started class yet!'))
                                             }
                                         });
                                 } else {
-                                    reply(Boom.badRequest('Class has already ended!'))
+                                    reply(Boom.notFound('Section ID ' + request.params.section_id + ' was not found!'));
                                 }
+                            })
+                            .catch((err) => {
+                                return reply(Boom.badImplementation(err));
                             });
-                    } else {
-                        reply(Boom.notFound('Section ID ' + request.params.section_id + ' was not found!'));
+
                     }
-                })
-                .catch((err) => {
-                    return reply(Boom.badImplementation(err));
                 });
+
         },
         config: {
-            notes: 'Sets the student\'s signed_out time in their attendance record',
+            notes: 'Marks the user_id as present once the class has begun',
             validate: {
                 params: {
-                    section_id: Joi.number().positive().integer()
+                    section_id: Joi.number().positive().integer(),
+                    user_id: Joi.number().positive().integer()
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'DELETE',
+        path: '/sections/{section_id}/users/{user_id}/attendance',
+        handler: function (request, reply) {
+            User
+                .query()
+                .where('id', request.params.user_id)
+                .first()
+                .then((user) => {
+                    if (!user){
+                        reply(Boom.notFound(`User ID ${request.params.user_id} was not found!`));
+                    } else {
+                        //Get the section and sequence information
+                        Section
+                            .query()
+                            .where('id', request.params.section_id)
+                            .eager('sequence')
+                            .first()
+                            .then((section) => {
+                                //handle error case if section is not valid
+                                if (section != null) {
+                                    ActualClass
+                                        .query()
+                                        //find the actual class for today after the professor has started class
+                                        .where('sequence_id', section.sequence.id)
+                                        .andWhere('stop_time', null)
+                                        .first()
+                                        .then((actual_class) => {
+                                            //handle the case to make sure the professor has started class
+                                            if (actual_class != null) {
+                                                //Load attendance object for current_user using today's actual_class_id
+                                                Attendance
+                                                    .query()
+                                                    .where('actual_class_id', actual_class.id)
+                                                    .andWhere('user_id', request.params.user_id)
+                                                    .first()
+                                                    .then((alreadyRegisteredAttendanceRecord) => {
+                                                        //check to see if they are already listed as attending class today
+                                                        if (!alreadyRegisteredAttendanceRecord) {
+                                                            console.log(alreadyRegisteredAttendanceRecord);
+                                                            return reply(Boom.badRequest(`${request.params.user_id} is not marked as present for this class!`));
+                                                        } else {
+                                                            //insert the attendance record with a time stamp
+                                                            Attendance
+                                                                .query()
+                                                                .patchAndFetchById(alreadyRegisteredAttendanceRecord.id, {
+                                                                    signed_out: new Date()
+                                                                })
+                                                                .then((attendanceEntry) => {
+                                                                    reply(attendanceEntry);
+                                                                });
+                                                        }
+                                                    });
+                                            } else {
+                                                reply(Boom.badRequest('Class has already ended!'))
+                                            }
+                                        });
+                                } else {
+                                    reply(Boom.notFound('Section ID ' + request.params.section_id + ' was not found!'));
+                                }
+                            })
+                            .catch((err) => {
+                                return reply(Boom.badImplementation(err));
+                            });
+                    }
+                });
+
+
+        },
+        config: {
+            notes: 'Sets the user_id\'s signed_out time in their attendance record',
+            validate: {
+                params: {
+                    section_id: Joi.number().positive().integer(),
+                    user_id: Joi.number().positive().integer()
                 }
             }
         }
@@ -315,4 +476,4 @@ exports.register = function (server, options, next) {
     next();
 };
 
-exports.register.attributes = { name: 'attendance', version: '0.0.2' };
+exports.register.attributes = { name: 'attendance', version: '0.0.3' };

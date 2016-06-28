@@ -21,8 +21,9 @@ lab.experiment('/Department endpoint', () => {
     lab.beforeEach(done => {
 
         return Promise.all([
-            db.knex.raw('TRUNCATE public.department CASCADE'),
-            db.knex.raw('TRUNCATE public.prefix CASCADE'),
+            db.knex.raw('TRUNCATE public.department CASCADE; ' + 
+            'TRUNCATE public.prefix CASCADE; '
+            )
         ])
             .then(results => {
                 return Promise.all([
