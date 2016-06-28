@@ -1,3 +1,6 @@
+sudo: required
+dist: trusty
+
 language: node_js
 
 node_js:
@@ -29,10 +32,6 @@ before_install:
   - sudo apt-get install gcc-5 g++-5
   - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 80 --slave /usr/bin/g++ g++ /usr/bin/g++-5
   - sudo update-alternatives --set gcc /usr/bin/gcc-5
-  # from http://blog.500tech.com/setting-up-travis-ci-to-run-tests-on-latest-google-chrome-version/
-  - sudo apt-get install -y libappindicator1 fonts-liberation
-  - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-  - sudo dpkg -i google-chrome*.deb
 
 #install:
 
