@@ -1,7 +1,7 @@
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
 const Boom = require('boom');
-const User = require('../models/User')
+const User = require('../models/User');
 var uuid = 1;
 
 exports.register = function (server, options, next) {
@@ -11,7 +11,7 @@ exports.register = function (server, options, next) {
     server.app.cache = cache;
 
     //defaults to set authentication on all routes
-    server.auth.strategy('session', 'cookie', {
+    server.auth.strategy('basic', 'cookie', {
         cookie: 'faraday-cookie',                           //cookie name
         isSecure: false,                                    //set to true for production apps
         password: '01234567890123456789012345678912',       //cookie secret
@@ -34,7 +34,7 @@ exports.register = function (server, options, next) {
     });
 
     //secures all routes
-    server.auth.default({ strategy: 'session' });
+    server.auth.default({ strategy: 'basic' });
 
     server.route({
         method: 'POST',

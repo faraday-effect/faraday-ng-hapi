@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 import { init_test, expect, server, db } from './support';
 const lab = exports.lab = init_test();

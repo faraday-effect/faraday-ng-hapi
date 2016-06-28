@@ -12,7 +12,7 @@ module.exports = {
         seeds: {
             directory: './seeds/'
         },
-        debug: true,
+        debug: false,
         pool: {
             min: 0,
             max: 1

@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Faraday Quiz Responses",
+  "description": "Multiple-choice quiz responses",
+  "type": "object",
+  "properties": {
+    "submitted_by": {
+      "title": "User who submitted these responses",
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "User ID",
+          "type": "integer"
+        },
+        "email": {
+          "title": "E-mail address",
+          "type": "string"
+        },
+        "first_name": {
+          "title": "First name",
+          "type": "string"
+        },
+        "last_name": {
+          "title": "Last name",
+          "type": "string"
+        }
+      },
+      "required": ["id", "email", "first_name", "last_name"]
+    },
+    "submitted_at": {
+      "title": "Time submitted",
+      "type": "string"
+    },
+    "quiz_uuid": {
+      "title": "UUID of the associated quiz",
+      "type": "string"
+    },
+    "responses": {
+      "title": "User responses",
+      "type": "array",
+      "items": {
+        "title": "quiz response",
+        "type": "object",
+        "properties": {
+          "question_uuid": {
+            "title": "UUID of question",
+            "type": "string"
+          },
+          "response_id": {
+            "title": "ID of answer selected for question",
+            "type": "integer"
+          }
+        }
+      }
+    }
+  },
+  "required": ["submitted_by", "submitted_at", "quiz_uuid", "responses"]
+}

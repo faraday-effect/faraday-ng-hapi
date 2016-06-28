@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 import { init_test, expect, server, db } from './support';
 const lab = exports.lab = init_test();
@@ -19,7 +19,7 @@ lab.experiment('/attendance endpoint', () => {
             db.knex.raw('TRUNCATE public.user CASCADE'),
             db.knex.raw('TRUNCATE public.actual_class CASCADE'),
             db.knex.raw('TRUNCATE public.sequence CASCADE'),
-            db.knex.raw('TRUNCATE public.section CASCADE'),
+            db.knex.raw('TRUNCATE public.section CASCADE')
         ])
             .then(results => {
                 return Promise.all([
@@ -39,7 +39,7 @@ lab.experiment('/attendance endpoint', () => {
                         .insertWithRelated({
                             title: 'Section xyz',
                             reg_number: '123456',
-                            credit_hours: '3',
+                            credit_hours: 3,
                             sequence: {
                                 title: 'seq xyz',
                                 offering: {
@@ -84,7 +84,96 @@ lab.experiment('/attendance endpoint', () => {
     // No need to invoke done();  According to documentation,
     // you can return a promise instead.
 
-lab.test('Retrieves all the actualClasses', (done) => {
+    lab.test('Attendance status route is successful - returning true', (done) => {
+        server.inject(
+            {
+                method: 'POST',
+                credentials: user,
+                url: `/sections/${section.id}/attendance`,
+                payload: {
+                    code: '000000'
+                }
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(200);
+                const response = JSON.parse(res.payload);
+                expect(response.id).to.exist()
+                expect(response.user_id).to.equal(user.id);
+                expect(response.actual_class_id).to.equal(section.sequence.actualClass.id);
+                expect(response.id).to.exist();
+                expect(response.signed_in).to.exist();
+                expect(response.signed_out).to.not.exist();
+                server.inject(
+                    {
+                        method: 'GET',
+                        credentials: user,
+                        url: `/sections/${section.id}/attendance`
+                    },
+                    (res) => {
+                        expect(res.statusCode).to.equal(200);
+                        const response = JSON.parse(res.payload);
+                        expect(response.attending).to.be.true();
+                        expect(response.message).to.equal('You\'re already listed as attending for this class');
+                        done();
+                    });
+            });
+    });
+
+    lab.test('Error out on invalid section for attendance status route', (done) => {
+
+        server.inject(
+            {
+                method: 'GET',
+                credentials: user,
+                url: `/sections/100000000/attendance`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(404);
+                const response = JSON.parse(res.payload);
+                expect(response.message).to.equal('Section ID 100000000 was not found!');
+                done();
+            });
+    });
+
+    lab.test('Attendance route successful - returning false - not started class', (done) => {
+        ActualClass
+            .query()
+            .deleteById(section.sequence.actualClass.id)
+            .then(() => {
+                server.inject(
+                    {
+                        method: 'GET',
+                        credentials: user,
+                        url: `/sections/${section.id}/attendance`
+                    },
+                    (res) => {
+                        expect(res.statusCode).to.equal(200);
+                        const response = JSON.parse(res.payload);
+                        expect(response.attending).to.be.false();
+                        expect(response.message).to.equal('Your professor has not yet started class');
+                        done();
+                    });
+            });
+    });
+
+    lab.test('Attendance route successful - returning false - not attending class', (done) => {
+
+        server.inject(
+            {
+                method: 'GET',
+                credentials: user,
+                url: `/sections/${section.id}/attendance`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(200);
+                const response = JSON.parse(res.payload);
+                expect(response.attending).to.be.false();
+                expect(response.message).to.equal('You are not attending this class');
+                done();
+            });
+    });
+
+    lab.test('Retrieves all the actualClasses', (done) => {
 
         server.inject(
             {
@@ -104,7 +193,7 @@ lab.test('Retrieves all the actualClasses', (done) => {
     });
 
     lab.test('Errors out if the section has no classes', (done) => {
-         ActualClass
+        ActualClass
             .query()
             .deleteById(section.sequence.actualClass.id)
             .then(() => {
@@ -415,7 +504,7 @@ lab.test('Retrieves all the actualClasses', (done) => {
             });
     });
 
-        lab.test('Error out if you are not marked as present', (done) => {
+    lab.test('Error out if you are not marked as present', (done) => {
 
         server.inject(
             {

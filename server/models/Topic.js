@@ -2,24 +2,23 @@
 
 const db = require('../db');
 
-class Term extends db.Model {
+class Topic extends db.Model {
     static get tableName() {
-        return 'term';
+        return 'topic';
     }
 
     static get relationMappings() {
         return {
-            offerings: {
-                relation: db.Model.HasManyRelation,
+            offering: {
+                relation: db.Model.BelongsToOneRelation,
                 modelClass: __dirname + '/Offering',
                 join: {
-                    from: 'term.id',
-                    to: 'offering.term_id'
+                    from: 'topic.offering_id',
+                    to: 'offering.id'
                 }
             }
         }
     }
 }
 
-module.exports = Term;
-
+module.exports = Topic;
