@@ -26,7 +26,7 @@ before_install:
   - sudo apt-get install python-software-properties
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt-get update
-  - sudo apt-get install gcc-5 g++-5 google-chrome-stable
+  - sudo apt-get install gcc-5 g++-5
   - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 80 --slave /usr/bin/g++ g++ /usr/bin/g++-5
   - sudo update-alternatives --set gcc /usr/bin/gcc-5
   # from http://blog.500tech.com/setting-up-travis-ci-to-run-tests-on-latest-google-chrome-version/
