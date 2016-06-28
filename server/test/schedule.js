@@ -4,6 +4,8 @@ import { init_test, expect, server, db } from './support';
 const lab = exports.lab = init_test();
 
 const User = require('../models/User');
+const RelationshipType = require('../models/RelationshipType');
+const UserSection = require('../models/UserSection'); 
 
 lab.experiment('/Schedule endpoint', () => {
 
@@ -21,6 +23,18 @@ lab.experiment('/Schedule endpoint', () => {
                 'TRUNCATE public.term CASCADE; '
             )
         ])
+        .then(() => {
+            return RelationshipType
+            .query()
+            .insert(
+                {
+                    title: 'student',
+                    description: 'I am learning'
+                }
+            ).then((relationshipType) => {
+                studentRelationship = relationshipType;
+            })
+        })
             .then(results => {
                 return Promise.all([
                     User
@@ -33,11 +47,8 @@ lab.experiment('/Schedule endpoint', () => {
                             mobile_phone: '0123456789',
                             office_phone: '0123456789',
                             password: 'pass',
-                            relationshipType: {
-                                title: 'student',
-                                description: 'I am learning'
-                            },
                             section: {
+                                relationship_type_id: studentRelationship.id,
                                 title: 'Section xyz',
                                 reg_number: '123456',
                                 credit_hours: 3,
@@ -334,7 +345,7 @@ lab.experiment('/Schedule endpoint', () => {
     });
 
     lab.test('Successfully allows a user to self assign to a section as a student', (done) => {
-        UserRelationship
+        UserSection
             .query()
             .delete()
             .where('user_id', user.id)
@@ -392,7 +403,7 @@ lab.experiment('/Schedule endpoint', () => {
     });
 
     lab.test('Successfully allows a user to assign a user_id to a section as a student', (done) => {
-        UserRelationship
+        UserSection
             .query()
             .delete()
             .where('user_id', user.id)
@@ -434,7 +445,7 @@ lab.experiment('/Schedule endpoint', () => {
     });
 
     lab.test('Error out when a user_id does not exist when attempting to enroll a user_id to a section', (done) => {
-        UserRelationship
+        UserSection
             .query()
             .delete()
             .where('user_id', user.id)

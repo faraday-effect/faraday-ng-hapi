@@ -41,4 +41,4 @@ class UserOffering extends Model {
 
 }
 
-module.exports = UserSection;
+module.exports = UserOffering;
