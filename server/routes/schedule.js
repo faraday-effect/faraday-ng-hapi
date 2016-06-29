@@ -382,7 +382,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'GET',
-        path: '/sections/{section_id}/relationship/{relationship_type_id}',
+        path: '/sections/{section_id}/relationships/{relationship_type_id}',
         handler: function (request, reply) {
             //find the relationship type for a relationship_type_id
             RelationshipType
@@ -431,7 +431,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'GET',
-        path: '/offering/{offering_id}/relationship/{relationship_type_id}',
+        path: '/offering/{offering_id}/relationships/{relationship_type_id}',
         handler: function (request, reply) {
             //find the relationship type for a relationship_type_id
             RelationshipType
@@ -477,6 +477,41 @@ exports.register = function (server, options, next) {
             }
         }
     });
+
+    server.route({
+        method: 'GET',
+        path: '/relationships',
+        handler: function(request, reply) {
+            RelationshipType
+                .query()
+                .then((relationships) => {
+                    reply(relationships);
+                });
+        },
+        config: {
+            notes: 'gets all the relationship_types for sections/offerings from the database'
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/relationships/{relationship_type_id}',
+        handler: function(request, reply) {
+            RelationshipType
+                .query()
+                .findById(request.params.relationship_type_id)
+                .then((relationship) => {
+                    if(relationship)
+                        reply(relationship);
+                    else
+                        reply(Boom.notFound('Relationship Type ID ' + request.params.relationship_type_id + ' was not found!'))
+                });
+        },
+        config: {
+            notes: 'gets a specific relationship_type object for sections/offerings from the database'
+        }
+    });
+
     next();
 };
 

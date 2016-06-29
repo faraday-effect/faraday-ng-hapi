@@ -471,7 +471,7 @@ lab.experiment('/Schedule endpoint', () => {
             {
                 method: 'GET',
                 credentials: user,
-                url: `/sections/${user.section.id}/relationship/1000000000`
+                url: `/sections/${user.section.id}/relationships/1000000000`
             },
             (res) => {
                 expect(res.statusCode).to.equal(404);
@@ -487,7 +487,7 @@ lab.experiment('/Schedule endpoint', () => {
             {
                 method: 'GET',
                 credentials: user,
-                url: `/sections/1000000000/relationship/${studentRelationship.id}`
+                url: `/sections/1000000000/relationships/${studentRelationship.id}`
             },
             (res) => {
                 expect(res.statusCode).to.equal(404);
@@ -503,7 +503,7 @@ lab.experiment('/Schedule endpoint', () => {
             {
                 method: 'GET',
                 credentials: user,
-                url: `/sections/${user.section.id}/relationship/${studentRelationship.id}`
+                url: `/sections/${user.section.id}/relationships/${studentRelationship.id}`
             },
             (res) => {
                 expect(res.statusCode).to.equal(200);
@@ -517,5 +517,58 @@ lab.experiment('/Schedule endpoint', () => {
                 done();
             });
     });
+
+    lab.test('Retrieves all the relationship_types for sections/offerings succesfully', (done) => {
+        server.inject(
+            {
+                method: 'GET',
+                credentials: user,
+                url: `/relationships`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(200);
+                const response = JSON.parse(res.payload);
+                expect(response).to.be.instanceOf(Array);
+                expect(response).to.have.length(1);
+                expect(response[0].id).to.equal(studentRelationship.id);
+                expect(response[0].title).to.equal(studentRelationship.title);
+                expect(response[0].description).to.equal(studentRelationship.description);
+                done();
+            });
+    });
+
+    lab.test('Retrieves a specific relationship_type successfully', (done) => {
+        server.inject(
+            {
+                method: 'GET',
+                credentials: user,
+                url: `/relationships/${studentRelationship.id}`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(200);
+                const response = JSON.parse(res.payload);
+                expect(response.id).to.equal(studentRelationship.id);
+                expect(response.title).to.equal(studentRelationship.title);
+                expect(response.description).to.equal(studentRelationship.description);
+                done();
+            });
+    });
+
+    lab.test('Errors out when attempting to retrieve a relationship_type_id that does not exist', (done) => {
+        server.inject(
+            {
+                method: 'GET',
+                credentials: user,
+                url: `/relationships/1000000000`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(404);
+                const response = JSON.parse(res.payload);
+                expect(response.error).to.equal('Not Found');
+                expect(response.message).to.equal('Relationship Type ID 1000000000 was not found!');
+                done();
+            });
+    });
+
 
 });
