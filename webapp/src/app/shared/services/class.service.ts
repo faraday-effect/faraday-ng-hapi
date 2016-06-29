@@ -53,7 +53,7 @@ export class ClassService {
   constructor(
     private nesService: NesService,
     private http: Http) {
-      nesService.subscribe('/attendence', msg => {
+      nesService.subscribe('/attendance', msg => {
         this.attendHandler([msg.student_id]);
       });
   }

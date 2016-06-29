@@ -4,6 +4,7 @@ import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 import { LoginUrl, LogoutUrl } from './constants';
+import { NesService } from './nes.service';
 
 // DEBUG
 import { UsersUrl } from './constants';
@@ -15,6 +16,7 @@ export class UserService {
   public isLoggedIn: boolean = false;
 
   constructor(
+    private nesService: NesService,
     private http: Http) {
     this.getCurrentUser().subscribe();
   }
@@ -23,7 +25,7 @@ export class UserService {
     return this.http.get(LoginUrl)
       .map(response => response.json())
       .map(json => this.user = json)
-      .map(() => this.isLoggedIn = true)
+      .map(() => this.isLoggedIn = this.user.id != undefined)
       .catch(this.handleError);
   }
 
@@ -36,6 +38,7 @@ export class UserService {
                .map(response => response.json())
                .map(json => this.user = json)
                .map(() => this.isLoggedIn = true)
+               .map(() => this.nesService.startNes())
                .catch(this.handleError);
   }
 
