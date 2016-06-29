@@ -9,7 +9,6 @@ const UserSection = require('../models/UserSection');
 
 lab.experiment('/Schedule endpoint', () => {
 
-    var section = null;
     var studentRelationship = null;
     var user = null;
 
@@ -39,7 +38,7 @@ lab.experiment('/Schedule endpoint', () => {
                 return Promise.all([
                     User
                         .query()
-                        .insert({
+                        .insertWithRelated({
                             id: 1,
                             first_name: "Sammy",
                             last_name: "Morris",
@@ -91,8 +90,6 @@ lab.experiment('/Schedule endpoint', () => {
                         })
                 ]).then(results => {
                     user = results[0];
-                    studentRelationship = results[1];
-                    section = results[2];
                 });
             });
     });
@@ -112,10 +109,10 @@ lab.experiment('/Schedule endpoint', () => {
                 const response = JSON.parse(res.payload);
                 expect(response).to.be.instanceOf(Array);
                 expect(response).to.have.length(1);
-                expect(response[0].id).to.equal(section.term.id);
-                expect(response[0].name).to.equal(section.term.name);
-                expect(response[0].start_date.substring(0, 10)).to.equal(section.term.start_date);
-                expect(response[0].end_date.substring(0, 10)).to.equal(section.term.end_date);
+                expect(response[0].id).to.equal(user.section.term.id);
+                expect(response[0].name).to.equal(user.section.term.name);
+                expect(response[0].start_date.substring(0, 10)).to.equal(user.section.term.start_date);
+                expect(response[0].end_date.substring(0, 10)).to.equal(user.section.term.end_date);
                 done();
             });
     });
@@ -125,15 +122,15 @@ lab.experiment('/Schedule endpoint', () => {
             {
                 method: 'GET',
                 credentials: user,
-                url: `/terms/${section.term.id}`
+                url: `/terms/${user.section.term.id}`
             },
             (res) => {
                 expect(res.statusCode).to.equal(200);
                 const response = JSON.parse(res.payload);
-                expect(response.id).to.equal(section.term.id);
-                expect(response.name).to.equal(section.term.name);
-                expect(response.start_date.substring(0, 10)).to.equal(section.term.start_date);
-                expect(response.end_date.substring(0, 10)).to.equal(section.term.end_date);
+                expect(response.id).to.equal(user.section.term.id);
+                expect(response.name).to.equal(user.section.term.name);
+                expect(response.start_date.substring(0, 10)).to.equal(user.section.term.start_date);
+                expect(response.end_date.substring(0, 10)).to.equal(user.section.term.end_date);
                 done();
             });
     });
@@ -182,7 +179,7 @@ lab.experiment('/Schedule endpoint', () => {
             {
                 method: 'PUT',
                 credentials: user,
-                url: `/terms/${section.term.id}`,
+                url: `/terms/${user.section.term.id}`,
                 payload: {
                     name: 'edited term',
                     start_date: '2020-01-01',
@@ -193,7 +190,7 @@ lab.experiment('/Schedule endpoint', () => {
                 expect(res.statusCode).to.equal(200);
                 const response = JSON.parse(res.payload);
                 expect(response.id).to.exist();
-                expect(response.id).to.equal(section.term.id);
+                expect(response.id).to.equal(user.section.term.id);
                 expect(response.name).to.equal('edited term');
                 expect(response.start_date.substring(0, 10)).to.equal('2020-01-01');
                 expect(response.end_date.substring(0, 10)).to.equal('2020-05-15');
@@ -213,17 +210,17 @@ lab.experiment('/Schedule endpoint', () => {
                 const response = JSON.parse(res.payload);
                 expect(response).to.be.instanceOf(Array);
                 expect(response).to.have.length(1);
-                expect(response[0].id).to.equal(section.id);
-                expect(response[0].title).to.equal(section.title);
-                expect(response[0].reg_number).to.equal(section.reg_number);
-                expect(response[0].credit_hours).to.equal(section.credit_hours);
-                expect(response[0].sequence.offering.course.id).to.equal(section.course.id);
-                expect(response[0].sequence.offering.course.prefix.id).to.equal(section.course.prefix_id);
-                expect(response[0].sequence.offering.course.department.id).to.equal(section.course.department_id);
+                expect(response[0].id).to.equal(user.section.id);
+                expect(response[0].title).to.equal(user.section.title);
+                expect(response[0].reg_number).to.equal(user.section.reg_number);
+                expect(response[0].credit_hours).to.equal(user.section.credit_hours);
+                expect(response[0].sequence.offering.course.id).to.equal(user.section.course.id);
+                expect(response[0].sequence.offering.course.prefix.id).to.equal(user.section.course.prefix_id);
+                expect(response[0].sequence.offering.course.department.id).to.equal(user.section.course.department_id);
                 expect(response[0].sectionSchedule).to.be.instanceOf(Array);
                 expect(response[0].sectionSchedule).to.have.length(2);
-                expect(response[0].sectionSchedule[0].weekday).to.equal(section.sectionSchedule[0].weekday);
-                expect(response[0].userRelationship[0].relationshipType.title).to.equal(studentRelationship.title);
+                expect(response[0].sectionSchedule[0].weekday).to.equal(user.section.sectionSchedule[0].weekday);
+                expect(response[0].relationshipType[0].title).to.equal(studentRelationship.title);
                 done();
             });
     });
@@ -233,22 +230,22 @@ lab.experiment('/Schedule endpoint', () => {
             {
                 method: 'GET',
                 credentials: user,
-                url: `/sections/${section.id}`
+                url: `/sections/${user.section.id}`
             },
             (res) => {
                 expect(res.statusCode).to.equal(200);
                 const response = JSON.parse(res.payload);
-                expect(response.id).to.equal(section.id);
-                expect(response.title).to.equal(section.title);
-                expect(response.reg_number).to.equal(section.reg_number);
-                expect(response.credit_hours).to.equal(section.credit_hours);
-                expect(response.sequence.offering.course.id).to.equal(section.course.id);
-                expect(response.sequence.offering.course.prefix.id).to.equal(section.course.prefix_id);
-                expect(response.sequence.offering.course.department.id).to.equal(section.course.department_id);
+                expect(response.id).to.equal(user.section.id);
+                expect(response.title).to.equal(user.section.title);
+                expect(response.reg_number).to.equal(user.section.reg_number);
+                expect(response.credit_hours).to.equal(user.section.credit_hours);
+                expect(response.sequence.offering.course.id).to.equal(user.section.course.id);
+                expect(response.sequence.offering.course.prefix.id).to.equal(user.section.course.prefix_id);
+                expect(response.sequence.offering.course.department.id).to.equal(user.section.course.department_id);
                 expect(response.sectionSchedule).to.be.instanceOf(Array);
                 expect(response.sectionSchedule).to.have.length(2);
-                expect(response.sectionSchedule[0].weekday).to.equal(section.sectionSchedule[0].weekday);
-                expect(response.userRelationship[0].relationshipType.title).to.equal(studentRelationship.title);
+                expect(response.sectionSchedule[0].weekday).to.equal(user.section.sectionSchedule[0].weekday);
+                expect(response.relationshipType[0].title).to.equal(studentRelationship.title);
                 done();
             });
     });
@@ -279,9 +276,9 @@ lab.experiment('/Schedule endpoint', () => {
                     title: 'new section',
                     reg_number: '012345',
                     credit_hours: 1,
-                    term_id: section.term.id,
-                    course_id: section.course.id,
-                    sequence_id: section.sequence.id
+                    term_id: user.section.term.id,
+                    course_id: user.section.course.id,
+                    sequence_id: user.section.sequence.id
                 }
             },
             (res) => {
@@ -291,9 +288,9 @@ lab.experiment('/Schedule endpoint', () => {
                 expect(response.title).to.equal('new section');
                 expect(response.reg_number).to.equal('012345');
                 expect(response.credit_hours).to.equal(1);
-                expect(response.term_id).to.equal(section.term.id);
-                expect(response.course_id).to.equal(section.course.id);
-                expect(response.sequence_id).to.equal(section.sequence_id);
+                expect(response.term_id).to.equal(user.section.term.id);
+                expect(response.course_id).to.equal(user.section.course.id);
+                expect(response.sequence_id).to.equal(user.section.sequence_id);
                 done();
             });
     });
@@ -303,27 +300,27 @@ lab.experiment('/Schedule endpoint', () => {
             {
                 method: 'PUT',
                 credentials: user,
-                url: `/sections/${section.id}`,
+                url: `/sections/${user.section.id}`,
                 payload: {
                     title: 'edited section',
                     reg_number: '98765',
                     credit_hours: 1,
-                    term_id: section.term.id,
-                    course_id: section.course.id,
-                    sequence_id: section.sequence.id
+                    term_id: user.section.term.id,
+                    course_id: user.section.course.id,
+                    sequence_id: user.section.sequence.id
                 }
             },
             (res) => {
                 expect(res.statusCode).to.equal(200);
                 const response = JSON.parse(res.payload);
                 expect(response.id).to.exist();
-                expect(response.id).to.equal(section.id);
+                expect(response.id).to.equal(user.section.id);
                 expect(response.title).to.equal('edited section');
                 expect(response.reg_number).to.equal('98765');
                 expect(response.credit_hours).to.equal(1);
-                expect(response.term_id).to.equal(section.term.id);
-                expect(response.course_id).to.equal(section.course.id);
-                expect(response.sequence_id).to.equal(section.sequence_id);
+                expect(response.term_id).to.equal(user.section.term.id);
+                expect(response.course_id).to.equal(user.section.course.id);
+                expect(response.sequence_id).to.equal(user.section.sequence_id);
                 done();
             });
     });
@@ -333,7 +330,7 @@ lab.experiment('/Schedule endpoint', () => {
             {
                 method: 'POST',
                 credentials: user,
-                url: `/sections/${section.id}/enroll`
+                url: `/sections/${user.section.id}/enroll`
             },
             (res) => {
                 expect(res.statusCode).to.equal(400);
@@ -356,13 +353,13 @@ lab.experiment('/Schedule endpoint', () => {
                     {
                         method: 'POST',
                         credentials: user,
-                        url: `/sections/${section.id}/enroll`
+                        url: `/sections/${user.section.id}/enroll`
                     },
                     (res) => {
                         expect(res.statusCode).to.equal(200);
                         const response = JSON.parse(res.payload);
                         expect(response.id).to.exist();
-                        expect(response.id).to.equal(section.id);
+                        expect(response.id).to.equal(user.section.id);
                         expect(response.user_id).to.equal(user.id);
                         expect(response.relationship_type_id).to.equal(studentRelationship.id);
                         done();
@@ -391,7 +388,7 @@ lab.experiment('/Schedule endpoint', () => {
             {
                 method: 'POST',
                 credentials: user,
-                url: `/sections/${section.id}/users/${user.id}/enroll`
+                url: `/sections/${user.section.id}/users/${user.id}/enroll`
             },
             (res) => {
                 expect(res.statusCode).to.equal(400);
@@ -414,13 +411,13 @@ lab.experiment('/Schedule endpoint', () => {
                     {
                         method: 'POST',
                         credentials: user,
-                        url: `/sections/${section.id}/users/${user.id}/enroll`
+                        url: `/sections/${user.section.id}/users/${user.id}/enroll`
                     },
                     (res) => {
                         expect(res.statusCode).to.equal(200);
                         const response = JSON.parse(res.payload);
                         expect(response.id).to.exist();
-                        expect(response.id).to.equal(section.id);
+                        expect(response.id).to.equal(user.section.id);
                         expect(response.user_id).to.equal(user.id);
                         expect(response.relationship_type_id).to.equal(studentRelationship.id);
                         done();
@@ -456,7 +453,7 @@ lab.experiment('/Schedule endpoint', () => {
                     {
                         method: 'POST',
                         credentials: user,
-                        url: `/sections/${section.id}/users/1000000000/enroll`
+                        url: `/sections/${user.section.id}/users/1000000000/enroll`
                     },
                     (res) => {
                         console.log(response);
@@ -490,7 +487,7 @@ lab.experiment('/Schedule endpoint', () => {
             {
                 method: 'GET',
                 credentials: user,
-                url: `/sections/${section.id}/students`
+                url: `/sections/${user.section.id}/students`
             },
             (res) => {
                 expect(res.statusCode).to.equal(200);

@@ -131,9 +131,9 @@ exports.register = function (server, options, next) {
                     return user
                         .$relatedQuery('section')
                         // Load all the related data from the db into a JSON object
-                        .eager('[userRelationship.relationshipType, sectionSchedule, sequence.offering.course.[prefix, department]]')
-                        // Filter the userRelationship by user_id and section_id
-                        .filterEager('userRelationship', builder => {
+                        .eager('[relationshipType, sectionSchedule, sequence.offering.course.[prefix, department]]')
+                        // Filter the relationshipType by user_id and section_id
+                        .filterEager('relationshipType', builder => {
                             builder.where('user_id', request.auth.credentials.id)
                         });
                 }).then((user_sections) => {
@@ -156,8 +156,8 @@ exports.register = function (server, options, next) {
                 .query()
                 .where('id', request.params.section_id)
                 .first()
-                .eager('[userRelationship.relationshipType, sectionSchedule, sequence.offering.course.[prefix, department]]')
-                .filterEager('userRelationship', builder => {
+                .eager('[relationshipType, sectionSchedule, sequence.offering.course.[prefix, department]]')
+                .filterEager('relationshipType', builder => {
                     builder.where('user_id', request.auth.credentials.id)
                 })
                 .then((section) => {

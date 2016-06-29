@@ -52,6 +52,19 @@ class Section extends Model {
                     from: 'section.id',
                     to: 'section_schedule.section_id'
                 }
+            },
+            relationshipType: {
+                relation: Model.ManyToManyRelation, 
+                modelClass: __dirname + '/RelationshipType',
+                join: {
+                    from: 'section.id',
+                    through: {
+                        from: 'user_section.section_id',
+                        to: 'user_section.relationship_type_id',
+                        extra: ['user_id']
+                    },
+                    to: 'relationship_type.id'
+                }
             }
         }
     }
