@@ -1,5 +1,5 @@
 import { LoginPage } from './login.po';
-import { expectToMatch, getBody } from './utils';
+import { expectToMatch, getBody, login } from './utils';
 
 describe('login page', () => {
   let page: LoginPage, loginUrl;
@@ -17,15 +17,8 @@ describe('login page', () => {
     expectToMatch(body, /Password/);
   });
 
-  it('should accept valid credentials', () => {
-    let email = page.getEmail();
-    let password = page.getPassword();
-    let loginButton = page.getLoginButton();
-    email.clear();
-    password.clear();
-    email.sendKeys('test@example.com');
-    password.sendKeys('pass');
-    loginButton.click();
+  it('should redirect after login', () => {
+    login();
     expect(browser.getCurrentUrl()).not.toEqual(loginUrl);
   });
 

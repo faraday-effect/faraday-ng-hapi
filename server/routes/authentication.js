@@ -97,7 +97,7 @@ exports.register = function (server, options, next) {
                 reply({});
         },
         config: {
-            auth: false,
+            auth: {mode: 'optional'},
             notes: 'Returns the current user object without the password, null if not logged in'
         }
     });
@@ -122,4 +122,4 @@ exports.register = function (server, options, next) {
     next();
 };
 
-exports.register.attributes = { name: 'authentication', version: '0.0.4' };
+exports.register.attributes = { name: 'authentication', version: '0.0.5' };
