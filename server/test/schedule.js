@@ -5,7 +5,7 @@ const lab = exports.lab = init_test();
 
 const User = require('../models/User');
 const RelationshipType = require('../models/RelationshipType');
-const UserSection = require('../models/UserSection'); 
+const UserSection = require('../models/UserSection');
 
 lab.experiment('/Schedule endpoint', () => {
 
@@ -23,18 +23,18 @@ lab.experiment('/Schedule endpoint', () => {
                 'TRUNCATE public.relationship_type CASCADE; '
             )
         ])
-        .then(() => {
-            return RelationshipType
-            .query()
-            .insert(
-                {
-                    title: 'student',
-                    description: 'I am learning'
-                }
-            ).then((relationshipType) => {
-                studentRelationship = relationshipType;
+            .then(() => {
+                return RelationshipType
+                    .query()
+                    .insert(
+                    {
+                        title: 'student',
+                        description: 'I am learning'
+                    }
+                    ).then((relationshipType) => {
+                        studentRelationship = relationshipType;
+                    })
             })
-        })
             .then(results => {
                 return Promise.all([
                     User
