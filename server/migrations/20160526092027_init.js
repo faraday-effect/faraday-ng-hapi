@@ -45,7 +45,7 @@ exports.up = function (knex, Promise) {
             table.primary(['relationship_type_id', 'section_id', 'user_id']);
         }),
 
-        knex.schema.createTableIfNotExists('user_offering', function (table) {
+knex.schema.createTableIfNotExists('user_offering', function (table) {
             table.integer('offering_id')
                 .unsigned()
                 .notNullable()

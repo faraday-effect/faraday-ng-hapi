@@ -431,7 +431,7 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'GET',
-        path: '/offering/{offering_id}/relationships/{relationship_type_id}',
+        path: '/offerings/{offering_id}/relationships/{relationship_type_id}',
         handler: function (request, reply) {
             //find the relationship type for a relationship_type_id
             RelationshipType
@@ -449,7 +449,111 @@ exports.register = function (server, options, next) {
                             .then((section) => {
                                 //if it doesn't exist blow up
                                 if(!section)
-                                    return reply(Boom.notFound('Section ID ' + request.params.offering_id + ' was not found!'));
+                                    return reply(Boom.notFound('Offering ID ' + request.params.offering_id + ' was not found!'));
+                                else {
+                                    //get all the users related to the offering so only the users 
+                                    //select is required so that the password is not sent back
+                                    return section
+                                        .$relatedQuery('user')
+                                        .select('id', 'first_name', 'last_name', 'campus_id', 'email')
+                                        .where('relationship_type_id', request.params.relationship_type_id)
+                                }
+                            })
+                            .then((response) => {
+                                //prevents a double reply error when sending back the response
+                                if(response.isBoom != true)
+                                    reply(response);
+                            });
+                    }
+                });
+        },
+        config: {
+            notes: 'gets all the users for a given offering_id based on their relationship_type',
+            validate: {
+                params: {
+                    offering_id: Joi.number().positive().integer(),
+                    relationship_type_id: Joi.number().positive().integer()
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'POST',
+        path: '/sections/{section_id}/relationships/{relationship_type_id}',
+        handler: function (request, reply) {
+            //find the relationship type for a relationship_type_id
+            RelationshipType
+                .query()
+                .findById(request.params.relationship_type_id)
+                .then((relationship) => {
+                    //if it doesn't exist blow up
+                    if(!relationship)
+                        return reply(Boom.notFound('Relationship Type ID ' + request.params.relationship_type_id + ' was not found!'));
+                    else {
+                        //find the section for a section_id
+                        Section
+                            .query()
+                            .findById(request.params.section_id)
+                            .then((section) => {
+                                //if it doesn't exist blow up
+                                if(!section)
+                                    return reply(Boom.notFound('Section ID ' + request.params.section_id + ' was not found!'));
+                                else {
+                                    //get all the users related to the section so only the users 
+                                    //select is required so that the password is not sent back
+                                    return section
+                                        .$relatedQuery('user')
+                                        .relate({
+                                            id: request.auth.credentials.id,
+                                            relationship_type_id: request.params.relationship_type_id
+
+                                        })
+                                    .catch((err) => {
+                                        return reply(Boom.badRequest('You are already enrolled in section ID ' + request.params.section_id));
+                                    })
+                                }
+                            })
+                            .then((response) => {
+                                //prevents a double reply error when sending back the response
+                                if(response.isBoom != true)
+                                    reply(response);
+                            });
+                    }
+                });
+        },
+        config: {
+            notes: 'gets all the users for a given section_id based on their relationship_type',
+            validate: {
+                params: {
+                    section_id: Joi.number().positive().integer(),
+                    relationship_type_id: Joi.number().positive().integer()
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'POST',
+        path: '/offerings/{offering_id}/relationships/{relationship_type_id}',
+        handler: function (request, reply) {
+            //find the relationship type for a relationship_type_id
+            RelationshipType
+                .query()
+                .findById(request.params.relationship_type_id)
+                .then((relationship) => {
+                    //if it doesn't exist blow up
+                    if(!relationship)
+                        return reply(Boom.notFound('Relationship Type ID ' + request.params.relationship_type_id + ' was not found!'));
+                    else {
+                        //find the section for a offering_id
+                        Offering
+                            .query()
+                            .findById(request.params.offering_id)
+                            .then((section) => {
+                                //if it doesn't exist blow up
+                                if(!section)
+                                    return reply(Boom.notFound('Offering ID ' + request.params.offering_id + ' was not found!'));
                                 else {
                                     //get all the users related to the offering so only the users 
                                     //select is required so that the password is not sent back

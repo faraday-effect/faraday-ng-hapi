@@ -56,6 +56,8 @@ lab.experiment('/Schedule endpoint', () => {
                                     id: 1,
                                     title: 'seq xyz',
                                     offering: {
+                                        '#ref': 'this_offering',
+                                        title: 'Offering Title',
                                         course: {
                                             '#id': 'this_course',
                                             title: 'Course Title',
@@ -87,6 +89,10 @@ lab.experiment('/Schedule endpoint', () => {
                                         start_time: '4:00 PM',
                                         stop_time: '4:50 PM'
                                     }]
+                            },
+                            offering: {
+                                relationship_type_id: studentRelationship.id,
+                                '#id': 'this_offering'
                             }
                         })
                 ]).then(results => {
@@ -504,6 +510,59 @@ lab.experiment('/Schedule endpoint', () => {
                 method: 'GET',
                 credentials: user,
                 url: `/sections/${user.section.id}/relationships/${studentRelationship.id}`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(200);
+                const response = JSON.parse(res.payload);
+                expect(response).to.be.instanceOf(Array);
+                expect(response).to.have.length(1);
+                expect(response[0].id).to.equal(user.id);
+                expect(response[0].first_name).to.equal(user.first_name);
+                expect(response[0].last_name).to.equal(user.last_name);
+                expect(response[0].email).to.equal(user.email);
+                done();
+            });
+    });
+
+    lab.test('Error out when a section_id does not exist when attempting to retreive a list of users for a given offering', (done) => {
+        server.inject(
+            {
+                method: 'GET',
+                credentials: user,
+                url: `/offerings/${user.section.sequence.offering.id}/relationships/1000000000`
+            },
+            (res) => {
+                console.log(user.section.sequence.offering.id);
+                expect(res.statusCode).to.equal(404);
+                const response = JSON.parse(res.payload);
+                expect(response.error).to.equal('Not Found');
+                expect(response.message).to.equal('Relationship Type ID 1000000000 was not found!');
+                done();
+            });
+    });
+
+    lab.test('Error out when a relationship_type_id does not exist when attempting to retreive a list of users for a given offering', (done) => {
+        server.inject(
+            {
+                method: 'GET',
+                credentials: user,
+                url: `/offerings/1000000000/relationships/${studentRelationship.id}`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(404);
+                const response = JSON.parse(res.payload);
+                expect(response.error).to.equal('Not Found');
+                expect(response.message).to.equal('Offering ID 1000000000 was not found!');
+                done();
+            });
+    });
+
+    lab.test('Retrieve a list of students from the database for a given offering successfully', (done) => {
+        server.inject(
+            {
+                method: 'GET',
+                credentials: user,
+                url: `/offerings/${user.section.sequence.offering.id}/relationships/${studentRelationship.id}`
             },
             (res) => {
                 expect(res.statusCode).to.equal(200);

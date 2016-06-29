@@ -30,9 +30,9 @@ class Offering extends Model {
                 join: {
                     from: 'offering.id',
                     through: {
-                        // modelClass: 'UserOffering',
                         from: 'user_offering.offering_id',
-                        to: 'user_offering.user_id'
+                        to: 'user_offering.user_id',
+                        extra: ['relationship_type_id']
                     },
                     to: 'user.id'
                 }
