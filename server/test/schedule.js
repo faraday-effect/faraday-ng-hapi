@@ -40,7 +40,6 @@ lab.experiment('/Schedule endpoint', () => {
                     User
                         .query()
                         .insertWithRelated({
-                            id: 1,
                             first_name: "Sammy",
                             last_name: "Morris",
                             email: 'sam@example.com',
@@ -53,11 +52,9 @@ lab.experiment('/Schedule endpoint', () => {
                                 reg_number: '123456',
                                 credit_hours: 3,
                                 sequence: {
-                                    id: 1,
                                     title: 'seq xyz',
                                     offering: {
                                         '#ref': 'this_offering',
-                                        title: 'Offering Title',
                                         course: {
                                             '#id': 'this_course',
                                             title: 'Course Title',
@@ -91,6 +88,7 @@ lab.experiment('/Schedule endpoint', () => {
                                     }]
                             },
                             offering: {
+                                title: 'Offering Title',
                                 relationship_type_id: studentRelationship.id,
                                 '#id': 'this_offering'
                             }
