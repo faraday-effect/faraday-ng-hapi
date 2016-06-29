@@ -472,7 +472,23 @@ lab.experiment('/Schedule endpoint', () => {
             {
                 method: 'GET',
                 credentials: user,
-                url: `/sections/1000000000/students`
+                url: `/sections/${user.section.id}/relationship/1000000000`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(404);
+                const response = JSON.parse(res.payload);
+                expect(response.error).to.equal('Not Found');
+                expect(response.message).to.equal('Relationship Type ID 1000000000 was not found!');
+                done();
+            });
+    });
+
+    lab.test('Error out when a relationship_type_id does not exist when attempting to retreive a list of users for a given section', (done) => {
+        server.inject(
+            {
+                method: 'GET',
+                credentials: user,
+                url: `/sections/1000000000/relationship/${studentRelationship.id}`
             },
             (res) => {
                 expect(res.statusCode).to.equal(404);
@@ -488,7 +504,7 @@ lab.experiment('/Schedule endpoint', () => {
             {
                 method: 'GET',
                 credentials: user,
-                url: `/sections/${user.section.id}/students`
+                url: `/sections/${user.section.id}/relationship/${studentRelationship.id}`
             },
             (res) => {
                 expect(res.statusCode).to.equal(200);

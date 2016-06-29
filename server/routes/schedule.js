@@ -35,8 +35,7 @@ exports.register = function (server, options, next) {
         handler: function (request, reply) {
             Term
                 .query()
-                .where('id', request.params.term_id)
-                .first()
+                .findById(request.params.term_id)
                 .then((terms) => {
                     if (terms != null)
                         reply(terms);
@@ -126,8 +125,7 @@ exports.register = function (server, options, next) {
         handler: function (request, reply) {
             User
                 .query()
-                .where('id', request.auth.credentials.id)
-                .first()
+                .findById(request.auth.credentials.id)
                 .then((user) => {
                     return user
                         .$relatedQuery('section')
@@ -155,8 +153,7 @@ exports.register = function (server, options, next) {
         handler: function (request, reply) {
             Section
                 .query()
-                .where('id', request.params.section_id)
-                .first()
+                .findById(request.params.section_id)
                 .eager('[relationshipType, sectionSchedule, sequence.offering.course.[prefix, department]]')
                 .filterEager('relationshipType', builder => {
                     builder.where('user_id', request.auth.credentials.id)
@@ -173,78 +170,6 @@ exports.register = function (server, options, next) {
         },
         config: {
             notes: 'retrieves a given section and all related information from the database',
-            validate: {
-                params: {
-                    section_id: Joi.number().positive().integer()
-                }
-            }
-        }
-    });
-
-    server.route({
-        method: 'GET',
-        path: '/sections/{section_id}/instructors',
-        handler: function (request, reply) {
-            var sectionSeq = null;
-            RelationshipType
-                .query()
-                .where('title', 'instructor')
-                .first()
-                .then((rt) => {
-                    Section
-                        .query()
-                        .where('id', request.params.section_id)
-                        .eager('sequence')
-                        .first()
-                        .then((section) => {
-                            sectionSeq = section.sequence;
-                            return section
-                                .$relatedQuery('userRelationship')
-                                .pluck('user_id')
-                                .where('relationship_type_id', rt.id)
-                        })
-                        .then((output) => {
-                            if (output.length == 0) {
-                                Offering
-                                    .query()
-                                    .where('id', sectionSeq.offering_id)
-                                    .first()
-                                    .then((section) => {
-                                        sectionSeq = section.sequence;
-                                        return section
-                                            .$relatedQuery('userRelationship')
-                                            .pluck('user_id')
-                                            .where('relationship_type_id', rt.id)
-                                    })
-                                    .then((op) => {
-                                        User
-                                            .query()
-                                            .whereIn('id', op)
-                                            .then((users) => {
-                                                for (var i = 0; i < users.length; i++) {
-                                                    users[i].stripPassword();
-                                                }
-                                                reply(users);
-                                            });
-                                    });
-                                return;
-                            } else {
-                                User
-                                    .query()
-                                    .whereIn('id', output)
-                                    .then((users) => {
-                                        for (var i = 0; i < users.length; i++) {
-                                            users[i].stripPassword();
-                                        }
-                                        reply(users);
-                                    });
-                            }
-                        })
-                });
-
-        },
-        config: {
-            notes: 'retrieves the professors for a given section ID even if the professor is tied only to the offering',
             validate: {
                 params: {
                     section_id: Joi.number().positive().integer()
@@ -351,8 +276,7 @@ exports.register = function (server, options, next) {
                     //Get the user object based on the current_user credentials
                     User
                         .query()
-                        .where('id', request.auth.credentials.id)
-                        .first()
+                        .findById(request.auth.credentials.id)
                         .then((user) => {
                             //if they have a relationship already, error out, else make the relationship
                             //between section and the user ID with the relationshipType of student
@@ -415,8 +339,7 @@ exports.register = function (server, options, next) {
                     //Get the user object based on the current_user credentials
                     User
                         .query()
-                        .where('id', request.params.user_id)
-                        .first()
+                        .findById(request.params.user_id)
                         .then((user) => {
                             //if they have a relationship already, error out, else make the relationship
                             //between section and the user ID with the relationshipType of student
@@ -460,50 +383,97 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'GET',
-        path: '/sections/{section_id}/students',
+        path: '/sections/{section_id}/relationship/{relationship_type_id}',
         handler: function (request, reply) {
-            //create a response object
-            var response = [];
-            //get the section object
-            Section
+            //find the relationship type for a relationship_type_id
+            RelationshipType
                 .query()
-                .where('id', request.params.section_id)
-                .first()
-                .then((section) => {
-                    return section
-                        //Get the users and their relationship_type for the section object
-                        .$relatedQuery('user')
-                        .eager('relationshipType')
-                        .filterEager('relationshipType', builder => {
-                            //it still gets all users, but we only want relationshipType to be added if the user is a student
-                            builder.where('title', 'student'),
-                                builder.andWhere('section_id', request.params.section_id),
-                                builder.andWhere('offering_id', null)
-                        })
-                })
-                .then((output) => {
-                    //Format the response object
-                    for (var i = 0; i < output.length; i++) {
-                        //remove the password
-                        delete output[i]['password'];
-                        //if there is a relationship type, add it to the response object
-                        if (output[i].relationshipType[0]) {
-                            //remove the relationshipType JSON since this is only returning students
-                            delete output[i].relationshipType
-                            response.push(output[i]);
-                        }
+                .findById(request.params.relationship_type_id)
+                .then((relationship) => {
+                    //if it doesn't exist blow up
+                    if(!relationship)
+                        return reply(Boom.notFound('Relationship Type ID ' + request.params.relationship_type_id + ' was not found!'));
+                    else {
+                        //find the section for a section_id
+                        Section
+                            .query()
+                            .findById(request.params.section_id)
+                            .then((section) => {
+                                //if it doesn't exist blow up
+                                if(!section)
+                                    return reply(Boom.notFound('Section ID ' + request.params.section_id + ' was not found!'));
+                                else {
+                                    //get all the users related to the section so only the users 
+                                    //select is required so that the password is not sent back
+                                    return section
+                                        .$relatedQuery('user')
+                                        .select('first_name', 'last_name', 'campus_id', 'email')
+                                        .where('relationship_type_id', request.params.relationship_type_id)
+                                }
+                            })
+                            .then((response) => {
+                                //prevents a double reply error when sending back the response
+                                if(response.isBoom != true)
+                                    reply(response);
+                            });
                     }
-                    reply(response);
-                })
-                .catch((err) => {
-                    reply(Boom.notFound(`Section ID ${request.params.section_id} was not found!`));
                 });
         },
         config: {
-            notes: 'gets all the students for a given section_id',
+            notes: 'gets all the users for a given section_id based on their relationship_type',
             validate: {
                 params: {
-                    section_id: Joi.number().positive().integer()
+                    section_id: Joi.number().positive().integer(),
+                    relationship_type_id: Joi.number().positive().integer()
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/offering/{offering_id}/relationship/{relationship_type_id}',
+        handler: function (request, reply) {
+            //find the relationship type for a relationship_type_id
+            RelationshipType
+                .query()
+                .findById(request.params.relationship_type_id)
+                .then((relationship) => {
+                    //if it doesn't exist blow up
+                    if(!relationship)
+                        return reply(Boom.notFound('Relationship Type ID ' + request.params.relationship_type_id + ' was not found!'));
+                    else {
+                        //find the section for a offering_id
+                        Offering
+                            .query()
+                            .findById(request.params.offering_id)
+                            .then((section) => {
+                                //if it doesn't exist blow up
+                                if(!section)
+                                    return reply(Boom.notFound('Section ID ' + request.params.offering_id + ' was not found!'));
+                                else {
+                                    //get all the users related to the offering so only the users 
+                                    //select is required so that the password is not sent back
+                                    return section
+                                        .$relatedQuery('user')
+                                        .select('first_name', 'last_name', 'campus_id', 'email')
+                                        .where('relationship_type_id', request.params.relationship_type_id)
+                                }
+                            })
+                            .then((response) => {
+                                //prevents a double reply error when sending back the response
+                                if(response.isBoom != true)
+                                    reply(response);
+                            });
+                    }
+                });
+        },
+        config: {
+            notes: 'gets all the users for a given offering_id based on their relationship_type',
+            validate: {
+                params: {
+                    offering_id: Joi.number().positive().integer(),
+                    relationship_type_id: Joi.number().positive().integer()
                 }
             }
         }
