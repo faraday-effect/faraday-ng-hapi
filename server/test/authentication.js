@@ -166,13 +166,11 @@ lab.experiment('/login endpoint', () => {
     });
 
     lab.test('Checks the current user route to make sure it returns 401 if not logged in', (done) => {
-        var user = null;
 
         server.inject(
             {
                 method: 'GET',
                 url: '/login',
-                credentials: user
             },
             (res) => {
                 expect(res.statusCode).to.equal(200);
