@@ -457,7 +457,6 @@ lab.experiment('/Schedule endpoint', () => {
                         url: `/sections/${user.section.id}/users/1000000000/enroll`
                     },
                     (res) => {
-                        console.log(response);
                         expect(res.statusCode).to.equal(404);
                         const response = JSON.parse(res.payload);
                         expect(response.error).to.equal('Not Found');

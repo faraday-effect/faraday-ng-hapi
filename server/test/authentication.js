@@ -175,8 +175,9 @@ lab.experiment('/login endpoint', () => {
                 credentials: user
             },
             (res) => {
-                expect(res.statusCode).to.equal(401);
+                expect(res.statusCode).to.equal(200);
                 const response = JSON.parse(res.payload);
+                expect(response).to.equal({});
                 done();
             });
     });

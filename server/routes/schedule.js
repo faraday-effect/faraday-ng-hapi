@@ -280,7 +280,6 @@ exports.register = function (server, options, next) {
                         .then((user) => {
                             //if they have a relationship already, error out, else make the relationship
                             //between section and the user ID with the relationshipType of student
-                            console.log(!hasPreviousRelationship);
                             if (!hasPreviousRelationship) {
                                 return user
                                     .$relatedQuery('section')
@@ -407,7 +406,7 @@ exports.register = function (server, options, next) {
                                     //select is required so that the password is not sent back
                                     return section
                                         .$relatedQuery('user')
-                                        .select('first_name', 'last_name', 'campus_id', 'email')
+                                        .select('id', 'first_name', 'last_name', 'campus_id', 'email')
                                         .where('relationship_type_id', request.params.relationship_type_id)
                                 }
                             })
@@ -456,7 +455,7 @@ exports.register = function (server, options, next) {
                                     //select is required so that the password is not sent back
                                     return section
                                         .$relatedQuery('user')
-                                        .select('first_name', 'last_name', 'campus_id', 'email')
+                                        .select('id', 'first_name', 'last_name', 'campus_id', 'email')
                                         .where('relationship_type_id', request.params.relationship_type_id)
                                 }
                             })
