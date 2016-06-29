@@ -7,6 +7,7 @@ const User = require('../models/User');
 const Term = require('../models/Term');
 const RelationshipType = require('../models/RelationshipType');
 const Offering = require('../models/Offering');
+const UserSection = require('../models/UserSection');
 
 exports.register = function (server, options, next) {
 
@@ -331,14 +332,14 @@ exports.register = function (server, options, next) {
         handler: function (request, reply) {
             var hasPreviousRelationship = null;
             //Get any of the previous relationships
-            UserRelationship
+            UserSection
                 .query()
-                .where('section_id', request.params.section_id)
-                .andWhere('user_id', request.auth.credentials.id)
+                .where('user_id', request.auth.credentials.id)
+                .andWhere('section_id', request.params.section_id)
                 .first()
-                .then((userRelationship) => {
+                .then((userSection) => {
                     //set previous relationship to a larger var scope
-                    hasPreviousRelationship = userRelationship;
+                    hasPreviousRelationship = userSection;
                 });
 
             //Get the relationship type object for a student
@@ -355,6 +356,7 @@ exports.register = function (server, options, next) {
                         .then((user) => {
                             //if they have a relationship already, error out, else make the relationship
                             //between section and the user ID with the relationshipType of student
+                            console.log(!hasPreviousRelationship);
                             if (!hasPreviousRelationship) {
                                 return user
                                     .$relatedQuery('section')
@@ -394,14 +396,14 @@ exports.register = function (server, options, next) {
         handler: function (request, reply) {
             var hasPreviousRelationship = null;
             //Get any of the previous relationships
-            UserRelationship
+            UserSection
                 .query()
                 .where('section_id', request.params.section_id)
                 .andWhere('user_id', request.params.user_id)
                 .first()
-                .then((userRelationship) => {
+                .then((userSection) => {
                     //set previous relationship to a larger var scope
-                    hasPreviousRelationship = userRelationship;
+                    hasPreviousRelationship = userSection;
                 });
 
             //Get the relationship type object for a student
@@ -438,7 +440,7 @@ exports.register = function (server, options, next) {
                         })
                         .catch((err) => {
                             //check to see if the error was caused by an invalid section_id or user_id
-                            if (err.constraint == 'user_relationship_section_id_foreign')
+                            if (err.constraint == 'user_section_section_id_foreign')
                                 reply(Boom.notFound(`Section ID ${request.params.section_id} was not found!`));
                             else
                                 reply(Boom.notFound(`User ID ${request.params.user_id} was not found!`))
@@ -509,4 +511,4 @@ exports.register = function (server, options, next) {
     next();
 };
 
-exports.register.attributes = { name: 'schedule', version: '0.0.6' };
+exports.register.attributes = { name: 'schedule', version: '0.0.7' };

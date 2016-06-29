@@ -14,9 +14,9 @@ class Section extends Model {
                 join: {
                     from: 'section.id',
                     through: {
-                        // modelClass: 'UserSection',
                         from: 'user_section.section_id',
-                        to: 'user_section.user_id'
+                        to: 'user_section.user_id',
+                        extra: ['relationship_type_id'] 
                     },
                     to: 'user.id'
                 }

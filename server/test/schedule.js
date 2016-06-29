@@ -19,7 +19,8 @@ lab.experiment('/Schedule endpoint', () => {
                 'TRUNCATE public.department CASCADE; ' +
                 'TRUNCATE public.prefix CASCADE; ' +
                 'TRUNCATE public.user CASCADE; ' +
-                'TRUNCATE public.term CASCADE; '
+                'TRUNCATE public.term CASCADE; ' +
+                'TRUNCATE public.relationship_type CASCADE; '
             )
         ])
         .then(() => {
@@ -336,7 +337,7 @@ lab.experiment('/Schedule endpoint', () => {
                 expect(res.statusCode).to.equal(400);
                 const response = JSON.parse(res.payload);
                 expect(response.error).to.equal('Bad Request');
-                expect(response.message).to.equal(`You are already enrolled in section ID ${section.id}`);
+                expect(response.message).to.equal(`You are already enrolled in section ID ${user.section.id}`);
                 done();
             });
     });
@@ -346,7 +347,7 @@ lab.experiment('/Schedule endpoint', () => {
             .query()
             .delete()
             .where('user_id', user.id)
-            .andWhere('section_id', section.id)
+            .andWhere('section_id', user.section.id)
             .andWhere('relationship_type_id', studentRelationship.id)
             .then((numDeleted) => {
                 server.inject(
@@ -394,7 +395,7 @@ lab.experiment('/Schedule endpoint', () => {
                 expect(res.statusCode).to.equal(400);
                 const response = JSON.parse(res.payload);
                 expect(response.error).to.equal('Bad Request');
-                expect(response.message).to.equal(`You are already enrolled in section ID ${section.id}`);
+                expect(response.message).to.equal(`You are already enrolled in section ID ${user.section.id}`);
                 done();
             });
     });
@@ -404,7 +405,7 @@ lab.experiment('/Schedule endpoint', () => {
             .query()
             .delete()
             .where('user_id', user.id)
-            .andWhere('section_id', section.id)
+            .andWhere('section_id', user.section.id)
             .andWhere('relationship_type_id', studentRelationship.id)
             .then((numDeleted) => {
                 server.inject(
@@ -446,7 +447,7 @@ lab.experiment('/Schedule endpoint', () => {
             .query()
             .delete()
             .where('user_id', user.id)
-            .andWhere('section_id', section.id)
+            .andWhere('section_id', user.section.id)
             .andWhere('relationship_type_id', studentRelationship.id)
             .then((numDeleted) => {
                 server.inject(
