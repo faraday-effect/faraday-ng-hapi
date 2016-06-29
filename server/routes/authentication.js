@@ -91,10 +91,14 @@ exports.register = function (server, options, next) {
         path: '/login',
         handler: function (request, reply) {
             var user = request.auth.credentials;
-            reply(user);
+            if(user)
+                reply(user);
+            else
+                reply({});
         },
         config: {
-            notes: 'Returns the current user object without the password'
+            auth: {mode: 'optional'},
+            notes: 'Returns the current user object without the password, null if not logged in'
         }
     });
 
@@ -118,4 +122,4 @@ exports.register = function (server, options, next) {
     next();
 };
 
-exports.register.attributes = { name: 'authentication', version: '0.0.4' };
+exports.register.attributes = { name: 'authentication', version: '0.0.5' };

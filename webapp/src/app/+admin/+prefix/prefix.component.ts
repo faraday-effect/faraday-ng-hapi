@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { Prefix, PrefixService } from 'app/shared';
 
@@ -16,19 +16,20 @@ export class PrefixComponent {
   errorMessage: string;
 
   constructor(
+    private route: ActivatedRoute,
     private prefixService: PrefixService) {
   }
 
-  /*
-  routerOnActivate(curr: RouteSegment) {
-    let id = +curr.getParam('id');
-    this.prefixService.getPrefix(id)
-      .subscribe(
-        prefix => this.prefix = prefix,
-        error =>  this.errorMessage = <any>error
-      );
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      let id = +params['id'];
+      this.prefixService.getPrefix(id)
+        .subscribe(
+          prefix => this.prefix = prefix,
+          error =>  this.errorMessage = <any>error
+        );
+    });
   }
-  */
 
 }
 

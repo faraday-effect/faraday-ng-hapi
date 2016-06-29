@@ -1,11 +1,7 @@
 import { Component } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 
-import { LoginComponent } from './+login';
-import { AdminComponent } from './+admin';
-import { ParticipantComponent } from './+participant';
-import { PodiumComponent } from './+podium';
-import { ProjectorComponent } from './+projector';
+import { ToolbarComponent } from './toolbar';
 import * as ServicesModule from 'app/shared/services';
 
 let Services = Object.keys(ServicesModule).map(k => ServicesModule[k]);
@@ -15,14 +11,12 @@ let Services = Object.keys(ServicesModule).map(k => ServicesModule[k]);
   selector: 'faraday-app',
   templateUrl: 'faraday.component.html',
   styleUrls: ['faraday.component.css'],
-  directives: [ROUTER_DIRECTIVES],
+  directives: [ROUTER_DIRECTIVES, ToolbarComponent],
   providers: [
     Services,
   ]
 })
 export class FaradayAppComponent {
-
-  debug = true;
 
   constructor() {}
 

@@ -2,8 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 //import {Observable} from 'rxjs/Observable';
-//import 'rxjs/add/operator/map';
-
 
 import {
   Course,

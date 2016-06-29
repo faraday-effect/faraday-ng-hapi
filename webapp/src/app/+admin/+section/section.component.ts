@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { Section, ClassService } from 'app/shared';
 
@@ -15,19 +15,20 @@ export class SectionComponent {
   errorMessage: string;
 
   constructor(
+    private route: ActivatedRoute,
     private classService: ClassService) {
   }
 
-  /*
-  routerOnActivate(curr: RouteSegment) {
-   let id = +curr.getParam('id');
-   this.classService.getSection(id)
-     .subscribe(
-       section => this.section = section,
-       error =>  this.errorMessage = <any>error
-     );
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      let id = +params['id'];
+      this.classService.getSection(id)
+        .subscribe(
+          section => this.section = section,
+          error =>  this.errorMessage = <any>error
+        );
+    });
   }
-  */
 
 }
 

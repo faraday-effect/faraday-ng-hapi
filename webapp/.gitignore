@@ -18,6 +18,7 @@
 /libpeerconnection.log
 npm-debug.log
 testem.log
+phantomjsdriver.log
 /typings
 
 # e2e

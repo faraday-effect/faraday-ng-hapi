@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { Department, DepartmentService } from 'app/shared';
 
@@ -16,18 +16,19 @@ export class DepartmentComponent {
   errorMessage: string;
 
   constructor(
+    private route: ActivatedRoute,
     private departmentService: DepartmentService) {
   }
 
-  /*
-  routerOnActivate(curr: RouteSegment) {
-    let id = +curr.getParam('id');
-    this.departmentService.getDepartment(id)
-      .subscribe(
-        department => this.department = department,
-        error =>  this.errorMessage = <any>error
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      let id = +params['id'];
+      this.departmentService.getDepartment(id)
+        .subscribe(
+          department => this.department = department,
+          error =>  this.errorMessage = <any>error
       );
+    });
   }
-  */
 
 }

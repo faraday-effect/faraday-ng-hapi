@@ -123,8 +123,8 @@ exports.seed = function (knex, Promise) {
                         }
                     },
                     {
-                        first_name: 'test',
-                        last_name: 'test',
+                        first_name: 'first',
+                        last_name: 'last',
                         email: 'test@example.com',
                         campus_id: '006694321',
                         //hash of 'pass'
