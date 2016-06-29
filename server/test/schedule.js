@@ -6,6 +6,7 @@ const lab = exports.lab = init_test();
 const User = require('../models/User');
 const RelationshipType = require('../models/RelationshipType');
 const UserSection = require('../models/UserSection');
+const UserOffering = require('../models/UserOffering');
 
 lab.experiment('/Schedule endpoint', () => {
 
@@ -522,6 +523,152 @@ lab.experiment('/Schedule endpoint', () => {
             });
     });
 
+    lab.test('Error out when a section_id does not exist when attempting associate a user with a section', (done) => {
+        server.inject(
+            {
+                method: 'POST',
+                credentials: user,
+                url: `/sections/${user.section.id}/relationships/1000000000`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(404);
+                const response = JSON.parse(res.payload);
+                expect(response.error).to.equal('Not Found');
+                expect(response.message).to.equal('Relationship Type ID 1000000000 was not found!');
+                done();
+            });
+    });
+
+    lab.test('Error out when a relationship_type_id does not exist when attempting associate a user with a section', (done) => {
+        server.inject(
+            {
+                method: 'POST',
+                credentials: user,
+                url: `/sections/1000000000/relationships/${studentRelationship.id}`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(404);
+                const response = JSON.parse(res.payload);
+                expect(response.error).to.equal('Not Found');
+                expect(response.message).to.equal('Section ID 1000000000 was not found!');
+                done();
+            });
+    });
+
+    lab.test('Error out when a user has already been \'enrolled\' in a section when attempting associate a user with a section', (done) => {
+        server.inject(
+            {
+                method: 'POST',
+                credentials: user,
+                url: `/sections/${user.section.id}/relationships/${studentRelationship.id}`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(400);
+                const response = JSON.parse(res.payload);
+                expect(response.error).to.equal('Bad Request');
+                expect(response.message).to.equal('You are already enrolled in section ID ' + user.section.id);
+                done();
+            });
+    });
+
+    lab.test('associates a user with a section and relationship_type successfully', (done) => {
+        UserSection
+            .query()
+            .delete()
+            .where('user_id', user.id)
+            .andWhere('section_id', user.section.id)
+            .andWhere('relationship_type_id', studentRelationship.id)
+            .then((numDeleted) => {
+                server.inject(
+                    {
+                        method: 'POST',
+                        credentials: user,
+                        url: `/sections/${user.section.id}/relationships/${studentRelationship.id}`
+                    },
+                    (res) => {
+                        expect(res.statusCode).to.equal(200);
+                        const response = JSON.parse(res.payload);
+                        expect(response.relationship_type_id).to.equal(studentRelationship.id);
+                        expect(response.section_id).to.equal(user.section.id);
+                        expect(response.id).to.equal(user.id);
+                        done();
+                    });
+            });
+    });
+
+    lab.test('Error out when a offering_id does not exist when attempting associate a user with a offering', (done) => {
+        server.inject(
+            {
+                method: 'POST',
+                credentials: user,
+                url: `/offerings/${user.section.sequence.offering.id}/relationships/1000000000`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(404);
+                const response = JSON.parse(res.payload);
+                expect(response.error).to.equal('Not Found');
+                expect(response.message).to.equal('Relationship Type ID 1000000000 was not found!');
+                done();
+            });
+    });
+
+    lab.test('Error out when a relationship_type_id does not exist when attempting associate a user with a offering', (done) => {
+        server.inject(
+            {
+                method: 'POST',
+                credentials: user,
+                url: `/offerings/1000000000/relationships/${studentRelationship.id}`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(404);
+                const response = JSON.parse(res.payload);
+                expect(response.error).to.equal('Not Found');
+                expect(response.message).to.equal('Offering ID 1000000000 was not found!');
+                done();
+            });
+    });
+
+    lab.test('Error out when a user has already been \'enrolled\' in an offering when attempting associate a user with a section', (done) => {
+        server.inject(
+            {
+                method: 'POST',
+                credentials: user,
+                url: `/offerings/${user.section.sequence.offering.id}/relationships/${studentRelationship.id}`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(400);
+                const response = JSON.parse(res.payload);
+                expect(response.error).to.equal('Bad Request');
+                expect(response.message).to.equal('You are already enrolled in offering ID ' + user.section.sequence.offering.id);
+                done();
+            });
+    });
+
+    lab.test('associates a user with an offering and relationship_type successfully', (done) => {
+        UserOffering
+            .query()
+            .delete()
+            .where('user_id', user.id)
+            .andWhere('offering_id', user.section.sequence.offering.id)
+            .andWhere('relationship_type_id', studentRelationship.id)
+            .then((numDeleted) => {
+                server.inject(
+                    {
+                        method: 'POST',
+                        credentials: user,
+                        url: `/offerings/${user.section.sequence.offering.id}/relationships/${studentRelationship.id}`
+                    },
+                    (res) => {
+                        expect(res.statusCode).to.equal(200);
+                        const response = JSON.parse(res.payload);
+                        expect(response.relationship_type_id).to.equal(studentRelationship.id);
+                        expect(response.offering_id).to.equal(user.section.sequence.offering.id);
+                        expect(response.id).to.equal(user.id);
+                        done();
+                    });
+            });
+    });
+
     lab.test('Error out when a section_id does not exist when attempting to retreive a list of users for a given offering', (done) => {
         server.inject(
             {
@@ -530,7 +677,6 @@ lab.experiment('/Schedule endpoint', () => {
                 url: `/offerings/${user.section.sequence.offering.id}/relationships/1000000000`
             },
             (res) => {
-                console.log(user.section.sequence.offering.id);
                 expect(res.statusCode).to.equal(404);
                 const response = JSON.parse(res.payload);
                 expect(response.error).to.equal('Not Found');

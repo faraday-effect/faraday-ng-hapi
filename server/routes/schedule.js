@@ -8,6 +8,7 @@ const Term = require('../models/Term');
 const RelationshipType = require('../models/RelationshipType');
 const Offering = require('../models/Offering');
 const UserSection = require('../models/UserSection');
+const UserOffering = require('../models/UserOffering');
 
 exports.register = function (server, options, next) {
 
@@ -507,23 +508,24 @@ exports.register = function (server, options, next) {
                                         .relate({
                                             id: request.auth.credentials.id,
                                             relationship_type_id: request.params.relationship_type_id
-
                                         })
                                     .catch((err) => {
                                         return reply(Boom.badRequest('You are already enrolled in section ID ' + request.params.section_id));
-                                    })
+                                    });
                                 }
                             })
                             .then((response) => {
                                 //prevents a double reply error when sending back the response
-                                if(response.isBoom != true)
+                                if(response.isBoom != true){
+                                    response['section_id'] = request.params.section_id;
                                     reply(response);
+                                }
                             });
                     }
                 });
         },
         config: {
-            notes: 'gets all the users for a given section_id based on their relationship_type',
+            notes: 'assocaites the current user to the section_id with the given relationship_type_id',
             validate: {
                 params: {
                     section_id: Joi.number().positive().integer(),
@@ -546,33 +548,40 @@ exports.register = function (server, options, next) {
                     if(!relationship)
                         return reply(Boom.notFound('Relationship Type ID ' + request.params.relationship_type_id + ' was not found!'));
                     else {
-                        //find the section for a offering_id
+                        //find the section for a section_id
                         Offering
                             .query()
                             .findById(request.params.offering_id)
-                            .then((section) => {
+                            .then((offering) => {
                                 //if it doesn't exist blow up
-                                if(!section)
+                                if(!offering)
                                     return reply(Boom.notFound('Offering ID ' + request.params.offering_id + ' was not found!'));
                                 else {
-                                    //get all the users related to the offering so only the users 
+                                    //get all the users related to the section so only the users 
                                     //select is required so that the password is not sent back
-                                    return section
+                                    return offering
                                         .$relatedQuery('user')
-                                        .select('id', 'first_name', 'last_name', 'campus_id', 'email')
-                                        .where('relationship_type_id', request.params.relationship_type_id)
+                                        .relate({
+                                            id: request.auth.credentials.id,
+                                            relationship_type_id: request.params.relationship_type_id
+                                        })
+                                    .catch((err) => {
+                                        return reply(Boom.badRequest('You are already enrolled in offering ID ' + request.params.offering_id));
+                                    });
                                 }
                             })
                             .then((response) => {
                                 //prevents a double reply error when sending back the response
-                                if(response.isBoom != true)
+                                if(response.isBoom != true){
+                                    response['offering_id'] = request.params.offering_id;
                                     reply(response);
+                                }
                             });
                     }
                 });
         },
         config: {
-            notes: 'gets all the users for a given offering_id based on their relationship_type',
+            notes: 'assocaites the current user to the offering_id with the given relationship_type_id',
             validate: {
                 params: {
                     offering_id: Joi.number().positive().integer(),
