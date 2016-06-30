@@ -342,14 +342,6 @@ lab.experiment('/attendance endpoint', () => {
                }
         });
 
-        server.inject(
-            {
-                method: 'GET',
-                credentials: user,
-                url: `/nes/auth`
-            },
-            (res) => {
-                console.log(res.headers['set-cookie'][0].split(';')[0]);
                 var client = new Nes.Client('ws://localhost:3000');
                 client.connect({ auth: { headers: { cookie: res.headers['set-cookie'][0].split(';')[0] } } }, function (err){
                     console.log(err);
