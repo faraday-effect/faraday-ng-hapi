@@ -265,11 +265,11 @@ lab.experiment('/attendance endpoint', () => {
             });
     });
 
-    lab.test('Posts reflection successfully', (done) => {
+    lab.test('Adds reflection successfully', (done) => {
 
         server.inject(
             {
-                method: 'POST',
+                method: 'PUT',
                 credentials: user,
                 url: '/classes/1',
                 payload: {
