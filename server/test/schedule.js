@@ -773,24 +773,5 @@ lab.experiment('/Schedule endpoint', () => {
             });
     });
 
-    lab.test('Retrieve a list of students from the database for a given section successfully', (done) => {
-        server.inject(
-            {
-                method: 'GET',
-                credentials: user,
-                url: `/sections/${section.id}/students`
-            },
-            (res) => {
-                expect(res.statusCode).to.equal(200);
-                const response = JSON.parse(res.payload);
-                expect(response).to.be.instanceOf(Array);
-                expect(response).to.have.length(1);
-                expect(response[0].id).to.equal(user.id);
-                expect(response[0].first_name).to.equal(user.first_name);
-                expect(response[0].last_name).to.equal(user.last_name);
-                expect(response[0].email).to.equal(user.email);
-                done();
-            });
-    });
 
 });

@@ -501,8 +501,7 @@ exports.register = function (server, options, next) {
                                 if(!section)
                                     return reply(Boom.notFound('Section ID ' + request.params.section_id + ' was not found!'));
                                 else {
-                                    //get all the users related to the section so only the users 
-                                    //select is required so that the password is not sent back
+                                    //relate the curerrent user and the given relationship_type_id accross the section
                                     return section
                                         .$relatedQuery('user')
                                         .relate({
@@ -510,6 +509,7 @@ exports.register = function (server, options, next) {
                                             relationship_type_id: request.params.relationship_type_id
                                         })
                                     .catch((err) => {
+                                        //error out if referential integrity bulks about the relationship already existing
                                         return reply(Boom.badRequest('You are already enrolled in section ID ' + request.params.section_id));
                                     });
                                 }
@@ -557,8 +557,7 @@ exports.register = function (server, options, next) {
                                 if(!offering)
                                     return reply(Boom.notFound('Offering ID ' + request.params.offering_id + ' was not found!'));
                                 else {
-                                    //get all the users related to the section so only the users 
-                                    //select is required so that the password is not sent back
+                                    //relate the curerrent user and the given relationship_type_id accross the offering
                                     return offering
                                         .$relatedQuery('user')
                                         .relate({
@@ -566,6 +565,7 @@ exports.register = function (server, options, next) {
                                             relationship_type_id: request.params.relationship_type_id
                                         })
                                     .catch((err) => {
+                                        //error out if referential integrity bulks about the relationship already existing
                                         return reply(Boom.badRequest('You are already enrolled in offering ID ' + request.params.offering_id));
                                     });
                                 }
