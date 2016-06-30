@@ -2,6 +2,7 @@
 
 const User = require('../models/User');
 const RelationshipType = require('../models/RelationshipType');
+const Section = require('../models/Section');
 
 exports.seed = function (knex, Promise) {
 
@@ -73,7 +74,6 @@ exports.seed = function (knex, Promise) {
                             },
                             section:
                             {
-                                '#id': 'CS section',
                                 relationship_type_id: dataModel['RelationshipType'][2].id,
                                 course: { '#ref': 'foundations CS course' },
                                 title: 'Foundations of CS Section Title',
@@ -165,7 +165,6 @@ exports.seed = function (knex, Promise) {
                                 sequence: [{
                                     title: 'Historic spring I sequence',
                                     section: [{
-                                        '#id': 'historic section 1',
                                         term: {
                                             '#ref': 'term'
                                         },
@@ -192,7 +191,6 @@ exports.seed = function (knex, Promise) {
                                         ]
                                     },
                                         {
-                                            '#id': 'historic section 2',
                                             term: {
                                                 '#ref': 'term'
                                             },
@@ -236,11 +234,7 @@ exports.seed = function (knex, Promise) {
                                 '#id': 'student',
                                 title: 'Student',
                                 description: 'I am a student'
-                            },
-                            section: [{
-                                '#ref': 'CS section',
-                                relationship_type_id: dataModel['RelationshipType'][0].id
-                            }]
+                            }
                         },
                         {
                             first_name: 'Keith',
@@ -253,11 +247,7 @@ exports.seed = function (knex, Promise) {
                             mobile_phone: '7654574371',
                             role: {
                                 '#ref': 'student'
-                            },
-                            section: [{
-                                '#ref': 'CS section',
-                                relationship_type_id: dataModel['RelationshipType'][0].id
-                            }]
+                            }
                         },
                         {
                             first_name: 'Ken',
@@ -270,11 +260,7 @@ exports.seed = function (knex, Promise) {
                             mobile_phone: '7652514154',
                             role: {
                                 '#ref': 'faculty'
-                            },
-                            section: [{
-                                '#ref': 'CS section',
-                                relationship_type_id: dataModel['RelationshipType'][1].id
-                            }]
+                            }
                         },
                         {
                             first_name: 'test',
@@ -287,11 +273,7 @@ exports.seed = function (knex, Promise) {
                             mobile_phone: null,
                             role: {
                                 '#ref': 'student'
-                            },
-                            section: [{
-                                '#ref': 'CS section',
-                                relationship_type_id: dataModel['RelationshipType'][0].id
-                            }]
+                            }
                         },
                         {
                             first_name: 'Junk',
@@ -304,11 +286,7 @@ exports.seed = function (knex, Promise) {
                             mobile_phone: null,
                             role: {
                                 '#ref': 'student'
-                            },
-                            // section: [{
-                            //     '#ref': 'historic section 2',
-                            //     relationship_type_id: dataModel['RelationshipType'][0].id
-                            // }]
+                            }
                         },
                         {
                             first_name: 'Test',
@@ -321,11 +299,7 @@ exports.seed = function (knex, Promise) {
                             mobile_phone: null,
                             role: {
                                 '#ref': 'student'
-                            },
-                            section: [{
-                                '#ref': 'CS section',
-                                relationship_type_id: dataModel['RelationshipType'][0].id
-                            }]
+                            }
                         },
                         {
                             first_name: 'Super',
@@ -344,7 +318,24 @@ exports.seed = function (knex, Promise) {
                     ]).then((users) => {
                         console.log('users and roles seeded');
                         dataModel['Users'] = users;
-                    });
+                    }).then(() => {
+                        Section
+                            .query()
+                            .findById(dataModel['Users'][0].section.id)
+                            .then((section) => {
+                                    return section
+                                        .$relatedQuery('user')
+                                        .relate({
+                                            id: dataModel['Users'][2].id,
+                                            relationship_type_id: dataModel['RelationshipType'][0].id
+                                        });
+                            }).then((response) => {
+                                console.log(response);
+                            })
+                            .catch((err) => {
+                                console.log("<<<<<<<<<<>>>>>>>> ", err);
+                            });
+                });
             }).catch(err => console.error("ERROR", err));
     });
 
