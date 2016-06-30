@@ -2,10 +2,6 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/toPromise';
 
 import { Course, Person } from '../models';
 import { CoursesUrl, SectionsUrl, StudentsUrl, AttendanceUrl } from './constants';
@@ -57,7 +53,7 @@ export class ClassService {
   constructor(
     private nesService: NesService,
     private http: Http) {
-      nesService.subscribe('/attendence', msg => {
+      nesService.subscribe('/attendance', msg => {
         this.attendHandler([msg.student_id]);
       });
   }

@@ -1,11 +1,19 @@
+sudo: required
+dist: trusty
+
 language: node_js
 
 node_js:
   - "6"
 
 env:
- - TEST_DIR=server
-# - TEST_DIR=webapp
+  - TEST_DIR=server
+  - TEST_DIR=webapp
+
+cache:
+  directories:
+    - server/node_modules
+    - webapp/node_modules
 
 notifications:
   slack: quantum-bits:qYEIHmdw3vBD1Q3XRxh2neXY
@@ -21,7 +29,7 @@ before_install:
   - sudo apt-get install python-software-properties
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt-get update
-  - sudo apt-get install gcc-5 g++-5
+  - sudo apt-get --assume-yes install gcc-5 g++-5
   - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 80 --slave /usr/bin/g++ g++ /usr/bin/g++-5
   - sudo update-alternatives --set gcc /usr/bin/gcc-5
 
@@ -31,8 +39,11 @@ before_script:
   - psql -U postgres -c 'create database faraday;'
   - psql -U postgres -c "create role faraday login password 'pass';"
   - postgres -V
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
 
-script: cd $TEST_DIR && npm install && ./node_modules/.bin/knex migrate:latest && npm test
+script:
+  - cd $TEST_DIR && ./run-tests.sh
 
 #after_success:
 #after_failure:

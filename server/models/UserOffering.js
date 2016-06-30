@@ -25,7 +25,7 @@ class UserOffering extends Model {
                 }
             },
             relationshipType: {
-                relation: Model.BelongsToOneRelation,
+                relation: Model.HasOneRelation,
                 modelClass: __dirname + '/RelationshipType',
                 join: {
                     from: 'user_offering.relationship_type_id',

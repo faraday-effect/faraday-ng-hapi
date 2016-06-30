@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
 
 declare var require: any;
 var Nes = require('nes/client');
 
-import { WebSocketUrl } from './constants';
+import { WebSocketUrl, WebSocketAuthUrl } from './constants';
 
 @Injectable()
 export class NesService {
@@ -12,22 +13,22 @@ export class NesService {
   toSubscribe = [];
   toRequest = [];
 
-  constructor() {
-    this.startNes();
-  }
+  constructor(private http: Http) { }
 
   startNes() {
-    this.client = new Nes.Client(WebSocketUrl);
-    this.client.connect(this.handleError);
-    this.client.onConnect = () => {
-      this.connected = true;
-      for (let sub of this.toSubscribe) {
-        this.subscribe(sub[0], sub[1]);
-      }
-      for (let req of this.toRequest) {
-        this.request(req[0], req[1]);
-      }
-    };
+    this.http.get(WebSocketAuthUrl).subscribe(() => {
+      this.client = new Nes.Client(WebSocketUrl);
+      this.client.connect(this.handleError);
+      this.client.onConnect = () => {
+        this.connected = true;
+        for (let sub of this.toSubscribe) {
+          this.subscribe(sub[0], sub[1]);
+        }
+        for (let req of this.toRequest) {
+          this.request(req[0], req[1]);
+        }
+      };
+    });
   }
 
   subscribe(path, callback) {

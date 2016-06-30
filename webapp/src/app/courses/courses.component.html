@@ -1,0 +1,46 @@
+<div class="row">
+  <div class="col">
+
+    <h5>My Courses</h5>
+    <div *ngFor="let course of courses | async" class="card hoverable">
+      <div class="card-content">
+        <a [routerLink]="'./'+course.id" class="card-title black-text">
+          {{course.prefix}} {{course.number}} &mdash; {{course.title}}
+        </a>
+        <div>{{course.teacher}}</div>
+        <div>{{course.start_time}} &ndash; {{course.stop_time}} ({{course.days}})</div>
+      </div>
+      <div [ngSwitch]="course.role">
+        <div *ngIf="canAttend(course.id)">
+          <div *ngSwitchCase="'student'" class="card-action">
+            <a (click)="attend(course.id)" class="btn-flat">Attend</a>
+          </div>
+        </div>
+        <div *ngSwitchCase="'teacher'" class="card-action">
+          <a [routerLink]="'./'+course.id+'/podium'" class="btn-flat">Teach</a>
+        </div>
+      </div>
+    </div>
+
+    <h5>All Courses</h5>
+    <div *ngFor="let course of allCourses | async" class="card hoverable">
+      <div class="card-content">
+        <a [routerLink]="'../courses/'+course.id" class="card-title black-text">
+          {{course.prefix}} {{course.number}} &mdash; {{course.title}}
+        </a>
+        <ul class="collection">
+          <li *ngFor="let section of course.sections" class="collection-item">
+            <a *ngIf="canEnroll(section.id)" (click)="enroll(section.id)" class="btn-flat secondary-content orange-text">Enroll</a>
+            <!-- <a *ngIf="canWithdraw(section.id)" (click)="withdraw(section.id)" class="btn-flat secondary-content red">Withdraw</a> -->
+            {{section.teacher}}
+            <br>
+            {{section.start_time}} &ndash; {{section.stop_time}} ({{section.days}})
+            <br>
+            {{section.credits}} {{ section.credits == 1 ? "Credit" : "Credits" }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -54,7 +54,6 @@ exports.seed = function (knex, Promise) {
                 dataModel['RelationshipType'] = relationshipType;
             })
             .then(() => {
-
                 return User
                     .query()
                     .insertWithRelated([
@@ -319,23 +318,22 @@ exports.seed = function (knex, Promise) {
                         console.log('users and roles seeded');
                         dataModel['Users'] = users;
                     }).then(() => {
-                        Section
+                        const user_id = dataModel['Users'][2].id;
+                        return User
                             .query()
-                            .findById(dataModel['Users'][0].section.id)
-                            .then((section) => {
-                                    return section
-                                        .$relatedQuery('user')
-                                        .relate({
-                                            id: dataModel['Users'][2].id,
-                                            relationship_type_id: dataModel['RelationshipType'][0].id
-                                        });
-                            }).then((response) => {
-                                console.log(response);
+                            .findById(user_id)
+                            .then(user => {
+                                return user
+                                    .$relatedQuery('section')
+                                    .relate({
+                                        id: dataModel['User'][0]['sequence'].section.id,
+                                        relationship_type_id: dataModel['RelationshipType'][0].id
+                                    });
                             })
-                            .catch((err) => {
-                                console.log("<<<<<<<<<<>>>>>>>> ", err);
+                            .catch(err => {
+                                console.log("ERR", err);
                             });
-                });
+                    });
             }).catch(err => console.error("ERROR", err));
     });
 

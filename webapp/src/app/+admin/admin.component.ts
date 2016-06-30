@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router, ROUTER_DIRECTIVES } from '@angular/router';
+import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from '@angular/router';
 
 import { CourseComponent } from './+course';
 import { CoursesComponent } from './+courses';
@@ -25,31 +25,32 @@ import { RegisterComponent } from './+register';
 export class AdminComponent {
 
   constructor(
+    private route: ActivatedRoute,
     private router: Router) {
   }
 
   gotoCourses() {
-    this.router.navigate(['/admin/courses']); // FIXME ADMIN
+    this.router.navigate(['courses'], {relativeTo: this.route});
   }
 
   gotoSections() {
-    this.router.navigate(['/admin/sections']); // FIXME ADMIN
+    this.router.navigate(['sections'], {relativeTo: this.route});
   }
 
   gotoDepartments() {
-    this.router.navigate(['/admin/departments']); // FIXME ADMIN
+    this.router.navigate(['departments'], {relativeTo: this.route});
   }
 
   gotoPrefixes() {
-    this.router.navigate(['/admin/prefixes']); // FIXME ADMIN
+    this.router.navigate(['prefixes'], {relativeTo: this.route});
   }
 
   gotoTerms() {
-    this.router.navigate(['/admin/terms']); // FIXME ADMIN
+    this.router.navigate(['terms'], {relativeTo: this.route});
   }
 
   gotoRegister() {
-    this.router.navigate(['/admin/register']); // FIXME ADMIN
+    this.router.navigate(['register'], {relativeTo: this.route});
   }
 
   title = 'Admin Console';
