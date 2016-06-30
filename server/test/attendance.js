@@ -19,8 +19,7 @@ lab.experiment('/attendance endpoint', () => {
                 'TRUNCATE public.department CASCADE; ' +
                 'TRUNCATE public.prefix CASCADE; ' +
                 'TRUNCATE public.user CASCADE; ' +
-                'TRUNCATE public.term CASCADE; ' +
-                'TRUNCATE public.relationship_type CASCADE; '
+                'TRUNCATE public.term CASCADE; '
             )
         ])
             .then(results => {

@@ -8,17 +8,16 @@ class RelationshipType extends Model {
 
     static get relationMappings() {
         return {
-            user: {
+            section: {
                 relation: Model.ManyToManyRelation,
-                modelClass: __dirname + '/User',
+                modelClass: __dirname + '/Section',
                 join: {
                     from: 'relationship_type.id',
                     through: {
-                        from: 'user_relationship.relationship_type',
-                        to: 'user_relationship.user_id',
-                        extra: ['user_relationship.section_id', 'user_relationship.offering_id']
+                        from: 'user_section.relationship_type_id',
+                        to: 'user_section.section_id'
                     },
-                    to: 'user.id'
+                    to: 'section.id'
                 }
             },
             offering: {
@@ -27,18 +26,10 @@ class RelationshipType extends Model {
                 join: {
                     from: 'relationship_type.id',
                     through: {
-                        from: 'user_relationship.relationship_type_id',
-                        to: 'user_relationship.offering_id'
+                        from: 'user_section.relationship_type_id',
+                        to: 'user_section.offering_id'
                     },
                     to: 'offering.id'
-                }
-            },
-            userRelationship: {
-                relation: Model.BelongsToOneRelation,
-                modelClass: __dirname + '/UserRelationship',
-                join: {
-                    from: 'relationship_type.id',
-                    to: 'user_relationship.relationship_type_id'
                 }
             }
         }

@@ -26,16 +26,29 @@ exports.up = function (knex, Promise) {
             table.text('description');
         }),
 
-        knex.schema.createTableIfNotExists('user_relationship', function (table) {
-            table.increments('id').primary();
+        knex.schema.createTableIfNotExists('user_section', function (table) {
             table.integer('section_id')
                 .unsigned()
-                .nullable()
+                .notNullable()
                 .references('id')
                 .inTable('section');
+            table.integer('relationship_type_id')
+                .unsigned()
+                .notNullable()
+                .references('id')
+                .inTable('relationship_type');
+            table.integer('user_id')
+                .unsigned()
+                .notNullable()
+                .references('id')
+                .inTable('user');
+            table.primary(['relationship_type_id', 'section_id', 'user_id']);
+        }),
+
+knex.schema.createTableIfNotExists('user_offering', function (table) {
             table.integer('offering_id')
                 .unsigned()
-                .nullable()
+                .notNullable()
                 .references('id')
                 .inTable('offering');
             table.integer('relationship_type_id')
@@ -48,6 +61,7 @@ exports.up = function (knex, Promise) {
                 .notNullable()
                 .references('id')
                 .inTable('user');
+            table.primary(['relationship_type_id', 'offering_id', 'user_id']);
         }),
 
         knex.schema.createTableIfNotExists('user_role', function (table) {
@@ -174,7 +188,7 @@ exports.up = function (knex, Promise) {
             table.date('start_date');
             table.date('stop_date');
         }),
-        
+
         knex.schema.createTableIfNotExists('section', function (table) {
             table.increments('id').primary();
             table.string('reg_number');
@@ -311,7 +325,7 @@ exports.up = function (knex, Promise) {
                 .inTable('knowledge_area');
         }),
 
-         knex.schema.createTableIfNotExists('offering_outcome', function (table) {
+        knex.schema.createTableIfNotExists('offering_outcome', function (table) {
             table.increments('id').primary();
             table.text('discussion');
             table.integer('learning_outcome_id')
@@ -420,7 +434,7 @@ exports.up = function (knex, Promise) {
         }),
 
         //Teal - assessment
-        knex.schema.createTableIfNotExists('assessment', function(table) {
+        knex.schema.createTableIfNotExists('assessment', function (table) {
             table.increments('id').primary();
             table.text('discussion');
             table.dateTime('assessed_at').notNullable();
@@ -436,12 +450,12 @@ exports.up = function (knex, Promise) {
                 .inTable('user');
         }),
 
-        knex.schema.createTableIfNotExists('comment', function(table) {
+        knex.schema.createTableIfNotExists('comment', function (table) {
             table.increments('id').primary();
             table.text('details');
         }),
 
-        knex.schema.createTableIfNotExists('evaluation', function(table) {
+        knex.schema.createTableIfNotExists('evaluation', function (table) {
             table.integer('criterion_id')
                 .unsigned()
                 .notNullable()
@@ -456,7 +470,7 @@ exports.up = function (knex, Promise) {
             table.primary(['criterion_id', 'assessment_id']);
         }),
 
-        knex.schema.createTableIfNotExists('evaluation_comment', function(table) {
+        knex.schema.createTableIfNotExists('evaluation_comment', function (table) {
             table.integer('evaluation_criterion_id').unsigned().notNullable();
             table.integer('evaluation_assessment_id').unsigned().notNullable();
             table.integer('comment_id').unsigned().notNullable();
@@ -474,8 +488,10 @@ exports.down = function (knex, Promise) {
         knex.schema.dropTableIfExists('section_schedule'),
         knex.schema.dropTableIfExists('team'),
         knex.schema.dropTableIfExists('attendance'),
-        knex.schema.dropTableIfExists('member_role'),
-        knex.schema.dropTableIfExists('member'),
+        knex.schema.dropTableIfExists('user_role'),
+        knex.schema.dropTableIfExists('user_section'),
+        knex.schema.dropTableIfExists('user_offering'),
+        knex.schema.dropTableIfExists('user_section'),
         knex.schema.dropTableIfExists('user_permission'),
         knex.schema.dropTableIfExists('evaluation_comment'),
         knex.schema.dropTableIfExists('evaluation'),
@@ -498,6 +514,7 @@ exports.down = function (knex, Promise) {
         knex.schema.dropTableIfExists('course'),
 
         //tables without fk
+        knex.schema.dropTableIfExists('relationship_type'),
         knex.schema.dropTableIfExists('criterion'),
         knex.schema.dropTableIfExists('comment'),
         knex.schema.dropTableIfExists('department'),
