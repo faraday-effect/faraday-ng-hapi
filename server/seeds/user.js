@@ -262,8 +262,8 @@ exports.seed = function (knex, Promise) {
                             }
                         },
                         {
-                            first_name: 'test',
-                            last_name: 'test',
+                            first_name: 'Test',
+                            last_name: 'Test',
                             email: 'test@test.com',
                             campus_id: '006697891',
                             //hash of 'pass'
@@ -276,7 +276,7 @@ exports.seed = function (knex, Promise) {
                         },
                         {
                             first_name: 'Junk',
-                            last_name: 'Tester',
+                            last_name: 'Test',
                             email: 'junk@test.com',
                             campus_id: '006697891',
                             //hash of 'pass'
@@ -301,7 +301,7 @@ exports.seed = function (knex, Promise) {
                             }
                         },
                         {
-                            first_name: 'Super TA',
+                            first_name: 'TA',
                             last_name: 'User',
                             email: 'test_ta@example.com',
                             campus_id: '006646359',
