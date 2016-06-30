@@ -14,18 +14,11 @@ class Section extends Model {
                 join: {
                     from: 'section.id',
                     through: {
-                        from: 'user_relationship.section_id',
-                        to: 'user_relationship.user_id'
+                        from: 'user_section.section_id',
+                        to: 'user_section.user_id',
+                        extra: ['relationship_type_id'] 
                     },
                     to: 'user.id'
-                }
-            },
-            userRelationship: {
-                relation: Model.HasManyRelation,
-                modelClass: __dirname + '/UserRelationship',
-                join: {
-                    from: 'section.id',
-                    to: 'user_relationship.section_id'
                 }
             },
             sequence: {
@@ -58,6 +51,19 @@ class Section extends Model {
                 join: {
                     from: 'section.id',
                     to: 'section_schedule.section_id'
+                }
+            },
+            relationshipType: {
+                relation: Model.ManyToManyRelation, 
+                modelClass: __dirname + '/RelationshipType',
+                join: {
+                    from: 'section.id',
+                    through: {
+                        from: 'user_section.section_id',
+                        to: 'user_section.relationship_type_id',
+                        extra: ['user_id']
+                    },
+                    to: 'relationship_type.id'
                 }
             }
         }

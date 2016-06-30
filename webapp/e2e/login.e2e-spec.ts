@@ -24,7 +24,7 @@ describe('login page', () => {
 
   it('should have first and last name and logout button in toolbar when logged in', () => {
     let bar = page.getToolbar();
-    expectToMatch(bar, /first last/);
+    expectToMatch(bar, /Test Example/);
     expectToMatch(bar, /Log Out/);
   });
 

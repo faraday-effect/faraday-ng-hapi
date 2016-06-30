@@ -3,8 +3,8 @@
 const Model = require('objection').Model;
 const db = require('../db');
 
-class UserRelationship extends Model {
-    static get tableName() { return 'user_relationship'; }
+class UserOffering extends Model {
+    static get tableName() { return 'user_offering'; }
 
     static get relationMappings() {
         return {
@@ -12,7 +12,7 @@ class UserRelationship extends Model {
                 relation: Model.BelongsToOneRelation,
                 modelClass: __dirname + '/User',
                 join: {
-                    from: 'user_relationship.user_id',
+                    from: 'user_offering.user_id',
                     to: 'user.id'
                 }
             },
@@ -20,7 +20,7 @@ class UserRelationship extends Model {
                 relation: Model.BelongsToOneRelation,
                 modelClass: __dirname + '/Offering',
                 join: {
-                    from: 'user_relationship.offering_id',
+                    from: 'user_offering.offering_id',
                     to: 'offering.id'
                 }
             },
@@ -28,12 +28,17 @@ class UserRelationship extends Model {
                 relation: Model.HasOneRelation,
                 modelClass: __dirname + '/RelationshipType',
                 join: {
-                    from: 'user_relationship.relationship_type_id',
+                    from: 'user_offering.relationship_type_id',
                     to: 'relationship_type.id'
                 }
             }
         }
     }
+
+  static get idColumn() {
+    return ['offering_id', 'relationship_type_id', 'user_id'];
+  }
+
 }
 
-module.exports = UserRelationship;
+module.exports = UserOffering;

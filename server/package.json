@@ -4,6 +4,10 @@
   "description": "LMS 2.0",
   "main": "index.js",
   "scripts": {
+    "start": "node start.js",
+    "watch": "nodemon start.js",
+    "knex:migrate": "knex migrate:latest",
+    "knex:seed": "knex seed:run",
     "test": "lab --verbose --transform node_modules/lab-babel --shuffle --globals __core-js_shared__",
     "test-cov": "lab --transform node_modules/lab-babel --globals __core-js_shared__ --reporter html --output foo-coverage.html --reporter console --output stdout"
   },
@@ -34,6 +38,7 @@
     "lodash": "^4.13.1",
     "lout": "^9.0.0",
     "nes": "^6.1.2",
+    "nodemon": "^1.9.2",
     "objection": "^0.5.1",
     "pg": "^4.5.5",
     "poop": "^2.0.0",
