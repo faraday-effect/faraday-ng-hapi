@@ -44,6 +44,7 @@ exports.register = function (server, options, next) {
                                                 if (alreadyRegisteredAttendanceRecord != null) {
                                                     return reply(Boom.badRequest('You already are listed as present for this class!'));
                                                 } else {
+                                                    server.publish('/sections/{request.params.section_id}/attendance', { user_id: request.auth.credentials.id, present: true });
                                                     //insert the attendance record with a time stamp
                                                     Attendance
                                                         .query()
@@ -119,6 +120,7 @@ exports.register = function (server, options, next) {
                                                 return reply(Boom.badRequest('You are not marked as present for this class!'));
                                             } else {
                                                 //insert the attendance record with a time stamp
+                                                server.publish('/sections/{request.params.section_id}/attendance', { user_id: request.auth.credentials.id, present: false });
                                                 Attendance
                                                     .query()
                                                     .patchAndFetchById(alreadyRegisteredAttendanceRecord.id, {
@@ -472,7 +474,7 @@ exports.register = function (server, options, next) {
         }
     });
 
-    server.subscription('/attendance');
+    server.subscription('/sections/{section_id}/attendance');
     next();
 };
 
