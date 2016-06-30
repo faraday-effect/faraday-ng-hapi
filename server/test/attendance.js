@@ -336,6 +336,12 @@ lab.experiment('/attendance endpoint', () => {
 
     lab.test('nes publishes item', (done) => {
 
+        server.start((err) =>{
+           	if(err){
+                   throw err;
+               }
+        });
+
         server.inject(
             {
                 method: 'GET',
@@ -344,9 +350,9 @@ lab.experiment('/attendance endpoint', () => {
             },
             (res) => {
                 console.log(res.headers['set-cookie'][0].split(';')[0]);
-                var client = new Nes.Client('ws://localhost:' + server.connections[0].info.port);
-                    client.connect({ auth: { headers: { cookie: res.headers['set-cookie'][0].split(';')[0] } } }, function (err){
-                        console.log(err);
+                var client = new Nes.Client('ws://localhost:3000');
+                client.connect({ auth: { headers: { cookie: res.headers['set-cookie'][0].split(';')[0] } } }, function (err){
+                    console.log(err);
 
                     var handler = function (update, flags) {
                         console.log(flags);
