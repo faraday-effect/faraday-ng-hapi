@@ -44,14 +44,6 @@ class Offering extends Model {
                     from: 'offering.id',
                     to: 'actual_class.offering_id'
                 }
-            },
-            userRelationship: {
-                relation: Model.HasManyRelation,
-                modelClass: __dirname + '/UserRelationship',
-                join: {
-                    from: 'offering.id',
-                    to: 'user_relationship.offering_id'
-                }
             }
         }
     }
