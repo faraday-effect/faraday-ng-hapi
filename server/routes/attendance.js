@@ -18,9 +18,8 @@ exports.register = function (server, options, next) {
                 //Get the section and sequence information
                 Section
                     .query()
-                    .where('id', request.params.section_id)
+                    .findById(request.params.section_id)
                     .eager('sequence')
-                    .first()
                     .then((section) => {
                         //handle error case if section is not valid
                         if (section != null) {
@@ -44,6 +43,7 @@ exports.register = function (server, options, next) {
                                                 if (alreadyRegisteredAttendanceRecord != null) {
                                                     return reply(Boom.badRequest('You already are listed as present for this class!'));
                                                 } else {
+                                                    server.publish('/sections/{request.params.section_id}/attendance', { user_id: request.auth.credentials.id, present: true });
                                                     //insert the attendance record with a time stamp
                                                     Attendance
                                                         .query()
@@ -92,9 +92,8 @@ exports.register = function (server, options, next) {
             //Get the section and sequence information
             Section
                 .query()
-                .where('id', request.params.section_id)
+                .findById(request.params.section_id)
                 .eager('sequence')
-                .first()
                 .then((section) => {
                     //handle error case if section is not valid
                     if (section != null) {
@@ -119,6 +118,7 @@ exports.register = function (server, options, next) {
                                                 return reply(Boom.badRequest('You are not marked as present for this class!'));
                                             } else {
                                                 //insert the attendance record with a time stamp
+                                                server.publish('/sections/{request.params.section_id}/attendance', { user_id: request.auth.credentials.id, present: false });
                                                 Attendance
                                                     .query()
                                                     .patchAndFetchById(alreadyRegisteredAttendanceRecord.id, {
@@ -158,9 +158,8 @@ exports.register = function (server, options, next) {
             //Get the section and sequence information
             Section
                 .query()
-                .where('id', request.params.section_id)
+                .findById(request.params.section_id)
                 .eager('sequence')
-                .first()
                 .then((section) => {
                     //handle error case if section is not valid
                     if (section != null) {
@@ -328,7 +327,6 @@ exports.register = function (server, options, next) {
                                                     .then((alreadyRegisteredAttendanceRecord) => {
                                                         //check to see if they are already listed as attending class today
                                                         if (!alreadyRegisteredAttendanceRecord) {
-                                                            console.log(alreadyRegisteredAttendanceRecord);
                                                             return reply(Boom.badRequest(`${request.params.user_id} is not marked as present for this class!`));
                                                         } else {
                                                             //insert the attendance record with a time stamp
@@ -412,7 +410,7 @@ exports.register = function (server, options, next) {
     });
 
     server.route({
-        method: 'POST',
+        method: 'PUT',
         path: '/classes/{actual_class_id}',
         handler: function (request, reply) {
             //Get the actual class instance and perform a patch to add reflection
@@ -430,7 +428,7 @@ exports.register = function (server, options, next) {
                 });
         },
         config: {
-            notes: 'Retrieves all the actual class instances for a section',
+            notes: 'Adds the reflection to an actual_class instance',
             validate: {
                 params: {
                     actual_class_id: Joi.number().positive().integer()
@@ -472,7 +470,7 @@ exports.register = function (server, options, next) {
         }
     });
 
-    server.subscription('/attendance');
+    server.subscription('/sections/{section_id}/attendance');
     next();
 };
 

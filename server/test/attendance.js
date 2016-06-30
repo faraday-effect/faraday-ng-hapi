@@ -6,11 +6,13 @@ const lab = exports.lab = init_test();
 const User = require('../models/User');
 const Section = require('../models/Section');
 const ActualClass = require('../models/ActualClass');
+var Nes = require('nes');
 
 lab.experiment('/attendance endpoint', () => {
 
     var section = null;
     var user = null;
+    // var client = null;
 
     lab.beforeEach(done => {
 
@@ -74,7 +76,6 @@ lab.experiment('/attendance endpoint', () => {
             }).then(results => {
                 user = results[0];
                 section = results[1];
-
             })
             .catch(err => {
                 console.log("ERROR", err);
@@ -265,11 +266,11 @@ lab.experiment('/attendance endpoint', () => {
             });
     });
 
-    lab.test('Posts reflection successfully', (done) => {
+    lab.test('Adds reflection successfully', (done) => {
 
         server.inject(
             {
-                method: 'POST',
+                method: 'PUT',
                 credentials: user,
                 url: '/classes/1',
                 payload: {
@@ -333,6 +334,52 @@ lab.experiment('/attendance endpoint', () => {
             });
     });
 
+    lab.test('nes publishes item', (done) => {
+
+        server.inject(
+            {
+                method: 'GET',
+                credentials: user,
+                url: `/nes/auth`
+            },
+            (res) => {
+                console.log(res.headers['set-cookie'][0].split(';')[0]);
+                var client = new Nes.Client('ws://localhost:' + server.connections[0].info.port);
+                    client.connect({ auth: { headers: { cookie: res.headers['set-cookie'][0].split(';')[0] } } }, function (err){
+                        console.log(err);
+
+                    var handler = function (update, flags) {
+                        console.log(flags);
+                        console.log(update);
+                    };
+
+                    client.subscribe(`/sections/${section.id}/attendance`, handler, function (err) {
+                        console.log(err);
+                    });
+
+                server.inject(
+                    {
+                        method: 'POST',
+                        credentials: user,
+                        url: `/sections/${section.id}/attendance`,
+                        payload: {
+                            code: '000000'
+                        }
+                    },
+                    (res) => {
+                        expect(res.statusCode).to.equal(200);
+                        const response = JSON.parse(res.payload);
+                        expect(response.id).to.exist()
+                        expect(response.user_id).to.equal(user.id);
+                        expect(response.actual_class_id).to.equal(section.sequence.actualClass.id);
+                        expect(response.id).to.exist();
+                        expect(response.signed_in).to.exist();
+                        expect(response.signed_out).to.not.exist();
+                        done();
+                    });
+                    });
+                });
+    });
 
     lab.test('Error out if section is not found when giving the user_id when signing in a student', (done) => {
 
