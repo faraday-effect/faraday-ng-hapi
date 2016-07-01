@@ -1,14 +1,18 @@
-"use strict";
+'use strict';
 
 const Joi = require('joi');
 const Boom = require('boom');
 const Section = require('../models/Section');
 const User = require('../models/User');
 const Term = require('../models/Term');
+const RelationshipType = require('../models/RelationshipType');
+const Offering = require('../models/Offering');
+const UserSection = require('../models/UserSection');
+const UserOffering = require('../models/UserOffering');
 
 exports.register = function (server, options, next) {
 
-server.route({
+    server.route({
         method: 'GET',
         path: '/terms',
         handler: function (request, reply) {
@@ -18,7 +22,7 @@ server.route({
                     reply(terms);
                 })
                 .catch(function (err) {
-                    return reply(Boom.badRequest('Failed to retrieve the terms', err));
+                    reply(Boom.badImplementation(err));
                 });
         },
         config: {
@@ -30,18 +34,17 @@ server.route({
         method: 'GET',
         path: '/terms/{term_id}',
         handler: function (request, reply) {
-             Term
+            Term
                 .query()
-                .where('id', request.params.term_id)
-                .first()
+                .findById(request.params.term_id)
                 .then((terms) => {
-                    if(terms != null)
+                    if (terms != null)
                         reply(terms);
                     else
-                        reply(Boom.notFound('Term ID ' + request.params.section_id + ' not found!'))
+                        reply(Boom.notFound('Term ID ' + request.params.term_id + ' was not found!'))
                 })
                 .catch(function (err) {
-                    return reply(Boom.badRequest('Failed to retrieve term id ' + request.params.term_id, err));
+                    reply(Boom.badImplementation(err));
                 });
         },
         config: {
@@ -69,7 +72,7 @@ server.route({
                     reply(newTerm);
                 })
                 .catch(function (err) {
-                    return reply(Boom.badRequest('Failed to create a new term', err));
+                    reply(Boom.badImplementation(err));
                 });
         },
         config: {
@@ -99,7 +102,7 @@ server.route({
                     reply(newTerm);
                 })
                 .catch(function (err) {
-                    return reply(Boom.badRequest('Failed to update a term ' + request.params.term_id, err));
+                    reply(Boom.badImplementation(err));
                 });
         },
         config: {
@@ -121,27 +124,27 @@ server.route({
         method: 'GET',
         path: '/sections',
         handler: function (request, reply) {
-            //get the current_user object
-            var current_user = request.auth.credentials;
             User
                 .query()
-                .where('id', current_user.id)
-                .first()
+                .findById(request.auth.credentials.id)
                 .then((user) => {
                     return user
-                    .$relatedQuery('section')
-                    //load all the related data fromt the db into a JSON object
-                    .eager('[userRelationship.relationshipType, sectionSchedule, sequence.offering.course.[prefix, department]]')
-                    //filter the userRelationship by user_id & section_id
-                    .filterEager('userRelationship', builder => {
-                        builder.where('user_id', current_user.id)
-                    });
+                        .$relatedQuery('section')
+                        // Load all the related data from the db into a JSON object
+                        .eager('[relationshipType, sectionSchedule, sequence.offering.course.[prefix, department]]')
+                        // Filter the relationshipType by user_id and section_id
+                        .filterEager('relationshipType', builder => {
+                            builder.where('user_id', request.auth.credentials.id)
+                        });
                 }).then((user_sections) => {
                     reply(user_sections);
                 })
                 .catch((err) => {
-                    return reply(Boom.notFound('Failed to retrieve all the sections for the current_user', err));
+                    reply(Boom.badImplementation(err));
                 });
+        },
+        config: {
+            notes: 'retrieves all the sections for a given user from the database'
         }
     });
 
@@ -151,23 +154,23 @@ server.route({
         handler: function (request, reply) {
             Section
                 .query()
-                .where('id', request.params.section_id)
-                .first()
-                .eager('[userRelationship.relationshipType, sectionSchedule, sequence.offering.course.[prefix, department]]')
-                .filterEager('userRelationship', builder => {
+                .findById(request.params.section_id)
+                .eager('[relationshipType, sectionSchedule, sequence.offering.course.[prefix, department]]')
+                .filterEager('relationshipType', builder => {
                     builder.where('user_id', request.auth.credentials.id)
                 })
                 .then((section) => {
-                    if(section != null)
+                    if (section)
                         reply(section);
                     else
-                        reply(Boom.notFound('Section ' + request.params.section_id + ' not found!', err));
+                        reply(Boom.notFound('Section ID ' + request.params.section_id + ' was not found!'))
                 })
                 .catch((err) => {
-                    return reply(Boom.badRequest('Failed to retrieve section id ' + request.params.section_id, err));
+                    reply(Boom.badImplementation(err));
                 });
         },
         config: {
+            notes: 'retrieves a given section and all related information from the database',
             validate: {
                 params: {
                     section_id: Joi.number().positive().integer()
@@ -183,7 +186,7 @@ server.route({
             Section
                 .query()
                 .insert({
-                    sequence_id: request.payload.offering_id,
+                    sequence_id: request.payload.sequence_id,
                     course_id: request.payload.course_id,
                     term_id: request.payload.term_id,
                     credit_hours: request.payload.credit_hours,
@@ -194,7 +197,7 @@ server.route({
                     return reply(section);
                 })
                 .catch(function (err) {
-                    return reply(Boom.badRequest('Failed to create a new section', err));
+                    reply(Boom.badImplementation(err));
                 });
         },
         config: {
@@ -229,13 +232,13 @@ server.route({
                     reply(updatedModel);
                 })
                 .catch(function (err) {
-                    reply(Boom.badData('Failed to edit section ' + request.payload.section_id, err));
+                    reply(Boom.badImplementation(err));
                 });
         },
         config: {
             validate: {
                 params: {
-                    section_id: Joi.number().integer()
+                    section_id: Joi.number().positive().integer()
                 },
                 payload: {
                     sequence_id: Joi.number().positive().integer().required(),
@@ -248,7 +251,381 @@ server.route({
             }
         }
     });
+
+    server.route({
+        method: 'POST',
+        path: '/sections/{section_id}/enroll',
+        handler: function (request, reply) {
+            var hasPreviousRelationship = null;
+            //Get any of the previous relationships
+            UserSection
+                .query()
+                .where('user_id', request.auth.credentials.id)
+                .andWhere('section_id', request.params.section_id)
+                .first()
+                .then((userSection) => {
+                    //set previous relationship to a larger var scope
+                    hasPreviousRelationship = userSection;
+                });
+
+            //Get the relationship type object for a student
+            RelationshipType
+                .query()
+                .where('title', 'student')
+                .first()
+                .then((relationshipType) => {
+                    //Get the user object based on the current_user credentials
+                    User
+                        .query()
+                        .findById(request.auth.credentials.id)
+                        .then((user) => {
+                            //if they have a relationship already, error out, else make the relationship
+                            //between section and the user ID with the relationshipType of student
+                            if (!hasPreviousRelationship) {
+                                return user
+                                    .$relatedQuery('section')
+                                    .relate({
+                                        id: request.params.section_id,
+                                        relationship_type_id: relationshipType.id
+                                    });
+                            } else {
+                                return reply(Boom.badRequest(`You are already enrolled in section ID ${request.params.section_id}`));
+                            }
+                        })
+                        //if it makes the new row, send it back to the client
+                        .then((newUserRelation) => {
+                            if (newUserRelation.id == request.params.section_id) {
+                                newUserRelation.user_id = request.auth.credentials.id;
+                                return reply(newUserRelation);
+                            }
+                        })
+                        .catch((err) => {
+                            return reply(Boom.notFound(`Section ID ${request.params.section_id} was not found!`));
+                        });
+                });
+        },
+        config: {
+            notes: 'Allows a student to self-enroll into a given section_id, prevents against double enrolling in the same section',
+            validate: {
+                params: {
+                    section_id: Joi.number().positive().integer()
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'POST',
+        path: '/sections/{section_id}/users/{user_id}/enroll',
+        handler: function (request, reply) {
+            var hasPreviousRelationship = null;
+            //Get any of the previous relationships
+            UserSection
+                .query()
+                .where('section_id', request.params.section_id)
+                .andWhere('user_id', request.params.user_id)
+                .first()
+                .then((userSection) => {
+                    //set previous relationship to a larger var scope
+                    hasPreviousRelationship = userSection;
+                });
+
+            //Get the relationship type object for a student
+            RelationshipType
+                .query()
+                .where('title', 'student')
+                .first()
+                .then((relationshipType) => {
+                    //Get the user object based on the current_user credentials
+                    User
+                        .query()
+                        .findById(request.params.user_id)
+                        .then((user) => {
+                            //if they have a relationship already, error out, else make the relationship
+                            //between section and the user ID with the relationshipType of student
+                            if (!hasPreviousRelationship) {
+                                return user
+                                    .$relatedQuery('section')
+                                    .relate({
+                                        id: request.params.section_id,
+                                        relationship_type_id: relationshipType.id
+                                    });
+                            } else {
+                                return reply(Boom.badRequest(`You are already enrolled in section ID ${request.params.section_id}`));
+                            }
+                        })
+                        //if it makes the new row, send it back to the client
+                        .then((newUserRelation) => {
+                            if (newUserRelation.id == request.params.section_id) {
+                                newUserRelation.user_id = request.params.user_id;
+                                return reply(newUserRelation);
+                            }
+                        })
+                        .catch((err) => {
+                            //check to see if the error was caused by an invalid section_id or user_id
+                            if (err.constraint == 'user_section_section_id_foreign')
+                                reply(Boom.notFound(`Section ID ${request.params.section_id} was not found!`));
+                            else
+                                reply(Boom.notFound(`User ID ${request.params.user_id} was not found!`))
+                        });
+                });
+        },
+        config: {
+            notes: 'Allows a student to self-enroll into a given section_id, prevents against double enrolling in the same section',
+            validate: {
+                params: {
+                    section_id: Joi.number().positive().integer(),
+                    user_id: Joi.number().positive().integer()
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/sections/{section_id}/relationships/{relationship_type_id}',
+        handler: function (request, reply) {
+            //find the relationship type for a relationship_type_id
+            RelationshipType
+                .query()
+                .findById(request.params.relationship_type_id)
+                .then((relationship) => {
+                    //if it doesn't exist blow up
+                    if(!relationship)
+                        return reply(Boom.notFound('Relationship Type ID ' + request.params.relationship_type_id + ' was not found!'));
+                    else {
+                        //find the section for a section_id
+                        Section
+                            .query()
+                            .findById(request.params.section_id)
+                            .then((section) => {
+                                //if it doesn't exist blow up
+                                if(!section)
+                                    return reply(Boom.notFound('Section ID ' + request.params.section_id + ' was not found!'));
+                                else {
+                                    //get all the users related to the section so only the users 
+                                    //select is required so that the password is not sent back
+                                    return section
+                                        .$relatedQuery('user')
+                                        .select('id', 'first_name', 'last_name', 'campus_id', 'email')
+                                        .where('relationship_type_id', request.params.relationship_type_id)
+                                }
+                            })
+                            .then((response) => {
+                                //prevents a double reply error when sending back the response
+                                if(response.isBoom != true)
+                                    reply(response);
+                            });
+                    }
+                });
+        },
+        config: {
+            notes: 'gets all the users for a given section_id based on their relationship_type',
+            validate: {
+                params: {
+                    section_id: Joi.number().positive().integer(),
+                    relationship_type_id: Joi.number().positive().integer()
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/offerings/{offering_id}/relationships/{relationship_type_id}',
+        handler: function (request, reply) {
+            //find the relationship type for a relationship_type_id
+            RelationshipType
+                .query()
+                .findById(request.params.relationship_type_id)
+                .then((relationship) => {
+                    //if it doesn't exist blow up
+                    if(!relationship)
+                        return reply(Boom.notFound('Relationship Type ID ' + request.params.relationship_type_id + ' was not found!'));
+                    else {
+                        //find the section for a offering_id
+                        Offering
+                            .query()
+                            .findById(request.params.offering_id)
+                            .then((section) => {
+                                //if it doesn't exist blow up
+                                if(!section)
+                                    return reply(Boom.notFound('Offering ID ' + request.params.offering_id + ' was not found!'));
+                                else {
+                                    //get all the users related to the offering so only the users 
+                                    //select is required so that the password is not sent back
+                                    return section
+                                        .$relatedQuery('user')
+                                        .select('id', 'first_name', 'last_name', 'campus_id', 'email')
+                                        .where('relationship_type_id', request.params.relationship_type_id)
+                                }
+                            })
+                            .then((response) => {
+                                //prevents a double reply error when sending back the response
+                                if(response.isBoom != true)
+                                    reply(response);
+                            });
+                    }
+                });
+        },
+        config: {
+            notes: 'gets all the users for a given offering_id based on their relationship_type',
+            validate: {
+                params: {
+                    offering_id: Joi.number().positive().integer(),
+                    relationship_type_id: Joi.number().positive().integer()
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'POST',
+        path: '/sections/{section_id}/relationships/{relationship_type_id}',
+        handler: function (request, reply) {
+            //find the relationship type for a relationship_type_id
+            RelationshipType
+                .query()
+                .findById(request.params.relationship_type_id)
+                .then((relationship) => {
+                    //if it doesn't exist blow up
+                    if(!relationship)
+                        return reply(Boom.notFound('Relationship Type ID ' + request.params.relationship_type_id + ' was not found!'));
+                    else {
+                        //find the section for a section_id
+                        Section
+                            .query()
+                            .findById(request.params.section_id)
+                            .then((section) => {
+                                //if it doesn't exist blow up
+                                if(!section)
+                                    return reply(Boom.notFound('Section ID ' + request.params.section_id + ' was not found!'));
+                                else {
+                                    //relate the curerrent user and the given relationship_type_id accross the section
+                                    return section
+                                        .$relatedQuery('user')
+                                        .relate({
+                                            id: request.auth.credentials.id,
+                                            relationship_type_id: request.params.relationship_type_id
+                                        })
+                                    .catch((err) => {
+                                        //error out if referential integrity bulks about the relationship already existing
+                                        return reply(Boom.badRequest('You are already enrolled in section ID ' + request.params.section_id));
+                                    });
+                                }
+                            })
+                            .then((response) => {
+                                //prevents a double reply error when sending back the response
+                                if(response.isBoom != true){
+                                    response['section_id'] = request.params.section_id;
+                                    reply(response);
+                                }
+                            });
+                    }
+                });
+        },
+        config: {
+            notes: 'assocaites the current user to the section_id with the given relationship_type_id',
+            validate: {
+                params: {
+                    section_id: Joi.number().positive().integer(),
+                    relationship_type_id: Joi.number().positive().integer()
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'POST',
+        path: '/offerings/{offering_id}/relationships/{relationship_type_id}',
+        handler: function (request, reply) {
+            //find the relationship type for a relationship_type_id
+            RelationshipType
+                .query()
+                .findById(request.params.relationship_type_id)
+                .then((relationship) => {
+                    //if it doesn't exist blow up
+                    if(!relationship)
+                        return reply(Boom.notFound('Relationship Type ID ' + request.params.relationship_type_id + ' was not found!'));
+                    else {
+                        //find the section for a section_id
+                        Offering
+                            .query()
+                            .findById(request.params.offering_id)
+                            .then((offering) => {
+                                //if it doesn't exist blow up
+                                if(!offering)
+                                    return reply(Boom.notFound('Offering ID ' + request.params.offering_id + ' was not found!'));
+                                else {
+                                    //relate the curerrent user and the given relationship_type_id accross the offering
+                                    return offering
+                                        .$relatedQuery('user')
+                                        .relate({
+                                            id: request.auth.credentials.id,
+                                            relationship_type_id: request.params.relationship_type_id
+                                        })
+                                    .catch((err) => {
+                                        //error out if referential integrity bulks about the relationship already existing
+                                        return reply(Boom.badRequest('You are already enrolled in offering ID ' + request.params.offering_id));
+                                    });
+                                }
+                            })
+                            .then((response) => {
+                                //prevents a double reply error when sending back the response
+                                if(response.isBoom != true){
+                                    response['offering_id'] = request.params.offering_id;
+                                    reply(response);
+                                }
+                            });
+                    }
+                });
+        },
+        config: {
+            notes: 'assocaites the current user to the offering_id with the given relationship_type_id',
+            validate: {
+                params: {
+                    offering_id: Joi.number().positive().integer(),
+                    relationship_type_id: Joi.number().positive().integer()
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/relationships',
+        handler: function(request, reply) {
+            RelationshipType
+                .query()
+                .then((relationships) => {
+                    reply(relationships);
+                });
+        },
+        config: {
+            notes: 'gets all the relationship_types for sections/offerings from the database'
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/relationships/{relationship_type_id}',
+        handler: function(request, reply) {
+            RelationshipType
+                .query()
+                .findById(request.params.relationship_type_id)
+                .then((relationship) => {
+                    if(relationship)
+                        reply(relationship);
+                    else
+                        reply(Boom.notFound('Relationship Type ID ' + request.params.relationship_type_id + ' was not found!'))
+                });
+        },
+        config: {
+            notes: 'gets a specific relationship_type object for sections/offerings from the database'
+        }
+    });
+
     next();
 };
 
-exports.register.attributes = { name: 'schedule', version: '0.0.3' };
+exports.register.attributes = { name: 'schedule', version: '0.0.7' };

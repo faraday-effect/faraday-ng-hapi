@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 import { init_test, expect, server, db } from './support';
 const lab = exports.lab = init_test();
@@ -166,17 +166,16 @@ lab.experiment('/login endpoint', () => {
     });
 
     lab.test('Checks the current user route to make sure it returns 401 if not logged in', (done) => {
-        var user = null;
 
         server.inject(
             {
                 method: 'GET',
                 url: '/login',
-                credentials: user
             },
             (res) => {
-                expect(res.statusCode).to.equal(401);
+                expect(res.statusCode).to.equal(200);
                 const response = JSON.parse(res.payload);
+                expect(response).to.equal({});
                 done();
             });
     });

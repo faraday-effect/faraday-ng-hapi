@@ -1,16 +1,55 @@
-const course_prefix_name = 8;
+const course_prefix_name = 3;
 const Joi = require('joi');
-const bookshelf = require('../bookshelf');
 const Boom = require('boom');
+
+const Prefix = require('../models/Prefix');
+const Department = require('../models/Department');
 
 exports.register = function (server, options, next) {
 
- server.route({
+    server.route({
         method: 'GET',
         path: '/prefixes',
         handler: function (request, reply) {
-            var response = bookshelf.Prefixes.forge().fetch();
-            reply(response);
+            Prefix
+                .query()
+                .then((prefixes) => {
+                    reply(prefixes);
+                })
+                .catch((err) => {
+                    reply(Boom.badImplementation(err));
+                });
+        },
+        config: {
+            notes: 'retrieves all the prefixes from the database'
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/prefixes/{prefix_id}',
+        handler: function (request, reply) {
+            Prefix
+                .query()
+                .where('id', request.params.prefix_id)
+                .first()
+                .then((prefix) => {
+                    if (prefix)
+                        reply(prefix);
+                    else
+                        reply(Boom.notFound('Prefix ID ' + request.params.prefix_id + ' was not found!'))
+                })
+                .catch((err) => {
+                    reply(Boom.badImplementation(err));
+                });
+        },
+        config: {
+            notes: 'Returns a prefix name given a prefix_id',
+            validate: {
+                params: {
+                    prefix_id: Joi.number().positive().integer()
+                }
+            }
         }
     });
 
@@ -18,14 +57,17 @@ exports.register = function (server, options, next) {
         method: 'POST',
         path: '/prefixes',
         handler: function (request, reply) {
-            new bookshelf.Prefix({
-                name: request.payload.name
-            })
-                .save().then(function (model) {
-                reply(model)
-            }).catch(function (err) {
-                return reply(Boom.badImplementation('Failed to create a new prefix', err));
-            });
+            Prefix
+                .query()
+                .insert({
+                    name: request.payload.name
+                })
+                .then((prefix) => {
+                    reply(prefix);
+                })
+                .catch((err) => {
+                    reply(Boom.badImplementation(err));
+                });
         },
         config: {
             validate: {
@@ -40,16 +82,17 @@ exports.register = function (server, options, next) {
         method: 'PUT',
         path: '/prefixes/{prefix_id}',
         handler: function (request, reply) {
-            bookshelf.Prefix.forge({'id': request.params.prefix_id})
-                .save(
-                    {
-                        name: request.payload.name
-                    }
-                ).then(function (model) {
-                reply(model)
-            }).catch(function (err) {
-                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
-            });
+            Prefix
+                .query()
+                .patchAndFetchById(request.params.prefix_id, {
+                    name: request.payload.name
+                })
+                .then((prefix) => {
+                    reply(prefix);
+                })
+                .catch((err) => {
+                    reply(Boom.badImplementation(err));
+                });
         },
         config: {
             notes: 'Updates a prefix given a prefix_id',
@@ -64,48 +107,22 @@ exports.register = function (server, options, next) {
         }
     });
 
-    server.route({
-        method: 'GET',
-        path: '/prefixes/{prefix_id}',
-        handler: function (request, reply) {
-            var response = bookshelf.Prefix.forge({'id': encodeURIComponent(request.params.prefix_id)}).fetch();
-            reply(response);
-        },
-        config: {
-            notes: 'Returns a prefix name given a prefix_id',
-            validate: {
-                params: {
-                    prefix_id: Joi.number().positive().integer()
-                }
-            }
-        }
-    });
-
-    server.route({
-        method: 'DELETE',
-        path: '/prefixes/{prefix_id}',
-        handler: function (request, reply) {
-            var response = bookshelf.Prefix.forge({'id': encodeURIComponent(request.params.prefix_id)}).fetch();
-            console.log('I deleted');
-            reply(response);
-        },
-        config: {
-            notes: 'to be implemented',
-            validate: {
-                params: {
-                    prefix_id: Joi.number().positive().integer()
-                }
-            }
-        }
-    });
-
 
     server.route({
         method: 'GET',
         path: '/departments',
         handler: function (request, reply) {
-            var response = bookshelf.Departments.forge().fetch();
-            reply(response);
+            Department
+                .query()
+                .then((department) => {
+                    reply(department);
+                })
+                .catch((err) => {
+                    reply(Boom.badImplementation(err));
+                });
+        },
+        config: {
+            notes: 'retrieves all the departments from the database'
         }
     });
 
@@ -113,8 +130,19 @@ exports.register = function (server, options, next) {
         method: 'GET',
         path: '/departments/{department_id}',
         handler: function (request, reply) {
-            var response = bookshelf.Department.forge({'id': encodeURIComponent(request.params.department_id)}).fetch();
-            reply(response);
+            Department
+                .query()
+                .where('id', request.params.department_id)
+                .first()
+                .then((department) => {
+                    if (department)
+                        reply(department);
+                    else
+                        reply(Boom.notFound('Department ID ' + request.params.department_id + ' was not found!'));
+                })
+                .catch((err) => {
+                    reply(Boom.badImplementation(err));
+                });
         },
         config: {
             notes: 'returns a department name given a department_id',
@@ -130,20 +158,20 @@ exports.register = function (server, options, next) {
         method: 'GET',
         path: '/departments/{department_id}/prefixes',
         handler: function (request, reply) {
-            new bookshelf.Department({id: request.params.department_id}).fetch().then(function (model) {
-                new bookshelf.Department_Prefix().where({department_id: request.params.department_id}).fetchAll().then(model2 => {
-                    var responseJSON = {
-                        id: model.get('id'),
-                        name: model.get('name'),
-                        prefixes: model2
-                    };
-                    reply(responseJSON);
-                }).catch((err) => {
-                    return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
+            Department
+                .query()
+                .where('id', request.params.department_id)
+                .eager('prefix')
+                .first()
+                .then((department) => {
+                    if(department)
+                        reply(department);
+                    else
+                        reply(Boom.notFound('Department ID ' + request.params.department_id + ' was not found!'))
+                })
+                .catch((err) => {
+                    reply(Boom.badImplementation(err));
                 });
-            }).catch((err) => {
-                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
-            });
         },
         config: {
             notes: 'returns the prefixes in an array and department name for a given department_id',
@@ -157,16 +185,57 @@ exports.register = function (server, options, next) {
 
     server.route({
         method: 'POST',
+        path: '/departments/{department_id}/prefixes/{prefix_id}',
+        handler: function (request, reply) {
+            Department
+                .query()
+                .where('id', request.params.department_id)
+                .first()
+                .then((department) => {
+                    return department
+                        .$relatedQuery('prefix')
+                        .relate(request.params.prefix_id);
+                })
+                .then((response) => {
+                    Department
+                        .query()
+                        .where('id', request.params.department_id)
+                        .eager('prefix')
+                        .first()
+                        .then((department) => {
+                            reply(department)
+                        });
+                })
+                .catch((err) => {
+                    reply(Boom.badRequest('Could not associate department ID ' + request.params.department_id + ' with prefix ID ' + request.params.prefix_id));
+                });
+        },
+        config: {
+            notes: 'Associates a department_id with a prefix_id',
+            validate: {
+                params: {
+                    department_id: Joi.number().positive().integer(),
+                    prefix_id: Joi.number().positive().integer()
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'POST',
         path: '/departments',
         handler: function (request, reply) {
-            new bookshelf.Department({
-                name: request.payload.name
-            })
-                .save().then(function (model) {
-                reply(model)
-            }).catch(function (err) {
-                return reply(Boom.badImplementation('Failed to create a new department', err));
-            });
+            Department
+                .query()
+                .insert({
+                    name: request.payload.name
+                })
+                .then((department) => {
+                    reply(department);
+                })
+                .catch((err) => {
+                    reply(Boom.badImplementation(err));
+                });
         },
         config: {
             notes: 'creates a new department',
@@ -182,22 +251,23 @@ exports.register = function (server, options, next) {
         method: 'PUT',
         path: '/departments/{department_id}',
         handler: function (request, reply) {
-            bookshelf.Department.forge({'id': request.params.department_id})
-                .save(
-                    {
-                        name: request.payload.name
-                    }
-                ).then(function (model) {
-                reply(model)
-            }).catch(function (err) {
-                return reply(Boom.badImplementation('Uh oh! Something went wrong!', err));
-            });
+            Department
+                .query()
+                .patchAndFetchById(request.params.department_id, {
+                    name: request.payload.name
+                })
+                .then((department) => {
+                    reply(department);
+                })
+                .catch((err) => {
+                    reply(Boom.badImplementation(err));
+                });
         },
         config: {
             notes: 'updates a department given a department_id',
             validate: {
                 params: {
-                    course_id: Joi.number().positive().integer()
+                    department_id: Joi.number().positive().integer()
                 },
                 payload: {
                     name: Joi.string().required()
@@ -206,24 +276,7 @@ exports.register = function (server, options, next) {
         }
     });
 
-    server.route({
-        method: 'DELETE',
-        path: '/departments/{department_id}',
-        handler: function (request, reply) {
-            var response = bookshelf.Department.forge({'id': encodeURIComponent(request.params.department_id)}).fetch();
-            console.log('I deleted');
-            reply(response);
-        },
-        config: {
-            notes: 'to be implemented',
-            validate: {
-                params: {
-                    department_id: Joi.number().positive().integer()
-                }
-            }
-        }
-    });
     next();
 };
 
-exports.register.attributes = {name: 'departments', version: '0.0.1'};
+exports.register.attributes = { name: 'departments', version: '0.0.2' };

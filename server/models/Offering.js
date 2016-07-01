@@ -1,7 +1,7 @@
 'use strict';
 
 const Model = require('objection').Model;
-const db = require('./../db')
+const db = require('../db');
 
 class Offering extends Model {
     static get tableName() { return 'offering'; }
@@ -30,8 +30,9 @@ class Offering extends Model {
                 join: {
                     from: 'offering.id',
                     through: {
-                        from: 'user_relationship.offering_id',
-                        to: 'user_relationship.user_id'
+                        from: 'user_offering.offering_id',
+                        to: 'user_offering.user_id',
+                        extra: ['relationship_type_id']
                     },
                     to: 'user.id'
                 }

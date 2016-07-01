@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Faraday Quiz",
+  "description": "Multiple choice quiz",
+  "type": "object",
+  "properties": {
+    "title": {
+      "description": "Quiz title",
+      "type": "string"
+    },
+    "uuid": {
+      "description": "Universally Unique ID for Quiz",
+      "type": "string"
+    },
+    "questions": {
+      "description": "Quiz questions",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "description": "Text of a question",
+            "type": "string"
+          },
+          "uuid": {
+            "description": "Universally Unique ID for Question",
+            "type": "string"
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "Answer ID; unique within question",
+                  "type": "integer"
+                },
+                "answer": {
+                  "description": "Possible answer",
+                  "type": "string"
+                },
+                "feedback": {
+                  "description": "Feedback regarding the answer",
+                  "type": "string"
+                }
+              },
+              "required": ["id", "answer"]
+            }
+          },
+          "scoring": {
+            "type": "object",
+            "properties": {
+              "correct": {
+                "description": "ID of correct answer",
+                "type": "integer"
+              }
+            }
+          }
+        },
+        "required": ["question", "uuid", "answers", "scoring"]
+      }
+    }
+  },
+  "required": ["title", "uuid", "questions"]
+}

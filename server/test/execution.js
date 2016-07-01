@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 import { init_test, expect, server, db } from './support';
 const lab = exports.lab = init_test();
@@ -15,11 +15,12 @@ lab.experiment('/Execution endpoint', () => {
     lab.beforeEach(done => {
 
         return Promise.all([
-            db.knex.raw('TRUNCATE public.attendance CASCADE'),
-            db.knex.raw('TRUNCATE public.user CASCADE'),
-            db.knex.raw('TRUNCATE public.actual_class CASCADE'),
-            db.knex.raw('TRUNCATE public.sequence CASCADE'),
-            db.knex.raw('TRUNCATE public.section CASCADE'),
+            db.knex.raw(
+                'TRUNCATE public.department CASCADE; ' +
+                'TRUNCATE public.prefix CASCADE; ' + 
+                'TRUNCATE public.user CASCADE; ' +
+                'TRUNCATE public.term CASCADE; '
+                )
         ])
             .then(results => {
                 return Promise.all([
@@ -39,7 +40,7 @@ lab.experiment('/Execution endpoint', () => {
                         .insertWithRelated({
                             title: 'Section xyz',
                             reg_number: '123456',
-                            credit_hours: '3',
+                            credit_hours: 3,
                             sequence: {
                                 title: 'seq xyz',
                                 offering: {

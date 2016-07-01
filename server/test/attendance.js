@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 import { init_test, expect, server, db } from './support';
 const lab = exports.lab = init_test();
@@ -6,20 +6,23 @@ const lab = exports.lab = init_test();
 const User = require('../models/User');
 const Section = require('../models/Section');
 const ActualClass = require('../models/ActualClass');
+var Nes = require('nes');
 
 lab.experiment('/attendance endpoint', () => {
 
     var section = null;
     var user = null;
+    // var client = null;
 
     lab.beforeEach(done => {
 
         return Promise.all([
-            db.knex.raw('TRUNCATE public.attendance CASCADE'),
-            db.knex.raw('TRUNCATE public.user CASCADE'),
-            db.knex.raw('TRUNCATE public.actual_class CASCADE'),
-            db.knex.raw('TRUNCATE public.sequence CASCADE'),
-            db.knex.raw('TRUNCATE public.section CASCADE'),
+            db.knex.raw(
+                'TRUNCATE public.department CASCADE; ' +
+                'TRUNCATE public.prefix CASCADE; ' +
+                'TRUNCATE public.user CASCADE; ' +
+                'TRUNCATE public.term CASCADE; '
+            )
         ])
             .then(results => {
                 return Promise.all([
@@ -39,7 +42,7 @@ lab.experiment('/attendance endpoint', () => {
                         .insertWithRelated({
                             title: 'Section xyz',
                             reg_number: '123456',
-                            credit_hours: '3',
+                            credit_hours: 3,
                             sequence: {
                                 title: 'seq xyz',
                                 offering: {
@@ -73,7 +76,6 @@ lab.experiment('/attendance endpoint', () => {
             }).then(results => {
                 user = results[0];
                 section = results[1];
-
             })
             .catch(err => {
                 console.log("ERROR", err);
@@ -81,10 +83,96 @@ lab.experiment('/attendance endpoint', () => {
 
     });
 
-    // No need to invoke done();  According to documentation,
-    // you can return a promise instead.
+    lab.test('Attendance status route is successful - returning true', (done) => {
+        server.inject(
+            {
+                method: 'POST',
+                credentials: user,
+                url: `/sections/${section.id}/attendance`,
+                payload: {
+                    code: '000000'
+                }
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(200);
+                const response = JSON.parse(res.payload);
+                expect(response.id).to.exist()
+                expect(response.user_id).to.equal(user.id);
+                expect(response.actual_class_id).to.equal(section.sequence.actualClass.id);
+                expect(response.id).to.exist();
+                expect(response.signed_in).to.exist();
+                expect(response.signed_out).to.not.exist();
+                server.inject(
+                    {
+                        method: 'GET',
+                        credentials: user,
+                        url: `/sections/${section.id}/attendance`
+                    },
+                    (res) => {
+                        expect(res.statusCode).to.equal(200);
+                        const response = JSON.parse(res.payload);
+                        expect(response.attending).to.be.true();
+                        expect(response.message).to.equal('You\'re already listed as attending for this class');
+                        done();
+                    });
+            });
+    });
 
-lab.test('Retrieves all the actualClasses', (done) => {
+    lab.test('Error out on invalid section for attendance status route', (done) => {
+
+        server.inject(
+            {
+                method: 'GET',
+                credentials: user,
+                url: `/sections/100000000/attendance`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(404);
+                const response = JSON.parse(res.payload);
+                expect(response.message).to.equal('Section ID 100000000 was not found!');
+                done();
+            });
+    });
+
+    lab.test('Attendance route successful - returning false - not started class', (done) => {
+        ActualClass
+            .query()
+            .deleteById(section.sequence.actualClass.id)
+            .then(() => {
+                server.inject(
+                    {
+                        method: 'GET',
+                        credentials: user,
+                        url: `/sections/${section.id}/attendance`
+                    },
+                    (res) => {
+                        expect(res.statusCode).to.equal(200);
+                        const response = JSON.parse(res.payload);
+                        expect(response.attending).to.be.false();
+                        expect(response.message).to.equal('Your professor has not yet started class');
+                        done();
+                    });
+            });
+    });
+
+    lab.test('Attendance route successful - returning false - not attending class', (done) => {
+
+        server.inject(
+            {
+                method: 'GET',
+                credentials: user,
+                url: `/sections/${section.id}/attendance`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(200);
+                const response = JSON.parse(res.payload);
+                expect(response.attending).to.be.false();
+                expect(response.message).to.equal('You are not attending this class');
+                done();
+            });
+    });
+
+    lab.test('Retrieves all the actualClasses', (done) => {
 
         server.inject(
             {
@@ -104,7 +192,7 @@ lab.test('Retrieves all the actualClasses', (done) => {
     });
 
     lab.test('Errors out if the section has no classes', (done) => {
-         ActualClass
+        ActualClass
             .query()
             .deleteById(section.sequence.actualClass.id)
             .then(() => {
@@ -178,11 +266,11 @@ lab.test('Retrieves all the actualClasses', (done) => {
             });
     });
 
-    lab.test('Posts reflection successfully', (done) => {
+    lab.test('Adds reflection successfully', (done) => {
 
         server.inject(
             {
-                method: 'POST',
+                method: 'PUT',
                 credentials: user,
                 url: '/classes/1',
                 payload: {
@@ -197,6 +285,27 @@ lab.test('Retrieves all the actualClasses', (done) => {
                 expect(response.stop_time).to.be.null();
                 expect(response.reflection).to.startWith('abcxyz');
                 expect(response.sequence_id).to.equal(section.sequence.id);
+                done();
+            });
+    });
+
+    lab.test('Mark user_id as present to a class', (done) => {
+
+        server.inject(
+            {
+                method: 'POST',
+                credentials: user,
+                url: `/sections/${section.id}/users/${user.id}/attendance`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(200);
+                const response = JSON.parse(res.payload);
+                expect(response.id).to.exist()
+                expect(response.user_id).to.equal(user.id);
+                expect(response.actual_class_id).to.equal(section.sequence.actualClass.id);
+                expect(response.id).to.exist();
+                expect(response.signed_in).to.exist();
+                expect(response.signed_out).to.not.exist();
                 done();
             });
     });
@@ -225,11 +334,126 @@ lab.test('Retrieves all the actualClasses', (done) => {
             });
     });
 
-    lab.test('Error out if section is not found', (done) => {
+    lab.test('nes publishes item', (done) => {
+
+        server.inject(
+            {
+                method: 'GET',
+                credentials: user,
+                url: `/nes/auth`
+            },
+            (res) => {
+                console.log(res.headers['set-cookie'][0].split(';')[0]);
+                var client = new Nes.Client('ws://localhost:' + server.connections[0].info.port);
+                    client.connect({ auth: { headers: { cookie: res.headers['set-cookie'][0].split(';')[0] } } }, function (err){
+                        console.log(err);
+
+                    var handler = function (update, flags) {
+                        console.log(flags);
+                        console.log(update);
+                    };
+
+                    client.subscribe(`/sections/${section.id}/attendance`, handler, function (err) {
+                        console.log(err);
+                    });
+
+                server.inject(
+                    {
+                        method: 'POST',
+                        credentials: user,
+                        url: `/sections/${section.id}/attendance`,
+                        payload: {
+                            code: '000000'
+                        }
+                    },
+                    (res) => {
+                        expect(res.statusCode).to.equal(200);
+                        const response = JSON.parse(res.payload);
+                        expect(response.id).to.exist()
+                        expect(response.user_id).to.equal(user.id);
+                        expect(response.actual_class_id).to.equal(section.sequence.actualClass.id);
+                        expect(response.id).to.exist();
+                        expect(response.signed_in).to.exist();
+                        expect(response.signed_out).to.not.exist();
+                        done();
+                    });
+                    });
+                });
+    });
+
+    lab.test('Error out if section is not found when giving the user_id when signing in a student', (done) => {
+
+        server.inject(
+            {
+                method: 'POST',
+                credentials: user,
+                url: `/sections/100000000/users/${user.id}/attendance`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(404);
+                const response = JSON.parse(res.payload);
+                expect(response.error).to.equal('Not Found');
+                expect(response.message).to.equal('Section ID 100000000 was not found!');
+                done();
+            });
+    });
+
+    lab.test('Error out if section is not found when giving user_id when signing out a student', (done) => {
 
         server.inject(
             {
                 method: 'DELETE',
+                credentials: user,
+                url: `/sections/100000000/users/${user.id}/attendance`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(404);
+                const response = JSON.parse(res.payload);
+                expect(response.error).to.equal('Not Found');
+                expect(response.message).to.equal('Section ID 100000000 was not found!');
+                done();
+            });
+    });
+
+    lab.test('Error out if user is not found when giving the user_id when signing in a student', (done) => {
+
+        server.inject(
+            {
+                method: 'POST',
+                credentials: user,
+                url: `/sections/${section.id}/users/100000000/attendance`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(404);
+                const response = JSON.parse(res.payload);
+                expect(response.error).to.equal('Not Found');
+                expect(response.message).to.equal('User ID 100000000 was not found!');
+                done();
+            });
+    });
+
+    lab.test('Error out if user is not found when giving user_id when signing out a student', (done) => {
+
+        server.inject(
+            {
+                method: 'DELETE',
+                credentials: user,
+                url: `/sections/${section.id}/users/100000000/attendance`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(404);
+                const response = JSON.parse(res.payload);
+                expect(response.error).to.equal('Not Found');
+                expect(response.message).to.equal('User ID 100000000 was not found!');
+                done();
+            });
+    });
+
+    lab.test('Error out if section is not found', (done) => {
+
+        server.inject(
+            {
+                method: 'POST',
                 credentials: user,
                 url: `/sections/100000000/attendance`,
                 payload: {
@@ -249,12 +473,9 @@ lab.test('Retrieves all the actualClasses', (done) => {
 
         server.inject(
             {
-                method: 'POST',
+                method: 'DELETE',
                 credentials: user,
-                url: `/sections/100000000/attendance`,
-                payload: {
-                    code: '000000'
-                }
+                url: `/sections/100000000/attendance`
             },
             (res) => {
                 expect(res.statusCode).to.equal(404);
@@ -299,6 +520,39 @@ lab.test('Retrieves all the actualClasses', (done) => {
                         const response = JSON.parse(res.payload);
                         expect(response.error).to.equal('Bad Request');
                         expect(response.message).to.equal('You already are listed as present for this class!');
+                        done();
+                    });
+            });
+    });
+
+    lab.test('Error out on a double sign in to a class when given the user_id', (done) => {
+
+        server.inject(
+            {
+                method: 'POST',
+                credentials: user,
+                url: `/sections/${section.id}/users/${user.id}/attendance`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(200);
+                const response = JSON.parse(res.payload);
+                expect(response.id).to.exist()
+                expect(response.user_id).to.equal(user.id);
+                expect(response.actual_class_id).to.equal(section.sequence.actualClass.id);
+                expect(response.id).to.exist();
+                expect(response.signed_in).to.exist();
+                expect(response.signed_out).to.not.exist();
+                server.inject(
+                    {
+                        method: 'POST',
+                        credentials: user,
+                        url: `/sections/${section.id}/users/${user.id}/attendance`
+                    },
+                    (res) => {
+                        expect(res.statusCode).to.equal(400);
+                        const response = JSON.parse(res.payload);
+                        expect(response.error).to.equal('Bad Request');
+                        expect(response.message).to.equal(`${user.id} is already listed as present for this class!`);
                         done();
                     });
             });
@@ -349,6 +603,28 @@ lab.test('Retrieves all the actualClasses', (done) => {
             });
     });
 
+    lab.test('Error out class not in session when providing a user_id', (done) => {
+
+        ActualClass
+            .query()
+            .deleteById(section.sequence.actualClass.id)
+            .then(() => {
+                server.inject(
+                    {
+                        method: 'POST',
+                        credentials: user,
+                        url: `/sections/${section.id}/users/${user.id}/attendance`
+                    },
+                    (res) => {
+                        expect(res.statusCode).to.equal(400);
+                        const response = JSON.parse(res.payload);
+                        expect(response.error).to.equal('Bad Request');
+                        expect(response.message).to.equal('The professor has not started class yet!');
+                        done();
+                    });
+            });
+    });
+
     lab.test('Error out class already ended', (done) => {
 
         ActualClass
@@ -359,10 +635,7 @@ lab.test('Retrieves all the actualClasses', (done) => {
                     {
                         method: 'DELETE',
                         credentials: user,
-                        url: `/sections/${section.id}/attendance`,
-                        payload: {
-                            code: '000000'
-                        }
+                        url: `/sections/${section.id}/attendance`
                     },
                     (res) => {
                         expect(res.statusCode).to.equal(400);
@@ -374,7 +647,29 @@ lab.test('Retrieves all the actualClasses', (done) => {
             });
     });
 
-    lab.test('Mark oneself as signed_out from a class', (done) => {
+    lab.test('Error out class already ended when providing a user_id', (done) => {
+
+        ActualClass
+            .query()
+            .deleteById(section.sequence.actualClass.id)
+            .then(() => {
+                server.inject(
+                    {
+                        method: 'DELETE',
+                        credentials: user,
+                        url: `/sections/${section.id}/users/${user.id}/attendance`
+                    },
+                    (res) => {
+                        expect(res.statusCode).to.equal(400);
+                        const response = JSON.parse(res.payload);
+                        expect(response.error).to.equal('Bad Request');
+                        expect(response.message).to.equal('Class has already ended!');
+                        done();
+                    });
+            });
+    });
+
+    lab.test('Mark oneself as signed_out from a class successfully', (done) => {
 
         server.inject(
             {
@@ -415,19 +710,77 @@ lab.test('Retrieves all the actualClasses', (done) => {
             });
     });
 
-        lab.test('Error out if you are not marked as present', (done) => {
+    lab.test('Mark user_id as signed_out from a class successfully', (done) => {
+
+        server.inject(
+            {
+                method: 'POST',
+                credentials: user,
+                url: `/sections/${section.id}/users/${user.id}/attendance`,
+                payload: {
+                    code: '000000'
+                }
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(200);
+                const response = JSON.parse(res.payload);
+                expect(response.id).to.exist()
+                expect(response.user_id).to.equal(user.id);
+                expect(response.actual_class_id).to.equal(section.sequence.actualClass.id);
+                expect(response.id).to.exist();
+                expect(response.signed_in).to.exist();
+                expect(response.signed_out).to.not.exist();
+
+                server.inject(
+                    {
+                        method: 'DELETE',
+                        credentials: user,
+                        url: `/sections/${section.id}/users/${user.id}/attendance`
+                    },
+                    (res2) => {
+                        expect(res2.statusCode).to.equal(200);
+                        const response = JSON.parse(res2.payload);
+                        expect(response.id).to.exist()
+                        expect(response.user_id).to.equal(user.id);
+                        expect(response.actual_class_id).to.equal(section.sequence.actualClass.id);
+                        expect(response.id).to.exist();
+                        expect(response.signed_in).to.exist();
+                        expect(response.signed_out).to.exist();
+                        done();
+                    });
+            });
+    });
+
+    lab.test('Error out if you are not marked as present', (done) => {
 
         server.inject(
             {
                 method: 'DELETE',
                 credentials: user,
-                url: `/sections/${section.id}/attendance`,
+                url: `/sections/${section.id}/attendance`
             },
             (res) => {
                 expect(res.statusCode).to.equal(400);
                 const response = JSON.parse(res.payload);
                 expect(response.error).to.equal('Bad Request');
                 expect(response.message).to.equal('You are not marked as present for this class!');
+                done();
+            });
+    });
+
+    lab.test('Error out if the user_id was not marked as present', (done) => {
+
+        server.inject(
+            {
+                method: 'DELETE',
+                credentials: user,
+                url: `/sections/${section.id}/users/${user.id}/attendance`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(400);
+                const response = JSON.parse(res.payload);
+                expect(response.error).to.equal('Bad Request');
+                expect(response.message).to.equal(`${user.id} is not marked as present for this class!`);
                 done();
             });
     });

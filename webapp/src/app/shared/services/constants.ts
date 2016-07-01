@@ -1,14 +1,16 @@
-export let BaseUrl = "http://localhost:3000/";
-export let WebSocketUrl = "ws://localhost:3000/";
+export const BaseUrl = 'http://localhost:3000/';
 
-export let LoginUrl = BaseUrl + 'login';
-export let LogoutUrl = BaseUrl + 'logout';
+export const WebSocketUrl = 'ws://localhost:3000/';
+export const WebSocketAuthUrl = 'http://localhost:3000/nes/auth';
 
-export let AttendanceUrl = BaseUrl + 'attendance';
-export let CoursesUrl = BaseUrl + 'courses';
-export let DepartmentsUrl = BaseUrl + 'departments';
-export let PrefixesUrl = BaseUrl + 'prefixes';
-export let SectionsUrl = BaseUrl + 'sections';
-export let TermsUrl = BaseUrl + 'terms';
-export let UsersUrl = BaseUrl + 'users';
-export let StudentsUrl = BaseUrl + 'students';
+export const LoginUrl = BaseUrl + 'login';
+export const LogoutUrl = BaseUrl + 'logout';
+
+export const AttendanceUrl = BaseUrl + 'attendance';
+export const CoursesUrl = BaseUrl + 'courses';
+export const DepartmentsUrl = BaseUrl + 'departments';
+export const PrefixesUrl = BaseUrl + 'prefixes';
+export const SectionsUrl = BaseUrl + 'sections';
+export const TermsUrl = BaseUrl + 'terms';
+export const UsersUrl = BaseUrl + 'users';
+export const StudentsUrl = BaseUrl + 'students';

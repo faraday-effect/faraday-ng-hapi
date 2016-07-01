@@ -3,7 +3,11 @@ export class FaradayPage {
     return browser.get('/');
   }
 
-  getParagraphText() {
-    return element(by.css('faraday-app h1')).getText();
+  getToolbar() {
+    return $('nav').getText();
+  }
+
+  getTitle() {
+    return $('.brand-logo').getText();
   }
 }

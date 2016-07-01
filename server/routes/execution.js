@@ -2,7 +2,7 @@ const Boom = require('boom');
 const Joi = require('joi');
 
 const Section = require('../models/Section');
-const ActualClass = require('../models/ActualClass')
+const ActualClass = require('../models/ActualClass');
 
 exports.register = function (server, options, next) {
 
