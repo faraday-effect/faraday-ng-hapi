@@ -43,8 +43,7 @@ exports.register = function (server, options, next) {
                                                 if (alreadyRegisteredAttendanceRecord != null) {
                                                     return reply(Boom.badRequest('You already are listed as present for this class!'));
                                                 } else {
-                                                    let path = '/sections/'+request.params.section_id+'/attendance';
-                                                    server.publish(path, { user_id: request.auth.credentials.id, present: true });
+                                                    server.publish(`/sections/${request.params.section_id}/attendance`, { user_id: request.auth.credentials.id, present: true });
                                                     //insert the attendance record with a time stamp
                                                     Attendance
                                                         .query()
@@ -119,7 +118,7 @@ exports.register = function (server, options, next) {
                                                 return reply(Boom.badRequest('You are not marked as present for this class!'));
                                             } else {
                                                 //insert the attendance record with a time stamp
-                                                server.publish('/sections/{request.params.section_id}/attendance', { user_id: request.auth.credentials.id, present: false });
+                                                server.publish(`/sections/${request.params.section_id}/attendance`, { user_id: request.auth.credentials.id, present: false });
                                                 Attendance
                                                     .query()
                                                     .patchAndFetchById(alreadyRegisteredAttendanceRecord.id, {
@@ -258,6 +257,7 @@ exports.register = function (server, options, next) {
                                                                     actual_class_id: actual_class.id
                                                                 })
                                                                 .then((attendanceEntry) => {
+                                                                    server.publish(`/sections/${request.params.section_id}/attendance`, { user_id: request.params.user_id, present: true });
                                                                     reply(attendanceEntry);
                                                                 });
                                                         }
@@ -337,6 +337,7 @@ exports.register = function (server, options, next) {
                                                                     signed_out: new Date()
                                                                 })
                                                                 .then((attendanceEntry) => {
+                                                                    server.publish(`/sections/${request.params.section_id}/attendance`, { user_id: request.params.user_id, present: false });
                                                                     reply(attendanceEntry);
                                                                 });
                                                         }

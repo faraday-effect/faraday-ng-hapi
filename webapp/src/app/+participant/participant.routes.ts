@@ -9,7 +9,7 @@ export const ParticipantRoutes: RouterConfig = [
     path: 'participant',
     component: ParticipantComponent,
     children: [
-      { path: '', redirectTo: 'quiz', terminal: true },
+      { path: '', redirectTo: 'quiz', pathMatch: 'full' },
       { path: 'quiz', component: QuizComponent },
     ],
   },

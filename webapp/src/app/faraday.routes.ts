@@ -9,7 +9,7 @@ import { CoursesRoutes } from './courses/courses.routes';
 import { LoginComponent } from './+login';
 
 export const routes: RouterConfig = [
-  { path: '', redirectTo: 'login', terminal: true },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   ...AdminRoutes,
   ...ParticipantRoutes,

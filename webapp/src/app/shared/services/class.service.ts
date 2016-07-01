@@ -40,7 +40,7 @@ const SECTIONS: any[] = [
 ];
 
 interface Handler {
-  (ids: any[]): any;
+  (obj: any): any;
 }
 
 @Injectable()
@@ -98,16 +98,7 @@ export class ClassService {
   // attendance
 
   subscribeToAttendance(id: number) {
-    console.log('subscribing...');
-    this.nesService.client.request('/hello', (err, msg) => {
-      console.log('requested /hello!');
-      console.log(msg);
-    });
-    this.nesService.subscribe('/sections/'+id+'/attendance', msg => {
-      console.log('subscribed to attendance!');
-      console.log(msg);
-      this.attendHandler([msg.student_id]);
-    });
+    this.nesService.subscribe(`/sections/${id}/attendance`, this.attendHandler);
   }
 
   getStudents(id) {
@@ -122,11 +113,11 @@ export class ClassService {
 
   attend(id: number, section_id: number, code: string) {
     let message = JSON.stringify({code: code});
-    this.http.post(SectionsUrl+'/'+section_id+'/users/'+id+'/attendance', message).subscribe();
+    this.http.post(SectionsUrl+`/${section_id}/users/${id}/attendance`, message).subscribe();
   }
 
   leave(id: number, section_id: number) {
-    this.http.delete(SectionsUrl+'/'+section_id+'/users/'+id+'/attendance').subscribe();
+    this.http.delete(SectionsUrl+`/${section_id}/users/${id}/attendance`).subscribe();
   }
 
   handleError(error: any) {

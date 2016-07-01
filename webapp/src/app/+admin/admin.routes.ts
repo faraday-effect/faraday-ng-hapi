@@ -18,7 +18,7 @@ export const AdminRoutes: RouterConfig = [
     path: 'admin',
     component: AdminComponent,
     children: [
-      { path: '', redirectTo: 'courses', terminal: true },
+      { path: '', redirectTo: 'courses', pathMatch: 'full' },
       { path: 'courses', component: CoursesComponent },
       { path: 'courses/:id', component: CourseComponent },
       { path: 'sections', component: SectionsComponent },

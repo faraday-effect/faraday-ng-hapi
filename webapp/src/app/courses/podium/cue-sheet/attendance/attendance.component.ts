@@ -43,19 +43,25 @@ export class AttendanceComponent implements OnInit {
       });
     });
 
-    this.classService.handleAttend(objs => {
-      for (let obj of objs) {
-        this.attending[obj.id] = obj.present;
+    this.classService.handleAttend(obj => {
+      if (this.attending[obj.user_id] == undefined && obj.present) {
+        this.attending[obj.user_id] = 'present';
+      } else if (this.attending[obj.user_id] == 'present' && ! obj.present) {
+        this.attending[obj.user_id] = 'left';
       }
     });
   }
 
-  getPresent() {
-    return this.students.filter(s => this.attending[s.id]);
+  getAbsent() {
+    return this.students.filter(s => this.attending[s.id] === undefined);
   }
 
-  getAbsent() {
-    return this.students.filter(s => ! this.attending[s.id]);
+  getPresent() {
+    return this.students.filter(s => this.attending[s.id] === 'present');
+  }
+
+  getLeft() {
+    return this.students.filter(s => this.attending[s.id] === 'left');
   }
 
   attend(id: number) {

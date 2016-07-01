@@ -8,7 +8,7 @@ export const ProjectorRoutes: RouterConfig = [
     path: 'projector',
     component: ProjectorComponent,
     children: [
-      { path: '', redirectTo: 'welcome', terminal: true },
+      { path: '', redirectTo: 'welcome', pathMatch: 'full' },
       { path: 'welcome', component: WelcomeComponent },
     ],
   },
