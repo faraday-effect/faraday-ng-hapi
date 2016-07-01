@@ -43,7 +43,8 @@ exports.register = function (server, options, next) {
                                                 if (alreadyRegisteredAttendanceRecord != null) {
                                                     return reply(Boom.badRequest('You already are listed as present for this class!'));
                                                 } else {
-                                                    server.publish('/sections/{request.params.section_id}/attendance', { user_id: request.auth.credentials.id, present: true });
+                                                    let path = '/sections/'+request.params.section_id+'/attendance';
+                                                    server.publish(path, { user_id: request.auth.credentials.id, present: true });
                                                     //insert the attendance record with a time stamp
                                                     Attendance
                                                         .query()

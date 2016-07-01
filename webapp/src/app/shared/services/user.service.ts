@@ -18,7 +18,9 @@ export class UserService {
   constructor(
     private nesService: NesService,
     private http: Http) {
-    this.getCurrentUser().subscribe();
+    this.getCurrentUser().subscribe(() => {
+      if (this.isLoggedIn) this.nesService.startNes();
+    });
   }
 
   getCurrentUser() {

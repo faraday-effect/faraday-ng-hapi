@@ -4,7 +4,7 @@ import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 import { Course, Person } from '../models';
-import { CoursesUrl, SectionsUrl, StudentsUrl, AttendanceUrl } from './constants';
+import { CoursesUrl, SectionsUrl, StudentsUrl } from './constants';
 import { NesService } from './nes.service';
 
 // MOCK
@@ -38,25 +38,19 @@ const SECTIONS: any[] = [
     title: 'Section 2'
   },
 ];
-const CLASS_CODE = '000000';
 
 interface Handler {
-  (ids: number[]): any;
+  (ids: any[]): any;
 }
 
 @Injectable()
 export class ClassService {
 
   attendHandler: Handler;
-  departHandler: Handler;
 
   constructor(
     private nesService: NesService,
-    private http: Http) {
-      nesService.subscribe('/attendance', msg => {
-        this.attendHandler([msg.student_id]);
-      });
-  }
+    private http: Http) { }
 
   // courses
 
@@ -103,35 +97,36 @@ export class ClassService {
 
   // attendance
 
+  subscribeToAttendance(id: number) {
+    console.log('subscribing...');
+    this.nesService.client.request('/hello', (err, msg) => {
+      console.log('requested /hello!');
+      console.log(msg);
+    });
+    this.nesService.subscribe('/sections/'+id+'/attendance', msg => {
+      console.log('subscribed to attendance!');
+      console.log(msg);
+      this.attendHandler([msg.student_id]);
+    });
+  }
+
   getStudents(id) {
-    return this.http.get(SectionsUrl+`/${id}/students`)
-               .toPromise()
-               .then(response => response.json())
+    return this.http.get(SectionsUrl+`/${id}/relationships/1`) // 1 hardcoded to students FIXME
+               .map(response => response.json())
                .catch(this.handleError);
   }
 
-  handleArrive(handler: Handler) {
+  handleAttend(handler: Handler) {
     this.attendHandler = handler;
   }
 
-  handleDepart(handler: Handler) {
-    this.departHandler = handler;
+  attend(id: number, section_id: number, code: string) {
+    let message = JSON.stringify({code: code});
+    this.http.post(SectionsUrl+'/'+section_id+'/users/'+id+'/attendance', message).subscribe();
   }
 
-  attend(id: number, classId: number) {
-    let message = JSON.stringify({
-      student_id: id,
-      actual_class_id: classId,
-      code: CLASS_CODE,
-    });
-    this.http.post(AttendanceUrl, message)
-        .toPromise().then(response => {
-          response.json();
-        });
-  }
-
-  depart(id: number, classId: number) {
-    this.departHandler([id]);
+  leave(id: number, section_id: number) {
+    this.http.delete(SectionsUrl+'/'+section_id+'/users/'+id+'/attendance').subscribe();
   }
 
   handleError(error: any) {

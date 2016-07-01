@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 
 const COURSES = [
   {
-    id: 21,
+    id: 1,
     prefix: "COS",
     number: "120",
     title: "Introduction to Computational Problem Solving",
@@ -11,7 +11,7 @@ const COURSES = [
     start_time: "10:00 AM",
     stop_time: "10:50 AM",
     days: "MWF",
-    role: "student",
+    role: "teacher",
   },
   {
     id: 25,

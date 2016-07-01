@@ -3,8 +3,10 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
 
 import { ToolbarComponent } from './toolbar';
 import * as ServicesModule from 'app/shared/services';
+import * as ConfigModule from 'app/shared/config';
 
 let Services = Object.keys(ServicesModule).map(k => ServicesModule[k]);
+let Config = Object.keys(ConfigModule).map(k => ConfigModule[k]);
 
 @Component({
   moduleId: module.id,
@@ -14,6 +16,7 @@ let Services = Object.keys(ServicesModule).map(k => ServicesModule[k]);
   directives: [ROUTER_DIRECTIVES, ToolbarComponent],
   providers: [
     Services,
+    Config,
   ]
 })
 export class FaradayAppComponent {

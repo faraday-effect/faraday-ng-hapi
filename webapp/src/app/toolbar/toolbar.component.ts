@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ROUTER_DIRECTIVES, Router } from '@angular/router';
 
 import {
-  ToolbarConfigService,
+  ToolbarConfig,
   UserService,
 } from 'app/shared';
 
@@ -23,7 +23,7 @@ export class ToolbarComponent implements OnInit {
   constructor(
     private userService: UserService,
     private router: Router,
-    private config: ToolbarConfigService) {}
+    private config: ToolbarConfig) {}
 
   ngOnInit() {
     this.routes = routes;

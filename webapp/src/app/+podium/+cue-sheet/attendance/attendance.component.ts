@@ -27,6 +27,7 @@ export class AttendanceComponent implements OnInit {
   }
 
   ngOnInit() {
+    /*
     this.classService.getSections()
         .toPromise()
         .then(sections => this.section_id = 1)
@@ -37,6 +38,8 @@ export class AttendanceComponent implements OnInit {
             (a, b) => a.first_name.localeCompare(b.first_name)
           );
         });
+        */
+       /*
 
     this.classService.handleArrive(ids => {
       for (let id of ids) {
@@ -49,6 +52,7 @@ export class AttendanceComponent implements OnInit {
         this.attending[id] = false;
       }
     });
+    */
   }
 
   getPresent() {
@@ -60,11 +64,11 @@ export class AttendanceComponent implements OnInit {
   }
 
   attend(id: number) {
-    this.classService.attend(id, this.classId);
+    // this.classService.attend(id, this.classId);
   }
 
   depart(id: number) {
-    this.classService.depart(id, this.classId);
+    // this.classService.depart(id, this.classId);
   }
 
   startClass() {

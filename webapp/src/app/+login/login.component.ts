@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import {
-  ToolbarConfigService,
+  ToolbarConfig,
   UserService,
 } from 'app/shared';
 
@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
   password: string;
 
   constructor(
-    private toolbarConfig: ToolbarConfigService,
+    private toolbarConfig: ToolbarConfig,
     private router: Router,
     private userService: UserService) {}
 

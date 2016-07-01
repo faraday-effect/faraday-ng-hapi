@@ -16,7 +16,7 @@ export class NesService {
   constructor(private http: Http) { }
 
   startNes() {
-    this.http.get(WebSocketAuthUrl).subscribe(() => {
+    this.http.get(WebSocketAuthUrl).subscribe(msg => {
       this.client = new Nes.Client(WebSocketUrl);
       this.client.connect(this.handleError);
       this.client.onConnect = () => {

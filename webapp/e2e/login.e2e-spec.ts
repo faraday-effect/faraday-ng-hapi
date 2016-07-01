@@ -1,13 +1,13 @@
 import { LoginPage } from './login.po';
-import { expectToMatch, getBody, login } from './utils';
+import { expectToMatch, getBody, login, logout } from './utils';
 
 describe('login page', () => {
-  let page: LoginPage, loginUrl;
+  let page: LoginPage;
+  let loginUrl = 'http://localhost:3000/login';
 
   beforeEach(() => {
     page = new LoginPage();
     page.navigateTo();
-    loginUrl = browser.getCurrentUrl();
   });
 
   it('should have title and fields', () => {
@@ -22,6 +22,7 @@ describe('login page', () => {
     expect(browser.getCurrentUrl()).not.toEqual(loginUrl);
   });
 
+  /*
   it('should have first and last name and logout button in toolbar when logged in', () => {
     let bar = page.getToolbar();
     expectToMatch(bar, /Test Example/);
@@ -29,9 +30,9 @@ describe('login page', () => {
   });
 
   it('should log out when logout button clicked', () => {
-    let logoutButton = page.getLogoutButton();
-    logoutButton.click();
-    let bar = page.getToolbar();
-    expectToMatch(bar, /Log In/);
+    logout();
+    // let bar = page.getToolbar();
+    expect(browser.getCurrentUrl()).toEqual(loginUrl);
   });
+  */
 });
