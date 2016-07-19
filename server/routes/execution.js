@@ -3,6 +3,7 @@ const Joi = require('joi');
 
 const Section = require('../models/Section');
 const ActualClass = require('../models/ActualClass');
+const attendance_code_length = require('../plugins/codeGenerator').attendance_code_length;
 
 exports.register = function (server, options, next) {
 
@@ -27,15 +28,24 @@ exports.register = function (server, options, next) {
                             .then((existingActualClass) => {
                                 //checks to make sure that the professor hasn't already started class
                                 if (existingActualClass == null) {
-                                    section
-                                        .sequence
-                                        .$relatedQuery('actualClass')
-                                        .insert({
-                                            start_time: new Date(),
-                                            sequence_id: section.sequence.id
-                                        }).then((actualClass) => {
-                                            reply(actualClass);
-                                        });
+                                    //create code                                    
+                                    server.methods.attendance.classBegin(section.sequence.id, (err, result) => {
+                                        if (!err) {
+                                            //create actual class instance
+                                            section
+                                                .sequence
+                                                .$relatedQuery('actualClass')
+                                                .insert({
+                                                    start_time: new Date(),
+                                                    sequence_id: section.sequence.id
+                                                }).then((actualClass) => {
+                                                    actualClass.code = result;
+                                                    reply(actualClass);
+                                                });
+                                        } else {
+                                            return reply(Boom.badImplementation(err));
+                                        }
+                                    });
                                 } else {
                                     reply(Boom.badRequest('Class is already in session!'));
                                 }
@@ -79,14 +89,20 @@ exports.register = function (server, options, next) {
                             .then((existingActualClass) => {
                                 //checks to make sure that the professor has already started class
                                 if (existingActualClass != null) {
-                                    section
-                                        .sequence
-                                        .$relatedQuery('actualClass')
-                                        .patchAndFetchById(existingActualClass.id, {
-                                            stop_time: new Date()
-                                        }).then((actualClass) => {
-                                            reply(actualClass);
-                                        });
+                                    server.methods.attendance.classOver(section.sequence.id, (err, result) => {
+                                        if (!err) {
+                                            section
+                                                .sequence
+                                                .$relatedQuery('actualClass')
+                                                .patchAndFetchById(existingActualClass.id, {
+                                                    stop_time: new Date()
+                                                }).then((actualClass) => {
+                                                    reply(actualClass);
+                                                });
+                                        } else {
+                                            reply(Boom.badImplementation(err));
+                                        }
+                                    });
                                 } else {
                                     reply(Boom.badRequest('Class has not been started or has already ended for the day!'));
                                 }
@@ -112,4 +128,4 @@ exports.register = function (server, options, next) {
     next();
 };
 
-exports.register.attributes = { name: 'execution', version: '0.0.1' };
+exports.register.attributes = { name: 'execution', version: '0.0.4' };

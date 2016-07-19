@@ -95,6 +95,7 @@ lab.experiment('/Execution endpoint', () => {
                 expect(response.id).to.exist()
                 expect(response.sequence_id).to.equal(section.sequence.id);
                 expect(response.start_time).to.exist();
+                expect(response.code).to.exist();
                 expect(response.stop_time).to.not.exist();
                 done();
             });
@@ -148,6 +149,7 @@ lab.experiment('/Execution endpoint', () => {
                 expect(response.id).to.exist()
                 expect(response.sequence_id).to.equal(section.sequence.id);
                 expect(response.start_time).to.exist();
+                expect(response.code).to.exist();
                 expect(response.stop_time).to.not.exist();
                 server.inject(
                     {
@@ -179,6 +181,7 @@ lab.experiment('/Execution endpoint', () => {
                 expect(response.id).to.exist()
                 expect(response.sequence_id).to.equal(section.sequence.id);
                 expect(response.start_time).to.exist();
+                expect(response.code).to.exist();
                 expect(response.stop_time).to.not.exist();
 
                 server.inject(
