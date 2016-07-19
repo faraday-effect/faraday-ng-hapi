@@ -7,11 +7,13 @@ const User = require('../models/User');
 const Section = require('../models/Section');
 const ActualClass = require('../models/ActualClass');
 var Nes = require('nes');
+var Wreck = require('wreck');
 
 lab.experiment('/attendance endpoint', () => {
 
     var section = null;
     var user = null;
+    var actualClass = null;
     // var client = null;
 
     lab.beforeEach(done => {
@@ -21,7 +23,8 @@ lab.experiment('/attendance endpoint', () => {
                 'TRUNCATE public.department CASCADE; ' +
                 'TRUNCATE public.prefix CASCADE; ' +
                 'TRUNCATE public.user CASCADE; ' +
-                'TRUNCATE public.term CASCADE; '
+                'TRUNCATE public.term CASCADE; ' +
+                'TRUNCATE public.actual_class CASCADE; '
             )
         ])
             .then(results => {
@@ -73,9 +76,12 @@ lab.experiment('/attendance endpoint', () => {
                             }
                         })
                 ])
+                    .then((results) => {
+                        user = results[0];
+                        section = results[1];
+                    })
             }).then(results => {
-                user = results[0];
-                section = results[1];
+                server.methods.attendance.setCode(section.sequence_id, '000000');
             })
             .catch(err => {
                 console.log("ERROR", err);
@@ -93,26 +99,26 @@ lab.experiment('/attendance endpoint', () => {
                     code: '000000'
                 }
             },
-            (res) => {
-                expect(res.statusCode).to.equal(200);
-                const response = JSON.parse(res.payload);
-                expect(response.id).to.exist()
-                expect(response.user_id).to.equal(user.id);
-                expect(response.actual_class_id).to.equal(section.sequence.actualClass.id);
-                expect(response.id).to.exist();
-                expect(response.signed_in).to.exist();
-                expect(response.signed_out).to.not.exist();
+            (res1) => {
+                expect(res1.statusCode).to.equal(200);
+                const response1 = JSON.parse(res1.payload);
+                expect(response1.id).to.exist()
+                expect(response1.user_id).to.equal(user.id);
+                expect(response1.actual_class_id).to.equal(section.sequence.actualClass.id);
+                expect(response1.id).to.exist();
+                expect(response1.signed_in).to.exist();
+                expect(response1.signed_out).to.not.exist();
                 server.inject(
                     {
                         method: 'GET',
                         credentials: user,
                         url: `/sections/${section.id}/attendance`
                     },
-                    (res) => {
-                        expect(res.statusCode).to.equal(200);
-                        const response = JSON.parse(res.payload);
-                        expect(response.attending).to.be.true();
-                        expect(response.message).to.equal('You\'re already listed as attending for this class');
+                    (res2) => {
+                        expect(res2.statusCode).to.equal(200);
+                        const response2 = JSON.parse(res2.payload);
+                        expect(response2.attending).to.be.true();
+                        expect(response2.message).to.equal('You\'re already listed as attending for this class');
                         done();
                     });
             });
@@ -332,53 +338,6 @@ lab.experiment('/attendance endpoint', () => {
                 expect(response.signed_out).to.not.exist();
                 done();
             });
-    });
-
-    lab.test('nes publishes item', (done) => {
-
-        server.inject(
-            {
-                method: 'GET',
-                credentials: user,
-                url: `/nes/auth`
-            },
-            (res) => {
-                console.log(res.headers['set-cookie'][0].split(';')[0]);
-                var client = new Nes.Client('ws://localhost:' + server.connections[0].info.port);
-                    client.connect({ auth: { headers: { cookie: res.headers['set-cookie'][0].split(';')[0] } } }, function (err){
-                        console.log(err);
-
-                    var handler = function (update, flags) {
-                        console.log(flags);
-                        console.log(update);
-                    };
-
-                    client.subscribe(`/sections/${section.id}/attendance`, handler, function (err) {
-                        console.log(err);
-                    });
-
-                server.inject(
-                    {
-                        method: 'POST',
-                        credentials: user,
-                        url: `/sections/${section.id}/attendance`,
-                        payload: {
-                            code: '000000'
-                        }
-                    },
-                    (res) => {
-                        expect(res.statusCode).to.equal(200);
-                        const response = JSON.parse(res.payload);
-                        expect(response.id).to.exist()
-                        expect(response.user_id).to.equal(user.id);
-                        expect(response.actual_class_id).to.equal(section.sequence.actualClass.id);
-                        expect(response.id).to.exist();
-                        expect(response.signed_in).to.exist();
-                        expect(response.signed_out).to.not.exist();
-                        done();
-                    });
-                    });
-                });
     });
 
     lab.test('Error out if section is not found when giving the user_id when signing in a student', (done) => {
@@ -716,10 +675,7 @@ lab.experiment('/attendance endpoint', () => {
             {
                 method: 'POST',
                 credentials: user,
-                url: `/sections/${section.id}/users/${user.id}/attendance`,
-                payload: {
-                    code: '000000'
-                }
+                url: `/sections/${section.id}/users/${user.id}/attendance`
             },
             (res) => {
                 expect(res.statusCode).to.equal(200);

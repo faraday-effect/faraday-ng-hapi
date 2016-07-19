@@ -44,7 +44,20 @@ class Offering extends Model {
                     from: 'offering.id',
                     to: 'actual_class.offering_id'
                 }
-            }
+            },
+            learningOutcomes: {
+                relation: Model.ManyToManyRelation,
+                modelClass: __dirname + '/LearningOutcome',
+                join: {
+                    from: 'offering.id',
+                    through: {
+                        from: 'offering_outcome.offering_id',
+                        to: 'offering_outcome.learning_outcome_id',
+                        extra: ['discussion']
+                    },
+                    to: 'learning_outcome.id'
+                }
+            },
         }
     }
 }

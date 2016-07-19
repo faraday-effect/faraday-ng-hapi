@@ -326,8 +326,6 @@ knex.schema.createTableIfNotExists('user_offering', function (table) {
         }),
 
         knex.schema.createTableIfNotExists('offering_outcome', function (table) {
-            table.increments('id').primary();
-            table.text('discussion');
             table.integer('learning_outcome_id')
                 .unsigned()
                 .notNullable()
@@ -338,17 +336,18 @@ knex.schema.createTableIfNotExists('user_offering', function (table) {
                 .notNullable()
                 .references('id')
                 .inTable('offering');
+            table.text('discussion');
+            table.primary(['learning_outcome_id', 'offering_id']);
         }),
 
         knex.schema.createTableIfNotExists('intended_outcome', function (table) {
-            table.integer('offering_outcome_id')
-                .references('id')
-                .inTable('offering_outcome');
-            table.integer('activity_id')
-                .references('id')
-                .inTable('activity');
+            table.integer('offering_outcome_learning_outcome_id').unsigned().notNullable();
+            table.integer('offering_outcome_offering_id').unsigned().notNullable();
+            table.integer('activity_id').unsigned().notNullable();
             table.text('discussion');
-            table.primary(['offering_outcome_id', 'activity_id']);
+            table.primary(['offering_outcome_learning_outcome_id', 'offering_outcome_offering_id', 'activity_id']);
+            table.foreign('activity_id').references('activity.id');
+            table.foreign(['offering_outcome_learning_outcome_id', 'offering_outcome_offering_id']).references(['learning_outcome_id', 'offering_id']).on('offering_outcome');
         }),
 
         //purple - execution

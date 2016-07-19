@@ -28,6 +28,7 @@ module.exports = function (callback) {
             // Web Sockets
             {register: require('nes'),
             options: {
+                //set to false because we are using http not https
                 auth: { type: "cookie", isSecure: false }
                 }
             },
@@ -45,9 +46,11 @@ module.exports = function (callback) {
             {register: require('./routes/execution')},
             {register: require('./routes/nes')},
             {register: require('./routes/schedule')},
+            {register: require('./routes/syllabus')},
             {register: require('./routes/users')},
             
             // Other plugins
+            {register: require('./plugins/codeGenerator')},
             {register: require('./plugins/quiz')},
 
             // Logging and reporting
