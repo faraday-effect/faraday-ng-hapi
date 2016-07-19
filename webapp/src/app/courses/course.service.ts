@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { Http } from '@angular/http';
 
 const COURSES = [
   {
@@ -123,9 +124,59 @@ export class CourseService {
 
   num: number;
 
-  constructor() {}
+  constructor(private http: Http) {}
 
   getCourses() {
+    let sectionsUrl = 'http://localhost:3000/sections';
+    let coursesUrl  = 'http://localhost:3000/courses';
+    let sections = {}, courses = {};
+    this.http.get(sectionsUrl)
+        .map(res => {
+          for (let sec of res.json()) {
+            sections[sec.id] = sec;
+          }
+        })
+        .flatMap(() => this.http.get(coursesUrl))
+        .map(res => {
+          for (let cour of res.json()) {
+            courses[cour.id] = cour;
+          }
+        })
+        .subscribe(() => {
+          // console.log(courses);
+          // console.log(sections);
+          let result = [];
+          for (let id in sections) {
+            let sched = {};
+            for (let day of sections[id].sectionSchedule) {
+              let wd;
+              switch (day.weekday) {
+                case 'Monday':    wd = 'M'; break;
+                case 'Tuesday':   wd = 'T'; break;
+                case 'Wednesday': wd = 'W'; break;
+                case 'Thursday':  wd = 'R'; break;
+                case 'Friday':    wd = 'F'; break;
+                case 'Saturday':  wd = 'S'; break;
+                case 'Sunday':    wd = 'U'; break;
+              }
+              let time = `${day.start_time.slice(0, 5)} - ${day.stop_time.slice(0, 5)}`;
+              if (sched[time] === undefined) sched[time] = '';
+              sched[time] += wd;
+            }
+            let course_id = sections[id].course_id;
+            result.push({
+              id: id,
+              prefix: courses[course_id].prefix.name,
+              number: courses[course_id].number,
+              title: courses[course_id].title,
+              // teacher
+              schedule: sched,
+              role: sections[id].relationshipType.title,
+            });
+          }
+          console.log(result);
+        });
+  // { id: 1, prefix: "COS", number: "120", title: "Solving", teacher: "Art White", start_time: "10:00 AM", stop_time: "10:50 AM", days: "MWF", role: "teacher", },
     // let obj = {id:1, prefix: "", number: this.num, title: "", teacher: "", start_time: "", stop_time: "", days: "", role: "student"};
     // return Observable.of(CLASSES.concat([obj]));
     return Observable.of(COURSES);
