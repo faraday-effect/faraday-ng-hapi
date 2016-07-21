@@ -7,8 +7,11 @@
         <a [routerLink]="'./'+course.id" class="card-title black-text">
           {{course.prefix}} {{course.number}} &mdash; {{course.title}}
         </a>
-        <div>{{course.teacher}}</div>
-        <div>{{course.start_time}} &ndash; {{course.stop_time}} ({{course.days}})</div>
+        <div *ngIf="course.teacher">{{course.teacher}}</div>
+        <span *ngFor="let pair of course.schedule; let i = index">
+          {{ i == 0 ? "" : "," }}
+          {{pair[0]}} ({{pair[1]}})
+        </span>
       </div>
       <div [ngSwitch]="course.role">
         <div *ngIf="canAttend(course.id)">
@@ -16,7 +19,7 @@
             <a (click)="attend(course.id)" class="btn-flat">Attend</a>
           </div>
         </div>
-        <div *ngSwitchCase="'teacher'" class="card-action">
+        <div *ngSwitchCase="'instructor'" class="card-action">
           <a [routerLink]="'./'+course.id+'/podium/cue-sheet'" class="btn-flat">Teach</a>
         </div>
       </div>
@@ -32,9 +35,12 @@
           <li *ngFor="let section of course.sections" class="collection-item">
             <a *ngIf="canEnroll(section.id)" (click)="enroll(section.id)" class="btn-flat secondary-content orange-text">Enroll</a>
             <!-- <a *ngIf="canWithdraw(section.id)" (click)="withdraw(section.id)" class="btn-flat secondary-content red">Withdraw</a> -->
-            {{section.teacher}}
+            <div *ngIf="section.teacher">{{section.teacher}}</div>
             <br>
-            {{section.start_time}} &ndash; {{section.stop_time}} ({{section.days}})
+            <span *ngFor="let pair of section.schedule; let i = index">
+              {{ i == 0 ? "" : "," }}
+              {{pair[0]}} ({{pair[1]}})
+            </span>
             <br>
             {{section.credits}} {{ section.credits == 1 ? "Credit" : "Credits" }}
           </li>
