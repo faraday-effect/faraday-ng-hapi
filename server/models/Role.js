@@ -8,7 +8,7 @@ class Role extends Model {
 
     static get relationMappings() {
         return {
-            user: {
+            users: {
                 relation: Model.ManyToManyRelation,
                 modelClass: __dirname + '/User',
                 join: {

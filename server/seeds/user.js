@@ -88,7 +88,7 @@ exports.seed = function (knex, Promise) {
                                     password: '$2a$10$75WOPbDaP1aUl5zrddUULeV9LMd2CZ61l4r7gBBUhV9lgqoJmCAbO',
                                     office_phone: '7659981234',
                                     mobile_phone: '7659985131',
-                                    role: {
+                                    roles: {
                                         '#id': 'faculty',
                                         title: 'Faculty',
                                         description: 'I work in the teaching side of things'
@@ -178,7 +178,7 @@ exports.seed = function (knex, Promise) {
                                     password: '$2a$10$75WOPbDaP1aUl5zrddUULeV9LMd2CZ61l4r7gBBUhV9lgqoJmCAbO',
                                     office_phone: '7659981234',
                                     mobile_phone: null,
-                                    role: {
+                                    roles: {
                                         '#ref': 'faculty'
                                     },
                                     offering:
@@ -280,7 +280,7 @@ exports.seed = function (knex, Promise) {
                                     password: '$2a$10$75WOPbDaP1aUl5zrddUULeV9LMd2CZ61l4r7gBBUhV9lgqoJmCAbO',
                                     office_phone: null,
                                     mobile_phone: '7654804409',
-                                    role: {
+                                    roles: {
                                         '#id': 'student',
                                         title: 'Student',
                                         description: 'I am a student'
@@ -295,7 +295,7 @@ exports.seed = function (knex, Promise) {
                                     password: '$2a$10$75WOPbDaP1aUl5zrddUULeV9LMd2CZ61l4r7gBBUhV9lgqoJmCAbO',
                                     office_phone: null,
                                     mobile_phone: '7654574371',
-                                    role: {
+                                    roles: {
                                         '#ref': 'student'
                                     }
                                 },
@@ -308,7 +308,7 @@ exports.seed = function (knex, Promise) {
                                     password: '$2a$10$75WOPbDaP1aUl5zrddUULeV9LMd2CZ61l4r7gBBUhV9lgqoJmCAbO',
                                     office_phone: '7659984321',
                                     mobile_phone: '7652514154',
-                                    role: {
+                                    roles: {
                                         '#ref': 'faculty'
                                     }
                                 },
@@ -321,7 +321,7 @@ exports.seed = function (knex, Promise) {
                                     password: '$2a$10$75WOPbDaP1aUl5zrddUULeV9LMd2CZ61l4r7gBBUhV9lgqoJmCAbO',
                                     office_phone: null,
                                     mobile_phone: null,
-                                    role: {
+                                    roles: {
                                         '#ref': 'student'
                                     }
                                 },
@@ -334,7 +334,7 @@ exports.seed = function (knex, Promise) {
                                     password: '$2a$10$75WOPbDaP1aUl5zrddUULeV9LMd2CZ61l4r7gBBUhV9lgqoJmCAbO',
                                     office_phone: null,
                                     mobile_phone: null,
-                                    role: {
+                                    roles: {
                                         '#ref': 'student'
                                     }
                                 },
@@ -347,7 +347,7 @@ exports.seed = function (knex, Promise) {
                                     password: '$2a$10$75WOPbDaP1aUl5zrddUULeV9LMd2CZ61l4r7gBBUhV9lgqoJmCAbO',
                                     office_phone: null,
                                     mobile_phone: null,
-                                    role: {
+                                    roles: {
                                         '#ref': 'student'
                                     }
                                 },
@@ -360,7 +360,7 @@ exports.seed = function (knex, Promise) {
                                     password: '$2a$10$75WOPbDaP1aUl5zrddUULeV9LMd2CZ61l4r7gBBUhV9lgqoJmCAbO',
                                     office_phone: null,
                                     mobile_phone: null,
-                                    role: {
+                                    roles: {
                                         '#ref': 'student'
                                     }
                                 },
@@ -373,7 +373,7 @@ exports.seed = function (knex, Promise) {
                                     password: '$2a$10$75WOPbDaP1aUl5zrddUULeV9LMd2CZ61l4r7gBBUhV9lgqoJmCAbO',
                                     office_phone: null,
                                     mobile_phone: null,
-                                    role: {
+                                    roles: {
                                         title: 'Admin',
                                         description: 'I have controls for everything!'
                                     }

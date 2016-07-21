@@ -10,7 +10,7 @@ class User extends Model {
 
     static get relationMappings() {
         return {
-            role: {
+            roles: {
                 relation: Model.ManyToManyRelation,
                 modelClass: __dirname + '/Role',
                 join: {

@@ -43,6 +43,7 @@ exports.register = function (server, options, next) {
             User
                 .query()
                 .where('email', request.payload.email)
+                .eager('roles')
                 .first()
                 .then((user) => {
                     //checks that the user password was matched with the DB password
@@ -57,6 +58,10 @@ exports.register = function (server, options, next) {
 
                         //Removes information from user object passed to browser and stored in the cache
                         user.stripPassword();
+
+                        //set the users scopes
+                        user.scope = user.roles;
+                        delete user['roles'];
 
                         //Sets the user object in the cache
                         server.app.cache.set(sid, user, 0, (err) => {
@@ -97,7 +102,10 @@ exports.register = function (server, options, next) {
                 reply({});
         },
         config: {
-            auth: {mode: 'optional'},
+            auth: {
+                scope: ['user'],
+                mode: 'optional'
+            },
             notes: 'Returns the current user object without the password, null if not logged in'
         }
     });
@@ -108,7 +116,7 @@ exports.register = function (server, options, next) {
         handler: function (request, reply) {
             server.app.cache.drop(request.auth.artifacts.sid, (err) => {
                 if (err) {
-                    return reply(Boom.badImplementation('Couldn\'t drop cache entry for user', err));
+                    return reply(Boom.badImplementation(err));
                 }
             });
             request.cookieAuth.clear();
