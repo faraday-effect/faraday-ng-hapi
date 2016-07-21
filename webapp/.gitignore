@@ -10,15 +10,18 @@
 
 # IDEs and editors
 /.idea
+.project
+.classpath
+*.launch
+.settings/
 
 # misc
-.sass-cache
+/.sass-cache
 /connect.lock
 /coverage/*
 /libpeerconnection.log
 npm-debug.log
 testem.log
-phantomjsdriver.log
 /typings
 
 # e2e

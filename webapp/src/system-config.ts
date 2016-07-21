@@ -1,3 +1,9 @@
+"use strict";
+
+// SystemJS configuration file, see links for more information
+// https://github.com/systemjs/systemjs
+// https://github.com/systemjs/systemjs/blob/master/docs/config-api.md
+
 /***********************************************************************************************
  * User Configuration.
  **********************************************************************************************/
@@ -6,7 +12,7 @@ const map: any = {
   'nes': 'vendor/nes',
   'materialize-css': 'materialize-src',
   'materialize': 'vendor/angular2-materialize',
-  'angular2-materialize': 'vendor/angular2-materialize'
+  'angular2-materialize': 'vendor/angular2-materialize',
 };
 
 /** User packages configuration. */
@@ -18,7 +24,7 @@ const packages: any = {
   'materialize': {
     'main': 'dist/materialize-directive.js',
     //'defaultExtension': 'js'
-  }
+  },
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,6 +36,7 @@ const barrels: string[] = [
   '@angular/core',
   '@angular/common',
   '@angular/compiler',
+  '@angular/forms',
   '@angular/http',
   '@angular/router',
   '@angular/platform-browser',
