@@ -58,9 +58,15 @@ exports.register = function (server, options, next) {
 
                         //Removes information from user object passed to browser and stored in the cache
                         user.stripPassword();
+                        user.scope = [];
 
-                        //set the users scopes
-                        user.scope = user.roles;
+                        //removes the roles object from the user object
+                        //and sets the users scopes object from those roles
+                        for(var i = 0; i < user.roles.length; i++) {
+                            user.scope.push(user.roles[i].title);
+                        }
+                        //every user is by default in the user scope
+                        user.scope.push('user');
                         delete user['roles'];
 
                         //Sets the user object in the cache
@@ -103,7 +109,6 @@ exports.register = function (server, options, next) {
         },
         config: {
             auth: {
-                scope: ['user'],
                 mode: 'optional'
             },
             notes: 'Returns the current user object without the password, null if not logged in'

@@ -90,7 +90,7 @@ exports.seed = function (knex, Promise) {
                                     mobile_phone: '7659985131',
                                     roles: {
                                         '#id': 'faculty',
-                                        title: 'Faculty',
+                                        title: 'faculty',
                                         description: 'I work in the teaching side of things'
                                     },
                                     section:
@@ -282,7 +282,7 @@ exports.seed = function (knex, Promise) {
                                     mobile_phone: '7654804409',
                                     roles: {
                                         '#id': 'student',
-                                        title: 'Student',
+                                        title: 'student',
                                         description: 'I am a student'
                                     }
                                 },
@@ -374,7 +374,7 @@ exports.seed = function (knex, Promise) {
                                     office_phone: null,
                                     mobile_phone: null,
                                     roles: {
-                                        title: 'Admin',
+                                        title: 'admin',
                                         description: 'I have controls for everything!'
                                     }
                                 }
