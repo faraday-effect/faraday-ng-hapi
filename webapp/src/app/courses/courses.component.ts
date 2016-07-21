@@ -25,7 +25,7 @@ export class CoursesComponent implements OnInit {
 
   ngOnInit() {
     this.courses = this.courseService.getCourses();
-    this.allCourses = this.courseService.getAllCourses();
+    this.allCourses = this.courseService.getMockAllCourses();
     this.courses.subscribe(courses => {
       this.enrolled = {};
       for (let c of courses) {

@@ -12,7 +12,7 @@ const COURSES = [
     schedule: [["10:00 - 10:50", "MWF"], ["09:00 - 09:50", "R"]],
     start_time: "10:00 AM",
     stop_time: "10:50 AM",
-    role: "teacher",
+    role: "instructor",
   },
   {
     id: 25,
@@ -30,7 +30,7 @@ const COURSES = [
     title: "Introduction to Systems",
     teacher: "Bill Bauson",
     schedule: [["14:00 - 17:50", "TR"]],
-    role: "teacher",
+    role: "instructor",
   },
   {
     id: 10,
@@ -39,7 +39,7 @@ const COURSES = [
     title: "Introduction to Systems",
     teacher: "Bill Bauson",
     schedule: [["14:00 - 17:50", "TR"]],
-    role: "teacher",
+    role: "student",
   },
   {
     id: 2,
@@ -135,8 +135,6 @@ export class CourseService {
           }
         })
         .map(() => {
-          // console.log(courses);
-          // console.log(sections);
           let result = [];
           for (let id in sections) {
             let sched_table = {};
@@ -170,13 +168,13 @@ export class CourseService {
           console.log(result);
           return result;
         });
-  // { id: 1, prefix: "COS", number: "120", title: "Solving", teacher: "Art White", start_time: "10:00 AM", stop_time: "10:50 AM", days: "MWF", role: "teacher", },
-    // let obj = {id:1, prefix: "", number: this.num, title: "", teacher: "", start_time: "", stop_time: "", days: "", role: "student"};
-    // return Observable.of(CLASSES.concat([obj]));
-    // return Observable.of(COURSES);
   }
 
-  getAllCourses() {
+  getMockCourses() {
+    return Observable.of(COURSES);
+  }
+
+  getMockAllCourses() {
     return Observable.of(ALL_COURSES);
   }
 

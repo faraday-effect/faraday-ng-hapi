@@ -36,7 +36,6 @@
             <a *ngIf="canEnroll(section.id)" (click)="enroll(section.id)" class="btn-flat secondary-content orange-text">Enroll</a>
             <!-- <a *ngIf="canWithdraw(section.id)" (click)="withdraw(section.id)" class="btn-flat secondary-content red">Withdraw</a> -->
             <div *ngIf="section.teacher">{{section.teacher}}</div>
-            <br>
             <span *ngFor="let pair of section.schedule; let i = index">
               {{ i == 0 ? "" : "," }}
               {{pair[0]}} ({{pair[1]}})
