@@ -4,6 +4,7 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
 import { ToolbarComponent } from './toolbar';
 import * as ServicesModule from 'app/shared/services';
 import * as ConfigModule from 'app/shared/config';
+import { UserService } from 'app/shared/services';
 
 let Services = Object.keys(ServicesModule).map(k => ServicesModule[k]);
 let Config = Object.keys(ConfigModule).map(k => ConfigModule[k]);
@@ -21,6 +22,10 @@ let Config = Object.keys(ConfigModule).map(k => ConfigModule[k]);
 })
 export class FaradayAppComponent {
 
-  constructor() {}
+  constructor(private userService: UserService) {}
+
+  ngOnInit() {
+    this.userService.startNesIfLoggedIn();
+  }
 
 }

@@ -137,7 +137,7 @@ export class CourseService {
             title: courses[course_id].title,
             teacher: 'Dr. TODO',
             schedule: this.makeSchedule(sections[id].sectionSchedule),
-            roles: sections[id].relationshipType[0].title, // FIXME hard-coded to 0
+            roles: sections[id].relationshipType.map(r => r.title),
           });
         }
         return result;

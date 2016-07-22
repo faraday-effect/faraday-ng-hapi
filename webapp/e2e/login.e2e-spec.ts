@@ -22,7 +22,6 @@ describe('login page', () => {
     expect(browser.getCurrentUrl()).not.toEqual(loginUrl);
   });
 
-  /*
   it('should have first and last name and logout button in toolbar when logged in', () => {
     let bar = page.getToolbar();
     expectToMatch(bar, /Test Example/);
@@ -31,8 +30,7 @@ describe('login page', () => {
 
   it('should log out when logout button clicked', () => {
     logout();
-    // let bar = page.getToolbar();
-    expect(browser.getCurrentUrl()).toEqual(loginUrl);
+    let bar = page.getToolbar();
+    expectToMatch(bar, /Log In/);
   });
-  */
 });
