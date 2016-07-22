@@ -44,6 +44,7 @@ lab.experiment('/Catalog endpoint', () => {
                             sequence: {
                                 title: 'seq xyz',
                                 offering: {
+                                    title: 'offering_title',
                                     course: {
                                         '#id': 'this_course',
                                         title: 'Course Title',
@@ -113,6 +114,14 @@ lab.experiment('/Catalog endpoint', () => {
                 expect(response[0].section[0].sectionSchedule).to.be.instanceOf(Array);
                 expect(response[0].section[0].sectionSchedule).to.have.length(2);
                 expect(response[0].section[0].sectionSchedule[0].weekday).to.equal(section.sectionSchedule[0].weekday);
+                expect(response[0].offering).to.be.instanceOf(Array);
+                expect(response[0].offering).to.have.length(1);
+                expect(response[0].offering[0].id).to.equal(section.sequence.offering.id);
+                expect(response[0].offering[0].title).to.equal(section.sequence.offering.title);
+                expect(response[0].offering[0].user).to.be.instanceOf(Array);
+                expect(response[0].offering[0].user).to.have.length(0);
+                expect(response[0].section[0].user).to.be.instanceOf(Array);
+                expect(response[0].section[0].user).to.have.length(0);
                 done();
             });
     });
@@ -137,6 +146,14 @@ lab.experiment('/Catalog endpoint', () => {
                 expect(response.section[0].sectionSchedule).to.be.instanceOf(Array);
                 expect(response.section[0].sectionSchedule).to.have.length(2);
                 expect(response.section[0].sectionSchedule[0].weekday).to.equal(section.sectionSchedule[0].weekday);
+                expect(response.offering).to.be.instanceOf(Array);
+                expect(response.offering).to.have.length(1);
+                expect(response.offering[0].id).to.equal(section.sequence.offering.id);
+                expect(response.offering[0].title).to.equal(section.sequence.offering.title);
+                expect(response.offering[0].user).to.be.instanceOf(Array);
+                expect(response.offering[0].user).to.have.length(0);
+                expect(response.section[0].user).to.be.instanceOf(Array);
+                expect(response.section[0].user).to.have.length(0);
                 done();
             });
     });
