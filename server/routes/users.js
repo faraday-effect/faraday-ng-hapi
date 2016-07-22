@@ -88,7 +88,36 @@ exports.register = function (server, options, next) {
         }
     });
 
+
+    server.route({
+        method: 'GET',
+        path: '/users/{user_id}/sections',
+        handler: function (request, reply) {
+            User
+                .query()
+                .findById(request.params.user_id)
+                .then((user) => {
+                    return user
+                        .$relatedQuery('section')
+                        // Load all the related data from the db into a JSON object
+                        .eager('[relationshipType, sectionSchedule, sequence.offering.course.[prefix, department]]')
+                        // Filter the relationshipType by user_id and section_id
+                        .filterEager('relationshipType', builder => {
+                            builder.where('user_id', request.params.user_id)
+                        });
+                }).then((user_sections) => {
+                    reply(user_sections);
+                })
+                .catch((err) => {
+                    reply(Boom.badImplementation(err));
+                });
+        },
+        config: {
+            notes: 'retrieves all the sections for a given user from the database'
+        }
+    });
+
     next();
 };
 
-exports.register.attributes = {name: 'users', version: '0.0.3'};
+exports.register.attributes = {name: 'users', version: '0.0.4'};

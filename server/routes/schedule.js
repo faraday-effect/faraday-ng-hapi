@@ -124,27 +124,18 @@ exports.register = function (server, options, next) {
         method: 'GET',
         path: '/sections',
         handler: function (request, reply) {
-            User
+            Section
                 .query()
-                .findById(request.auth.credentials.id)
-                .then((user) => {
-                    return user
-                        .$relatedQuery('section')
-                        // Load all the related data from the db into a JSON object
-                        .eager('[relationshipType, sectionSchedule, sequence.offering.course.[prefix, department]]')
-                        // Filter the relationshipType by user_id and section_id
-                        .filterEager('relationshipType', builder => {
-                            builder.where('user_id', request.auth.credentials.id)
-                        });
-                }).then((user_sections) => {
-                    reply(user_sections);
+                .eager('[sectionSchedule, sequence.offering.course.[prefix, department], user]')
+                .then((section) => {
+                        reply(section);
                 })
                 .catch((err) => {
                     reply(Boom.badImplementation(err));
                 });
         },
         config: {
-            notes: 'retrieves all the sections for a given user from the database'
+            notes: 'retrieves all the sections from the database'
         }
     });
 
@@ -628,4 +619,4 @@ exports.register = function (server, options, next) {
     next();
 };
 
-exports.register.attributes = { name: 'schedule', version: '0.0.7' };
+exports.register.attributes = { name: 'schedule', version: '0.0.8' };

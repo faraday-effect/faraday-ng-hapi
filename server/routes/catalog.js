@@ -12,7 +12,7 @@ exports.register = function (server, options, next) {
         handler: function (request, reply) {
             Course
                 .query()
-                .eager('[prefix, department, section.sectionSchedule]')
+                .eager('[prefix, department, offering.user, section.[sectionSchedule, user]]')
                 .then((courses) => {
                     reply(courses);
                 })
@@ -32,7 +32,7 @@ exports.register = function (server, options, next) {
             Course
                 .query()
                 .where('id', request.params.course_id)
-                .eager('[prefix, department, section.sectionSchedule]')
+                .eager('[prefix, department, offering.user, section.[sectionSchedule, user]]')
                 .first()
                 .then((course) => {
                     if(course)
