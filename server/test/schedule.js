@@ -223,10 +223,11 @@ lab.experiment('/Schedule endpoint', () => {
                 expect(response[0].sequence.offering.course.id).to.equal(user.section.course.id);
                 expect(response[0].sequence.offering.course.prefix.id).to.equal(user.section.course.prefix_id);
                 expect(response[0].sequence.offering.course.department.id).to.equal(user.section.course.department_id);
+                expect(response[0].user).to.be.instanceOf(Array);
+                expect(response[0].user).to.have.length(1);
                 expect(response[0].sectionSchedule).to.be.instanceOf(Array);
                 expect(response[0].sectionSchedule).to.have.length(2);
                 expect(response[0].sectionSchedule[0].weekday).to.equal(user.section.sectionSchedule[0].weekday);
-                expect(response[0].relationshipType[0].title).to.equal(studentRelationship.title);
                 done();
             });
     });
