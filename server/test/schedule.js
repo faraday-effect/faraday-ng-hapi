@@ -232,6 +232,34 @@ lab.experiment('/Schedule endpoint', () => {
             });
     });
 
+    lab.test('Get all sections for a given user_id', (done) => {
+        server.inject(
+            {
+                method: 'GET',
+                credentials: user,
+                url: `/users/${user.id}/sections`
+            },
+            (res) => {
+                expect(res.statusCode).to.equal(200);
+                const response = JSON.parse(res.payload);
+                expect(response).to.be.instanceOf(Array);
+                expect(response).to.have.length(1);
+                expect(response[0].id).to.equal(user.section.id);
+                expect(response[0].title).to.equal(user.section.title);
+                expect(response[0].reg_number).to.equal(user.section.reg_number);
+                expect(response[0].credit_hours).to.equal(user.section.credit_hours);
+                expect(response[0].sequence.offering.course.id).to.equal(user.section.course.id);
+                expect(response[0].sequence.offering.course.prefix.id).to.equal(user.section.course.prefix_id);
+                expect(response[0].sequence.offering.course.department.id).to.equal(user.section.course.department_id);
+                expect(response[0].relationship_type_id).to.be.equal(user.section.relationship_type_id);
+                expect(response[0].relationshipType).to.exist();
+                expect(response[0].sectionSchedule).to.be.instanceOf(Array);
+                expect(response[0].sectionSchedule).to.have.length(2);
+                expect(response[0].sectionSchedule[0].weekday).to.equal(user.section.sectionSchedule[0].weekday);
+                done();
+            });
+    });
+
     lab.test('Get a single section', (done) => {
         server.inject(
             {
