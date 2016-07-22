@@ -2,6 +2,7 @@
 
 const Joi = require('joi');
 const Boom = require('boom');
+const _ = require('lodash');
 const Section = require('../models/Section');
 const User = require('../models/User');
 const Term = require('../models/Term');
@@ -152,7 +153,20 @@ exports.register = function (server, options, next) {
                 })
                 .then((section) => {
                     if (section)
-                        reply(section);
+                        section
+                            .sequence
+                            .$relatedQuery('actualClass')
+                            .where('stop_time', null)
+                            .first()
+                            .then((exisitngActualClass) => {
+                                if(exisitngActualClass){
+                                    section.inSession = true;
+                                } else {
+                                    section.inSession = false;  
+                                }
+                                delete section.sequence.actualClass;
+                                reply(section);
+                            });
                     else
                         reply(Boom.notFound('Section ID ' + request.params.section_id + ' was not found!'))
                 })
@@ -188,8 +202,30 @@ exports.register = function (server, options, next) {
                         .filterEager('relationshipType', builder => {
                             builder.where('user_id', request.params.user_id)
                         });
-                }).then((user_sections) => {
-                    reply(user_sections);
+                }).then((userSections) => {
+                    new Promise((resolve, reject) => {
+                        var lengthSuccess = 0;
+                    _(userSections).forEach((value) => {
+                        value
+                            .sequence
+                            .$relatedQuery('actualClass')
+                            .where('stop_time', null)
+                            .first()
+                            .then((exisitngActualClass) => {
+                                if(exisitngActualClass){
+                                    value.inSession = true;
+                                } else {
+                                    value.inSession = false;  
+                                }
+                                delete value.sequence.actualClass;
+                                lengthSuccess = lengthSuccess + 1;
+                                if(lengthSuccess == userSections.length)
+                                    resolve(userSections);
+                            });
+                        });
+                    }).then((newUserSections) => {
+                         reply(newUserSections);
+                    });
                 })
                 .catch((err) => {
                     reply(Boom.badImplementation(err));
