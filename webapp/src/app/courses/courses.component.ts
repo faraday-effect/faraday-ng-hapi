@@ -25,7 +25,7 @@ export class CoursesComponent implements OnInit {
 
   ngOnInit() {
     this.courses = this.courseService.getCourses();
-    this.allCourses = this.courseService.getMockAllCourses();
+    this.allCourses = this.courseService.getAllCourses();
     this.courses.subscribe(courses => {
       this.enrolled = {};
       for (let c of courses) {
@@ -39,8 +39,9 @@ export class CoursesComponent implements OnInit {
     this.router.navigate([id, 'participant'], {relativeTo: this.route});
   }
 
-  canAttend(id: number) {
-    return id != 25;
+  canAttend(course: any) {
+    // TODO ta's and actually check if class has started
+    return course.roles.includes('student');
   }
 
   enroll(id: number) {

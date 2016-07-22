@@ -12,7 +12,7 @@ const COURSES = [
     schedule: [["10:00 - 10:50", "MWF"], ["09:00 - 09:50", "R"]],
     start_time: "10:00 AM",
     stop_time: "10:50 AM",
-    role: "instructor",
+    roles: "instructor",
   },
   {
     id: 25,
@@ -21,7 +21,7 @@ const COURSES = [
     title: "Foundations of Computer Science",
     teacher: "Stefan Brandle",
     schedule: [["13:00 - 13:50", "MWF"]],
-    role: "student",
+    roles: "student",
   },
   {
     id: 9,
@@ -30,7 +30,7 @@ const COURSES = [
     title: "Introduction to Systems",
     teacher: "Bill Bauson",
     schedule: [["14:00 - 17:50", "TR"]],
-    role: "instructor",
+    roles: "instructor",
   },
   {
     id: 10,
@@ -39,7 +39,7 @@ const COURSES = [
     title: "Introduction to Systems",
     teacher: "Bill Bauson",
     schedule: [["14:00 - 17:50", "TR"]],
-    role: "student",
+    roles: "student",
   },
   {
     id: 2,
@@ -48,7 +48,7 @@ const COURSES = [
     title: "University Physics I",
     teacher: "Bob Davis",
     schedule: [["14:00 - 17:50", "TR"]],
-    role: "student",
+    roles: "student",
   },
 ];
 
@@ -115,59 +115,69 @@ const ALL_COURSES = [
 export class CourseService {
 
   num: number;
+  private sectionsUrl = 'http://localhost:3000/sections';
+  private coursesUrl  = 'http://localhost:3000/courses';
 
   constructor(private http: Http) {}
 
   getCourses() {
-    let sectionsUrl = 'http://localhost:3000/sections';
-    let coursesUrl  = 'http://localhost:3000/courses';
     let sections = {}, courses = {};
-    return this.http.get(sectionsUrl)
-        .map(res => {
-          for (let sec of res.json()) {
-            sections[sec.id] = sec;
-          }
-        })
-        .flatMap(() => this.http.get(coursesUrl))
-        .map(res => {
-          for (let cour of res.json()) {
-            courses[cour.id] = cour;
-          }
-        })
-        .map(() => {
-          let result = [];
-          for (let id in sections) {
-            let sched_table = {};
-            for (let day of sections[id].sectionSchedule) {
-              let wd;
-              switch (day.weekday) {
-                case 'Monday':    wd = 'M'; break;
-                case 'Tuesday':   wd = 'T'; break;
-                case 'Wednesday': wd = 'W'; break;
-                case 'Thursday':  wd = 'R'; break;
-                case 'Friday':    wd = 'F'; break;
-                case 'Saturday':  wd = 'S'; break;
-                case 'Sunday':    wd = 'U'; break;
-              }
-              let time = `${day.start_time.slice(0, 5)} - ${day.stop_time.slice(0, 5)}`;
-              if (sched_table[time] === undefined) sched_table[time] = '';
-              sched_table[time] += wd;
-            }
-            let sched = Object.keys(sched_table).map(k => [k, sched_table[k]]);
-            let course_id = sections[id].course_id;
-            result.push({
-              id: id,
-              prefix: courses[course_id].prefix.name,
-              number: courses[course_id].number,
-              title: courses[course_id].title,
-              teacher: 'Dr. TODO',
-              schedule: sched,
-              role: sections[id].relationshipType.title,
+    return this.http.get(this.sectionsUrl)
+      .map(res => res.json().map(s => sections[s.id] = s))
+      .flatMap(() => this.http.get(this.coursesUrl))
+      .map(res => res.json().map(c => courses[c.id] = c))
+      .map(() => {
+        let result = [];
+        for (let id in sections) {
+          let course_id = sections[id].course_id;
+          result.push({
+            id: id,
+            prefix: courses[course_id].prefix.name,
+            number: courses[course_id].number,
+            title: courses[course_id].title,
+            teacher: 'Dr. TODO',
+            schedule: this.makeSchedule(sections[id].sectionSchedule),
+            roles: sections[id].relationshipType[0].title, // FIXME hard-coded to 0
+          });
+        }
+        return result;
+      });
+  }
+
+  getAllCourses() {
+    return this.http.get(this.coursesUrl)
+      .map(res => {
+        let courses = [];
+        res.json().map(c => courses[c.id] = c);
+        let result = [];
+        for (let id in courses) {
+          let item = {
+            id: id,
+            prefix: courses[id].prefix.name,
+            number: courses[id].number,
+            title: courses[id].title,
+            sections: [],
+          };
+          for (let s of courses[id].section) {
+            item.sections.push({
+              id: s.id,
+              schedule: this.makeSchedule(s.sectionSchedule),
+              credits: s.credit_hours,
+              teacher: "Dr. TODO ALSO",
             });
           }
-          console.log(result);
-          return result;
-        });
+          result.push(item);
+        }
+        return result;
+      });
+    /*
+    id: 4,
+    prefix: "COS",
+    number: "120",
+    title: "Introduction to Computational Problem Solving",
+    sections: [
+      { id: 10, schedule: [["09:00 - 09:50", "MWF"]], credits: 4, teacher: "Art White" },
+    */
   }
 
   getMockCourses() {
@@ -176,6 +186,26 @@ export class CourseService {
 
   getMockAllCourses() {
     return Observable.of(ALL_COURSES);
+  }
+
+  private makeSchedule(schedule: any) {
+    let sched_table = {};
+    for (let day of schedule) {
+      let wd;
+      switch (day.weekday) {
+        case 'Monday':    wd = 'M'; break;
+        case 'Tuesday':   wd = 'T'; break;
+        case 'Wednesday': wd = 'W'; break;
+        case 'Thursday':  wd = 'R'; break;
+        case 'Friday':    wd = 'F'; break;
+        case 'Saturday':  wd = 'S'; break;
+        case 'Sunday':    wd = 'U'; break;
+      }
+      let time = `${day.start_time.slice(0, 5)} - ${day.stop_time.slice(0, 5)}`;
+      if (sched_table[time] === undefined) sched_table[time] = '';
+      sched_table[time] += wd;
+    }
+    return Object.keys(sched_table).map(k => [k, sched_table[k]]);
   }
 
 }

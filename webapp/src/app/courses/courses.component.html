@@ -13,15 +13,11 @@
           {{pair[0]}} ({{pair[1]}})
         </span>
       </div>
-      <div [ngSwitch]="course.role">
-        <div *ngIf="canAttend(course.id)">
-          <div *ngSwitchCase="'student'" class="card-action">
-            <a (click)="attend(course.id)" class="btn-flat">Attend</a>
-          </div>
-        </div>
-        <div *ngSwitchCase="'instructor'" class="card-action">
-          <a [routerLink]="'./'+course.id+'/podium/cue-sheet'" class="btn-flat">Teach</a>
-        </div>
+      <div *ngIf="canAttend(course)" class="card-action">
+        <a (click)="attend(course.id)" class="btn-flat">Attend</a>
+      </div>
+      <div *ngIf="course.roles.includes('instructor')" class="card-action">
+        <a [routerLink]="'./'+course.id+'/podium/cue-sheet'" class="btn-flat">Teach</a>
       </div>
     </div>
 
