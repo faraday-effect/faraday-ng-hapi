@@ -9,6 +9,8 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/retry';
+import 'rxjs/add/operator/repeat';
+import 'rxjs/add/operator/do';
 
 import { FARADAY_ROUTER_PROVIDERS } from './app/faraday.routes';
 import { FaradayAppComponent, environment } from './app';

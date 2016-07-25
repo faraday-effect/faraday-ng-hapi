@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Http } from '@angular/http';
 
+import { UserService } from 'app/shared';
+
 const COURSES = [
   {
     id: 1,
@@ -118,7 +120,9 @@ export class CourseService {
   private sectionsUrl = 'http://localhost:3000/sections';
   private coursesUrl  = 'http://localhost:3000/courses';
 
-  constructor(private http: Http) {}
+  constructor(
+    private userService: UserService,
+    private http: Http) {}
 
   getCourses() {
     let sections = {}, courses = {};
@@ -170,14 +174,6 @@ export class CourseService {
         }
         return result;
       });
-    /*
-    id: 4,
-    prefix: "COS",
-    number: "120",
-    title: "Introduction to Computational Problem Solving",
-    sections: [
-      { id: 10, schedule: [["09:00 - 09:50", "MWF"]], credits: 4, teacher: "Art White" },
-    */
   }
 
   getMockCourses() {
@@ -206,6 +202,10 @@ export class CourseService {
       sched_table[time] += wd;
     }
     return Object.keys(sched_table).map(k => [k, sched_table[k]]);
+  }
+
+  enroll(sectionId: number) {
+    return this.http.post(`http://localhost:3000/sections/${sectionId}/relationships/${this.userService.relationships.student}`, '');
   }
 
 }

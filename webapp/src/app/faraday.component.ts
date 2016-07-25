@@ -25,7 +25,7 @@ export class FaradayAppComponent {
   constructor(private userService: UserService) {}
 
   ngOnInit() {
-    this.userService.startNesIfLoggedIn();
+    this.userService.init();
   }
 
 }

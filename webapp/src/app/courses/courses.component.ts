@@ -45,8 +45,9 @@ export class CoursesComponent implements OnInit {
   }
 
   enroll(id: number) {
-    console.log(`Enrolling in ${id}!`);
-    this.courses.retry().delay(1000);
+    this.courseService.enroll(id).subscribe(null, null, () => {
+      this.ngOnInit();
+    });
   }
 
   canEnroll(id: number) {

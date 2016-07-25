@@ -14,10 +14,27 @@ export class UserService {
 
   public user: any = {};
   public isLoggedIn: boolean = false;
+  public relationships: any = {};
 
   constructor(
     private nesService: NesService,
     private http: Http) {}
+
+  init() {
+    this.getRelationshipIds();
+    this.startNesIfLoggedIn();
+  }
+
+  getRelationshipIds() {
+    let relationshipsUrl = 'http://localhost:3000/relationships';
+    this.http.get(relationshipsUrl)
+        .map(res => res.json())
+        .subscribe(json => {
+          for (let rel of json) {
+            this.relationships[rel.title] = rel.id;
+          }
+        });
+  }
 
   startNesIfLoggedIn() {
     this.getCurrentUser().subscribe(() => {
