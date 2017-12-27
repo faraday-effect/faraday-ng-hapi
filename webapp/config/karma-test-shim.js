@@ -54,4 +54,3 @@ System.import('system-config.js').then(function() {
       return System.import(moduleName);
     }));
 }).then(__karma__.start, __karma__.error);
-

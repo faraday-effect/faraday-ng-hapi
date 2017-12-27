@@ -39,13 +39,15 @@ export class CoursesComponent implements OnInit {
     this.router.navigate([id, 'participant'], {relativeTo: this.route});
   }
 
-  canAttend(id: number) {
-    return id != 25;
+  canAttend(course: any) {
+    // TODO ta's and actually check if class has started
+    return course.roles.includes('student');
   }
 
   enroll(id: number) {
-    console.log(`Enrolling in ${id}!`);
-    this.courses.retry().delay(1000);
+    this.courseService.enroll(id).subscribe(null, null, () => {
+      this.ngOnInit();
+    });
   }
 
   canEnroll(id: number) {

@@ -30,8 +30,7 @@ describe('login page', () => {
 
   it('should log out when logout button clicked', () => {
     logout();
-    // let bar = page.getToolbar();
-    expect(browser.getCurrentUrl()).toEqual(loginUrl);
+    let bar = page.getToolbar();
+    expectToMatch(bar, /Log In/);
   });
-
 });

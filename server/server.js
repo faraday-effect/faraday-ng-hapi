@@ -3,6 +3,16 @@
 const Hapi = require('hapi');
 const Path = require('path');
 
+var nes_options = {
+  auth: {
+    type: "cookie",
+    isSecure: false,
+  }
+};
+if (process.env.NES_DISABLE_HEARTBEAT) {
+  nes_options.heartbeat = false;
+}
+
 module.exports = function (callback) {
 
     const server = new Hapi.Server();
@@ -26,11 +36,7 @@ module.exports = function (callback) {
             {register: require('hapi-auth-cookie')},
 
             // Web Sockets
-            {register: require('nes'),
-            options: {
-                auth: { type: "cookie", isSecure: false }
-                }
-            },
+            {register: require('nes'), options: nes_options},
 
             // Traditional content (including lout)
             {register: require('vision')},
@@ -45,9 +51,11 @@ module.exports = function (callback) {
             {register: require('./routes/execution')},
             {register: require('./routes/nes')},
             {register: require('./routes/schedule')},
+            {register: require('./routes/syllabus')},
             {register: require('./routes/users')},
             
             // Other plugins
+            {register: require('./plugins/codeGenerator')},
             {register: require('./plugins/quiz')},
 
             // Logging and reporting
